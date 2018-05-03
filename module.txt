@@ -1,0 +1,9 @@
+{
+    "id" : "GooeyDefence",
+    "version" : "0.1.0-SNAPSHOT",
+    "author" : "",
+    "displayName" : "GooeyDefence",
+    "description" : "",
+    "dependencies" : [],
+    "serverSideOnly" : false
+}
