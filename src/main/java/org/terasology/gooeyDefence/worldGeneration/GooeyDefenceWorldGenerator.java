@@ -16,6 +16,10 @@
 package org.terasology.gooeyDefence.worldGeneration;
 
 import org.terasology.engine.SimpleUri;
+import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
+import org.terasology.gooeyDefence.worldGeneration.providers.SurfaceHeightProvider;
+import org.terasology.gooeyDefence.worldGeneration.rasterizers.DefenceFieldRasterizer;
+import org.terasology.gooeyDefence.worldGeneration.rasterizers.WorldSurfaceRasterizer;
 import org.terasology.registry.In;
 import org.terasology.world.generation.BaseFacetedWorldGenerator;
 import org.terasology.world.generation.WorldBuilder;

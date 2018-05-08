@@ -13,47 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.worldGeneration;
+package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.math.ChunkMath;
-import org.terasology.math.geom.BaseVector3i;
-import org.terasology.math.geom.Vector2i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
-import org.terasology.registry.In;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
-import org.terasology.world.chunks.Chunk;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
-import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
 import java.util.Map;
 
-public class WorldSurfaceRasterizer implements WorldRasterizer {
-    private BlockManager blockManager;
-
-    static private final Logger logger = LoggerFactory.getLogger(GooeyDefenceWorldGenerator.class);
-
+public class DefenceFieldRasterizer implements WorldRasterizer {
     private Block dirt;
 
     @Override
     public void initialize() {
-        blockManager = CoreRegistry.get(BlockManager.class);
-        dirt = blockManager.getBlock("GooeyDefence:Dirt");
+        dirt = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Dirt");
     }
 
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
-        SurfaceHeightFacet surfaceHeightFacet = chunkRegion.getFacet(SurfaceHeightFacet.class);
-        for (Vector3i pos : chunkRegion.getRegion()) {
-            float height = surfaceHeightFacet.getWorld(pos.x, pos.z);
-            if (pos.y < height) {
-                chunk.setBlock(ChunkMath.calcBlockPos(pos), dirt);
-            }
+        DefenceFieldFacet fieldFacet = chunkRegion.getFacet(DefenceFieldFacet.class);
+        for (Map.Entry<Vector3i, Boolean> entry : fieldFacet.getWorldEntries().entrySet()) {
+            chunk.setBlock(ChunkMath.calcBlockPos(entry.getKey()), dirt);
         }
     }
 }
+

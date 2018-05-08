@@ -13,36 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.worldGeneration;
+package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.terasology.gooeyDefence.worldGeneration.GooeyDefenceWorldGenerator;
 import org.terasology.math.ChunkMath;
-import org.terasology.math.Region3i;
 import org.terasology.math.geom.BaseVector3i;
-import org.terasology.math.geom.Rect2i;
+import org.terasology.math.geom.Vector2i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
+import org.terasology.registry.In;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.chunks.Chunk;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
+import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
 import java.util.Map;
 
-public class DefenceFieldRasterizer implements WorldRasterizer {
+public class WorldSurfaceRasterizer implements WorldRasterizer {
+    private BlockManager blockManager;
+
+    static private final Logger logger = LoggerFactory.getLogger(GooeyDefenceWorldGenerator.class);
+
     private Block dirt;
 
     @Override
     public void initialize() {
-        dirt = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Dirt");
+        blockManager = CoreRegistry.get(BlockManager.class);
+        dirt = blockManager.getBlock("GooeyDefence:Dirt");
     }
 
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
-        DefenceFieldFacet fieldFacet = chunkRegion.getFacet(DefenceFieldFacet.class);
-        for (Map.Entry<Vector3i, Boolean> entry : fieldFacet.getWorldEntries().entrySet()) {
-            chunk.setBlock(ChunkMath.calcBlockPos(entry.getKey()), dirt);
+        SurfaceHeightFacet surfaceHeightFacet = chunkRegion.getFacet(SurfaceHeightFacet.class);
+        for (Vector3i pos : chunkRegion.getRegion()) {
+            float height = surfaceHeightFacet.getWorld(pos.x, pos.z);
+            if (pos.y < height) {
+                chunk.setBlock(ChunkMath.calcBlockPos(pos), dirt);
+            }
         }
     }
 }
-

@@ -13,20 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.worldGeneration;
+package org.terasology.gooeyDefence.worldGeneration.providers;
 
-import org.terasology.math.TeraMath;
-import org.terasology.math.geom.BaseVector2i;
+import org.terasology.gooeyDefence.worldGeneration.DefenceField;
+import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.math.geom.BaseVector3i;
-import org.terasology.math.geom.Rect2i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.utilities.procedural.Noise;
 import org.terasology.utilities.procedural.WhiteNoise;
 import org.terasology.world.generation.*;
-import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
 @Produces({DefenceFieldFacet.class})
-@Requires(@Facet(value = SurfaceHeightFacet.class, border = @FacetBorder(sides = 4)))
 public class DefenceFieldProvider implements FacetProvider {
     private Noise noise;
 
