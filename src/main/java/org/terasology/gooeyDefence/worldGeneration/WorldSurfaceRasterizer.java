@@ -18,6 +18,8 @@ package org.terasology.gooeyDefence.worldGeneration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.math.ChunkMath;
+import org.terasology.math.geom.BaseVector3i;
+import org.terasology.math.geom.Vector2i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
@@ -29,7 +31,9 @@ import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
 import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
-public class GooeyDefenceWorldRasterizer implements WorldRasterizer {
+import java.util.Map;
+
+public class WorldSurfaceRasterizer implements WorldRasterizer {
     private BlockManager blockManager;
 
     static private final Logger logger = LoggerFactory.getLogger(GooeyDefenceWorldGenerator.class);
@@ -39,7 +43,7 @@ public class GooeyDefenceWorldRasterizer implements WorldRasterizer {
     @Override
     public void initialize() {
         blockManager = CoreRegistry.get(BlockManager.class);
-        dirt  = blockManager.getBlock("GooeyDefence:Dirt");
+        dirt = blockManager.getBlock("GooeyDefence:Dirt");
     }
 
     @Override

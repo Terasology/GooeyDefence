@@ -36,6 +36,8 @@ public class GooeyDefenceWorldGenerator extends BaseFacetedWorldGenerator {
     protected WorldBuilder createWorld() {
         return new WorldBuilder(worldGeneratorPluginLibrary)
                 .addProvider(new SurfaceHeightProvider())
-                .addRasterizer(new GooeyDefenceWorldRasterizer());
+                .addProvider(new DefenceFieldProvider())
+                .addRasterizer(new WorldSurfaceRasterizer())
+                .addRasterizer(new DefenceFieldRasterizer());
     }
 }

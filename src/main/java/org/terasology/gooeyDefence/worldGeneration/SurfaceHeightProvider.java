@@ -24,7 +24,7 @@ import org.terasology.world.generation.Produces;
 import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
 @Produces({SurfaceHeightFacet.class})
-public class SurfaceHeightProvider implements FacetProvider{
+public class SurfaceHeightProvider implements FacetProvider {
     @Override
     public void setSeed(long seed) {
 
@@ -33,11 +33,11 @@ public class SurfaceHeightProvider implements FacetProvider{
     @Override
     public void process(GeneratingRegion region) {
         Border3D border = region.getBorderForFacet(SurfaceHeightFacet.class);
-        SurfaceHeightFacet facet = new SurfaceHeightFacet(region.getRegion(),border);
+        SurfaceHeightFacet facet = new SurfaceHeightFacet(region.getRegion(), border);
 
         Rect2i processRegion = facet.getWorldRegion();
         for (BaseVector2i position : processRegion.contents()) {
-            facet.setWorld(position, 10f);
+            facet.setWorld(position, 0f);
         }
         region.setRegionFacet(SurfaceHeightFacet.class, facet);
     }
