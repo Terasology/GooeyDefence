@@ -5,5 +5,7 @@
     "displayName" : "GooeyDefence",
     "description" : "",
     "dependencies" : [],
-    "serverSideOnly" : false
+    "serverSideOnly" : false,
+    "isGameplay" : "true",
+    "defaultWorldGenerator" : "GooeyDefence:gooeyDefenceField"
 }
