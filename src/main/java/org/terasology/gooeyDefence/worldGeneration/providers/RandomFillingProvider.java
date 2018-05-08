@@ -43,7 +43,6 @@ public class RandomFillingProvider implements FacetProvider {
     public void process(GeneratingRegion region) {
         Border3D border = region.getBorderForFacet(RandomFillingFacet.class);
         RandomFillingFacet facet = new RandomFillingFacet(region.getRegion(), border);
-        SurfaceHeightFacet surfaceFacet = region.getRegionFacet(SurfaceHeightFacet.class);
 
         Rect2i processRegion = facet.getWorldRegion();
         for (BaseVector2i pos : processRegion.contents()) {
