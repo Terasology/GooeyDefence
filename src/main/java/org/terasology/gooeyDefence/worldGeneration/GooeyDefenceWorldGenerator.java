@@ -17,8 +17,10 @@ package org.terasology.gooeyDefence.worldGeneration;
 
 import org.terasology.engine.SimpleUri;
 import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
+import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
 import org.terasology.gooeyDefence.worldGeneration.providers.SurfaceHeightProvider;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.DefenceFieldRasterizer;
+import org.terasology.gooeyDefence.worldGeneration.rasterizers.RandomFillingRasterizer;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.WorldSurfaceRasterizer;
 import org.terasology.registry.In;
 import org.terasology.world.generation.BaseFacetedWorldGenerator;
@@ -41,7 +43,9 @@ public class GooeyDefenceWorldGenerator extends BaseFacetedWorldGenerator {
         return new WorldBuilder(worldGeneratorPluginLibrary)
                 .addProvider(new SurfaceHeightProvider())
                 .addProvider(new DefenceFieldProvider())
+                .addProvider(new RandomFillingProvider())
                 .addRasterizer(new WorldSurfaceRasterizer())
-                .addRasterizer(new DefenceFieldRasterizer());
+                .addRasterizer(new DefenceFieldRasterizer())
+                .addRasterizer(new RandomFillingRasterizer());
     }
 }
