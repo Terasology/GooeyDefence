@@ -35,16 +35,12 @@ import org.terasology.world.generation.facets.SurfaceHeightFacet;
 import java.util.Map;
 
 public class WorldSurfaceRasterizer implements WorldRasterizer {
-    private BlockManager blockManager;
 
-    static private final Logger logger = LoggerFactory.getLogger(GooeyDefenceWorldGenerator.class);
-
-    private Block dirt;
+    private Block block;
 
     @Override
     public void initialize() {
-        blockManager = CoreRegistry.get(BlockManager.class);
-        dirt = blockManager.getBlock("GooeyDefence:Dirt");
+        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Base");
     }
 
     @Override
@@ -53,7 +49,7 @@ public class WorldSurfaceRasterizer implements WorldRasterizer {
         for (Vector3i pos : chunkRegion.getRegion()) {
             float height = surfaceHeightFacet.getWorld(pos.x, pos.z);
             if (pos.y < height) {
-                chunk.setBlock(ChunkMath.calcBlockPos(pos), dirt);
+                chunk.setBlock(ChunkMath.calcBlockPos(pos), block);
             }
         }
     }

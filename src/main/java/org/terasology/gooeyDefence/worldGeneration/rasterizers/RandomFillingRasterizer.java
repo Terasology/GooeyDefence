@@ -15,7 +15,6 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
-import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.gooeyDefence.worldGeneration.facets.RandomFillingFacet;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
@@ -29,11 +28,11 @@ import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
 
 public class RandomFillingRasterizer implements WorldRasterizer {
-    private Block dirt;
+    private Block block;
 
     @Override
     public void initialize() {
-        dirt = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Dirt");
+        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Plain");
     }
 
     @Override
@@ -42,7 +41,7 @@ public class RandomFillingRasterizer implements WorldRasterizer {
         SurfaceHeightFacet surfaceFacet = chunkRegion.getFacet(SurfaceHeightFacet.class);
         for (Vector3i pos : chunkRegion.getRegion()) {
             if (randomFacet.getWorld(pos.x, pos.z) && surfaceFacet.getWorld(pos.x, pos.z) == pos.y) {
-                chunk.setBlock(ChunkMath.calcBlockPos(pos), dirt);
+                chunk.setBlock(ChunkMath.calcBlockPos(pos), block);
             }
         }
     }

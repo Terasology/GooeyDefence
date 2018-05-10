@@ -30,7 +30,6 @@ import org.terasology.world.generation.Requires;
 import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
 @Produces({RandomFillingFacet.class})
-@Requires(@Facet(SurfaceHeightFacet.class))
 public class RandomFillingProvider implements FacetProvider {
     private Noise noise;
 
@@ -46,7 +45,9 @@ public class RandomFillingProvider implements FacetProvider {
 
         Rect2i processRegion = facet.getWorldRegion();
         for (BaseVector2i pos : processRegion.contents()) {
-            if (noise.noise(pos.x(), pos.y()) > 0.2 && pos.distance(BaseVector2i.ZERO) > DefenceField.shrineRingSize()) {
+            double distance = pos.distance(BaseVector2i.ZERO);
+            if (distance > DefenceField.shrineRingSize() && distance < DefenceField.outerRingSize())
+            if (noise.noise(pos.x(), pos.y()) > 0.1) {
                 facet.setWorld(pos.x(), pos.y(), true);
             }
         }

@@ -46,8 +46,8 @@ public class GooeyDefenceWorldGenerator extends BaseFacetedWorldGenerator {
                 .addProvider(new DefenceFieldProvider())
                 .addProvider(new RandomFillingProvider())
                 .addRasterizer(new WorldSurfaceRasterizer())
-                .addRasterizer(new DefenceFieldRasterizer())
                 .addRasterizer(new RandomFillingRasterizer())
+                .addRasterizer(new DefenceFieldRasterizer())
                 .addRasterizer(new ShrineRasterizer());
     }
 }

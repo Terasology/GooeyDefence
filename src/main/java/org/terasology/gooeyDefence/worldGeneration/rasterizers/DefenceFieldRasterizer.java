@@ -28,18 +28,18 @@ import org.terasology.world.generation.WorldRasterizer;
 import java.util.Map;
 
 public class DefenceFieldRasterizer implements WorldRasterizer {
-    private Block dirt;
+    private Block block;
 
     @Override
     public void initialize() {
-        dirt = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Dirt");
+        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Base");
     }
 
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         DefenceFieldFacet fieldFacet = chunkRegion.getFacet(DefenceFieldFacet.class);
         for (Map.Entry<Vector3i, Boolean> entry : fieldFacet.getWorldEntries().entrySet()) {
-            chunk.setBlock(ChunkMath.calcBlockPos(entry.getKey()), dirt);
+            chunk.setBlock(ChunkMath.calcBlockPos(entry.getKey()), block);
         }
     }
 }
