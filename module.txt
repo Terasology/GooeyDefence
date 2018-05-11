@@ -4,7 +4,9 @@
     "author" : "",
     "displayName" : "GooeyDefence",
     "description" : "",
-    "dependencies" : [],
+    "dependencies" : [
+        {"id" : "FlexiblePathfinding", "minVersion" : "0.1.0"}
+    ],
     "serverSideOnly" : false,
     "isGameplay" : "true",
     "defaultWorldGenerator" : "GooeyDefence:gooeyDefenceField"
