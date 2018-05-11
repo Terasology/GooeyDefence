@@ -19,6 +19,7 @@ import org.terasology.gooeyDefence.worldGeneration.DefenceField;
 import org.terasology.gooeyDefence.worldGeneration.facets.RandomFillingFacet;
 import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.Rect2i;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.utilities.procedural.Noise;
 import org.terasology.utilities.procedural.WhiteNoise;
 import org.terasology.world.generation.Border3D;
@@ -46,11 +47,19 @@ public class RandomFillingProvider implements FacetProvider {
         Rect2i processRegion = facet.getWorldRegion();
         for (BaseVector2i pos : processRegion.contents()) {
             double distance = pos.distance(BaseVector2i.ZERO);
-            if (distance > DefenceField.shrineRingSize() && distance < DefenceField.outerRingSize())
-            if (noise.noise(pos.x(), pos.y()) > 0.1) {
-                facet.setWorld(pos.x(), pos.y(), true);
+            /* Generate random  blocks if the position is
+             * 1. Inside the main dome
+             * 2. Outside the inner shrine
+             * 3. Outside an entrance area
+             *  */
+            if (distance > DefenceField.shrineRingSize()
+                    && distance < DefenceField.outerRingSize()
+                    && !DefenceField.inRangeOfEntrance(new Vector3i(pos.x(), 0, pos.y()))) {
+                if ((noise.noise(pos.x(), pos.y()) + 1) / 2 < 0.3) {
+                    facet.setWorld(pos.x(), pos.y(), true);
+                }
             }
+            region.setRegionFacet(RandomFillingFacet.class, facet);
         }
-        region.setRegionFacet(RandomFillingFacet.class, facet);
     }
 }

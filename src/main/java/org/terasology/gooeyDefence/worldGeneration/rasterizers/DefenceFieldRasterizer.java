@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
+import org.terasology.gooeyDefence.worldGeneration.DefenceField;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
@@ -29,17 +30,26 @@ import java.util.Map;
 
 public class DefenceFieldRasterizer implements WorldRasterizer {
     private Block block;
+    private Block altBlock;
 
     @Override
     public void initialize() {
         block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Base");
+        altBlock = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Shrine");
     }
 
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         DefenceFieldFacet fieldFacet = chunkRegion.getFacet(DefenceFieldFacet.class);
         for (Map.Entry<Vector3i, Boolean> entry : fieldFacet.getWorldEntries().entrySet()) {
-            chunk.setBlock(ChunkMath.calcBlockPos(entry.getKey()), block);
+            if (entry.getValue()) {
+                Vector3i pos = entry.getKey();
+                if ((int) DefenceField.distanceToNearestEntrance(pos) < DefenceField.entranceRingSize() + 2) {
+                    chunk.setBlock(ChunkMath.calcBlockPos(pos), altBlock);
+                } else {
+                    chunk.setBlock(ChunkMath.calcBlockPos(pos), block);
+                }
+            }
         }
     }
 }
