@@ -15,11 +15,59 @@
  */
 package org.terasology.gooeyDefence.worldGeneration;
 
+import org.terasology.math.geom.BaseVector3i;
+import org.terasology.math.geom.Vector3i;
+
+import java.util.Arrays;
+
 public class DefenceField {
+    private static Vector3i[] entrances = new Vector3i[]{
+            /* Entrance One */
+            new Vector3i(
+                    outerRingSize(),
+                    0,
+                    0),
+            /* Entrance Two */
+            new Vector3i(
+                    (int) (Math.cos(Math.toRadians(120)) * outerRingSize()),
+                    0,
+                    (int) (Math.sin(Math.toRadians(120)) * outerRingSize())),
+            /* Entrance Three */
+            new Vector3i(
+                    (int) (Math.cos(Math.toRadians(240)) * outerRingSize()),
+                    0,
+                    (int) (Math.sin(Math.toRadians(240)) * outerRingSize()))
+    };
+
+    public static int entranceCount() {
+        return entrances.length;
+    }
+
+    public static Vector3i fieldCentre() {
+        return new Vector3i(0, 0, 0);
+    }
+
     public static int shrineRingSize() {
         return 5;
     }
+
     public static int outerRingSize() {
         return 60;
+    }
+
+    public static int entranceRingSize() {
+        return 4;
+    }
+
+    public static Vector3i entrancePos(int id) {
+        return id < entrances.length && id >= 0 ? entrances[id] : null;
+    }
+
+    public static boolean inRangeOfEntrance(BaseVector3i pos) {
+        return distanceToNearestEntrance(pos) < entranceRingSize();
+    }
+
+    public static double distanceToNearestEntrance(BaseVector3i pos) {
+        return Arrays.stream(entrances).mapToDouble(pos::distanceSquared).min().orElse(-1);
     }
 }
