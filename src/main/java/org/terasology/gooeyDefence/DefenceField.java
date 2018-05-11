@@ -24,26 +24,24 @@ import java.util.Arrays;
 /**
  * A class that provides Static information about the Defence Field.
  * Dynamic information is given by {@link DefenceWorldProvider}
+ *
  * @see DefenceWorldProvider
  */
 public class DefenceField {
-    private static Vector3i[] entrances = new Vector3i[]{
-            /* Entrance One */
-            new Vector3i(
-                    outerRingSize(),
+    private static Vector3i[] calculateEntrances(int count) {
+        Vector3i[] result = new Vector3i[count];
+        double stepSize = (2 * Math.PI) / count;
+        for (int i = 0; i < count; i++) {
+            result[i] = new Vector3i(
+                    (int) (Math.cos(stepSize * i) * outerRingSize()),
                     0,
-                    0),
-            /* Entrance Two */
-            new Vector3i(
-                    (int) (Math.cos(Math.toRadians(120)) * outerRingSize()),
-                    0,
-                    (int) (Math.sin(Math.toRadians(120)) * outerRingSize())),
-            /* Entrance Three */
-            new Vector3i(
-                    (int) (Math.cos(Math.toRadians(240)) * outerRingSize()),
-                    0,
-                    (int) (Math.sin(Math.toRadians(240)) * outerRingSize()))
-    };
+                    (int) (Math.sin(stepSize * i) * outerRingSize())
+            );
+        }
+        return result;
+    }
+
+    private static Vector3i[] entrances = calculateEntrances(3);
 
     /**
      * @return The number of entrances in the field
@@ -101,6 +99,6 @@ public class DefenceField {
      * @return The distance between the position and the nearest entrance.
      */
     public static double distanceToNearestEntrance(BaseVector3i pos) {
-        return Arrays.stream(entrances).mapToDouble(pos::distanceSquared).min().orElse(-1);
+        return Arrays.stream(entrances).mapToDouble(pos::distance).min().orElse(-1);
     }
 }
