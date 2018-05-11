@@ -23,6 +23,11 @@ import org.terasology.registry.Share;
 
 import java.util.List;
 
+/**
+ * A class that provides dynamic information about the Defence Field.
+ * Static information is given by {@link DefenceField}
+ * @see DefenceField
+ */
 @Share(DefenceWorldProvider.class)
 @RegisterSystem
 public class DefenceWorldProvider extends BaseComponentSystem {
@@ -34,17 +39,27 @@ public class DefenceWorldProvider extends BaseComponentSystem {
 
     @Override
     public void postBegin() {
-        calculatePaths(0);
+        calculatePaths();
     }
 
-    private void calculatePaths(int pathId) {
-        if (pathId >= paths.length) {
-            return;
-        }
+    /**
+     * Calculate the path from an entrance to the centre
+     * @param id The entrance to calculate from
+     */
+    private void calculatePath(int id) {
         pathfinderSystem.requestPath(
-                DefenceField.entrancePos(pathId), DefenceField.fieldCentre(), (path, target) -> {
-                    paths[pathId] = path;
-                    calculatePaths(pathId + 1);
+                DefenceField.entrancePos(id), DefenceField.fieldCentre(), (path, target) -> {
+                    paths[id] = path;
                 });
+    }
+
+    /**
+     * Calculate paths from all the entrances to the centre.
+     */
+    private void calculatePaths() {
+        for (int id = 0; id < paths.length; id++) {
+            calculatePath(id);
+        }
+
     }
 }

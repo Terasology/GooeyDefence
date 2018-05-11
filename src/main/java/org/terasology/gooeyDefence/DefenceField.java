@@ -20,6 +20,12 @@ import org.terasology.math.geom.Vector3i;
 
 import java.util.Arrays;
 
+
+/**
+ * A class that provides Static information about the Defence Field.
+ * Dynamic information is given by {@link DefenceWorldProvider}
+ * @see DefenceWorldProvider
+ */
 public class DefenceField {
     private static Vector3i[] entrances = new Vector3i[]{
             /* Entrance One */
@@ -39,34 +45,61 @@ public class DefenceField {
                     (int) (Math.sin(Math.toRadians(240)) * outerRingSize()))
     };
 
+    /**
+     * @return The number of entrances in the field
+     */
     public static int entranceCount() {
         return entrances.length;
     }
 
+    /**
+     * @return The centre of the field.
+     */
     public static Vector3i fieldCentre() {
         return new Vector3i(0, 0, 0);
     }
 
+    /**
+     * @return The size, in blocks, of the clear zone around the shrine
+     */
     public static int shrineRingSize() {
         return 5;
     }
 
+    /**
+     * @return The size, in blocks, of the outer wall of the defence field
+     */
     public static int outerRingSize() {
         return 60;
     }
 
+    /**
+     * @return The size, in blocks, of the clear zone around each entrance
+     */
     public static int entranceRingSize() {
         return 4;
     }
 
+    /**
+     * @param id The id of the entrance to get
+     * @return The position of the entrance
+     */
     public static Vector3i entrancePos(int id) {
         return id < entrances.length && id >= 0 ? entrances[id] : null;
     }
 
+    /**
+     * @param pos The position to check
+     * @return True, if the position is inside a clear zone around any entrance. False otherwise
+     */
     public static boolean inRangeOfEntrance(BaseVector3i pos) {
         return distanceToNearestEntrance(pos) < entranceRingSize();
     }
 
+    /**
+     * @param pos The position to check
+     * @return The distance between the position and the nearest entrance.
+     */
     public static double distanceToNearestEntrance(BaseVector3i pos) {
         return Arrays.stream(entrances).mapToDouble(pos::distanceSquared).min().orElse(-1);
     }

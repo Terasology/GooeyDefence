@@ -18,20 +18,19 @@ package org.terasology.gooeyDefence.worldGeneration.providers;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.math.geom.BaseVector3i;
-import org.terasology.math.geom.Vector2i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.utilities.procedural.Noise;
 import org.terasology.utilities.procedural.WhiteNoise;
-import org.terasology.world.generation.*;
+import org.terasology.world.generation.Border3D;
+import org.terasology.world.generation.FacetProvider;
+import org.terasology.world.generation.GeneratingRegion;
+import org.terasology.world.generation.Produces;
 
+/**
+ * Fills the {@link DefenceFieldFacet} class with data on the dome.
+ */
 @Produces({DefenceFieldFacet.class})
 public class DefenceFieldProvider implements FacetProvider {
-    private Noise noise;
-
-    @Override
-    public void setSeed(long seed) {
-        noise = new WhiteNoise(seed);
-    }
 
     @Override
     public void process(GeneratingRegion region) {
@@ -42,7 +41,7 @@ public class DefenceFieldProvider implements FacetProvider {
             /* Generate a border if the position is either
              * 1. Part of the main dome, but not within range of an entrance
              * 2. Part of an entrance dome, but outside the main dome
-             *  */
+             */
             int centreDistance = (int) pos.distance(BaseVector3i.ZERO);
             int entranceDistance = (int) DefenceField.distanceToNearestEntrance(pos);
             if (centreDistance == DefenceField.outerRingSize()

@@ -28,6 +28,10 @@ import org.terasology.world.generation.WorldRasterizer;
 
 import java.util.Map;
 
+/**
+ * Places blocks according to the values set in {@link org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider}.
+ * Any block close to the entrance, including those in the mini dome, are set to a different block than the rest of the dome.
+ */
 public class DefenceFieldRasterizer implements WorldRasterizer {
     private Block block;
     private Block altBlock;

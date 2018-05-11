@@ -23,6 +23,9 @@ import org.terasology.world.generation.GeneratingRegion;
 import org.terasology.world.generation.Produces;
 import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
+/**
+ * Fills the{@link SurfaceHeightFacet} with a surface height of 0 globally.
+ */
 @Produces({SurfaceHeightFacet.class})
 public class SurfaceHeightProvider implements FacetProvider {
     @Override

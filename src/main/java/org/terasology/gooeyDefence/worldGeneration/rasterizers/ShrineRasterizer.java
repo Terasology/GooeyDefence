@@ -24,10 +24,17 @@ import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
 
+/**
+ * Builds a shrine at the origin of the world.
+ */
 public class ShrineRasterizer implements WorldRasterizer {
 
     private Block block;
 
+    /**
+     * The data for the shrine's shape.
+     * A 1 indicates a block should be placed, and a 0 indicates an empty space
+     */
     private int[][][] shrine = new int[][][]{
             {{0,0,0},
              {0,1,0},

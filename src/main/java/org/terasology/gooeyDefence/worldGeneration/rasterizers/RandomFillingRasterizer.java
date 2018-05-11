@@ -26,7 +26,10 @@ import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
 import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
-
+/**
+ * Places blocks according to the values given in {@link org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider}.
+ * The block used is the basic building block.
+ */
 public class RandomFillingRasterizer implements WorldRasterizer {
     private Block block;
 

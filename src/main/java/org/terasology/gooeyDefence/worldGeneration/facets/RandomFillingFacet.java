@@ -19,6 +19,9 @@ import org.terasology.math.Region3i;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.facets.base.BaseBooleanFieldFacet2D;
 
+/**
+ * Facet that fills the centre of the dome with a random assortment of blocks
+ */
 public class RandomFillingFacet extends BaseBooleanFieldFacet2D {
     public RandomFillingFacet(Region3i region, Border3D border) {
         super(region, border);

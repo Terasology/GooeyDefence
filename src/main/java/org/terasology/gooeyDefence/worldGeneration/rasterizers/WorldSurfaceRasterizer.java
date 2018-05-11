@@ -15,25 +15,19 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.terasology.gooeyDefence.worldGeneration.GooeyDefenceWorldGenerator;
 import org.terasology.math.ChunkMath;
-import org.terasology.math.geom.BaseVector3i;
-import org.terasology.math.geom.Vector2i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
-import org.terasology.registry.In;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
-import org.terasology.world.chunks.Chunk;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
 import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
-import java.util.Map;
-
+/**
+ * Places the base world block at the surface level.
+ */
 public class WorldSurfaceRasterizer implements WorldRasterizer {
 
     private Block block;

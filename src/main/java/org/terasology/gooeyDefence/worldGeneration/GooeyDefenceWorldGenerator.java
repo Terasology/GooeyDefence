@@ -29,6 +29,9 @@ import org.terasology.world.generation.WorldBuilder;
 import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
 
+/**
+ * Generates the GooeyDefence world.
+ */
 @RegisterWorldGenerator(id = "gooeyDefenceField", displayName = "Gooey Defence", description = "The world generator for the Gooey Defence gameplay module")
 public class GooeyDefenceWorldGenerator extends BaseFacetedWorldGenerator {
 

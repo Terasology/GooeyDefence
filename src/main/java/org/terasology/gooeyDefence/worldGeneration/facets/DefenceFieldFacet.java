@@ -21,6 +21,9 @@ import org.terasology.world.generation.facets.base.SparseBooleanFieldFacet3D;
 import org.terasology.world.generation.facets.base.SparseObjectFacet3D;
 
 
+/**
+ * Facet that provides information on where to place the blocks that make up the main outer dome
+ */
 public class DefenceFieldFacet extends SparseBooleanFieldFacet3D {
 
     public DefenceFieldFacet(Region3i region, Border3D border) {
