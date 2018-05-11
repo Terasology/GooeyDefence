@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
-import org.terasology.gooeyDefence.worldGeneration.DefenceField;
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
