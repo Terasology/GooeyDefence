@@ -26,7 +26,7 @@ import org.terasology.world.generation.WorldRasterizer;
 
 public class ShrineRasterizer implements WorldRasterizer {
 
-    private Block dirt;
+    private Block block;
 
     private int[][][] shrine = new int[][][]{
             {{0,0,0},
@@ -55,7 +55,7 @@ public class ShrineRasterizer implements WorldRasterizer {
 
     @Override
     public void initialize() {
-        dirt = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Dirt");
+        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Shrine");
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ShrineRasterizer implements WorldRasterizer {
                 for (int x = 0; x < shrine[y].length; x++) {
                     for (int z = 0; z < shrine[y][x].length; z++) {
                         if (shrine[y][x][z] == 1) {
-                            chunk.setBlock(ChunkMath.calcBlockPos(x,y,z), dirt);
+                            chunk.setBlock(ChunkMath.calcBlockPos(x,y,z), block);
                         }
                     }
                 }
