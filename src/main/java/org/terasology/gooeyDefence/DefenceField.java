@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.worldGeneration;
+package org.terasology.gooeyDefence;
 
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;

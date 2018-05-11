@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.providers;
 
-import org.terasology.gooeyDefence.worldGeneration.DefenceField;
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
