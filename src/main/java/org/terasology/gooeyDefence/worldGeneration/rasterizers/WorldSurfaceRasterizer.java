@@ -34,7 +34,7 @@ public class WorldSurfaceRasterizer implements WorldRasterizer {
 
     @Override
     public void initialize() {
-        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Base");
+        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:WorldBlock");
     }
 
     @Override

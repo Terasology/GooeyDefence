@@ -38,8 +38,8 @@ public class DefenceFieldRasterizer implements WorldRasterizer {
 
     @Override
     public void initialize() {
-        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Base");
-        altBlock = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Shrine");
+        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:WorldBlock");
+        altBlock = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:AltWorldBlock");
     }
 
     @Override

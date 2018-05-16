@@ -1,5 +1,8 @@
 {
   "translucent": true,
   "shadowCasting": false,
-  "tile": "GooeyDefence:Shrine"
+  "tile": "GooeyDefence:Shrine",
+  "entity": {
+    "prefab": "GooeyDefence:Shrine"
+  }
 }
