@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
@@ -31,35 +32,6 @@ public class ShrineRasterizer implements WorldRasterizer {
 
     private Block block;
 
-    /**
-     * The data for the shrine's shape.
-     * A 1 indicates a block should be placed, and a 0 indicates an empty space
-     */
-    private int[][][] shrine = new int[][][]{
-            {{0,0,0},
-             {0,1,0},
-             {0,0,0}},
-
-            {{0,0,0},
-             {0,1,0},
-             {0,0,0}},
-
-            {{0,1,0},
-             {1,1,1},
-             {0,1,0}},
-
-            {{1,1,1},
-             {1,1,1},
-             {1,1,1}},
-
-            {{0,1,0},
-             {1,1,1},
-             {0,1,0}},
-
-            {{0,0,0},
-             {0,1,0},
-             {0,0,0}}};
-
     @Override
     public void initialize() {
         block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Shrine");
@@ -70,6 +42,7 @@ public class ShrineRasterizer implements WorldRasterizer {
         Vector3i zero = new Vector3i(0, 0, 0);
         if (chunkRegion.getRegion().encompasses(zero)) {
             //TODO: Find a better way to create the shrine that isn't StructureTemplates.
+            int[][][] shrine = DefenceField.getShrine();
             for (int y = 0; y < shrine.length; y++) {
                 for (int x = 0; x < shrine[y].length; x++) {
                     for (int z = 0; z < shrine[y][x].length; z++) {

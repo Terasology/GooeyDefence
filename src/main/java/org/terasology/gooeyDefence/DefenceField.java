@@ -28,6 +28,63 @@ import java.util.Arrays;
  * @see DefenceWorldProvider
  */
 public class DefenceField {
+    private static Vector3i[] entrances = calculateEntrances(3);
+    /**
+     * The data for the shrine's shape.
+     * A 1 indicates a block should be placed, and a 0 indicates an empty space
+     */
+    private static int[][][] shrine = new int[][][]{
+            {{0,0,0},
+             {0,1,0},
+             {0,0,0}},
+
+            {{0,0,0},
+             {0,1,0},
+             {0,0,0}},
+
+            {{0,1,0},
+             {1,1,1},
+             {0,1,0}},
+
+            {{1,1,1},
+             {1,1,1},
+             {1,1,1}},
+
+            {{0,1,0},
+             {1,1,1},
+             {0,1,0}},
+
+            {{0,0,0},
+             {0,1,0},
+             {0,0,0}}};
+
+    /**
+     * Returns the location of a block in the shrine.
+     * This block will always be the same one given the same shrine arrangement.
+     * @return The position of a block in the shrine
+     */
+    public static Vector3i getShrineBlock() {
+        for (int y = 0; y < shrine.length; y++) {
+            for (int x = 0; x < shrine[y].length; x++) {
+                for (int z = 0; z < shrine[y][x].length; z++) {
+                    if (shrine[y][x][z] == 1) {
+                        return new Vector3i(x, y, z);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static int[][][] getShrine() {
+        return shrine;
+    }
+
+    /**
+     * Calculates the position of each entrance along the rim of the dome
+     * @param count The number of entrances
+     * @return An array containing the locations of the entrances.
+     */
     private static Vector3i[] calculateEntrances(int count) {
         Vector3i[] result = new Vector3i[count];
         double stepSize = (2 * Math.PI) / count;
@@ -40,8 +97,6 @@ public class DefenceField {
         }
         return result;
     }
-
-    private static Vector3i[] entrances = calculateEntrances(3);
 
     /**
      * @return The number of entrances in the field
