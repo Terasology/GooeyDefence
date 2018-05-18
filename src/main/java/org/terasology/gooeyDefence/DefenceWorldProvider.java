@@ -22,6 +22,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
+import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
@@ -71,7 +72,7 @@ public class DefenceWorldProvider extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onActivate(ActivateEvent event, EntityRef entity) {
+    public void onActivate(ActivateEvent event, EntityRef entity, ShrineComponent component) {
         if (!fieldActivated) {
             shrineEntity = entity;
             setupWorld();
