@@ -37,14 +37,15 @@ import java.util.List;
 
 /**
  * A class that provides dynamic information about the Defence Field.
+ * Also performs all high level actions, delegating specifics to other systems.
  * Static information is given by {@link DefenceField}
  *
  * @see DefenceField
  */
-@Share(DefenceWorldProvider.class)
+@Share(DefenceWorldManager.class)
 @RegisterSystem
-public class DefenceWorldProvider extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(DefenceWorldProvider.class);
+public class DefenceWorldManager extends BaseComponentSystem {
+    private static final Logger logger = LoggerFactory.getLogger(DefenceWorldManager.class);
 
     private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
 
@@ -83,7 +84,7 @@ public class DefenceWorldProvider extends BaseComponentSystem {
      * Initialises the defence field
      */
     public void setupWorld() {
-        logger.info("Setting up the world");
+        logger.info("Setting up the world.");
         fieldActivated = true;
         calculatePaths();
     }
@@ -95,10 +96,7 @@ public class DefenceWorldProvider extends BaseComponentSystem {
      */
     public void calculatePath(int id) {
         pathfinderSystem.requestPath(
-                DefenceField.entrancePos(id), DefenceField.fieldCentre(), (List<Vector3i> path, Vector3i target) -> {
-                    logger.info(path.toString());
-                    paths.set(id, path);
-                });
+                DefenceField.entrancePos(id), DefenceField.fieldCentre(), (path, target) -> paths.set(id, path));
     }
 
     /**

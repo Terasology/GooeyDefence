@@ -23,9 +23,9 @@ import java.util.Arrays;
 
 /**
  * A class that provides Static information about the Defence Field.
- * Dynamic information is given by {@link DefenceWorldProvider}
+ * Dynamic information is given by {@link DefenceWorldManager}
  *
- * @see DefenceWorldProvider
+ * @see DefenceWorldManager
  */
 public class DefenceField {
     private static Vector3i[] entrances = calculateEntrances(3);
