@@ -16,7 +16,29 @@
 package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.math.geom.Vector3i;
+import org.terasology.world.block.ForceBlockActive;
+
+import java.util.List;
 
 @ForceBlockActive
 public class ShrineComponent implements Component {
+    private List<List<Vector3i>> paths;
+    private boolean saved;
+
+    public List<List<Vector3i>> getPaths() {
+        return paths;
+    }
+
+    public void setPaths(List<List<Vector3i>> paths) {
+        this.paths = paths;
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
 }
