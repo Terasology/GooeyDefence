@@ -138,7 +138,7 @@ public class DefenceField {
      * @return The position of the entrance
      */
     public static Vector3i entrancePos(int id) {
-        return id < entrances.length && id >= 0 ? entrances[id] : null;
+        return id < entrances.length && id >= 0 ? entrances[id] : Vector3i.zero();
     }
 
     /**

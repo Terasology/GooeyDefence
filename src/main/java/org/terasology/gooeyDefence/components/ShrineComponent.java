@@ -17,5 +17,6 @@ package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
 
-public class ShrineComponent implements Component{
+@ForceBlockActive
+public class ShrineComponent implements Component {
 }

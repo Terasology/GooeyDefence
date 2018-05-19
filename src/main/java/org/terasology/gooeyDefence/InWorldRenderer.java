@@ -31,7 +31,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     private BlockSelectionRenderer blockSelectionRenderer;
 
     @In
-    private DefenceWorldProvider worldProvider;
+    private DefenceWorldManager worldProvider;
 
     @Override
     public void initialise() {
