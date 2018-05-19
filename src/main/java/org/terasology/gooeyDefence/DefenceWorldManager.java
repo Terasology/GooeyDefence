@@ -55,6 +55,8 @@ public class DefenceWorldManager extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
     @In
+    private EnemyManager enemyManager;
+    @In
     private BlockEntityRegistry blockEntityRegistry;
 
     private EntityRef shrineEntity;
@@ -93,8 +95,12 @@ public class DefenceWorldManager extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onActivate(ActivateEvent event, EntityRef entity, ShrineComponent component) {
-        if (!fieldActivated) {
+    public void onActivate(ActivateEvent event, EntityRef entity) {
+        if (fieldActivated) {
+            for (int i = 0; i < DefenceField.entranceCount(); i++) {
+                enemyManager.spawnEnemy(i);
+            }
+        } else {
             setupWorld();
         }
     }
@@ -140,5 +146,24 @@ public class DefenceWorldManager extends BaseComponentSystem {
      */
     public List<List<Vector3i>> getPaths() {
         return paths;
+    }
+
+    /**
+     * Get a path. Will return null if the path has not been calculated yet.
+     *
+     * @param pathID Which entrance the path should come from
+     * @return The given path, or null if it doesn't exist yet.
+     */
+    public List<Vector3i> getPath(int pathID) {
+        return paths.get(pathID);
+    }
+
+    /**
+     * Everything should remain paused until the field is re-activated.
+     *
+     * @return true if the field is activated, false otherwise.
+     */
+    public boolean isFieldActivated() {
+        return fieldActivated;
     }
 }
