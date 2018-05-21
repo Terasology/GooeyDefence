@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.world.block.ForceBlockActive;
 
@@ -25,6 +26,7 @@ import java.util.List;
 public class ShrineComponent implements Component {
     private List<List<Vector3i>> paths;
     private boolean saved;
+    private int health = DefenceField.initialHealth();
 
     public List<List<Vector3i>> getPaths() {
         return paths;
@@ -40,5 +42,13 @@ public class ShrineComponent implements Component {
 
     public void setSaved(boolean saved) {
         this.saved = saved;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void changeHealth(int change) {
+        health += change;
     }
 }

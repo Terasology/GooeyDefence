@@ -23,6 +23,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.components.ShrineComponent;
+import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
@@ -89,6 +90,12 @@ public class DefenceWorldManager extends BaseComponentSystem {
                 logger.info("Saving paths failed.");
             }
         }
+    }
+
+    @ReceiveEvent
+    public void onDamageShrine(DamageShrineEvent event, EntityRef entity) {
+        ShrineComponent component = shrineEntity.getComponent(ShrineComponent.class);
+        component.changeHealth(event.getDamage());
     }
 
     @ReceiveEvent
