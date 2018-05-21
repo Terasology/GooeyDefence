@@ -18,7 +18,9 @@ package org.terasology.gooeyDefence;
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -33,55 +35,56 @@ public class DefenceField {
      * The data for the shrine's shape.
      * A 1 indicates a block should be placed, and a 0 indicates an empty space
      */
-    private static int[][][] shrine = new int[][][]{
-            {{0,0,0},
-             {0,1,0},
-             {0,0,0}},
+    private static Vector3i[] shrineData = convertToVectors(new int[][][]{
+            {{0, 0, 0},
+             {0, 1, 0},
+             {0, 0, 0}},
 
-            {{0,0,0},
-             {0,1,0},
-             {0,0,0}},
+            {{0, 0, 0},
+             {0, 1, 0},
+             {0, 0, 0}},
 
-            {{0,1,0},
-             {1,1,1},
-             {0,1,0}},
+            {{0, 1, 0},
+             {1, 1, 1},
+             {0, 1, 0}},
 
-            {{1,1,1},
-             {1,1,1},
-             {1,1,1}},
+            {{1, 1, 1},
+             {1, 1, 1},
+             {1, 1, 1}},
 
-            {{0,1,0},
-             {1,1,1},
-             {0,1,0}},
+            {{0, 1, 0},
+             {1, 1, 1},
+             {0, 1, 0}},
 
-            {{0,0,0},
-             {0,1,0},
-             {0,0,0}}};
+            {{0, 0, 0},
+             {0, 1, 0},
+             {0, 0, 0}}});
 
     /**
-     * Returns the location of a block in the shrine.
-     * This block will always be the same one given the same shrine arrangement.
-     * @return The position of a block in the shrine
+     * Converts the human readable shrine data to a list of positions.
+     * Only intended to be used once to initialise a field.
+     *
+     * @param shrineData The human readable version of the data.
+     * @return An array of Vector3i containing the location of each one.
      */
-    public static Vector3i getShrineBlock() {
-        for (int y = 0; y < shrine.length; y++) {
-            for (int x = 0; x < shrine[y].length; x++) {
-                for (int z = 0; z < shrine[y][x].length; z++) {
-                    if (shrine[y][x][z] == 1) {
-                        return new Vector3i(x, y, z);
+    private static Vector3i[] convertToVectors(int[][][] shrineData) {
+        List<Vector3i> positions = new ArrayList<>();
+        for (int y = 0; y < shrineData.length; y++) {
+            for (int x = 0; x < shrineData[y].length; x++) {
+                for (int z = 0; z < shrineData[y][x].length; z++) {
+                    if (shrineData[y][x][z] == 1) {
+                        positions.add(new Vector3i(x, y, z));
                     }
                 }
             }
         }
-        return null;
-    }
-
-    public static int[][][] getShrine() {
-        return shrine;
+        return positions.toArray(new Vector3i[0]);
     }
 
     /**
-     * Calculates the position of each entrance along the rim of the dome
+     * Calculates the position of each entrance along the rim of the dome.
+     * Only intended to be used once to initialise a field.
+     *
      * @param count The number of entrances
      * @return An array containing the locations of the entrances.
      */
@@ -96,6 +99,20 @@ public class DefenceField {
             );
         }
         return result;
+    }
+
+    /**
+     * Returns the location of a block in the shrine.
+     * This block will always be the same one given the same shrine arrangement.
+     *
+     * @return The position of a block in the shrine
+     */
+    public static Vector3i getShrineBlock() {
+        return shrineData.length > 0 ? shrineData[0] : null;
+    }
+
+    public static Vector3i[] getShrine() {
+        return shrineData;
     }
 
     /**
@@ -155,5 +172,12 @@ public class DefenceField {
      */
     public static double distanceToNearestEntrance(BaseVector3i pos) {
         return Arrays.stream(entrances).mapToDouble(pos::distance).min().orElse(-1);
+    }
+
+    /**
+     * @return The initial health the shrine should have.
+     */
+    public static int initialHealth() {
+        return 40;
     }
 }
