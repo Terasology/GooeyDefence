@@ -82,8 +82,12 @@ public class DefenceWorldManager extends BaseComponentSystem {
     public void preSave() {
         if (fieldActivated) {
             ShrineComponent component = shrineEntity.getComponent(ShrineComponent.class);
-            component.setPaths(paths);
-            component.setSaved(true);
+            if (component != null) {
+                component.setPaths(paths);
+                component.setSaved(true);
+            } else {
+                logger.info("Saving paths failed.");
+            }
         }
     }
 
