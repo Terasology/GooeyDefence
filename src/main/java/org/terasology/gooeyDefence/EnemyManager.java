@@ -23,7 +23,6 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.components.GooeyComponent;
-import org.terasology.logic.characters.CharacterMoveInputEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -90,10 +89,15 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
                 gooeyComponent.goal = path.get(gooeyComponent.currentStep).toVector3f();
             }
         } else {
+            /* Calculate required heading */
             Vector3f target = new Vector3f(gooeyComponent.goal);
             target.sub(locationComponent.getWorldPosition());
             target.normalize();
-            entity.send(new CharacterMoveInputEvent(0, 0, 0, target, true, false, false, (long) (delta * 1000)));
+            /* Scale to the speed */
+            target.scale(gooeyComponent.speed*delta);
+            /* Move the enemy */
+            locationComponent.setWorldPosition(locationComponent.getWorldPosition().add(target));
+            entity.saveComponent(locationComponent);
         }
     }
 }

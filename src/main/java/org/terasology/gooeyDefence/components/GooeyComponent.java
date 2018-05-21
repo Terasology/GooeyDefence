@@ -22,4 +22,5 @@ public class GooeyComponent implements Component {
     public int currentStep;
     public int pathId;
     public Vector3f goal;
+    public int speed;
 }
