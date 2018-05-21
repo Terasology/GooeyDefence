@@ -15,9 +15,13 @@
  */
 package org.terasology.gooeyDefence;
 
+import org.terasology.engine.Time;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
+import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.rendering.world.selection.BlockSelectionRenderer;
@@ -28,33 +32,52 @@ import java.util.List;
 @RegisterSystem
 public class InWorldRenderer extends BaseComponentSystem implements RenderSystem {
 
-    private BlockSelectionRenderer blockSelectionRenderer;
+    private BlockSelectionRenderer pathBlockRenderer;
+    private BlockSelectionRenderer shrineDamageRenderer;
 
+
+    @In
+    private Time time;
     @In
     private DefenceWorldManager worldProvider;
 
+    private int shrineDamaged = 0;
+
     @Override
     public void initialise() {
-        blockSelectionRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:PathBlock").get());
+        pathBlockRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:PathBlock").get());
+        shrineDamageRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:ShrineDamaged").get());
+    }
+
+    @ReceiveEvent
+    public void onDamageShrine(DamageShrineEvent event, EntityRef entity) {
+        shrineDamaged = 100;
     }
 
     @Override
     public void renderAlphaBlend() {
-        blockSelectionRenderer.beginRenderOverlay();
+        pathBlockRenderer.beginRenderOverlay();
         List<List<Vector3i>> paths = worldProvider.getPaths();
         for (List<Vector3i> path : paths) {
             if (path != null) {
                 for (Vector3i pos : path) {
-                    blockSelectionRenderer.renderMark2(Vector3i.up().add(pos));
+                    pathBlockRenderer.renderMark2(Vector3i.up().add(pos));
                 }
             }
         }
-        blockSelectionRenderer.endRenderOverlay();
+        pathBlockRenderer.endRenderOverlay();
+        shrineDamageRenderer.beginRenderOverlay();
+        if (shrineDamaged > 0) {
+            shrineDamaged -= time.getGameDeltaInMs();
+            for (Vector3i pos : DefenceField.getShrine()) {
+                shrineDamageRenderer.renderMark2(pos);
+            }
+        }
+        shrineDamageRenderer.endRenderOverlay();
     }
 
     @Override
     public void renderOpaque() {
-
     }
 
     @Override

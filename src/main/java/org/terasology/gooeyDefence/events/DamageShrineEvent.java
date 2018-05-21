@@ -20,6 +20,11 @@ import org.terasology.entitySystem.event.Event;
 public class DamageShrineEvent implements Event {
     private int damage;
 
+    public DamageShrineEvent(int damage) {
+        this.damage = damage;
+    }
+
+
     public int getDamage() {
         return damage;
     }

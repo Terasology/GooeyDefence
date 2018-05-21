@@ -23,6 +23,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.components.GooeyComponent;
+import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -83,6 +84,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         if (dist < 0.1f) {
             List<Vector3i> path = defenceWorldManager.getPath(gooeyComponent.pathId);
             if (gooeyComponent.currentStep == path.size() - 1) {
+                entity.send(new DamageShrineEvent(gooeyComponent.damage));
                 entity.destroy();
             } else {
                 gooeyComponent.currentStep += 1;
