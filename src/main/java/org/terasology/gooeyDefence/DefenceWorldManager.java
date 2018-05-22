@@ -32,6 +32,7 @@ import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.OnChangedBlock;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.sun.CelestialSystem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,6 +60,8 @@ public class DefenceWorldManager extends BaseComponentSystem {
     private EnemyManager enemyManager;
     @In
     private BlockEntityRegistry blockEntityRegistry;
+    @In
+    private CelestialSystem celestialSystem;
 
     private EntityRef shrineEntity;
 
@@ -119,9 +122,13 @@ public class DefenceWorldManager extends BaseComponentSystem {
     /**
      * Initialises the defence field
      */
-    public void setupWorld() {
+    private void setupWorld() {
         logger.info("Setting up the world.");
         fieldActivated = true;
+
+        if (!celestialSystem.isSunHalted()) {
+            celestialSystem.toggleSunHalting(0.5f);
+        }
 
         shrineEntity = blockEntityRegistry.getBlockEntityAt(DefenceField.getShrineBlock());
         ShrineComponent component = shrineEntity.getComponent(ShrineComponent.class);
