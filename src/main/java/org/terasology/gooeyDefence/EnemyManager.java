@@ -87,7 +87,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
                 entity.send(new DamageShrineEvent(gooeyComponent.damage));
                 entity.destroy();
             } else {
-                gooeyComponent.currentStep += 1;
+                gooeyComponent.currentStep = Math.min(gooeyComponent.currentStep + 1, path.size() - 1);
                 gooeyComponent.goal = path.get(gooeyComponent.currentStep).toVector3f();
             }
         } else {
@@ -96,7 +96,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
             target.sub(locationComponent.getWorldPosition());
             target.normalize();
             /* Scale to the speed */
-            target.scale(gooeyComponent.speed*delta);
+            target.scale(gooeyComponent.speed * delta);
             /* Move the enemy */
             locationComponent.setWorldPosition(locationComponent.getWorldPosition().add(target));
             entity.saveComponent(locationComponent);
