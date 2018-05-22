@@ -1,3 +1,6 @@
 {
-  "tile": "GooeyDefence:Plain"
+  "tile": "GooeyDefence:Plain",
+  "entity": {
+    "prefab":"GooeyDefence:PlainBlock"
+  }
 }
