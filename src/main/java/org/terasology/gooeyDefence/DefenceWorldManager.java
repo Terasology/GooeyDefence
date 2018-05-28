@@ -32,6 +32,7 @@ import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.OnChangedBlock;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.entity.placement.PlaceBlocks;
 import org.terasology.world.sun.CelestialSystem;
 
 import java.util.ArrayList;
@@ -95,6 +96,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
         }
     }
 
+
     @ReceiveEvent
     public void onDamageShrine(DamageShrineEvent event, EntityRef entity) {
         ShrineComponent component = shrineEntity.getComponent(ShrineComponent.class);
@@ -102,8 +104,15 @@ public class DefenceWorldManager extends BaseComponentSystem {
     }
 
     @ReceiveEvent
+    public void onPlaceBlocks(PlaceBlocks event, EntityRef entity) {
+        if (fieldActivated) {
+            calculatePaths();
+        }
+    }
+
+    @ReceiveEvent
     public void onChangedBlock(OnChangedBlock event, EntityRef entity) {
-        if (event.getNewType() == airBlock || event.getOldType() == airBlock) {
+        if (fieldActivated && (event.getNewType() == airBlock || event.getOldType() == airBlock)) {
             calculatePaths();
         }
     }
@@ -111,9 +120,9 @@ public class DefenceWorldManager extends BaseComponentSystem {
     @ReceiveEvent
     public void onActivate(ActivateEvent event, EntityRef entity) {
         if (fieldActivated) {
-            for (int i = 0; i < DefenceField.entranceCount(); i++) {
-                enemyManager.spawnEnemy(i);
-            }
+            //for (int i = 0; i < DefenceField.entranceCount(); i++) {
+            //    enemyManager.spawnEnemy(i);
+            //}
         } else {
             setupWorld();
         }
