@@ -15,5 +15,5 @@
  */
 package org.terasology.gooeyDefence.components.towers.base;
 
-public class CoreComponent {
+public class TowerEffectComponent {
 }
