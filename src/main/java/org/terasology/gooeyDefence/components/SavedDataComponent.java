@@ -23,10 +23,10 @@ import org.terasology.world.block.ForceBlockActive;
 import java.util.List;
 
 @ForceBlockActive
-public class ShrineComponent implements Component {
+public class SavedDataComponent implements Component {
     private List<List<Vector3i>> paths;
     private boolean saved;
-    private int health = DefenceField.initialHealth();
+    private int health;
 
     public List<List<Vector3i>> getPaths() {
         return paths;
@@ -48,7 +48,9 @@ public class ShrineComponent implements Component {
         return health;
     }
 
-    public void changeHealth(int change) {
-        health += change;
+    public void setHealth(int change) {
+        health = change;
+    }
+
     }
 }

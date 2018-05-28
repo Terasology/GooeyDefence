@@ -22,7 +22,8 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
-import org.terasology.gooeyDefence.components.ShrineComponent;
+import org.terasology.gooeyDefence.components.SavedDataComponent;
+import org.terasology.gooeyDefence.components.towers.ShrineComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.math.geom.Vector3i;
@@ -64,7 +65,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
     @In
     private CelestialSystem celestialSystem;
 
-    private EntityRef shrineEntity;
+    public static EntityRef shrineEntity = EntityRef.NULL;
 
     private boolean fieldActivated;
 
@@ -86,7 +87,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
     @Override
     public void preSave() {
         if (fieldActivated) {
-            ShrineComponent component = shrineEntity.getComponent(ShrineComponent.class);
+            SavedDataComponent component = shrineEntity.getComponent(SavedDataComponent.class);
             if (component != null) {
                 component.setPaths(paths);
                 component.setSaved(true);
@@ -100,7 +101,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
     @ReceiveEvent
     public void onDamageShrine(DamageShrineEvent event, EntityRef entity) {
         ShrineComponent component = shrineEntity.getComponent(ShrineComponent.class);
-        component.changeHealth(event.getDamage());
+        component.reduceHealth(event.getDamage());
     }
 
     @ReceiveEvent
@@ -140,7 +141,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
         }
 
         shrineEntity = blockEntityRegistry.getBlockEntityAt(DefenceField.getShrineBlock());
-        ShrineComponent component = shrineEntity.getComponent(ShrineComponent.class);
+        SavedDataComponent component = shrineEntity.getComponent(SavedDataComponent.class);
         if (component.isSaved()) {
             logger.info("Attempting to retrieve saved data");
             paths = component.getPaths();
