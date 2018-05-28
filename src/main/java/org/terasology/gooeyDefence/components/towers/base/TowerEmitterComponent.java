@@ -15,5 +15,7 @@
  */
 package org.terasology.gooeyDefence.components.towers.base;
 
-public class TowerEmitterComponent {
+import org.terasology.entitySystem.Component;
+
+public class TowerEmitterComponent implements Component {
 }

@@ -16,7 +16,9 @@
 package org.terasology.gooeyDefence.components.towers;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.world.block.ForceBlockActive;
 
+@ForceBlockActive
 public class TowerMultiBlockComponent implements Component {
     private long towerEntity = -1;
 
