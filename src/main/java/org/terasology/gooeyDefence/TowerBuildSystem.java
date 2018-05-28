@@ -83,12 +83,9 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * @param entity The world entity placing the blocks
      */
     @ReceiveEvent
-    public void onAddedBlocks(PlaceBlocks event, EntityRef entity) {
-        for (Vector3i pos : event.getBlocks().keySet()) {
-            EntityRef blockEntity = blockEntityRegistry.getEntityAt(pos);
-            if (blockEntity.hasComponent(TowerMultiBlockComponent.class)) {
-                handleTowerBlock(pos, blockEntity);
-            }
+    public void onAddedBlocks(OnBlockItemPlaced event, EntityRef entity) {
+        if (event.getPlacedBlock().hasComponent(TowerMultiBlockComponent.class)) {
+            handleTowerBlock(event.getPosition(), event.getPlacedBlock());
         }
     }
 
