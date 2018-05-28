@@ -52,8 +52,8 @@ import java.util.List;
 public class DefenceWorldManager extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(DefenceWorldManager.class);
 
-    private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
 
+    private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
     @In
     private PathfinderSystem pathfinderSystem;
     @In
@@ -65,14 +65,13 @@ public class DefenceWorldManager extends BaseComponentSystem {
     @In
     private CelestialSystem celestialSystem;
 
-    public static EntityRef shrineEntity = EntityRef.NULL;
-
-    private boolean fieldActivated;
-
     private Block airBlock;
 
     @Override
     public void initialise() {
+        if (!celestialSystem.isSunHalted()) {
+            celestialSystem.toggleSunHalting(0.5f);
+        }
         airBlock = blockManager.getBlock(BlockManager.AIR_ID);
     }
 
@@ -86,8 +85,8 @@ public class DefenceWorldManager extends BaseComponentSystem {
 
     @Override
     public void preSave() {
-        if (fieldActivated) {
-            SavedDataComponent component = shrineEntity.getComponent(SavedDataComponent.class);
+        if (DefenceField.fieldActivated) {
+            SavedDataComponent component = DefenceField.shrineEntity.getComponent(SavedDataComponent.class);
             if (component != null) {
                 component.setPaths(paths);
                 component.setSaved(true);
@@ -100,27 +99,27 @@ public class DefenceWorldManager extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onDamageShrine(DamageShrineEvent event, EntityRef entity) {
-        ShrineComponent component = shrineEntity.getComponent(ShrineComponent.class);
+        ShrineComponent component = DefenceField.shrineEntity.getComponent(ShrineComponent.class);
         component.reduceHealth(event.getDamage());
     }
 
     @ReceiveEvent
     public void onPlaceBlocks(PlaceBlocks event, EntityRef entity) {
-        if (fieldActivated) {
+        if (DefenceField.fieldActivated) {
             calculatePaths();
         }
     }
 
     @ReceiveEvent
     public void onChangedBlock(OnChangedBlock event, EntityRef entity) {
-        if (fieldActivated && (event.getNewType() == airBlock || event.getOldType() == airBlock)) {
+        if (DefenceField.fieldActivated && (event.getNewType() == airBlock || event.getOldType() == airBlock)) {
             calculatePaths();
         }
     }
 
     @ReceiveEvent
     public void onActivate(ActivateEvent event, EntityRef entity) {
-        if (fieldActivated) {
+        if (DefenceField.fieldActivated) {
             //for (int i = 0; i < DefenceField.entranceCount(); i++) {
             //    enemyManager.spawnEnemy(i);
             //}
@@ -134,14 +133,10 @@ public class DefenceWorldManager extends BaseComponentSystem {
      */
     private void setupWorld() {
         logger.info("Setting up the world.");
-        fieldActivated = true;
+        DefenceField.fieldActivated = true;
 
-        if (!celestialSystem.isSunHalted()) {
-            celestialSystem.toggleSunHalting(0.5f);
-        }
-
-        shrineEntity = blockEntityRegistry.getBlockEntityAt(DefenceField.getShrineBlock());
-        SavedDataComponent component = shrineEntity.getComponent(SavedDataComponent.class);
+        DefenceField.shrineEntity = blockEntityRegistry.getBlockEntityAt(DefenceField.getShrineBlock());
+        SavedDataComponent component = DefenceField.shrineEntity.getComponent(SavedDataComponent.class);
         if (component.isSaved()) {
             logger.info("Attempting to retrieve saved data");
             paths = component.getPaths();
@@ -184,14 +179,5 @@ public class DefenceWorldManager extends BaseComponentSystem {
      */
     public List<Vector3i> getPath(int pathID) {
         return paths.get(pathID);
-    }
-
-    /**
-     * Everything should remain paused until the field is re-activated.
-     *
-     * @return true if the field is activated, false otherwise.
-     */
-    public boolean isFieldActivated() {
-        return fieldActivated;
     }
 }

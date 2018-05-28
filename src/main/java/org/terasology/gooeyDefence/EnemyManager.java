@@ -64,7 +64,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
 
     @Override
     public void update(float delta) {
-        if (defenceWorldManager.isFieldActivated()) {
+        if (DefenceField.fieldActivated) {
             for (EntityRef entity : entityManager.getEntitiesWith(GooeyComponent.class)) {
                 moveEnemy(entity, delta);
             }

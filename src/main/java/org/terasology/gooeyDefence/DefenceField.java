@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence;
 
+import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
 
@@ -30,6 +31,8 @@ import java.util.List;
  * @see DefenceWorldManager
  */
 public class DefenceField {
+    public static EntityRef shrineEntity = EntityRef.NULL;
+    public static boolean fieldActivated;
     private static Vector3i[] entrances = calculateEntrances(3);
     /**
      * The data for the shrine's shape.
