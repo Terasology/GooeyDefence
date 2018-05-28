@@ -16,14 +16,13 @@
 package org.terasology.gooeyDefence.components.towers;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.math.geom.Vector3i;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TowerComponent implements Component {
-    public List<Long> cores = new ArrayList<>();
-    public List<Long> effects = new ArrayList<>();
-    public List<Long> emitters = new ArrayList<>();
-    public List<Long> plains = new ArrayList<>();
+    public Set<Long> cores = new HashSet<>();
+    public Set<Long> effects = new HashSet<>();
+    public Set<Long> emitters = new HashSet<>();
+    public Set<Long> plains = new HashSet<>();
 }
