@@ -29,6 +29,8 @@ import org.terasology.gooeyDefence.components.towers.TowerMultiBlockComponent;
 import org.terasology.gooeyDefence.components.towers.base.TowerCoreComponent;
 import org.terasology.gooeyDefence.components.towers.base.TowerEffectComponent;
 import org.terasology.gooeyDefence.components.towers.base.TowerEmitterComponent;
+import org.terasology.gooeyDefence.events.TowerCreatedEvent;
+import org.terasology.gooeyDefence.events.TowerDestroyedEvent;
 import org.terasology.logic.characters.events.AttackEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.health.DestroyEvent;
@@ -53,7 +55,6 @@ import java.util.stream.Collectors;
 public class TowerBuildSystem extends BaseComponentSystem {
 
     private static final Logger logger = LoggerFactory.getLogger(TowerBuildSystem.class);
-    private List<EntityRef> towerEntities = new ArrayList<>();
     @In
     private BlockEntityRegistry blockEntityRegistry;
     @In
@@ -145,7 +146,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
             newComponent.plains.addAll(component.plains);
 
             /* Destroy the old tower entity */
-            towerEntity.destroy();
+            removeTower(towerEntity);
         }
     }
 
@@ -182,7 +183,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
      */
     private EntityRef createNewTower() {
         EntityRef towerEntity = entityManager.create("GooeyDefence:TowerEntity");
-        towerEntities.add(towerEntity);
+        towerEntity.send(new TowerCreatedEvent());
         return towerEntity;
     }
 
@@ -237,6 +238,11 @@ public class TowerBuildSystem extends BaseComponentSystem {
         block.getComponent(TowerMultiBlockComponent.class).setTowerEntity(-1);
     }
 
+    private void removeTower(EntityRef tower) {
+        tower.send(new TowerDestroyedEvent());
+        tower.destroy();
+    }
+
     /**
      * Rebuilds a given tower into one or multiple towers
      *
@@ -247,7 +253,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
         /* Remove their references to a tower entity */
         blocks.forEach(entityRef -> entityRef.getComponent(TowerMultiBlockComponent.class).setTowerEntity(-1));
 
-        entityManager.getEntity(towerID).destroy();
+        removeTower(entityManager.getEntity(towerID));
         for (EntityRef block : blocks) {
             Vector3i pos = new Vector3i(block.getComponent(LocationComponent.class).getWorldPosition());
             handleTowerBlock(pos, block);
