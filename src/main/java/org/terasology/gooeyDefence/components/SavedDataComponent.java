@@ -17,13 +17,17 @@ package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.reflection.MappedContainer;
 import org.terasology.world.block.ForceBlockActive;
 
 import java.util.List;
+import java.util.Set;
 
 @ForceBlockActive
 public class SavedDataComponent implements Component {
+    private Set<Set<Vector3i>> towers;
     private List<List<Vector3i>> paths;
     private boolean saved;
     private int health;
@@ -52,5 +56,11 @@ public class SavedDataComponent implements Component {
         health = change;
     }
 
+    public Set<Set<Vector3i>> getTowers() {
+        return towers;
+    }
+
+    public void setTowers(Set<Set<Vector3i>> towers) {
+        this.towers = towers;
     }
 }

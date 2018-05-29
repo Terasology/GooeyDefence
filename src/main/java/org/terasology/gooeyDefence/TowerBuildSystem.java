@@ -238,6 +238,12 @@ public class TowerBuildSystem extends BaseComponentSystem {
         block.getComponent(TowerMultiBlockComponent.class).setTowerEntity(-1);
     }
 
+    /**
+     * Removes a tower entity.
+     * Sending the appropriate events.
+     *
+     * @param tower The tower to remove
+     */
     private void removeTower(EntityRef tower) {
         tower.send(new TowerDestroyedEvent());
         tower.destroy();
@@ -266,7 +272,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * @param tower The tower entity to retrieve from
      * @return All the entities in the tower.
      */
-    private Set<EntityRef> getAllFrom(EntityRef tower) {
+    public Set<EntityRef> getAllFrom(EntityRef tower) {
         TowerComponent component = tower.getComponent(TowerComponent.class);
         Set<Long> results = new HashSet<>();
         results.addAll(component.cores);
@@ -276,6 +282,17 @@ public class TowerBuildSystem extends BaseComponentSystem {
 
         /* Convert the Longs to Entity Refs */
         return results.stream().map(id -> entityManager.getEntity(id)).collect(Collectors.toSet());
+    }
+
+    public EntityRef loadTower(Set<Vector3i> positions) {
+        Set<EntityRef> blocks = positions
+                .stream()
+                .map(blockEntityRegistry::getEntityAt)
+                .collect(Collectors.toSet());
+        EntityRef tower = createNewTower();
+
+        blocks.forEach(block -> addToTower(tower, block));
+        return tower;
     }
 
 }
