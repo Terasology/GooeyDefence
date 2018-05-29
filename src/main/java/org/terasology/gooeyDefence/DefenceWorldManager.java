@@ -25,6 +25,7 @@ import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.components.SavedDataComponent;
 import org.terasology.gooeyDefence.components.towers.ShrineComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
+import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
@@ -141,6 +142,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
             logger.info("Attempting to retrieve saved data");
             paths = component.getPaths();
         }
+        DefenceField.shrineEntity.send(new OnFieldActivated());
 
         calculatePaths();
     }
