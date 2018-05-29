@@ -137,12 +137,13 @@ public class DefenceWorldManager extends BaseComponentSystem {
         DefenceField.fieldActivated = true;
 
         DefenceField.shrineEntity = blockEntityRegistry.getBlockEntityAt(DefenceField.getShrineBlock());
+        logger.info("Shrine ID: " + DefenceField.shrineEntity.getId());
         SavedDataComponent component = DefenceField.shrineEntity.getComponent(SavedDataComponent.class);
         if (component.isSaved()) {
             logger.info("Attempting to retrieve saved data");
             paths = component.getPaths();
+            DefenceField.shrineEntity.send(new OnFieldActivated());
         }
-        DefenceField.shrineEntity.send(new OnFieldActivated());
 
         calculatePaths();
     }

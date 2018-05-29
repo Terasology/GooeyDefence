@@ -29,6 +29,7 @@ import org.terasology.gooeyDefence.components.towers.TowerMultiBlockComponent;
 import org.terasology.gooeyDefence.components.towers.base.TowerCoreComponent;
 import org.terasology.gooeyDefence.components.towers.base.TowerEffectComponent;
 import org.terasology.gooeyDefence.components.towers.base.TowerEmitterComponent;
+import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.TowerDestroyedEvent;
 import org.terasology.logic.characters.events.AttackEvent;
@@ -40,7 +41,6 @@ import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
-import org.terasology.registry.Share;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.items.OnBlockItemPlaced;
 
@@ -50,7 +50,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Share(TowerBuildSystem.class)
 @RegisterSystem
 public class TowerBuildSystem extends BaseComponentSystem {
 
@@ -76,7 +75,16 @@ public class TowerBuildSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onActivate(ActivateEvent event, EntityRef entity, TowerMultiBlockComponent component) {
-        logger.info("");
+        logger.info("Tower Entity: " + component.getTowerEntity());
+    }
+
+    @ReceiveEvent
+    public void onFieldActivated(OnFieldActivated event, EntityRef savedDataEntity) {
+        Iterable<EntityRef> blockEntities = entityManager.getEntitiesWith(TowerMultiBlockComponent.class);
+        /* Clear entities */
+        blockEntities.forEach(entity -> entity.getComponent(TowerMultiBlockComponent.class).setTowerEntity(-1));
+        /* Rebuild towers */
+        blockEntities.forEach(this::handleTowerBlock);
     }
 
     /**
@@ -118,6 +126,12 @@ public class TowerBuildSystem extends BaseComponentSystem {
                 addToTower(entityManager.getEntity(towers.iterator().next()), blockEntity);
                 mergeTowers(towers);
                 break;
+        }
+    }
+
+    private void handleTowerBlock(EntityRef entityRef) {
+        if (entityRef.hasComponent(LocationComponent.class)) {
+            handleTowerBlock(new Vector3i(entityRef.getComponent(LocationComponent.class).getWorldPosition()), entityRef);
         }
     }
 
@@ -272,7 +286,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * @param tower The tower entity to retrieve from
      * @return All the entities in the tower.
      */
-    public Set<EntityRef> getAllFrom(EntityRef tower) {
+    private Set<EntityRef> getAllFrom(EntityRef tower) {
         TowerComponent component = tower.getComponent(TowerComponent.class);
         Set<Long> results = new HashSet<>();
         results.addAll(component.cores);
@@ -282,17 +296,6 @@ public class TowerBuildSystem extends BaseComponentSystem {
 
         /* Convert the Longs to Entity Refs */
         return results.stream().map(id -> entityManager.getEntity(id)).collect(Collectors.toSet());
-    }
-
-    public EntityRef loadTower(Set<Vector3i> positions) {
-        Set<EntityRef> blocks = positions
-                .stream()
-                .map(blockEntityRegistry::getEntityAt)
-                .collect(Collectors.toSet());
-        EntityRef tower = createNewTower();
-
-        blocks.forEach(block -> addToTower(tower, block));
-        return tower;
     }
 
 }
