@@ -13,9 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components.towers.base;
+package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
 
-public class TowerEmitterComponent implements Component {
+public class ShrineComponent implements Component {
+    private int health;
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+    public void reduceHealth(int amount) {
+        this.health -= amount;
+    }
 }

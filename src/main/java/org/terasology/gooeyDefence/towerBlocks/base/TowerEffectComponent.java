@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components.towers.base;
+package org.terasology.gooeyDefence.towerBlocks.base;
 
 import org.terasology.entitySystem.Component;
 
