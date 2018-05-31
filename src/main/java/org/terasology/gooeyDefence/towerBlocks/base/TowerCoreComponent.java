@@ -16,6 +16,8 @@
 package org.terasology.gooeyDefence.towerBlocks.base;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.towerBlocks.cores.AttackSelection;
 
 public class TowerCoreComponent implements Component {
+    public int power;
 }

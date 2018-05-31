@@ -13,10 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.towerBlocks.base;
+package org.terasology.gooeyDefence.events;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.Event;
 
-public class TowerEmitterComponent implements Component {
-    public int drain;
+import java.util.Set;
+
+public class DoSelectEnemies implements Event {
+    private Set<EntityRef> targets;
+
+    public Set<EntityRef> getTargets() {
+        return targets;
+    }
+
+    public void setTargets(Set<EntityRef> targets) {
+        this.targets = targets;
+    }
 }

@@ -18,4 +18,5 @@ package org.terasology.gooeyDefence.towerBlocks.base;
 import org.terasology.entitySystem.Component;
 
 public class TowerEffectComponent implements Component {
+    public int drain;
 }
