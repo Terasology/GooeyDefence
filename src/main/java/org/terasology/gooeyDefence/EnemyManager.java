@@ -30,7 +30,9 @@ import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Handles all enemy based actions. Is controlled by {@link DefenceWorldManager}.
@@ -39,6 +41,8 @@ import java.util.List;
 @RegisterSystem
 public class EnemyManager extends BaseComponentSystem implements UpdateSubscriberSystem {
     private static final Logger logger = LoggerFactory.getLogger(EnemyManager.class);
+
+    private Set<EntityRef> enemies = new HashSet<>();
 
     @In
     private EntityManager entityManager;
@@ -60,12 +64,43 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         component.currentStep = 0;
         component.pathId = entranceNumber;
         entity.saveComponent(component);
+
+        enemies.add(entity);
+    }
+
+    /**
+     * Destroys an enemy, ensuring that all references to it in the system are handled.
+     *
+     * @param enemy The enemy to destroy
+     */
+    public void destroyEnemy(EntityRef enemy) {
+        enemies.remove(enemy);
+        enemy.destroy();
+    }
+
+    /**
+     * Obtain all the enemies that are within range of the given position.
+     *
+     * @param pos   The position to look for
+     * @param range The range to search in.
+     * @return A set of all enemies found within this range.
+     */
+    public Set<EntityRef> getEnemiesInRange(Vector3f pos, int range) {
+        int rangeSqr = range * range;
+        Set<EntityRef> result = new HashSet<>();
+        for (EntityRef enemy : enemies) {
+            Vector3f enemyPos = enemy.getComponent(LocationComponent.class).getWorldPosition();
+            if (enemyPos.distanceSquared(pos) <= rangeSqr) {
+                result.add(enemy);
+            }
+        }
+        return result;
     }
 
     @Override
     public void update(float delta) {
         if (DefenceField.fieldActivated) {
-            for (EntityRef entity : entityManager.getEntitiesWith(GooeyComponent.class)) {
+            for (EntityRef entity : enemies) {
                 moveEnemy(entity, delta);
             }
         }
