@@ -15,8 +15,10 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.base;
 
-import org.terasology.entitySystem.Component;
+public abstract class TowerEmitter {
+    private int drain;
 
-public class TowerEmitterComponent implements Component {
-    public int drain;
+    public int getDrain() {
+        return drain;
+    }
 }

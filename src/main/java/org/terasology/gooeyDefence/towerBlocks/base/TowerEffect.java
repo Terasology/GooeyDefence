@@ -15,9 +15,10 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.base;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.cores.AttackSelection;
+public abstract class TowerEffect {
+    private int drain;
 
-public class TowerCoreComponent implements Component {
-    public int power;
+    public int getDrain() {
+        return drain;
+    }
 }

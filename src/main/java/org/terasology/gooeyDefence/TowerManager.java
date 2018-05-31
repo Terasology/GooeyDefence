@@ -22,12 +22,12 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerCoreComponent;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEffectComponent;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitterComponent;
 import org.terasology.gooeyDefence.events.DoSelectEnemies;
 import org.terasology.gooeyDefence.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.TowerDestroyedEvent;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEffect;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.registry.In;
@@ -66,15 +66,6 @@ public class TowerManager extends BaseComponentSystem {
         }
     }
 
-    private <T extends Component> T getTowerComponent(EntityRef entity, Class<T> targetComponent) {
-        for (Component component : entity.iterateComponents()) {
-            if (targetComponent.isInstance(component)) {
-                return targetComponent.cast(component);
-            }
-        }
-        return null;
-    }
-
     private void handleTowerShooting(TowerComponent towerComponent) {
         for (long emitterID : towerComponent.emitters) {
             EntityRef emitter = entityManager.getEntity(emitterID);
@@ -85,18 +76,24 @@ public class TowerManager extends BaseComponentSystem {
 
     private int getEmitterDrain(TowerComponent towerComponent) {
         int drain = 0;
-        for (long coreID : towerComponent.emitters) {
-            EntityRef coreEntity = entityManager.getEntity(coreID);
-            drain += coreEntity.getComponent(TowerEmitterComponent.class).drain;
+        for (long emitterID : towerComponent.emitters) {
+            EntityRef emitterEntity = entityManager.getEntity(emitterID);
+            TowerEmitter emitter = getComponentExtending(emitterEntity, TowerEmitter.class);
+            if (emitter != null) {
+                drain += emitter.getDrain();
+            }
         }
         return drain;
     }
 
     private int getEffectsDrain(TowerComponent towerComponent) {
         int drain = 0;
-        for (long coreID : towerComponent.effects) {
-            EntityRef coreEntity = entityManager.getEntity(coreID);
-            drain += coreEntity.getComponent(TowerEffectComponent.class).drain;
+        for (long effectID : towerComponent.effects) {
+            EntityRef effectEntity = entityManager.getEntity(effectID);
+            TowerEffect effect = getComponentExtending(effectEntity, TowerEffect.class);
+            if (effect != null) {
+                drain += effect.getDrain();
+            }
         }
         return drain;
     }
@@ -105,10 +102,21 @@ public class TowerManager extends BaseComponentSystem {
         int power = 0;
         for (long coreID : towerComponent.cores) {
             EntityRef coreEntity = entityManager.getEntity(coreID);
-            power += coreEntity.getComponent(TowerCoreComponent.class).power;
+            TowerCore core = getComponentExtending(coreEntity, TowerCore.class);
+            if (core != null) {
+                power += core.getPower();
+            }
         }
         return power;
     }
 
+    private <Y> Y getComponentExtending(EntityRef entity, Class<Y> superClass) {
+        for (Component component : entity.iterateComponents()) {
+            if (component.getClass().isInstance(superClass)) {
+                return superClass.cast(component);
+            }
+        }
+        return null;
+    }
 
 }

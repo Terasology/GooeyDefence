@@ -26,9 +26,9 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.components.towers.TowerMultiBlockComponent;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerCoreComponent;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEffectComponent;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitterComponent;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEffect;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.TowerDestroyedEvent;
@@ -176,13 +176,13 @@ public class TowerBuildSystem extends BaseComponentSystem {
 
         /* Add it to the relevant list of blocks */
         for (Component component : blockEntity.iterateComponents()) {
-            if (component instanceof TowerCoreComponent) {
+            if (component instanceof TowerCore) {
                 towerComponent.cores.add(blockEntity.getId());
                 return;
-            } else if (component instanceof TowerEffectComponent) {
+            } else if (component instanceof TowerEffect) {
                 towerComponent.effects.add(blockEntity.getId());
                 return;
-            } else if (component instanceof TowerEmitterComponent) {
+            } else if (component instanceof TowerEmitter) {
                 towerComponent.emitters.add(blockEntity.getId());
                 return;
             }
