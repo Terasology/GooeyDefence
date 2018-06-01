@@ -18,6 +18,8 @@ package org.terasology.gooeyDefence.events;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,8 +30,8 @@ public class DoSelectEnemies implements Event {
         return targets;
     }
 
-    public void setTargets(Set<EntityRef> targets) {
-        this.targets = targets;
+    public void addMultiple(Collection<EntityRef> targets) {
+        this.targets.addAll(targets);
     }
 
     public void addToList(EntityRef target) {
