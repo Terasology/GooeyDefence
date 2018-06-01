@@ -126,11 +126,11 @@ public class DefenceWorldManager extends BaseComponentSystem {
      */
     private void setupWorld() {
         logger.info("Setting up the world.");
-        DefenceField.setFieldActivated();
 
         SavedDataComponent component = DefenceField.getShrineEntity().getComponent(SavedDataComponent.class);
         DefenceField.getShrineEntity().send(new OnFieldActivated());
 
+        DefenceField.setFieldActivated();
         if (component.isSaved()) {
             logger.info("Attempting to retrieve saved data");
             paths = component.getPaths();
