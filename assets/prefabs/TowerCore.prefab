@@ -1,5 +1,7 @@
 {
   "alwaysRelevant": true,
   "TowerMultiBlock": {},
-  "TowerCore":{}
+  "BasicCore": {
+    "power": 10
+  }
 }
