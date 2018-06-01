@@ -1,0 +1,8 @@
+{
+  "alwaysRelevant": true,
+  "TowerMultiBlock": {},
+  "SingleTargetEmitter": {
+    "drain": 5,
+    "range": 10
+  }
+}

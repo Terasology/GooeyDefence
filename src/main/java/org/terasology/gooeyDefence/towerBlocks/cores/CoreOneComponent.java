@@ -18,5 +18,5 @@ package org.terasology.gooeyDefence.towerBlocks.cores;
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
 
-public class BasicCoreComponent extends TowerCore implements Component {
+public class CoreOneComponent extends TowerCore implements Component {
 }
