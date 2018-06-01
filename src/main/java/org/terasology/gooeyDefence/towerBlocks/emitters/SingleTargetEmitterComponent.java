@@ -13,17 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.towerBlocks.base;
+package org.terasology.gooeyDefence.towerBlocks.emitters;
 
-public abstract class TowerEmitter {
-    private int drain;
-    private int range;
+import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
 
-    public int getDrain() {
-        return drain;
-    }
-
-    public int getRange() {
-        return range;
-    }
+public class SingleTargetEmitterComponent extends TowerEmitter implements Component {
 }

@@ -83,7 +83,6 @@ public class TowerManager extends BaseComponentSystem {
         if (event.getActionId().equals("towerUpdate" + entity.getId())) {
             int corePower = getTotalCorePower(component);
             int totalDrain = getEffectsDrain(component) + getEmitterDrain(component);
-            logger.info(entity.getId() + ": Power: " + corePower + ", Drain: " + totalDrain);
             if (corePower >= totalDrain) {
                 handleTowerShooting(component);
             }
