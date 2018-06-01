@@ -15,6 +15,8 @@
  */
 package org.terasology.gooeyDefence;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -37,6 +39,8 @@ import java.util.Set;
 
 @RegisterSystem
 public class TowerManager extends BaseComponentSystem {
+    private static final Logger logger = LoggerFactory.getLogger(TowerManager.class);
+
     @In
     private DelayManager delayManager;
     @In
@@ -60,6 +64,7 @@ public class TowerManager extends BaseComponentSystem {
         if (event.getActionId().equals("towerUpdate" + entity.getId())) {
             int corePower = getTotalCorePower(component);
             int totalDrain = getEffectsDrain(component) + getEmitterDrain(component);
+            logger.info(entity.getId() + ": Power: " + corePower + ", Drain: " + totalDrain);
             if (corePower >= totalDrain) {
                 handleTowerShooting(component);
             }
@@ -112,7 +117,7 @@ public class TowerManager extends BaseComponentSystem {
 
     private <Y> Y getComponentExtending(EntityRef entity, Class<Y> superClass) {
         for (Component component : entity.iterateComponents()) {
-            if (component.getClass().isInstance(superClass)) {
+            if (superClass.isInstance(component)) {
                 return superClass.cast(component);
             }
         }
