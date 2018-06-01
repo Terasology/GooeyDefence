@@ -18,6 +18,8 @@ package org.terasology.gooeyDefence;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.registry.CoreRegistry;
+import org.terasology.world.BlockEntityRegistry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,8 +33,8 @@ import java.util.List;
  * @see DefenceWorldManager
  */
 public class DefenceField {
-    public static EntityRef shrineEntity = EntityRef.NULL;
-    public static boolean fieldActivated;
+    private static EntityRef shrineEntity = EntityRef.NULL;
+    private static boolean fieldActivated;
     private static Vector3i[] entrances = calculateEntrances(3);
     /**
      * The data for the shrine's shape.
@@ -178,9 +180,30 @@ public class DefenceField {
     }
 
     /**
-     * @return The initial health the shrine should have.
+     * Get the shrine entity from the shrine.
+     * Caches the result, recollecting it when it's not existing
+     *
+     * @return The shrine entity, or the null entity if it can't be found
      */
-    public static int initialHealth() {
-        return 40;
+    public static EntityRef getShrineEntity() {
+        if (!shrineEntity.exists()) {
+            shrineEntity = CoreRegistry.get(BlockEntityRegistry.class).getBlockEntityAt(getShrineBlock());
+        }
+        return shrineEntity;
+    }
+
+    /**
+     * @return A boolean indicating if the field is activated or not.
+     */
+    public static boolean isFieldActivated() {
+        return fieldActivated;
+    }
+
+    /**
+     * Activate the field.
+     * There is no mechanism for setting the value to false because this shouldn't be possible or needed.
+     */
+    public static void setFieldActivated() {
+        DefenceField.fieldActivated = true;
     }
 }

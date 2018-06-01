@@ -30,7 +30,6 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
-import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.OnChangedBlock;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
@@ -58,14 +57,12 @@ public class DefenceWorldManager extends BaseComponentSystem {
     @In
     private PathfinderSystem pathfinderSystem;
     @In
-    private BlockManager blockManager;
-    @In
     private EnemyManager enemyManager;
-    @In
-    private BlockEntityRegistry blockEntityRegistry;
     @In
     private CelestialSystem celestialSystem;
 
+    @In
+    private BlockManager blockManager;
     private Block airBlock;
 
     @Override
@@ -86,8 +83,8 @@ public class DefenceWorldManager extends BaseComponentSystem {
 
     @Override
     public void preSave() {
-        if (DefenceField.fieldActivated) {
-            SavedDataComponent component = DefenceField.shrineEntity.getComponent(SavedDataComponent.class);
+        if (DefenceField.isFieldActivated()) {
+            SavedDataComponent component = DefenceField.getShrineEntity().getComponent(SavedDataComponent.class);
             if (component != null) {
                 component.setPaths(paths);
                 component.setSaved(true);
@@ -100,31 +97,27 @@ public class DefenceWorldManager extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onDamageShrine(DamageShrineEvent event, EntityRef entity) {
-        ShrineComponent component = DefenceField.shrineEntity.getComponent(ShrineComponent.class);
+        ShrineComponent component = DefenceField.getShrineEntity().getComponent(ShrineComponent.class);
         component.reduceHealth(event.getDamage());
     }
 
     @ReceiveEvent
     public void onPlaceBlocks(PlaceBlocks event, EntityRef entity) {
-        if (DefenceField.fieldActivated) {
+        if (DefenceField.isFieldActivated()) {
             calculatePaths();
         }
     }
 
     @ReceiveEvent
     public void onChangedBlock(OnChangedBlock event, EntityRef entity) {
-        if (DefenceField.fieldActivated && (event.getNewType() == airBlock || event.getOldType() == airBlock)) {
+        if (DefenceField.isFieldActivated() && (event.getNewType() == airBlock || event.getOldType() == airBlock)) {
             calculatePaths();
         }
     }
 
     @ReceiveEvent
     public void onActivate(ActivateEvent event, EntityRef entity) {
-        if (DefenceField.fieldActivated) {
-            //for (int i = 0; i < DefenceField.entranceCount(); i++) {
-            //    enemyManager.spawnEnemy(i);
-            //}
-        } else {
+        if (!DefenceField.isFieldActivated()) {
             setupWorld();
         }
     }
@@ -134,15 +127,14 @@ public class DefenceWorldManager extends BaseComponentSystem {
      */
     private void setupWorld() {
         logger.info("Setting up the world.");
-        DefenceField.fieldActivated = true;
+        DefenceField.setFieldActivated();
 
-        DefenceField.shrineEntity = blockEntityRegistry.getBlockEntityAt(DefenceField.getShrineBlock());
-        logger.info("Shrine ID: " + DefenceField.shrineEntity.getId());
-        SavedDataComponent component = DefenceField.shrineEntity.getComponent(SavedDataComponent.class);
+        logger.info("Shrine ID: " + DefenceField.getShrineEntity().getId());
+        SavedDataComponent component = DefenceField.getShrineEntity().getComponent(SavedDataComponent.class);
         if (component.isSaved()) {
             logger.info("Attempting to retrieve saved data");
             paths = component.getPaths();
-            DefenceField.shrineEntity.send(new OnFieldActivated());
+            DefenceField.getShrineEntity().send(new OnFieldActivated());
         }
 
         calculatePaths();

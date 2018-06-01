@@ -99,7 +99,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
 
     @Override
     public void update(float delta) {
-        if (DefenceField.fieldActivated) {
+        if (DefenceField.isFieldActivated()) {
             for (EntityRef entity : enemies) {
                 moveEnemy(entity, delta);
             }
