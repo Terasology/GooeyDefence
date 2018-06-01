@@ -3,6 +3,6 @@
   "TowerMultiBlock": {},
   "SingleTargetEmitter": {
     "drain": 5,
-    "range": 10
+    "range": 2
   }
 }
