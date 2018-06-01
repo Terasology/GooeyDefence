@@ -26,6 +26,7 @@ import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.logic.location.LocationComponent;
@@ -60,7 +61,14 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
         enemies.clear();
         entityManager.getEntitiesWith(GooeyComponent.class).forEach(enemies::add);
-        delayManager.addPeriodicAction(DefenceField.getShrineEntity(), "SpawnEnemyEvent", 500, 500);
+        //delayManager.addPeriodicAction(DefenceField.getShrineEntity(), "SpawnEnemyEvent", 500, 500);
+    }
+
+    @ReceiveEvent
+    public void onActivate(ActivateEvent event, EntityRef entity) {
+        for (int i = 0; i < DefenceField.entranceCount(); i++) {
+            spawnEnemy(i);
+        }
     }
 
     @ReceiveEvent
