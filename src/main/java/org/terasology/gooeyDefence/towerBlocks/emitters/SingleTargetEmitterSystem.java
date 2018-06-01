@@ -48,8 +48,8 @@ public class SingleTargetEmitterSystem extends BaseComponentSystem {
     public void onDoSelectEnemies(DoSelectEnemies event, EntityRef entity, LocationComponent locationComponent, SingleTargetEmitterComponent emitterComponent) {
         Set<EntityRef> targets = enemyManager.getEnemiesInRange(
                 locationComponent.getWorldPosition(),
-                emitterComponent.getRange());
-        Optional<EntityRef> firstEnemy = targets.stream().max((first, second) -> {
+                emitterComponent.getRange());   
+        Optional<EntityRef> firstEnemy = targets.stream().min((first, second) -> {
             GooeyComponent firstComponent = first.getComponent(GooeyComponent.class);
             GooeyComponent secondComponent = second.getComponent(GooeyComponent.class);
             return firstComponent.currentStep - secondComponent.currentStep;
