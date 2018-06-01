@@ -71,7 +71,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
             }
         }
     }
-    
+
     /**
      * Spawns an enemy at the given entrance.
      * Also begins it travelling down the path.
@@ -160,7 +160,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
             entity.send(new DamageShrineEvent(gooeyComponent.damage));
             destroyEnemy(entity);
         } else {
-            gooeyComponent.currentStep -= 1;
+            gooeyComponent.currentStep = Math.min(gooeyComponent.currentStep - 1, path.size() - 1);
             gooeyComponent.goal = path.get(gooeyComponent.currentStep).toVector3f();
             entity.saveComponent(gooeyComponent);
         }
