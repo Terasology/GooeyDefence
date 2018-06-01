@@ -57,8 +57,6 @@ public class DefenceWorldManager extends BaseComponentSystem {
     @In
     private PathfinderSystem pathfinderSystem;
     @In
-    private EnemyManager enemyManager;
-    @In
     private CelestialSystem celestialSystem;
 
     @In
@@ -94,11 +92,12 @@ public class DefenceWorldManager extends BaseComponentSystem {
         }
     }
 
-
     @ReceiveEvent
     public void onDamageShrine(DamageShrineEvent event, EntityRef entity) {
         ShrineComponent component = DefenceField.getShrineEntity().getComponent(ShrineComponent.class);
-        component.reduceHealth(event.getDamage());
+        if (component != null) {
+            component.reduceHealth(event.getDamage());
+        }
     }
 
     @ReceiveEvent
@@ -129,12 +128,12 @@ public class DefenceWorldManager extends BaseComponentSystem {
         logger.info("Setting up the world.");
         DefenceField.setFieldActivated();
 
-        logger.info("Shrine ID: " + DefenceField.getShrineEntity().getId());
         SavedDataComponent component = DefenceField.getShrineEntity().getComponent(SavedDataComponent.class);
+        DefenceField.getShrineEntity().send(new OnFieldActivated());
+
         if (component.isSaved()) {
             logger.info("Attempting to retrieve saved data");
             paths = component.getPaths();
-            DefenceField.getShrineEntity().send(new OnFieldActivated());
         }
 
         calculatePaths();
@@ -147,7 +146,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
      */
     public void calculatePath(int id) {
         pathfinderSystem.requestPath(
-                DefenceField.entrancePos(id), DefenceField.fieldCentre(), (path, target) -> paths.set(id, path));
+                DefenceField.fieldCentre(), DefenceField.entrancePos(id), (path, target) -> paths.set(id, path));
     }
 
     /**

@@ -19,11 +19,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
+import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -43,6 +45,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     private static final Logger logger = LoggerFactory.getLogger(EnemyManager.class);
 
     private Set<EntityRef> enemies = new HashSet<>();
+    private Set<EntityRef> enemiesToRemove = new HashSet<>();
 
     @In
     private EntityManager entityManager;
@@ -60,8 +63,9 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
 
         /* Setup movement component */
         GooeyComponent component = entity.getComponent(GooeyComponent.class);
-        component.goal = defenceWorldManager.getPath(entranceNumber).get(0).toVector3f();
-        component.currentStep = 0;
+        List<Vector3i> path = defenceWorldManager.getPath(entranceNumber);
+        component.currentStep = path.size() - 1;
+        component.goal = path.get(component.currentStep).toVector3f();
         component.pathId = entranceNumber;
         entity.saveComponent(component);
 
@@ -74,7 +78,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param enemy The enemy to destroy
      */
     public void destroyEnemy(EntityRef enemy) {
-        enemies.remove(enemy);
+        enemiesToRemove.add(enemy);
         enemy.destroy();
     }
 
@@ -100,9 +104,9 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     @Override
     public void update(float delta) {
         if (DefenceField.isFieldActivated()) {
-            for (EntityRef entity : enemies) {
-                moveEnemy(entity, delta);
-            }
+            enemies.forEach(entity -> processEnemy(entity, delta));
+            enemiesToRemove.forEach(enemies::remove);
+            enemiesToRemove.clear();
         }
     }
 
@@ -111,30 +115,55 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      *
      * @param entity the enemy to move
      */
-    private void moveEnemy(EntityRef entity, float delta) {
+    private void processEnemy(EntityRef entity, float delta) {
         LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
         GooeyComponent gooeyComponent = entity.getComponent(GooeyComponent.class);
 
         float dist = locationComponent.getWorldPosition().distanceSquared(gooeyComponent.goal);
         if (dist < 0.1f) {
-            List<Vector3i> path = defenceWorldManager.getPath(gooeyComponent.pathId);
-            if (gooeyComponent.currentStep == path.size() - 1) {
-                entity.send(new DamageShrineEvent(gooeyComponent.damage));
-                entity.destroy();
-            } else {
-                gooeyComponent.currentStep = Math.min(gooeyComponent.currentStep + 1, path.size() - 1);
-                gooeyComponent.goal = path.get(gooeyComponent.currentStep).toVector3f();
-            }
+            updateToNextStep(entity, gooeyComponent);
         } else {
-            /* Calculate required heading */
-            Vector3f target = new Vector3f(gooeyComponent.goal);
-            target.sub(locationComponent.getWorldPosition());
-            target.normalize();
-            /* Scale to the speed */
-            target.scale(gooeyComponent.speed * delta);
-            /* Move the enemy */
-            locationComponent.setWorldPosition(locationComponent.getWorldPosition().add(target));
-            entity.saveComponent(locationComponent);
+            moveEnemyTowardsGoal(entity, delta, gooeyComponent, locationComponent);
         }
     }
+
+    /**
+     * Handles the entity reaching the goal.
+     * Either marks the entity as having reached the end of the path or picks the next element in the path as the goal.
+     *
+     * @param entity         The entity to update
+     * @param gooeyComponent The GooeyComponent of the entity
+     */
+    private void updateToNextStep(EntityRef entity, GooeyComponent gooeyComponent) {
+        List<Vector3i> path = defenceWorldManager.getPath(gooeyComponent.pathId);
+        if (gooeyComponent.currentStep <= 0) {
+            entity.send(new DamageShrineEvent(gooeyComponent.damage));
+            destroyEnemy(entity);
+        } else {
+            gooeyComponent.currentStep -= 1;
+            gooeyComponent.goal = path.get(gooeyComponent.currentStep).toVector3f();
+            entity.saveComponent(gooeyComponent);
+        }
+    }
+
+    /**
+     * Moves the entity towards it's goal.
+     *
+     * @param entity            The entity to move
+     * @param delta             The delta of this step
+     * @param gooeyComponent    The GooeyComponent of the entity
+     * @param locationComponent The LocationComponent of the entity
+     */
+    private void moveEnemyTowardsGoal(EntityRef entity, float delta, GooeyComponent gooeyComponent, LocationComponent locationComponent) {
+        /* Calculate required heading */
+        Vector3f target = new Vector3f(gooeyComponent.goal);
+        target.sub(locationComponent.getWorldPosition());
+        target.normalize();
+        /* Scale to the speed */
+        target.scale(gooeyComponent.speed * delta);
+        /* Move the enemy */
+        locationComponent.setWorldPosition(locationComponent.getWorldPosition().add(target));
+        entity.saveComponent(locationComponent);
+    }
+
 }
