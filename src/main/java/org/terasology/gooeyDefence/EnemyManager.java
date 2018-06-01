@@ -26,6 +26,8 @@ import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.logic.delay.DelayManager;
+import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -51,7 +53,25 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     private EntityManager entityManager;
     @In
     private DefenceWorldManager defenceWorldManager;
+    @In
+    private DelayManager delayManager;
 
+    @ReceiveEvent
+    public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
+        enemies.clear();
+        entityManager.getEntitiesWith(GooeyComponent.class).forEach(enemies::add);
+        delayManager.addPeriodicAction(DefenceField.getShrineEntity(), "SpawnEnemyEvent", 500, 500);
+    }
+
+    @ReceiveEvent
+    public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity) {
+        if (event.getActionId().equals("SpawnEnemyEvent")) {
+            for (int i = 0; i < DefenceField.entranceCount(); i++) {
+                spawnEnemy(i);
+            }
+        }
+    }
+    
     /**
      * Spawns an enemy at the given entrance.
      * Also begins it travelling down the path.
