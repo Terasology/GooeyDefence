@@ -60,14 +60,6 @@ public class TowerBuildSystem extends BaseComponentSystem {
     private EntityManager entityManager;
 
     /**
-     * Make blocks destroy instantly
-     */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
-    public void onAttackEntity(AttackEvent event, EntityRef targetEntity) {
-        targetEntity.send(new DestroyEvent(event.getInstigator(), event.getDirectCause(), EngineDamageTypes.PHYSICAL.get()));
-    }
-
-    /**
      * Test Event Handler
      *
      * @param event  The activate event

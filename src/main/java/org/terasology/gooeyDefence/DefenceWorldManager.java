@@ -17,23 +17,33 @@ package org.terasology.gooeyDefence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
+import org.terasology.gooeyDefence.components.DestructibleBlockComponent;
 import org.terasology.gooeyDefence.components.SavedDataComponent;
 import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.logic.characters.events.AttackEvent;
 import org.terasology.logic.common.ActivateEvent;
+import org.terasology.logic.health.DestroyEvent;
+import org.terasology.logic.health.EngineDamageTypes;
+import org.terasology.logic.inventory.events.DropItemEvent;
+import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.world.OnChangedBlock;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.entity.CreateBlockDropsEvent;
 import org.terasology.world.block.entity.placement.PlaceBlocks;
+import org.terasology.world.block.items.BlockItemFactory;
 import org.terasology.world.sun.CelestialSystem;
 
 import java.util.ArrayList;
@@ -58,10 +68,14 @@ public class DefenceWorldManager extends BaseComponentSystem {
     private PathfinderSystem pathfinderSystem;
     @In
     private CelestialSystem celestialSystem;
+    @In
+    private EntityManager entityManager;
 
     @In
     private BlockManager blockManager;
+    private BlockItemFactory factory;
     private Block airBlock;
+
 
     @Override
     public void initialise() {
@@ -69,6 +83,26 @@ public class DefenceWorldManager extends BaseComponentSystem {
             celestialSystem.toggleSunHalting(0.5f);
         }
         airBlock = blockManager.getBlock(BlockManager.AIR_ID);
+        factory = new BlockItemFactory(entityManager);
+    }
+
+    /**
+     * Make blocks destroy instantly
+     */
+    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
+    public void onAttackEntity(AttackEvent event, EntityRef targetEntity) {
+        event.consume();
+        if (targetEntity.hasComponent(DestructibleBlockComponent.class)) {
+            targetEntity.send(new DestroyEvent(event.getInstigator(), event.getDirectCause(), EngineDamageTypes.PHYSICAL.get()));
+        }
+    }
+
+    @ReceiveEvent
+    public void onCreateBlockDrops(CreateBlockDropsEvent event, EntityRef entity, LocationComponent component) {
+        if (entity.getParentPrefab().getName().equals("GooeyDefence:PlainWorldGen")) {
+                event.consume();
+            factory.newInstance(blockManager.getBlockFamily("GooeyDefence:Plain")).send(new DropItemEvent(component.getWorldPosition()));
+        }
     }
 
     /**
