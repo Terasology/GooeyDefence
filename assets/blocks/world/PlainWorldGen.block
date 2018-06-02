@@ -1,0 +1,7 @@
+{
+  "tile": "GooeyDefence:PlainWorldGen",
+  "entity": {
+    "prefab":"GooeyDefence:PlainWorldGen"
+  },
+  "translucent":true
+}

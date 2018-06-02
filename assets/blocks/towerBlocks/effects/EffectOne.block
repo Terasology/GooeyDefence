@@ -2,5 +2,6 @@
   "entity": {
     "prefab": "GooeyDefence:EffectOne"
   },
-  "blockTile": "GooeyDefence:EffectOne"
+  "blockTile": "GooeyDefence:EffectOne",
+  "translucent":true
 }

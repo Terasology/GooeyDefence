@@ -35,7 +35,7 @@ public class RandomFillingRasterizer implements WorldRasterizer {
 
     @Override
     public void initialize() {
-        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Plain");
+        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:PlainWorldGen");
     }
 
     @Override
