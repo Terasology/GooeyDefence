@@ -1,6 +1,5 @@
 {
-  "alwaysRelevant": true,
-  "TowerMultiBlock": {},
+  "parent": "GooeyDefence:PlainBlock",
   "SingleTargetEmitter": {
     "drain": 5,
     "range": 2

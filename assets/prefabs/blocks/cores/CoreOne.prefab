@@ -1,6 +1,5 @@
 {
-  "alwaysRelevant": true,
-  "TowerMultiBlock": {},
+  "parent": "GooeyDefence:PlainBlock",
   "CoreOne": {
     "power": 10
   }

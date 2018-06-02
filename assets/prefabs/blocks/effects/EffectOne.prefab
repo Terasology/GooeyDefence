@@ -1,5 +1,4 @@
 {
-  "alwaysRelevant": true,
-  "TowerMultiBlock": {},
+  "parent": "GooeyDefence:PlainBlock",
   "FireEffect":{}
 }
