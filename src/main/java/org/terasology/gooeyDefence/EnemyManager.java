@@ -87,11 +87,16 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param entranceNumber The entrance to spawn at
      */
     public void spawnEnemy(int entranceNumber) {
+
+        List<Vector3i> path = defenceWorldManager.getPath(entranceNumber);
+        if (path == null) {
+            return;
+        }
+
         EntityRef entity = entityManager.create("GooeyDefence:Gooey", DefenceField.entrancePos(entranceNumber).toVector3f());
 
         /* Setup movement component */
         GooeyComponent component = entity.getComponent(GooeyComponent.class);
-        List<Vector3i> path = defenceWorldManager.getPath(entranceNumber);
         component.currentStep = path.size() - 1;
         component.goal = path.get(component.currentStep).toVector3f();
         component.pathId = entranceNumber;
@@ -164,6 +169,9 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      */
     private void updateToNextStep(EntityRef entity, GooeyComponent gooeyComponent) {
         List<Vector3i> path = defenceWorldManager.getPath(gooeyComponent.pathId);
+        if (path == null) {
+            return;
+        }
         if (gooeyComponent.currentStep <= 0) {
             entity.send(new DamageShrineEvent(gooeyComponent.damage));
             destroyEnemy(entity);
