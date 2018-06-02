@@ -21,7 +21,7 @@ import org.terasology.math.geom.Vector3f;
 public class GooeyComponent implements Component {
     public int currentStep;
     public int pathId;
-    public Vector3f goal;
+    public Vector3f goal = Vector3f.zero();
     public int speed;
     public int damage;
 }
