@@ -25,7 +25,6 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.components.DestructibleBlockComponent;
-import org.terasology.gooeyDefence.components.SavedDataComponent;
 import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
@@ -61,6 +60,7 @@ import java.util.List;
 @RegisterSystem
 public class DefenceWorldManager extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(DefenceWorldManager.class);
+    private int numPathCalculation = 0;
 
 
     private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
@@ -100,31 +100,11 @@ public class DefenceWorldManager extends BaseComponentSystem {
     @ReceiveEvent
     public void onCreateBlockDrops(CreateBlockDropsEvent event, EntityRef entity, LocationComponent component) {
         if (entity.getParentPrefab().getName().equals("GooeyDefence:PlainWorldGen")) {
-                event.consume();
+            event.consume();
             factory.newInstance(blockManager.getBlockFamily("GooeyDefence:Plain")).send(new DropItemEvent(component.getWorldPosition()));
         }
     }
 
-    /**
-     * Implemented to ensure we capture both manual and automatic saves
-     */
-    @Override
-    public void preAutoSave() {
-        preSave();
-    }
-
-    @Override
-    public void preSave() {
-        if (DefenceField.isFieldActivated()) {
-            SavedDataComponent component = DefenceField.getShrineEntity().getComponent(SavedDataComponent.class);
-            if (component != null) {
-                component.setPaths(paths);
-                component.setSaved(true);
-            } else {
-                logger.info("Saving paths failed.");
-            }
-        }
-    }
 
     @ReceiveEvent
     public void onDamageShrine(DamageShrineEvent event, EntityRef entity) {
@@ -161,34 +141,45 @@ public class DefenceWorldManager extends BaseComponentSystem {
     private void setupWorld() {
         logger.info("Setting up the world.");
 
-        SavedDataComponent component = DefenceField.getShrineEntity().getComponent(SavedDataComponent.class);
         DefenceField.getShrineEntity().send(new OnFieldActivated());
 
-        DefenceField.setFieldActivated();
-        if (component.isSaved()) {
-            logger.info("Attempting to retrieve saved data");
-            paths = component.getPaths();
-        }
-
-        calculatePaths();
+        calculatePaths(DefenceField::setFieldActivated);
     }
+
 
     /**
      * Calculate the path from an entrance to the centre
      *
-     * @param id The entrance to calculate from
+     * @param id       The entrance to calculate from
+     * @param callback A callback to be invoked after all pending path calculations have completed
      */
-    public void calculatePath(int id) {
+    private void calculatePath(int id, Runnable callback) {
+        numPathCalculation++;
         pathfinderSystem.requestPath(
-                DefenceField.fieldCentre(), DefenceField.entrancePos(id), (path, target) -> paths.set(id, path));
+                DefenceField.fieldCentre(), DefenceField.entrancePos(id), (path, end) -> {
+                    paths.set(id, path);
+                    numPathCalculation--;
+                    if (callback != null && numPathCalculation <= 0) {
+                        callback.run();
+                    }
+                });
     }
 
     /**
      * Calculate paths from all the entrances to the centre.
      */
-    public void calculatePaths() {
+    private void calculatePaths() {
+        calculatePaths(null);
+    }
+
+    /**
+     * Calculates all paths from all entrance to the centre
+     *
+     * @param callback A callback to invoke when all paths have finished being calculated
+     */
+    private void calculatePaths(Runnable callback) {
         for (int id = 0; id < DefenceField.entranceCount(); id++) {
-            calculatePath(id);
+            calculatePath(id, callback);
         }
     }
 
