@@ -13,27 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.events;
+package org.terasology.gooeyDefence.events.combat;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+public class ApplyEffectEvent implements Event {
+    private EntityRef target;
 
-public class DoSelectEnemies implements Event {
-    private Set<EntityRef> targets = new HashSet<>();
-
-    public Set<EntityRef> getTargets() {
-        return targets;
+    public ApplyEffectEvent(EntityRef target) {
+        this.target = target;
     }
 
-    public void addMultiple(Collection<EntityRef> targets) {
-        this.targets.addAll(targets);
-    }
-
-    public void addToList(EntityRef target) {
-        this.targets.add(target);
+    public EntityRef getTarget() {
+        return target;
     }
 }

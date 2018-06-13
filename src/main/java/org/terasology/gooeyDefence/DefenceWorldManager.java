@@ -74,7 +74,6 @@ public class DefenceWorldManager extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
     private BlockItemFactory factory;
-    private Block airBlock;
 
 
     @Override
@@ -82,7 +81,6 @@ public class DefenceWorldManager extends BaseComponentSystem {
         if (!celestialSystem.isSunHalted()) {
             celestialSystem.toggleSunHalting(0.5f);
         }
-        airBlock = blockManager.getBlock(BlockManager.AIR_ID);
         factory = new BlockItemFactory(entityManager);
     }
 
@@ -97,6 +95,9 @@ public class DefenceWorldManager extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Make the world gen blocks drop a plain block as an item
+     */
     @ReceiveEvent
     public void onCreateBlockDrops(CreateBlockDropsEvent event, EntityRef entity, LocationComponent component) {
         if (entity.getParentPrefab().getName().equals("GooeyDefence:PlainWorldGen")) {
@@ -114,20 +115,29 @@ public class DefenceWorldManager extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Update path on a block placed
+     */
     @ReceiveEvent
     public void onPlaceBlocks(PlaceBlocks event, EntityRef entity) {
         if (DefenceField.isFieldActivated()) {
             calculatePaths();
         }
     }
-
+    /**
+     * Update path on a block removed
+     */
     @ReceiveEvent
     public void onChangedBlock(OnChangedBlock event, EntityRef entity) {
-        if (DefenceField.isFieldActivated() && (event.getNewType() == airBlock || event.getOldType() == airBlock)) {
+        if (DefenceField.isFieldActivated()) {
             calculatePaths();
         }
     }
 
+    /**
+     * Activate the world on a interaction
+     * TODO: remove and replace with UI interaction
+     */
     @ReceiveEvent
     public void onActivate(ActivateEvent event, EntityRef entity) {
         if (!DefenceField.isFieldActivated()) {

@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.events;
+package org.terasology.gooeyDefence.events.tower;
 
 import org.terasology.entitySystem.event.Event;
 
 /**
- * Event sent when a tower is created
- * Sent against the new tower.
+ * Event sent when a tower is destroyed.
+ * Sent against the destroyed tower.
  */
-public class TowerCreatedEvent implements Event {
+public class TowerDestroyedEvent implements Event {
 }

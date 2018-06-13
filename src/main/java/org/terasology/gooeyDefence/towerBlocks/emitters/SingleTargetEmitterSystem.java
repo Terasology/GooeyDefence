@@ -23,7 +23,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.components.GooeyComponent;
-import org.terasology.gooeyDefence.events.DoSelectEnemies;
+import org.terasology.gooeyDefence.events.combat.DoSelectEnemies;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 

@@ -26,8 +26,8 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.components.towers.TowerMultiBlockComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
-import org.terasology.gooeyDefence.events.TowerCreatedEvent;
-import org.terasology.gooeyDefence.events.TowerDestroyedEvent;
+import org.terasology.gooeyDefence.events.tower.TowerCreatedEvent;
+import org.terasology.gooeyDefence.events.tower.TowerDestroyedEvent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffect;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
@@ -64,6 +64,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onActivate(ActivateEvent event, EntityRef entity, TowerMultiBlockComponent component) {
         logger.info("Tower Entity: " + component.getTowerEntity());
+
     }
 
     @ReceiveEvent

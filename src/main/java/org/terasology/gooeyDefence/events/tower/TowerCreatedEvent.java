@@ -13,19 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.events;
+package org.terasology.gooeyDefence.events.tower;
 
-import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 
-public class ApplyEffectEvent implements Event {
-    private EntityRef target;
-
-    public ApplyEffectEvent(EntityRef target) {
-        this.target = target;
-    }
-
-    public EntityRef getTarget() {
-        return target;
-    }
+/**
+ * Event sent when a tower is created
+ * Sent against the new tower.
+ */
+public class TowerCreatedEvent implements Event {
 }
