@@ -20,6 +20,7 @@ import org.terasology.entitySystem.event.Event;
 
 public class ApplyEffectEvent implements Event {
     private EntityRef target;
+
     public ApplyEffectEvent(EntityRef target) {
         this.target = target;
     }

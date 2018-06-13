@@ -27,6 +27,7 @@ public class ShrineComponent implements Component {
     public void setHealth(int health) {
         this.health = health;
     }
+
     public void reduceHealth(int amount) {
         this.health -= amount;
     }

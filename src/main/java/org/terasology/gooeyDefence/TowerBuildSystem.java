@@ -20,23 +20,19 @@ import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.components.towers.TowerMultiBlockComponent;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEffect;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.TowerDestroyedEvent;
-import org.terasology.logic.characters.events.AttackEvent;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEffect;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
 import org.terasology.logic.common.ActivateEvent;
-import org.terasology.logic.health.DestroyEvent;
 import org.terasology.logic.health.DoDestroyEvent;
-import org.terasology.logic.health.EngineDamageTypes;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
@@ -52,8 +48,8 @@ import java.util.stream.Collectors;
 
 @RegisterSystem
 public class TowerBuildSystem extends BaseComponentSystem {
-
     private static final Logger logger = LoggerFactory.getLogger(TowerBuildSystem.class);
+
     @In
     private BlockEntityRegistry blockEntityRegistry;
     @In
