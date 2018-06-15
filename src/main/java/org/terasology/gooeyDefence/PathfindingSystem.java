@@ -29,6 +29,7 @@ import org.terasology.gooeyDefence.events.RepathEnemyRequest;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
+import org.terasology.registry.Share;
 import org.terasology.world.OnChangedBlock;
 import org.terasology.world.block.entity.placement.PlaceBlocks;
 
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Share(PathfindingSystem.class)
 @RegisterSystem
 public class PathfindingSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(PathfindingSystem.class);
