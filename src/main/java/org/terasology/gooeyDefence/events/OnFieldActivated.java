@@ -17,6 +17,31 @@ package org.terasology.gooeyDefence.events;
 
 import org.terasology.entitySystem.event.Event;
 
+/**
+ * Event sent to initialise a field after a new game or a save has been loaded.
+ */
 public class OnFieldActivated implements Event {
+    private Runnable callback;
+    private int tasks;
 
+    public OnFieldActivated(Runnable callback) {
+        this.callback = callback;
+    }
+
+    /**
+     * Record that a new task is underway
+     */
+    public void beginTask() {
+        tasks++;
+    }
+
+    /**
+     * Record that a task has finished. If all tasks are over then run the callback.
+     */
+    public void finishTask() {
+        tasks--;
+        if (tasks <= 0) {
+            callback.run();
+        }
+    }
 }

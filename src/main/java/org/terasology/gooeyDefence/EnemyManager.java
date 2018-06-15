@@ -26,6 +26,7 @@ import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.gooeyDefence.events.PathUpdatedEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
@@ -53,10 +54,14 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     @In
     private EntityManager entityManager;
     @In
-    private DefenceWorldManager defenceWorldManager;
+    private PathfindingSystem pathfindingSystem;
     @In
     private DelayManager delayManager;
 
+    /**
+     * Called when the field is activated.
+     * Clears the enemy store and re-scans for any enemies.
+     */
     @ReceiveEvent
     public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
         enemies.clear();
@@ -80,6 +85,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         }
     }
 
+
     /**
      * Spawns an enemy at the given entrance.
      * Also begins it travelling down the path.
@@ -88,7 +94,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      */
     public void spawnEnemy(int entranceNumber) {
 
-        List<Vector3i> path = defenceWorldManager.getPath(entranceNumber);
+        List<Vector3i> path = pathfindingSystem.getPath(entranceNumber);
         if (path == null) {
             return;
         }
@@ -168,7 +174,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param gooeyComponent The GooeyComponent of the entity
      */
     private void updateToNextStep(EntityRef entity, GooeyComponent gooeyComponent) {
-        List<Vector3i> path = defenceWorldManager.getPath(gooeyComponent.pathId);
+        List<Vector3i> path = pathfindingSystem.getPath(gooeyComponent.pathId);
         if (path == null) {
             return;
         }
