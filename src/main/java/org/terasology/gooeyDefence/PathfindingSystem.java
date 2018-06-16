@@ -22,11 +22,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
-import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
-import org.terasology.gooeyDefence.events.PathUpdatedEvent;
-import org.terasology.gooeyDefence.events.RepathEnemyRequest;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -58,14 +54,6 @@ public class PathfindingSystem extends BaseComponentSystem {
         }
     }
 
-    /**
-     * Repath an enemy that has had it's path changed
-     * Filters on LocationComponent & GooeyComponent
-     */
-    @ReceiveEvent(components = GooeyComponent.class)
-    public void onRepathEnemy(RepathEnemyRequest event, EntityRef entity, LocationComponent component) {
-
-    }
 
     /**
      * Update path on a block placed
@@ -97,7 +85,6 @@ public class PathfindingSystem extends BaseComponentSystem {
         pathfinderSystem.requestPath(
                 DefenceField.fieldCentre(), DefenceField.entrancePos(id), (path, end) -> {
                     paths.set(id, path);
-                    DefenceField.getShrineEntity().send(new PathUpdatedEvent(id, path));
                     if (callback != null) {
                         callback.run();
                     }
