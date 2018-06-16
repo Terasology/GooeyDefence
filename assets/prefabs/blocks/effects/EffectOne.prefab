@@ -1,4 +1,6 @@
 {
   "parent": "GooeyDefence:PlainBlock",
-  "FireEffect":{}
+  "FireEffect": {
+    "drain": 5
+  }
 }
