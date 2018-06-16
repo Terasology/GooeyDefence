@@ -1,8 +1,8 @@
-#Gooey's Defence
+# Gooey's Defence
 This module serves as the main module for the Gooey's Defence Gameplay Template.  
 It currently is undergoing active development and thus is not at a public release stage.
 
-##Testing Instructions
+## Testing Instructions
 If you want to test this module then these are the current steps.
 
 Firstly, upon loading the world you should interact with any block via `E`.  
