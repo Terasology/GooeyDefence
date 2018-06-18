@@ -29,7 +29,9 @@ public class EntrancePathComponent implements PathComponent {
     private Vector3f goal;
     private PathfindingSystem pathManager;
 
-    /** empty constructor for deserialisation */
+    /**
+     * empty constructor for deserialisation
+     */
     public EntrancePathComponent() {
     }
 
@@ -40,6 +42,10 @@ public class EntrancePathComponent implements PathComponent {
         goal = pathManager.getPath(entranceID).get(step).toVector3f();
     }
 
+
+    public void setPathManager(PathfindingSystem pathManager) {
+        this.pathManager = pathManager;
+    }
 
     @Override
     public int getStep() {
@@ -65,7 +71,7 @@ public class EntrancePathComponent implements PathComponent {
 
     @Override
     public boolean atEnd() {
-        return false;
+        return step == 0;
     }
 
     public int getEntranceID() {

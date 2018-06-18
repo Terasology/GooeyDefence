@@ -81,6 +81,9 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
         enemies.clear();
         entityManager.getEntitiesWith(GooeyComponent.class).forEach(enemies::add);
+        enemies.stream().filter(enemy->enemy.hasComponent(EntrancePathComponent.class))
+                .forEach(enemy->enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingSystem));
+
         //delayManager.addPeriodicAction(DefenceField.getShrineEntity(), "SpawnEnemyEvent", 500, 500);
     }
 

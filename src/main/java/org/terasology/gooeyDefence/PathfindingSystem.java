@@ -42,7 +42,7 @@ public class PathfindingSystem extends BaseComponentSystem {
 
     @In
     private PathfinderSystem pathfinderSystem;
-    private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), new ArrayList<Vector3i>()));
+    private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
 
 
     /**
@@ -96,8 +96,9 @@ public class PathfindingSystem extends BaseComponentSystem {
     private void calculatePath(int id, Runnable callback) {
         pathfinderSystem.requestPath(
                 DefenceField.fieldCentre(), DefenceField.entrancePos(id), (path, end) -> {
-                    if (!paths.get(id).equals(path)) {
-                        paths.set(id, path);
+                    List<Vector3i> oldPath = paths.get(id);
+                    paths.set(id, path);
+                    if (oldPath != null && !oldPath.equals(path)) {
                         DefenceField.getShrineEntity().send(new OnPathChanged(id, path));
                     }
                     if (callback != null) {
