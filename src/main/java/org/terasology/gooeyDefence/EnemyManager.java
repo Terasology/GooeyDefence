@@ -31,6 +31,7 @@ import org.terasology.gooeyDefence.components.enemies.MovementComponent;
 import org.terasology.gooeyDefence.components.enemies.PathComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.gooeyDefence.events.OnPathChanged;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
@@ -96,6 +97,16 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
                 spawnEnemy(i);
             }
         }
+    }
+
+    /**
+     * Called when the a path is changed.
+     *
+     * @see OnPathChanged
+     */
+    @ReceiveEvent
+    public void onPathChanged(OnPathChanged event, EntityRef entity) {
+        logger.info(event.getPathId() + "");
     }
 
     /**

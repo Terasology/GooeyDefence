@@ -23,6 +23,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.gooeyDefence.events.OnPathChanged;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -40,7 +41,7 @@ public class PathfindingSystem extends BaseComponentSystem {
 
     @In
     private PathfinderSystem pathfinderSystem;
-    private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
+    private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), new ArrayList<Vector3i>()));
 
 
     /**
@@ -79,12 +80,15 @@ public class PathfindingSystem extends BaseComponentSystem {
      * Calculate the path from an entrance to the centre
      *
      * @param id       The entrance to calculate from
-     * @param callback A callback to be invoked after all pending path calculations have completed
+     * @param callback A callback to be invoked after the path calculation has finished.
      */
     private void calculatePath(int id, Runnable callback) {
         pathfinderSystem.requestPath(
                 DefenceField.fieldCentre(), DefenceField.entrancePos(id), (path, end) -> {
-                    paths.set(id, path);
+                    if (!paths.get(id).equals(path)) {
+                        paths.set(id, path);
+                        DefenceField.getShrineEntity().send(new OnPathChanged(id, path));
+                    }
                     if (callback != null) {
                         callback.run();
                     }
