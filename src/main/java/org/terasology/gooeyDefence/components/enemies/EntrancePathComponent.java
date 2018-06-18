@@ -26,23 +26,20 @@ public class EntrancePathComponent implements PathComponent {
     private static final Logger logger = LoggerFactory.getLogger(EntrancePathComponent.class);
     private int step;
     private int entranceID;
-    private Vector3f goal = Vector3f.zero();
+    private Vector3f goal;
     private PathfindingSystem pathManager;
-
-    public EntrancePathComponent() {
-
-    }
 
     public EntrancePathComponent(int entranceID, PathfindingSystem pathManager) {
         this.entranceID = entranceID;
         this.pathManager = pathManager;
-        step = pathManager.getPath(entranceID).size();
+        step = pathManager.getPath(entranceID).size() - 1;
+        goal = pathManager.getPath(entranceID).get(step).toVector3f();
     }
 
 
     @Override
     public int getStep() {
-        return 0;
+        return step;
     }
 
     @Override
