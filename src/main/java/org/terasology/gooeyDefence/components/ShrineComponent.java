@@ -16,7 +16,9 @@
 package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.world.block.ForceBlockActive;
 
+@ForceBlockActive
 public class ShrineComponent implements Component {
     private int health;
 
