@@ -29,6 +29,10 @@ public class EntrancePathComponent implements PathComponent {
     private Vector3f goal;
     private PathfindingSystem pathManager;
 
+    /** empty constructor for deserialisation */
+    public EntrancePathComponent() {
+    }
+
     public EntrancePathComponent(int entranceID, PathfindingSystem pathManager) {
         this.entranceID = entranceID;
         this.pathManager = pathManager;

@@ -15,7 +15,6 @@
  */
 package org.terasology.gooeyDefence.components.enemies;
 
-import org.terasology.entitySystem.Component;
 import org.terasology.math.geom.Vector3f;
 
 import java.util.List;
@@ -24,6 +23,11 @@ public class CustomPathComponent implements PathComponent {
     private List<Vector3f> path;
     private int step;
 
+    /**
+     * empty constructor for deserialisation
+     */
+    public CustomPathComponent() {
+    }
 
     public CustomPathComponent(List<Vector3f> path) {
         this.path = path;
