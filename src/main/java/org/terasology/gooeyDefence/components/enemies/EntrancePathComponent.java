@@ -32,7 +32,7 @@ public class EntrancePathComponent implements PathComponent {
     /**
      * empty constructor for deserialisation
      */
-    public EntrancePathComponent() {
+    private EntrancePathComponent() {
     }
 
     public EntrancePathComponent(int entranceID, PathfindingSystem pathManager) {

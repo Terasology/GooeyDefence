@@ -17,45 +17,42 @@ package org.terasology.gooeyDefence.components.enemies;
 
 import org.terasology.math.geom.Vector3f;
 
-import java.util.List;
-
-public class CustomPathComponent implements PathComponent {
-    private List<Vector3f> path;
-    private int step;
+/**
+ * Keeps the gooey at a specific location.
+ * Used to pause it when a path is being calculated.
+ */
+public class BlankPathComponent implements PathComponent {
+    private Vector3f position;
 
     /**
      * empty constructor for deserialisation
      */
-    private CustomPathComponent() {
+    private BlankPathComponent() {
+
     }
 
-    public CustomPathComponent(List<Vector3f> path) {
-        this.path = path;
-        this.step = path.size() - 1;
+    public BlankPathComponent(Vector3f position) {
+        this.position = position;
     }
 
 
     @Override
     public int getStep() {
-        return step;
+        return 0;
     }
 
     @Override
     public Vector3f getGoal() {
-        if (step >= 1) {
-            return path.get(step - 1);
-        } else {
-            return null;
-        }
+        return position;
     }
 
     @Override
     public void nextStep() {
-        step = Math.min(Math.max(0, step--), path.size() - 1);
+
     }
 
     @Override
     public boolean atEnd() {
-        return step == 0;
+        return false;
     }
 }

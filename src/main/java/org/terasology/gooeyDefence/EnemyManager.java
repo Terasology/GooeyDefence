@@ -24,6 +24,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.gooeyDefence.components.enemies.BlankPathComponent;
 import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
 import org.terasology.gooeyDefence.components.enemies.EntrancePathComponent;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
@@ -68,6 +69,8 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
             return entity.getComponent(EntrancePathComponent.class);
         } else if (entity.hasComponent(CustomPathComponent.class)) {
             return entity.getComponent(CustomPathComponent.class);
+        } else if (entity.hasComponent(BlankPathComponent.class)) {
+            return entity.getComponent(BlankPathComponent.class);
         } else {
             throw new Error("Enemy with no Path Component Requested.");
         }
@@ -81,8 +84,8 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
         enemies.clear();
         entityManager.getEntitiesWith(GooeyComponent.class).forEach(enemies::add);
-        enemies.stream().filter(enemy->enemy.hasComponent(EntrancePathComponent.class))
-                .forEach(enemy->enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingSystem));
+        enemies.stream().filter(enemy -> enemy.hasComponent(EntrancePathComponent.class))
+                .forEach(enemy -> enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingSystem));
 
         //delayManager.addPeriodicAction(DefenceField.getShrineEntity(), "SpawnEnemyEvent", 500, 500);
     }
