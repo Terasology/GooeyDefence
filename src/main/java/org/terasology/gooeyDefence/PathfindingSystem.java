@@ -24,6 +24,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnPathChanged;
+import org.terasology.gooeyDefence.events.RepathEnemyRequest;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -74,6 +75,16 @@ public class PathfindingSystem extends BaseComponentSystem {
         if (DefenceField.isFieldActivated()) {
             calculatePaths();
         }
+    }
+
+    /**
+     * Called to request an enemy be re-pathed. Handles that.
+     *
+     * @see RepathEnemyRequest
+     */
+    @ReceiveEvent
+    public void onRepathEnemyRequest(RepathEnemyRequest event, EntityRef entity) {
+        logger.info("ping");
     }
 
     /**

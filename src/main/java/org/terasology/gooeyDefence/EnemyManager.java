@@ -32,6 +32,7 @@ import org.terasology.gooeyDefence.components.enemies.PathComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnPathChanged;
+import org.terasology.gooeyDefence.events.RepathEnemyRequest;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
@@ -106,7 +107,17 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      */
     @ReceiveEvent
     public void onPathChanged(OnPathChanged event, EntityRef entity) {
-        logger.info(event.getPathId() + "");
+        enemies.forEach(enemy -> {
+            /* If entity is on the path that changes */
+            if (entity.hasComponent(EntrancePathComponent.class)) {
+                if (entity.getComponent(EntrancePathComponent.class).getEntranceID() == event.getPathId()) {
+                    entity.send(new RepathEnemyRequest());
+                }
+                /* If the enemy wasn't on an entrance path */
+            } else {
+                entity.send(new RepathEnemyRequest());
+            }
+        });
     }
 
     /**
@@ -122,7 +133,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
 
         EntityRef entity = entityManager.create("GooeyDefence:Gooey", DefenceField.entrancePos(entranceNumber).toVector3f());
 
-        /* Setup movement component */
+        /* Setup pathfinding component */
         EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingSystem);
         entity.addComponent(component);
 
