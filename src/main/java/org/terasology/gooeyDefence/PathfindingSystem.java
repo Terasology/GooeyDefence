@@ -22,9 +22,12 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
+import org.terasology.gooeyDefence.components.enemies.BlankPathComponent;
+import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnPathChanged;
 import org.terasology.gooeyDefence.events.RepathEnemyRequest;
+import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -34,6 +37,8 @@ import org.terasology.world.block.entity.placement.PlaceBlocks;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 @Share(PathfindingSystem.class)
 @RegisterSystem
@@ -78,13 +83,26 @@ public class PathfindingSystem extends BaseComponentSystem {
     }
 
     /**
-     * Called to request an enemy be re-pathed. Handles that.
+     * Called to request an enemy be re-pathed.
      *
      * @see RepathEnemyRequest
      */
     @ReceiveEvent
-    public void onRepathEnemyRequest(RepathEnemyRequest event, EntityRef entity) {
-        logger.info("ping");
+    public void onRepathEnemyRequest(RepathEnemyRequest event, EntityRef entity, LocationComponent locationComponent) {
+        /* Pause the enemy */
+        entity.removeComponent(EnemyManager.getPathComponent(entity).getClass());
+        entity.addComponent(new BlankPathComponent(locationComponent.getWorldPosition()));
+
+        /* Process it's path */
+        calculatePath(new Vector3i(locationComponent.getWorldPosition()), (path, end) -> {
+            if (path.size() != 0) {
+                CustomPathComponent customPathComponent = new CustomPathComponent(path.stream()
+                        .map(Vector3i::toVector3f)
+                        .collect(Collectors.toList()));
+                entity.addComponent(customPathComponent);
+                entity.removeComponent(BlankPathComponent.class);
+            }
+        });
     }
 
     /**
