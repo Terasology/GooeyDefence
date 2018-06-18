@@ -112,16 +112,16 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @see OnPathChanged
      */
     @ReceiveEvent
-    public void onPathChanged(OnPathChanged event, EntityRef entity) {
+    public void onPathChanged(OnPathChanged event, EntityRef shrineEntity) {
         enemies.forEach(enemy -> {
             /* If entity is on the path that changes */
-            if (entity.hasComponent(EntrancePathComponent.class)) {
-                if (entity.getComponent(EntrancePathComponent.class).getEntranceID() == event.getPathId()) {
-                    entity.send(new RepathEnemyRequest());
+            if (enemy.hasComponent(EntrancePathComponent.class)) {
+                if (enemy.getComponent(EntrancePathComponent.class).getEntranceID() == event.getPathId()) {
+                    enemy.send(new RepathEnemyRequest());
                 }
                 /* If the enemy wasn't on an entrance path */
             } else {
-                entity.send(new RepathEnemyRequest());
+                enemy.send(new RepathEnemyRequest());
             }
         });
     }
