@@ -43,7 +43,7 @@ public class CustomPathComponent implements PathComponent {
     @Override
     public Vector3f getGoal() {
         if (step >= 1) {
-            return path.get(step + 1);
+            return path.get(step - 1);
         } else {
             return null;
         }
@@ -51,7 +51,7 @@ public class CustomPathComponent implements PathComponent {
 
     @Override
     public void nextStep() {
-        step -= step > 0 ? 1 : 0;
+        step = Math.min(Math.max(0, step--), path.size() - 1);
     }
 
     @Override

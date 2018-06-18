@@ -60,11 +60,7 @@ public class EntrancePathComponent implements PathComponent {
     @Override
     public void nextStep() {
         List path = pathManager.getPath(entranceID);
-        step -= step > 0 ? 1 : 0;
-        if (step >= path.size()) {
-            step = path.size() - 1;
-            logger.error("Step greater than path size.");
-        }
+        step = Math.min(Math.max(0, step--), path.size() - 1);
         goal = pathManager.getPath(entranceID).get(step).toVector3f();
 
     }
