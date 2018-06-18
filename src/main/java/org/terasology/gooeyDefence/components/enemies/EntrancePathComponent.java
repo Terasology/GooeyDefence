@@ -60,7 +60,8 @@ public class EntrancePathComponent implements PathComponent {
     @Override
     public void nextStep() {
         List path = pathManager.getPath(entranceID);
-        step = Math.min(Math.max(0, step--), path.size() - 1);
+        step--;
+        step = Math.min(Math.max(0, step), path.size() - 1);
         goal = pathManager.getPath(entranceID).get(step).toVector3f();
 
     }
