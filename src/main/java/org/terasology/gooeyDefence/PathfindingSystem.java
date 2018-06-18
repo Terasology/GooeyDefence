@@ -94,17 +94,20 @@ public class PathfindingSystem extends BaseComponentSystem {
      * @param callback A callback to be invoked after the path calculation has finished.
      */
     private void calculatePath(int id, Runnable callback) {
-        pathfinderSystem.requestPath(
-                DefenceField.fieldCentre(), DefenceField.entrancePos(id), (path, end) -> {
-                    List<Vector3i> oldPath = paths.get(id);
-                    paths.set(id, path);
-                    if (oldPath != null && !oldPath.equals(path)) {
-                        DefenceField.getShrineEntity().send(new OnPathChanged(id, path));
-                    }
-                    if (callback != null) {
-                        callback.run();
-                    }
-                });
+        calculatePath(DefenceField.entrancePos(id), (path, end) -> {
+            List<Vector3i> oldPath = paths.get(id);
+            paths.set(id, path);
+            if (oldPath != null && !oldPath.equals(path)) {
+                DefenceField.getShrineEntity().send(new OnPathChanged(id, path));
+            }
+            if (callback != null) {
+                callback.run();
+            }
+        });
+    }
+
+    private void calculatePath(Vector3i startPoint, BiConsumer<List<Vector3i>, Vector3i> callback) {
+        pathfinderSystem.requestPath(DefenceField.fieldCentre(), startPoint, callback::accept);
     }
 
     /**
