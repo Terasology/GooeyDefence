@@ -24,7 +24,11 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
-import org.terasology.gooeyDefence.components.GooeyComponent;
+import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
+import org.terasology.gooeyDefence.components.enemies.EntrancePathComponent;
+import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
+import org.terasology.gooeyDefence.components.enemies.MovementComponent;
+import org.terasology.gooeyDefence.components.enemies.PathComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.logic.common.ActivateEvent;
@@ -32,12 +36,10 @@ import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -57,6 +59,17 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     private PathfindingSystem pathfindingSystem;
     @In
     private DelayManager delayManager;
+
+    public static PathComponent getPathComponent(EntityRef entity) {
+        //TODO: Make this less ugly. Dynamically obtain path components via reflection?
+        if (entity.hasComponent(EntrancePathComponent.class)) {
+            return entity.getComponent(EntrancePathComponent.class);
+        } else if (entity.hasComponent(CustomPathComponent.class)) {
+            return entity.getComponent(CustomPathComponent.class);
+        } else {
+            throw new Error("Enemy with no Path Component Requested.");
+        }
+    }
 
     /**
      * Called when the field is activated.
@@ -85,7 +98,6 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         }
     }
 
-
     /**
      * Spawns an enemy at the given entrance.
      * Also begins it travelling down the path.
@@ -93,20 +105,15 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param entranceNumber The entrance to spawn at
      */
     public void spawnEnemy(int entranceNumber) {
-
-        List<Vector3i> path = pathfindingSystem.getPath(entranceNumber);
-        if (path == null) {
+        if (!DefenceField.isFieldActivated()) {
             return;
         }
 
         EntityRef entity = entityManager.create("GooeyDefence:Gooey", DefenceField.entrancePos(entranceNumber).toVector3f());
 
         /* Setup movement component */
-        GooeyComponent component = entity.getComponent(GooeyComponent.class);
-        component.currentStep = path.size() - 1;
-        component.goal = path.get(component.currentStep).toVector3f();
-        component.pathId = entranceNumber;
-        entity.saveComponent(component);
+        EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingSystem);
+        entity.addComponent(component);
 
         enemies.add(entity);
     }
@@ -155,14 +162,14 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param entity the enemy to move
      */
     private void processEnemy(EntityRef entity, float delta) {
+        PathComponent pathComponent = getPathComponent(entity);
         LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
-        GooeyComponent gooeyComponent = entity.getComponent(GooeyComponent.class);
 
-        float dist = locationComponent.getWorldPosition().distanceSquared(gooeyComponent.goal);
+        float dist = locationComponent.getWorldPosition().distanceSquared(pathComponent.getGoal());
         if (dist < 0.1f) {
-            updateToNextStep(entity, gooeyComponent);
+            updateToNextStep(entity, pathComponent);
         } else {
-            moveEnemyTowardsGoal(entity, delta, gooeyComponent, locationComponent);
+            moveEnemyTowardsGoal(entity, pathComponent, locationComponent, delta);
         }
     }
 
@@ -170,39 +177,36 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * Handles the entity reaching the goal.
      * Either marks the entity as having reached the end of the path or picks the next element in the path as the goal.
      *
-     * @param entity         The entity to update
-     * @param gooeyComponent The GooeyComponent of the entity
+     * @param entity        The entity to update
+     * @param pathComponent The GooeyComponent of the entity
      */
-    private void updateToNextStep(EntityRef entity, GooeyComponent gooeyComponent) {
-        List<Vector3i> path = pathfindingSystem.getPath(gooeyComponent.pathId);
-        if (path == null) {
-            return;
-        }
-        if (gooeyComponent.currentStep <= 0) {
+    private void updateToNextStep(EntityRef entity, PathComponent pathComponent) {
+        if (pathComponent.atEnd()) {
+            GooeyComponent gooeyComponent = entity.getComponent(GooeyComponent.class);
             entity.send(new DamageShrineEvent(gooeyComponent.damage));
             destroyEnemy(entity);
         } else {
-            gooeyComponent.currentStep = Math.min(gooeyComponent.currentStep - 1, path.size() - 1);
-            gooeyComponent.goal = path.get(gooeyComponent.currentStep).toVector3f();
-            entity.saveComponent(gooeyComponent);
+            pathComponent.nextStep();
         }
     }
+
 
     /**
      * Moves the entity towards it's goal.
      *
      * @param entity            The entity to move
-     * @param delta             The delta of this step
-     * @param gooeyComponent    The GooeyComponent of the entity
+     * @param pathComponent     The GooeyComponent of the entity
      * @param locationComponent The LocationComponent of the entity
+     * @param delta             The delta of this step
      */
-    private void moveEnemyTowardsGoal(EntityRef entity, float delta, GooeyComponent gooeyComponent, LocationComponent locationComponent) {
+    private void moveEnemyTowardsGoal(EntityRef entity, PathComponent pathComponent, LocationComponent locationComponent, float delta) {
+        MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
         /* Calculate required heading */
-        Vector3f target = new Vector3f(gooeyComponent.goal);
+        Vector3f target = new Vector3f(pathComponent.getGoal());
         target.sub(locationComponent.getWorldPosition());
         target.normalize();
         /* Scale to the speed */
-        target.scale(gooeyComponent.speed * delta);
+        target.scale(movementComponent.getSpeed() * delta);
         /* Move the enemy */
         locationComponent.setWorldPosition(locationComponent.getWorldPosition().add(target));
         entity.saveComponent(locationComponent);

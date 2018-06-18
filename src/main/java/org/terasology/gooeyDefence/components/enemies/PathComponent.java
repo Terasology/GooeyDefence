@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components;
+package org.terasology.gooeyDefence.components.enemies;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.math.geom.Vector3f;
 
-public class GooeyComponent implements Component {
-    public int currentStep;
-    public int pathId;
-    public Vector3f goal = Vector3f.zero();
-    public int speed;
-    public int damage;
+public interface PathComponent extends Component {
+
+
+    int getStep();
+
+    Vector3f getGoal();
+
+    void nextStep();
+
+    boolean atEnd();
+
 }
