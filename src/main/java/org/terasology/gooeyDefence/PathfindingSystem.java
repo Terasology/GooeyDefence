@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 @Share(PathfindingSystem.class)
 @RegisterSystem
@@ -91,14 +90,12 @@ public class PathfindingSystem extends BaseComponentSystem {
     public void onRepathEnemyRequest(RepathEnemyRequest event, EntityRef entity, LocationComponent locationComponent) {
         /* Pause the enemy */
         entity.removeComponent(EnemyManager.getPathComponent(entity).getClass());
-        entity.addComponent(new BlankPathComponent(locationComponent.getWorldPosition()));
+        entity.addComponent(new BlankPathComponent(new Vector3i(locationComponent.getWorldPosition())));
 
         /* Process it's path */
         calculatePath(new Vector3i(locationComponent.getWorldPosition()), (path, end) -> {
             if (path.size() != 0) {
-                CustomPathComponent customPathComponent = new CustomPathComponent(path.stream()
-                        .map(Vector3i::toVector3f)
-                        .collect(Collectors.toList()));
+                CustomPathComponent customPathComponent = new CustomPathComponent(path);
                 entity.addComponent(customPathComponent);
                 entity.removeComponent(BlankPathComponent.class);
             }

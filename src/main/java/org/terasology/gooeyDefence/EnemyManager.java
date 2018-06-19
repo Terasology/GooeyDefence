@@ -39,6 +39,7 @@ import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
@@ -193,7 +194,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         PathComponent pathComponent = getPathComponent(entity);
         LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
 
-        float dist = locationComponent.getWorldPosition().distanceSquared(pathComponent.getGoal());
+        float dist = locationComponent.getWorldPosition().distanceSquared(pathComponent.getGoal().toVector3f());
         if (dist < 0.1f) {
             updateToNextStep(entity, pathComponent);
         } else {
@@ -230,7 +231,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     private void moveEnemyTowardsGoal(EntityRef entity, PathComponent pathComponent, LocationComponent locationComponent, float delta) {
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
         /* Calculate required heading */
-        Vector3f target = new Vector3f(pathComponent.getGoal());
+        Vector3f target = pathComponent.getGoal().toVector3f();
         target.sub(locationComponent.getWorldPosition());
         target.normalize();
         /* Scale to the speed */

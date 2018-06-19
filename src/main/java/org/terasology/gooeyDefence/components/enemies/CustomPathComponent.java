@@ -16,11 +16,12 @@
 package org.terasology.gooeyDefence.components.enemies;
 
 import org.terasology.math.geom.Vector3f;
+import org.terasology.math.geom.Vector3i;
 
 import java.util.List;
 
 public class CustomPathComponent implements PathComponent {
-    private List<Vector3f> path;
+    private List<Vector3i> path;
     private int step;
 
     /**
@@ -29,7 +30,7 @@ public class CustomPathComponent implements PathComponent {
     private CustomPathComponent() {
     }
 
-    public CustomPathComponent(List<Vector3f> path) {
+    public CustomPathComponent(List<Vector3i> path) {
         this.path = path;
         this.step = path.size() - 1;
     }
@@ -41,7 +42,7 @@ public class CustomPathComponent implements PathComponent {
     }
 
     @Override
-    public Vector3f getGoal() {
+    public Vector3i getGoal() {
         return path.get(step);
     }
 

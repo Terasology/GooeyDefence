@@ -16,14 +16,14 @@
 package org.terasology.gooeyDefence.components.enemies;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.math.geom.Vector3f;
+import org.terasology.math.geom.Vector3i;
 
 public interface PathComponent extends Component {
 
 
     int getStep();
 
-    Vector3f getGoal();
+    Vector3i getGoal();
 
     void nextStep();
 

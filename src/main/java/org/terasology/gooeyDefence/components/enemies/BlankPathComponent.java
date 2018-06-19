@@ -15,14 +15,14 @@
  */
 package org.terasology.gooeyDefence.components.enemies;
 
-import org.terasology.math.geom.Vector3f;
+import org.terasology.math.geom.Vector3i;
 
 /**
  * Keeps the gooey at a specific location.
  * Used to pause it when a path is being calculated.
  */
 public class BlankPathComponent implements PathComponent {
-    private Vector3f position;
+    private Vector3i position;
 
     /**
      * empty constructor for deserialisation
@@ -31,7 +31,7 @@ public class BlankPathComponent implements PathComponent {
 
     }
 
-    public BlankPathComponent(Vector3f position) {
+    public BlankPathComponent(Vector3i position) {
         this.position = position;
     }
 
@@ -42,7 +42,7 @@ public class BlankPathComponent implements PathComponent {
     }
 
     @Override
-    public Vector3f getGoal() {
+    public Vector3i getGoal() {
         return position;
     }
 
