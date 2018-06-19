@@ -18,15 +18,36 @@ package org.terasology.gooeyDefence.components.enemies;
 import org.terasology.entitySystem.Component;
 import org.terasology.math.geom.Vector3i;
 
+/**
+ * A component that marks a path for the enemy to follow.
+ * Intended to have multiple implementations for different pathfollowing situations.
+ */
 public interface PathComponent extends Component {
 
-
+    /**
+     * Step zero must be the end of the path.
+     *
+     * @return The current step of the path
+     */
     int getStep();
 
+    /**
+     * @return the current block the enemy is moving towards
+     */
     Vector3i getGoal();
 
+    /**
+     * Advance internal counters to the next step.
+     */
     void nextStep();
 
-    boolean atEnd();
+    /**
+     * Check if the enemy is at the end of the path.
+     * Step zero must indicate the end.
+     * @return If the enemy is at step zero.
+     */
+    default boolean atEnd() {
+        return getStep() == 0;
+    }
 
 }

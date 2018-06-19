@@ -15,11 +15,14 @@
  */
 package org.terasology.gooeyDefence.components.enemies;
 
-import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 
 import java.util.List;
 
+/**
+ * Moves the enemy along a path stored internally in the component
+ * Used for enemies that don't follow the standard entrance path.
+ */
 public class CustomPathComponent implements PathComponent {
     private List<Vector3i> path;
     private int step;

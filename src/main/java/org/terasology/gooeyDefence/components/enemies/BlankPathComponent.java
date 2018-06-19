@@ -18,7 +18,7 @@ package org.terasology.gooeyDefence.components.enemies;
 import org.terasology.math.geom.Vector3i;
 
 /**
- * Keeps the gooey at a specific location.
+ * Keeps the enemy at a specific location.
  * Used to pause it when a path is being calculated.
  */
 public class BlankPathComponent implements PathComponent {
