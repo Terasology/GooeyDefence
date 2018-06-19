@@ -61,6 +61,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         for (List<Vector3i> path : paths) {
             if (path != null) {
                 for (Vector3i pos : path) {
+                    pathBlockRenderer.renderMark2(pos);
                     pathBlockRenderer.renderMark2(Vector3i.up().add(pos));
                 }
             }
