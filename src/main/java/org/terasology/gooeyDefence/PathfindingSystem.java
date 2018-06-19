@@ -21,17 +21,20 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.flexiblepathfinding.JPSConfig;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.components.enemies.BlankPathComponent;
 import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnPathChanged;
 import org.terasology.gooeyDefence.events.RepathEnemyRequest;
+import org.terasology.gooeyDefence.pathfinding.EnemyWalkingPlugin;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.world.OnChangedBlock;
+import org.terasology.world.WorldProvider;
 import org.terasology.world.block.entity.placement.PlaceBlocks;
 
 import java.util.ArrayList;
@@ -48,6 +51,8 @@ public class PathfindingSystem extends BaseComponentSystem {
     @In
     private PathfinderSystem pathfinderSystem;
     private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
+    @In
+    private WorldProvider worldProvider;
 
 
     /**
@@ -125,7 +130,15 @@ public class PathfindingSystem extends BaseComponentSystem {
     }
 
     private void calculatePath(Vector3i startPoint, BiConsumer<List<Vector3i>, Vector3i> callback) {
-        pathfinderSystem.requestPath(DefenceField.fieldCentre(), startPoint, callback::accept);
+        JPSConfig config = new JPSConfig();
+        /* Backwards to ensure that zero is at the field centre */
+        config.start = DefenceField.fieldCentre();
+        config.stop = startPoint;
+        config.maxDepth = DefenceField.outerRingSize() * 2;
+        //TODO: Replace width and height with values from enemy.
+        config.plugin = new EnemyWalkingPlugin(worldProvider, 0.5f, 0.5f);
+        config.maxTime = 4f;
+        pathfinderSystem.requestPath(config, callback::accept);
     }
 
     /**
