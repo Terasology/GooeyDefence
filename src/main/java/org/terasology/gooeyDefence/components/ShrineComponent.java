@@ -18,6 +18,10 @@ package org.terasology.gooeyDefence.components;
 import org.terasology.entitySystem.Component;
 import org.terasology.world.block.ForceBlockActive;
 
+/**
+ * Component for the central shrine entity.
+ * Stores information relating to the shrine and to the general field.
+ */
 @ForceBlockActive
 public class ShrineComponent implements Component {
     private int health;

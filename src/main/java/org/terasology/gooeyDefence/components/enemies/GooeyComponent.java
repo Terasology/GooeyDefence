@@ -18,6 +18,10 @@ package org.terasology.gooeyDefence.components.enemies;
 import org.terasology.entitySystem.Component;
 import org.terasology.math.geom.Vector3f;
 
+/**
+ * General purpose catch all component.
+ * Intended only to be used temporarily to store fields whilst they haven't got their own component
+ */
 public class GooeyComponent implements Component {
     public int damage;
 }

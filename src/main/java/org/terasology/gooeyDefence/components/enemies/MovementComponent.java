@@ -17,6 +17,9 @@ package org.terasology.gooeyDefence.components.enemies;
 
 import org.terasology.entitySystem.Component;
 
+/**
+ * Stores information on how to move the enemy.
+ */
 public class MovementComponent implements Component {
     private int speed;
 
