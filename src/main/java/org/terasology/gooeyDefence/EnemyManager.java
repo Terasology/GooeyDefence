@@ -44,6 +44,7 @@ import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -114,17 +115,31 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      */
     @ReceiveEvent
     public void onPathChanged(OnPathChanged event, EntityRef shrineEntity) {
-        enemies.forEach(enemy -> {
-            /* If entity is on the path that changes */
+        for (EntityRef enemy : enemies) {
+            /* Firstly check if the enemy is on an unchanged path */
             if (enemy.hasComponent(EntrancePathComponent.class)) {
-                if (enemy.getComponent(EntrancePathComponent.class).getEntranceID() == event.getPathId()) {
-                    enemy.send(new RepathEnemyRequest());
+                if (enemy.getComponent(EntrancePathComponent.class).getEntranceID() != event.getPathId()) {
+                    return;
                 }
-                /* If the enemy wasn't on an entrance path */
+            }
+
+            /* Check if the goal is on the new path */
+            PathComponent pathComponent = getPathComponent(enemy);
+            Vector3i goal = pathComponent.getGoal();
+            List<Vector3i> newPath = event.getNewPath();
+            if (newPath.contains(goal)) {
+                /* Add a entrance component starting at the given position */
+                enemy.removeComponent(pathComponent.getClass());
+                EntrancePathComponent entranceComponent = new EntrancePathComponent(
+                        event.getPathId(),
+                        pathfindingSystem,
+                        newPath.indexOf(goal));
+                enemy.addComponent(entranceComponent);
             } else {
+                /* It's had it's path change and it isn't on the new path */
                 enemy.send(new RepathEnemyRequest());
             }
-        });
+        }
     }
 
     /**

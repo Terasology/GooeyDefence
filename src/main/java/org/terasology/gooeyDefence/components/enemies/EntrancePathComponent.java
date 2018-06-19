@@ -18,7 +18,6 @@ package org.terasology.gooeyDefence.components.enemies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.gooeyDefence.PathfindingSystem;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 
 import java.util.List;
@@ -34,6 +33,13 @@ public class EntrancePathComponent implements PathComponent {
      * empty constructor for deserialisation
      */
     private EntrancePathComponent() {
+    }
+
+    public EntrancePathComponent(int entranceID, PathfindingSystem pathManager, int startStep) {
+        this.entranceID = entranceID;
+        this.pathManager = pathManager;
+        step = Math.max(Math.min(pathManager.getPath(entranceID).size() - 1, startStep), 0);
+        goal = pathManager.getPath(entranceID).get(step);
     }
 
     public EntrancePathComponent(int entranceID, PathfindingSystem pathManager) {
@@ -60,10 +66,10 @@ public class EntrancePathComponent implements PathComponent {
 
     @Override
     public void nextStep() {
-        List path = pathManager.getPath(entranceID);
+        List<Vector3i> path = pathManager.getPath(entranceID);
         step--;
         step = Math.min(Math.max(0, step), path.size() - 1);
-        goal = pathManager.getPath(entranceID).get(step);
+        goal = path.get(step);
 
     }
 
