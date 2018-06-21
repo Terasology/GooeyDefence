@@ -27,15 +27,22 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
 
     @Override
     public boolean isReachable(Vector3i to, Vector3i from) {
-        /* If the height difference between the two is more than 1 block */
-        if (Math.abs(to.y - from.y) > 1) {
+
+        /* Check both positions are not the same */
+        if (to.equals(from)
+                /* We can go diagonally if it's horizontal */
+                || to.y == from.y && to.distanceSquared(from) > 2
+                /* We can only go directly up or down */
+                || to.y != from.y && to.distanceSquared(from) > 1
+                /* Check that at least one of the to or from are walkable */
+                || !(isWalkable(to) || isWalkable(from))) {
             return false;
         }
 
-        // check that all blocks passed through by this movement are penetrable
+        /* Check that all blocks passed through by this movement are penetrable */
         for (Vector3i occupiedBlock : getOccupiedRegionRelative()) {
 
-            // the start/stop for this block in the occupied region
+            /* The start/stop for this block in the occupied region */
             Vector3i occupiedBlockTo = new Vector3i(to).add(occupiedBlock);
             Vector3i occupiedBlockFrom = new Vector3i(from).add(occupiedBlock);
 
@@ -46,7 +53,6 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
                 }
             }
         }
-
-        return isWalkable(to) || isWalkable(from);
+        return true;
     }
 }
