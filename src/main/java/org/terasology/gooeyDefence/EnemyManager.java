@@ -136,7 +136,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
                         newPath.indexOf(goal));
                 enemy.addComponent(entranceComponent);
             } else {
-                /* It's had it's path change and it isn't on the new path */
+                /* It's had its path change and it isn't on the new path */
                 enemy.send(new RepathEnemyRequest());
             }
         }
@@ -241,7 +241,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param entity            The entity to move
      * @param pathComponent     The GooeyComponent of the entity
      * @param locationComponent The LocationComponent of the entity
-     * @param delta             The delta of this step
+     * @param delta             The time elapsed since the last call (in ms)
      */
     private void moveEnemyTowardsGoal(EntityRef entity, PathComponent pathComponent, LocationComponent locationComponent, float delta) {
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);

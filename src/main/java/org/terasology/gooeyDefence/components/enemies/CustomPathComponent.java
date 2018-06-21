@@ -20,7 +20,8 @@ import org.terasology.math.geom.Vector3i;
 import java.util.List;
 
 /**
- * Moves the enemy along a path stored internally in the component
+ * Moves the enemy along a path stored internally in the component.
+ * <p>
  * Used for enemies that don't follow the standard entrance path.
  */
 public class CustomPathComponent implements PathComponent {
@@ -28,7 +29,7 @@ public class CustomPathComponent implements PathComponent {
     private int step;
 
     /**
-     * empty constructor for deserialisation
+     * Empty constructor for deserialisation.
      */
     private CustomPathComponent() {
     }

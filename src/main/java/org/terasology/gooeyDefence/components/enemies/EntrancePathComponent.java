@@ -35,7 +35,7 @@ public class EntrancePathComponent implements PathComponent {
     private PathfindingSystem pathManager;
 
     /**
-     * empty constructor for deserialisation
+     * Empty constructor for deserialisation.
      */
     private EntrancePathComponent() {
     }

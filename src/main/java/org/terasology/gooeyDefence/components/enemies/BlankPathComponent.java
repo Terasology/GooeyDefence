@@ -25,7 +25,7 @@ public class BlankPathComponent implements PathComponent {
     private Vector3i position;
 
     /**
-     * empty constructor for deserialisation
+     * Empty constructor for deserialisation.
      */
     private BlankPathComponent() {
 
