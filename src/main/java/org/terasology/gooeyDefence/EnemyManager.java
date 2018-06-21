@@ -74,7 +74,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         } else if (entity.hasComponent(BlankPathComponent.class)) {
             return entity.getComponent(BlankPathComponent.class);
         } else {
-            throw new Error("Enemy with no Path Component Requested.");
+            throw new Error("Path Component requested on entity that lacks one.");
         }
     }
 
