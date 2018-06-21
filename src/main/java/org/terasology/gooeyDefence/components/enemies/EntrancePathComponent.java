@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class EntrancePathComponent implements PathComponent {
     private int step;
-    private int entranceID;
+    private int entranceId;
     private Vector3i goal;
     private PathfindingSystem pathManager;
 
@@ -43,22 +43,22 @@ public class EntrancePathComponent implements PathComponent {
     /**
      * Create a new entrance path component specifying the position along the path to start at.
      *
-     * @param entranceID  The ID of the entrance
+     * @param entranceId  The ID of the entrance
      * @param pathManager The PathfindingSystem the path is stored in
      * @param startStep   The step to start from.
      */
-    public EntrancePathComponent(int entranceID, PathfindingSystem pathManager, int startStep) {
-        this.entranceID = entranceID;
+    public EntrancePathComponent(int entranceId, PathfindingSystem pathManager, int startStep) {
+        this.entranceId = entranceId;
         this.pathManager = pathManager;
-        step = Math.max(Math.min(pathManager.getPath(entranceID).size() - 1, startStep), 0);
-        goal = pathManager.getPath(entranceID).get(step);
+        step = Math.max(Math.min(pathManager.getPath(entranceId).size() - 1, startStep), 0);
+        goal = pathManager.getPath(entranceId).get(step);
     }
 
-    public EntrancePathComponent(int entranceID, PathfindingSystem pathManager) {
-        this.entranceID = entranceID;
+    public EntrancePathComponent(int entranceId, PathfindingSystem pathManager) {
+        this.entranceId = entranceId;
         this.pathManager = pathManager;
-        step = pathManager.getPath(entranceID).size() - 1;
-        goal = pathManager.getPath(entranceID).get(step);
+        step = pathManager.getPath(entranceId).size() - 1;
+        goal = pathManager.getPath(entranceId).get(step);
     }
 
     /**
@@ -83,7 +83,7 @@ public class EntrancePathComponent implements PathComponent {
 
     @Override
     public void nextStep() {
-        List<Vector3i> path = pathManager.getPath(entranceID);
+        List<Vector3i> path = pathManager.getPath(entranceId);
         step--;
         step = Math.min(Math.max(0, step), path.size() - 1);
         goal = path.get(step);
@@ -93,7 +93,7 @@ public class EntrancePathComponent implements PathComponent {
     /**
      * @return the ID of the entrance path this component is following.
      */
-    public int getEntranceID() {
-        return entranceID;
+    public int getEntranceId() {
+        return entranceId;
     }
 }

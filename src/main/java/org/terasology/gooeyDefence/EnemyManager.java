@@ -118,7 +118,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         for (EntityRef enemy : enemies) {
             /* Firstly check if the enemy is on an unchanged path */
             if (enemy.hasComponent(EntrancePathComponent.class)) {
-                if (enemy.getComponent(EntrancePathComponent.class).getEntranceID() != event.getPathId()) {
+                if (enemy.getComponent(EntrancePathComponent.class).getEntranceId() != event.getPathId()) {
                     return;
                 }
             }
@@ -209,8 +209,8 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         PathComponent pathComponent = getPathComponent(entity);
         LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
 
-        float dist = locationComponent.getWorldPosition().distanceSquared(pathComponent.getGoal().toVector3f());
-        if (dist < 0.1f) {
+        float distSqr = locationComponent.getWorldPosition().distanceSquared(pathComponent.getGoal().toVector3f());
+        if (distSqr < 0.1f) {
             updateToNextStep(entity, pathComponent);
         } else {
             moveEnemyTowardsGoal(entity, pathComponent, locationComponent, delta);
