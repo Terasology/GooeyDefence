@@ -132,13 +132,16 @@ public class PathfindingSystem extends BaseComponentSystem {
     private void calculatePath(Vector3i startPoint, BiConsumer<List<Vector3i>, Vector3i> callback) {
         JPSConfig config = new JPSConfig();
         /* Backwards to ensure that zero is at the field centre */
-        config.start = DefenceField.fieldCentre();
-        config.stop = startPoint;
+        config.start = startPoint;
+        config.stop = DefenceField.fieldCentre();
         config.maxDepth = DefenceField.outerRingSize() * 2;
         //TODO: Replace width and height with values from enemy.
         config.plugin = new EnemyWalkingPlugin(worldProvider, 0.5f, 0.5f);
-        config.maxTime = 4f;
-        pathfinderSystem.requestPath(config, callback::accept);
+        config.maxTime = 10f;
+        pathfinderSystem.requestPath(config, (path, end) -> {
+            Collections.reverse(path);
+            callback.accept(path, DefenceField.fieldCentre());
+        });
     }
 
     /**
