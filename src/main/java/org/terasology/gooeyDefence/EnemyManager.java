@@ -18,14 +18,13 @@ package org.terasology.gooeyDefence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
-import org.terasology.gooeyDefence.components.enemies.BlankPathComponent;
-import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
 import org.terasology.gooeyDefence.components.enemies.EntrancePathComponent;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
 import org.terasology.gooeyDefence.components.enemies.MovementComponent;
@@ -65,17 +64,24 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     @In
     private DelayManager delayManager;
 
+    /**
+     * Get the PathComponent used on the entity.
+     * <p>
+     * An entity should only have one implementation of the path component.
+     * As such, this method makes no guarantee about which component will be returned if the
+     * entity has multiple implementations.
+     *
+     * @param entity The entity to look on
+     * @return The first path component found on the entity.
+     * @throws IllegalArgumentException If the entity lacks a PathComponent
+     */
     public static PathComponent getPathComponent(EntityRef entity) {
-        //TODO: Make this less ugly. Dynamically obtain path components via reflection?
-        if (entity.hasComponent(EntrancePathComponent.class)) {
-            return entity.getComponent(EntrancePathComponent.class);
-        } else if (entity.hasComponent(CustomPathComponent.class)) {
-            return entity.getComponent(CustomPathComponent.class);
-        } else if (entity.hasComponent(BlankPathComponent.class)) {
-            return entity.getComponent(BlankPathComponent.class);
-        } else {
-            throw new Error("Path Component requested on entity that lacks one.");
+        for (Component component : entity.iterateComponents()) {
+            if (component instanceof PathComponent) {
+                return (PathComponent) component;
+            }
         }
+        throw new IllegalArgumentException("Path Component requested on entity that lacks one.");
     }
 
     /**
