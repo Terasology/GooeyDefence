@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components;
+package org.terasology.gooeyDefence.events;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.world.block.ForceBlockActive;
+import org.terasology.entitySystem.event.Event;
+import org.terasology.math.geom.Vector3i;
 
-/**
- * Component for the central shrine entity.
- * Stores information relating to the shrine and to the general field.
- */
-@ForceBlockActive
-public class ShrineComponent implements Component {
-    private int health;
+import java.util.List;
 
-    public int getHealth() {
-        return health;
+public class OnEntrancePathChanged implements Event {
+    private int pathId;
+    private List<Vector3i> newPath;
+
+    public OnEntrancePathChanged(int pathId, List<Vector3i> newPath) {
+        this.pathId = pathId;
+        this.newPath = newPath;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public List<Vector3i> getNewPath() {
+        return newPath;
     }
 
-    public void reduceHealth(int amount) {
-        this.health -= amount;
+    public int getPathId() {
+        return pathId;
     }
 }

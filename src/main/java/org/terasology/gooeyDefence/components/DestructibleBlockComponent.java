@@ -17,5 +17,8 @@ package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
 
+/**
+ * Marks that a block can be destroyed.
+ */
 public class DestructibleBlockComponent implements Component {
 }

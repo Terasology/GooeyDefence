@@ -20,6 +20,9 @@ import org.terasology.entitySystem.Component;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Component storing the ID's of all the blocks that make up a tower.
+ */
 public class TowerComponent implements Component {
     public Set<Long> cores = new HashSet<>();
     public Set<Long> effects = new HashSet<>();

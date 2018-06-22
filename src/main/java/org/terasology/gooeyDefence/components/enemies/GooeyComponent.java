@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components;
+package org.terasology.gooeyDefence.components.enemies;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.world.block.ForceBlockActive;
+import org.terasology.math.geom.Vector3f;
 
 /**
- * Component for the central shrine entity.
- * Stores information relating to the shrine and to the general field.
+ * General purpose catch all component.
+ * Intended only to be used temporarily to store fields whilst they haven't got their own component
  */
-@ForceBlockActive
-public class ShrineComponent implements Component {
-    private int health;
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public void reduceHealth(int amount) {
-        this.health -= amount;
-    }
+public class GooeyComponent implements Component {
+    public int damage;
 }

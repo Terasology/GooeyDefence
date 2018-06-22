@@ -16,12 +16,16 @@
 package org.terasology.gooeyDefence.components.towers;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.world.block.ForceBlockActive;
 
+/**
+ * Stores a reference to the entity this block belongs to.
+ */
 @ForceBlockActive
 public class TowerMultiBlockComponent implements Component {
     private long towerEntity = -1;
-
+    
     public long getTowerEntity() {
         return towerEntity;
     }
