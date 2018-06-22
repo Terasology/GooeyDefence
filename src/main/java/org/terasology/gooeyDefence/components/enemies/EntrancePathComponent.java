@@ -45,12 +45,16 @@ public class EntrancePathComponent implements PathComponent {
      *
      * @param entranceId  The ID of the entrance
      * @param pathManager The PathfindingSystem the path is stored in
-     * @param startStep   The step to start from.
+     * @param startStep   The step to start from. This must be a valid index in the path.
      */
     public EntrancePathComponent(int entranceId, PathfindingSystem pathManager, int startStep) {
         this.entranceId = entranceId;
         this.pathManager = pathManager;
-        step = Math.max(Math.min(pathManager.getPath(entranceId).size() - 1, startStep), 0);
+        /* The startStep given must be in the range of the path */
+        if (startStep < 0 || startStep > pathManager.getPath(entranceId).size() - 1) {
+            throw new IllegalArgumentException();
+        }
+        step = startStep;
         goal = pathManager.getPath(entranceId).get(step);
     }
 
@@ -63,7 +67,7 @@ public class EntrancePathComponent implements PathComponent {
 
     /**
      * Set the PathfindingSystem the paths are stored in.
-     * Used as the field cannot be serialised.
+     * The field storing it cannot be serialised so it must be manually set.
      *
      * @param pathManager The new path manager to set
      */
@@ -91,7 +95,7 @@ public class EntrancePathComponent implements PathComponent {
     }
 
     /**
-     * @return the ID of the entrance path this component is following.
+     * @return the Id of the entrance path this component is following.
      */
     public int getEntranceId() {
         return entranceId;
