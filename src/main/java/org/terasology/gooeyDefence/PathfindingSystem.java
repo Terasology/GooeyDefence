@@ -94,7 +94,7 @@ public class PathfindingSystem extends BaseComponentSystem {
 
         /* Process its path */
         calculatePath(new Vector3i(locationComponent.getWorldPosition()), (path, end) -> {
-            if (path.size() != 0) {
+            if (!path.isEmpty()) {
                 CustomPathComponent customPathComponent = new CustomPathComponent(path);
                 entity.addComponent(customPathComponent);
                 entity.removeComponent(BlankPathComponent.class);
