@@ -17,5 +17,12 @@ package org.terasology.gooeyDefence.events;
 
 import org.terasology.entitySystem.event.Event;
 
+/**
+ * Event is sent when an enemy is no longer on an entrance path.
+ *
+ * Calls the {@link org.terasology.gooeyDefence.PathfindingSystem} to re-path this enemy towards the shrine
+ *
+ * @see org.terasology.gooeyDefence.components.enemies.CustomPathComponent
+ */
 public class RepathEnemyRequest implements Event {
 }
