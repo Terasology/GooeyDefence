@@ -32,10 +32,11 @@ import java.util.List;
  *
  * @see DefenceWorldManager
  */
-public class DefenceField {
+public final class DefenceField {
     private static EntityRef shrineEntity = EntityRef.NULL;
     private static boolean fieldActivated;
-    private static Vector3i[] entrances = calculateEntrances(3);
+    private static int entranceCount = 3;
+    private static Vector3i[] entrances = calculateEntrances(entranceCount);
     /**
      * The data for the shrine's shape.
      * A 1 indicates a block should be placed, and a 0 indicates an empty space
@@ -66,18 +67,24 @@ public class DefenceField {
              {0, 0, 0}}});
 
     /**
+     * Private constructor as class is a utility class and should not be instantiated.
+     */
+    private DefenceField() {
+    }
+
+    /**
      * Converts the human readable shrine data to a list of positions.
      * Only intended to be used once to initialise a field.
      *
-     * @param shrineData The human readable version of the data.
+     * @param rawData The human readable version of the data.
      * @return An array of Vector3i containing the location of each one.
      */
-    private static Vector3i[] convertToVectors(int[][][] shrineData) {
+    private static Vector3i[] convertToVectors(int[][][] rawData) {
         List<Vector3i> positions = new ArrayList<>();
-        for (int y = 0; y < shrineData.length; y++) {
-            for (int x = 0; x < shrineData[y].length; x++) {
-                for (int z = 0; z < shrineData[y][x].length; z++) {
-                    if (shrineData[y][x][z] == 1) {
+        for (int y = 0; y < rawData.length; y++) {
+            for (int x = 0; x < rawData[y].length; x++) {
+                for (int z = 0; z < rawData[y][x].length; z++) {
+                    if (rawData[y][x][z] == 1) {
                         positions.add(new Vector3i(x, y, z));
                     }
                 }
@@ -124,7 +131,7 @@ public class DefenceField {
      * @return The number of entrances in the field
      */
     public static int entranceCount() {
-        return entrances.length;
+        return entranceCount;
     }
 
     /**
