@@ -20,11 +20,11 @@ import org.terasology.math.geom.Vector3i;
 
 import java.util.List;
 
-public class OnPathChanged implements Event {
+public class OnEntrancePathChanged implements Event {
     private int pathId;
     private List<Vector3i> newPath;
 
-    public OnPathChanged(int pathId, List<Vector3i> newPath) {
+    public OnEntrancePathChanged(int pathId, List<Vector3i> newPath) {
         this.pathId = pathId;
         this.newPath = newPath;
     }

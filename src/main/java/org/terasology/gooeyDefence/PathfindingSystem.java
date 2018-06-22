@@ -25,7 +25,7 @@ import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.components.enemies.BlankPathComponent;
 import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
-import org.terasology.gooeyDefence.events.OnPathChanged;
+import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.RepathEnemyRequest;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
@@ -113,7 +113,7 @@ public class PathfindingSystem extends BaseComponentSystem {
             List<Vector3i> oldPath = paths.get(id);
             paths.set(id, path);
             if (oldPath != null && !oldPath.equals(path)) {
-                DefenceField.getShrineEntity().send(new OnPathChanged(id, path));
+                DefenceField.getShrineEntity().send(new OnEntrancePathChanged(id, path));
             }
             if (callback != null) {
                 callback.run();
