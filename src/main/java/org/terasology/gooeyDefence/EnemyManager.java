@@ -200,18 +200,19 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     @Override
     public void update(float delta) {
         if (DefenceField.isFieldActivated()) {
-            enemies.forEach(entity -> processEnemy(entity, delta));
+            enemies.forEach(entity -> moveEnemyAlongPath(entity, delta));
             enemiesToRemove.forEach(enemies::remove);
             enemiesToRemove.clear();
         }
     }
 
     /**
-     * Moves an enemy along it's path.
+     * Moves an enemy one step along it's path.
+     * Also handles the enemy reaching the end of the path.
      *
      * @param entity the enemy to move
      */
-    private void processEnemy(EntityRef entity, float delta) {
+    private void moveEnemyAlongPath(EntityRef entity, float delta) {
         PathComponent pathComponent = getPathComponent(entity);
         LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
 
