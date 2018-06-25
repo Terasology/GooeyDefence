@@ -21,32 +21,42 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.flexiblepathfinding.JPSConfig;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.components.enemies.BlankPathComponent;
 import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
-import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
+import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.RepathEnemyRequest;
+import org.terasology.gooeyDefence.pathfinding.EnemyWalkingPlugin;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.world.OnChangedBlock;
+import org.terasology.world.WorldProvider;
 import org.terasology.world.block.entity.placement.PlaceBlocks;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 @Share(PathfindingSystem.class)
 @RegisterSystem
 public class PathfindingSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(PathfindingSystem.class);
+    /**
+     * How long the pathfinding system should try and find a path for before giving up.
+     * In seconds.
+     */
+    private static final float PATHFINDING_TIMEOUT = 10.f;
 
     @In
     private PathfinderSystem pathfinderSystem;
     private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
+    @In
+    private WorldProvider worldProvider;
 
 
     /**
@@ -93,13 +103,14 @@ public class PathfindingSystem extends BaseComponentSystem {
         entity.addComponent(new BlankPathComponent(new Vector3i(locationComponent.getWorldPosition())));
 
         /* Process its path */
-        calculatePath(new Vector3i(locationComponent.getWorldPosition()), (path, end) -> {
-            if (!path.isEmpty()) {
-                CustomPathComponent customPathComponent = new CustomPathComponent(path);
-                entity.addComponent(customPathComponent);
-                entity.removeComponent(BlankPathComponent.class);
-            }
-        });
+        calculatePath(buildJpsConfig(new Vector3i(locationComponent.getWorldPosition())),
+                path -> {
+                    if (!path.isEmpty()) {
+                        CustomPathComponent customPathComponent = new CustomPathComponent(path);
+                        entity.addComponent(customPathComponent);
+                        entity.removeComponent(BlankPathComponent.class);
+                    }
+                });
     }
 
     /**
@@ -109,20 +120,50 @@ public class PathfindingSystem extends BaseComponentSystem {
      * @param callback A callback to be invoked after the path calculation has finished.
      */
     private void calculatePath(int id, Runnable callback) {
-        calculatePath(DefenceField.entrancePos(id), (path, end) -> {
-            List<Vector3i> oldPath = paths.get(id);
-            paths.set(id, path);
-            if (oldPath != null && !oldPath.equals(path)) {
-                DefenceField.getShrineEntity().send(new OnEntrancePathChanged(id, path));
-            }
-            if (callback != null) {
-                callback.run();
-            }
-        });
+        calculatePath(buildJpsConfig(DefenceField.entrancePos(id)),
+                (path) -> {
+                    List<Vector3i> oldPath = paths.get(id);
+                    paths.set(id, path);
+                    if (oldPath != null && !oldPath.equals(path)) {
+                        DefenceField.getShrineEntity().send(new OnEntrancePathChanged(id, path));
+                    }
+                    if (callback != null) {
+                        callback.run();
+                    }
+                });
     }
 
-    private void calculatePath(Vector3i startPoint, BiConsumer<List<Vector3i>, Vector3i> callback) {
-        pathfinderSystem.requestPath(DefenceField.fieldCentre(), startPoint, callback::accept);
+    /**
+     * Calculate the path given the config and the callback.
+     *
+     * @param config   The config to use for the pathfinding.
+     * @param callback The callback to be used once the path is found.
+     */
+    private void calculatePath(JPSConfig config, Consumer<List<Vector3i>> callback) {
+        pathfinderSystem.requestPath(config, (path, end) -> {
+            /* In order to make the path use zero as the end, we need to flip it. */
+            Collections.reverse(path);
+            callback.accept(path);
+        });
+
+    }
+
+    /**
+     * Produces a config to be used for pathfinding.
+     * Sets the path to run from the given position to the shrine.
+     *
+     * @param start The starting position of the path.
+     * @return A new JPSConfig for the path.
+     */
+    private JPSConfig buildJpsConfig(Vector3i start) {
+        JPSConfig result = new JPSConfig();
+        result.start = start;
+        result.stop = DefenceField.fieldCentre();
+        result.maxDepth = DefenceField.outerRingSize() * 2;
+        //TODO: Replace width and height with values from enemy.
+        result.plugin = new EnemyWalkingPlugin(worldProvider, 0.5f, 0.5f);
+        result.maxTime = PATHFINDING_TIMEOUT;
+        return result;
     }
 
     /**
