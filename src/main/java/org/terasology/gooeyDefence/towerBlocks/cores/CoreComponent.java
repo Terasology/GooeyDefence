@@ -21,5 +21,5 @@ import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
 /**
  * Test core component.
  */
-public class CoreOneComponent extends TowerCore implements Component {
+public class CoreComponent extends TowerCore implements Component {
 }
