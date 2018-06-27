@@ -21,6 +21,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.components.enemies.PathComponent;
 import org.terasology.gooeyDefence.events.combat.DoSelectEnemies;
@@ -55,8 +56,8 @@ public class SingleTargetTargeterSystem extends BaseComponentSystem {
                 locationComponent.getWorldPosition(),
                 targeterComponent.getRange());
         Optional<EntityRef> firstEnemy = targets.stream().min((first, second) -> {
-            PathComponent firstComponent = EnemyManager.getPathComponent(first);
-            PathComponent secondComponent = EnemyManager.getPathComponent(second);
+            PathComponent firstComponent = DefenceField.getComponentExtending(first, PathComponent.class);
+            PathComponent secondComponent = DefenceField.getComponentExtending(second, PathComponent.class);
             return firstComponent.getStep() - secondComponent.getStep();
         });
         firstEnemy.ifPresent(event::addToList);

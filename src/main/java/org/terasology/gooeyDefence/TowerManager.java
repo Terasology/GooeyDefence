@@ -17,7 +17,6 @@ package org.terasology.gooeyDefence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -122,7 +121,7 @@ public class TowerManager extends BaseComponentSystem {
         int drain = 0;
         for (long emitterID : towerComponent.targeter) {
             EntityRef emitterEntity = entityManager.getEntity(emitterID);
-            TowerTargeter emitter = getComponentExtending(emitterEntity, TowerTargeter.class);
+            TowerTargeter emitter = DefenceField.getComponentExtending(emitterEntity, TowerTargeter.class);
             if (emitter != null) {
                 drain += emitter.getDrain();
             }
@@ -140,7 +139,7 @@ public class TowerManager extends BaseComponentSystem {
         int drain = 0;
         for (long effectorID : towerComponent.effector) {
             EntityRef effectorEntity = entityManager.getEntity(effectorID);
-            TowerEffector effector = getComponentExtending(effectorEntity, TowerEffector.class);
+            TowerEffector effector = DefenceField.getComponentExtending(effectorEntity, TowerEffector.class);
             if (effector != null) {
                 drain += effector.getDrain();
             }
@@ -158,29 +157,12 @@ public class TowerManager extends BaseComponentSystem {
         int power = 0;
         for (long coreID : towerComponent.cores) {
             EntityRef coreEntity = entityManager.getEntity(coreID);
-            TowerCore core = getComponentExtending(coreEntity, TowerCore.class);
+            TowerCore core = DefenceField.getComponentExtending(coreEntity, TowerCore.class);
             if (core != null) {
                 power += core.getPower();
             }
         }
         return power;
-    }
-
-    /**
-     * Helper method for getting a component given one of it's superclasses
-     *
-     * @param entity     The entity to search on
-     * @param superClass The superclass of the component to filter for
-     * @param <Y>        The type of the superclass
-     * @return The component that extends the superclass
-     */
-    private <Y> Y getComponentExtending(EntityRef entity, Class<Y> superClass) {
-        for (Component component : entity.iterateComponents()) {
-            if (superClass.isInstance(component)) {
-                return superClass.cast(component);
-            }
-        }
-        return null;
     }
 
 }

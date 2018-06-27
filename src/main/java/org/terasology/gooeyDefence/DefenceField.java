@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence;
 
+import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
@@ -212,5 +213,22 @@ public final class DefenceField {
      */
     public static void setFieldActivated() {
         DefenceField.fieldActivated = true;
+    }
+
+    /**
+     * Helper method for getting a component given one of it's superclasses
+     *
+     * @param entity     The entity to search on
+     * @param superClass The superclass of the component to filter for
+     * @param <Y>        The type of the superclass
+     * @return The component that extends the superclass
+     */
+    public static <Y> Y getComponentExtending(EntityRef entity, Class<Y> superClass) {
+        for (Component component : entity.iterateComponents()) {
+            if (superClass.isInstance(component)) {
+                return superClass.cast(component);
+            }
+        }
+        return null;
     }
 }
