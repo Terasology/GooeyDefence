@@ -25,8 +25,10 @@ import java.util.List;
  * <p>
  * Doesn't store the path internally to reduce on memory, instead stores a
  * reference to the PathfindingManager that holds the path.
+ * This does result in needing to re-set the pathManager every time the game is loaded/created.
  *
  * @see PathfindingManager
+ * @see CustomPathComponent
  */
 public class EntrancePathComponent implements PathComponent {
     private int step;
