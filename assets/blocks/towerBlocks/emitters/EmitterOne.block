@@ -1,7 +1,0 @@
-{
-  "entity": {
-    "prefab": "GooeyDefence:EmitterOne"
-  },
-  "blockTile": "GooeyDefence:EmitterOne",
-  "translucent":true
-}

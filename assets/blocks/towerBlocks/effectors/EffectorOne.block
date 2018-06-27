@@ -1,0 +1,7 @@
+{
+  "entity": {
+    "prefab": "GooeyDefence:EffectorOne"
+  },
+  "blockTile": "GooeyDefence:EffectorOne",
+  "translucent":true
+}
