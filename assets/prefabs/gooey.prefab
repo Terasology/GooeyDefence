@@ -63,6 +63,9 @@
   },
   "Movement": {
     "speed": 3
+  },
+  "GooeyDefence:Health": {
+    "health": 20
   }
 }
 
