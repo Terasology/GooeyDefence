@@ -1,0 +1,7 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "DamageEffector": {
+    "drain": 5,
+    "damage": 16
+  }
+}
