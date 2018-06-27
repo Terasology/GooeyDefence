@@ -28,11 +28,11 @@ import org.terasology.gooeyDefence.components.enemies.EntrancePathComponent;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
 import org.terasology.gooeyDefence.components.enemies.MovementComponent;
 import org.terasology.gooeyDefence.components.enemies.PathComponent;
-import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
-import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.RepathEnemyRequest;
+import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
+import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
@@ -171,7 +171,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param enemy The enemy to destroy
      */
     public void destroyEnemy(EntityRef enemy) {
-        enemiesToRemove.add(enemy);
+        enemies.remove(enemy);
         enemy.destroy();
     }
 
@@ -199,6 +199,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         if (DefenceField.isFieldActivated()) {
             enemies.forEach(entity -> moveEnemyAlongPath(entity, delta));
             enemiesToRemove.forEach(enemies::remove);
+            enemiesToRemove.forEach(EntityRef::destroy);
             enemiesToRemove.clear();
         }
     }
@@ -232,7 +233,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         if (pathComponent.atEnd()) {
             GooeyComponent gooeyComponent = entity.getComponent(GooeyComponent.class);
             entity.send(new DamageEntityEvent(gooeyComponent.damage));
-            destroyEnemy(entity);
+            enemiesToRemove.add(entity);
         } else {
             pathComponent.nextStep();
         }
