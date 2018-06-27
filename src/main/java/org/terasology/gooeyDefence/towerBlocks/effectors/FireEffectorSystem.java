@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.towerBlocks.effects;
+package org.terasology.gooeyDefence.towerBlocks.effectors;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -29,7 +29,7 @@ import org.terasology.rendering.world.selection.BlockSelectionRenderer;
 import org.terasology.utilities.Assets;
 
 @RegisterSystem
-public class FireEffectSystem extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
+public class FireEffectorSystem extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
 
     private EntityRef targetEntity;
 
@@ -41,7 +41,7 @@ public class FireEffectSystem extends BaseComponentSystem implements RenderSyste
     }
 
     @ReceiveEvent
-    public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, FireEffectComponent emitterComponent) {
+    public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, FireEffectorComponent effectorComponent) {
         targetEntity = event.getTarget();
     }
 

@@ -29,8 +29,8 @@ import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.tower.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.tower.TowerDestroyedEvent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEffect;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.health.DoDestroyEvent;
 import org.terasology.logic.location.LocationComponent;
@@ -144,8 +144,8 @@ public class TowerBuildSystem extends BaseComponentSystem {
             /* Store them into the new tower */
             TowerComponent component = towerEntity.getComponent(TowerComponent.class);
             newComponent.cores.addAll(component.cores);
-            newComponent.effects.addAll(component.effects);
-            newComponent.emitters.addAll(component.emitters);
+            newComponent.effector.addAll(component.effector);
+            newComponent.targeter.addAll(component.targeter);
             newComponent.plains.addAll(component.plains);
 
             /* Destroy the old tower entity */
@@ -168,11 +168,11 @@ public class TowerBuildSystem extends BaseComponentSystem {
             if (component instanceof TowerCore) {
                 towerComponent.cores.add(blockEntity.getId());
                 return;
-            } else if (component instanceof TowerEffect) {
-                towerComponent.effects.add(blockEntity.getId());
+            } else if (component instanceof TowerEffector) {
+                towerComponent.effector.add(blockEntity.getId());
                 return;
-            } else if (component instanceof TowerEmitter) {
-                towerComponent.emitters.add(blockEntity.getId());
+            } else if (component instanceof TowerTargeter) {
+                towerComponent.targeter.add(blockEntity.getId());
                 return;
             }
         }
@@ -235,8 +235,8 @@ public class TowerBuildSystem extends BaseComponentSystem {
     private void removeBlockFromTower(EntityRef tower, EntityRef block) {
         TowerComponent component = tower.getComponent(TowerComponent.class);
         component.cores.remove(block.getId());
-        component.emitters.remove(block.getId());
-        component.effects.remove(block.getId());
+        component.targeter.remove(block.getId());
+        component.effector.remove(block.getId());
         component.plains.remove(block.getId());
         block.getComponent(TowerMultiBlockComponent.class).setTowerEntity(-1);
     }
@@ -279,8 +279,8 @@ public class TowerBuildSystem extends BaseComponentSystem {
         TowerComponent component = tower.getComponent(TowerComponent.class);
         Set<Long> results = new HashSet<>();
         results.addAll(component.cores);
-        results.addAll(component.effects);
-        results.addAll(component.emitters);
+        results.addAll(component.effector);
+        results.addAll(component.targeter);
         results.addAll(component.plains);
 
         /* Convert the Longs to Entity Refs */

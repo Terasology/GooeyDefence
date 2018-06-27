@@ -17,7 +17,7 @@ package org.terasology.gooeyDefence.events.combat;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -27,7 +27,7 @@ import java.util.Set;
  * Event sent to select the enemies that will be attacked.
  * Sent against the Emitter blocks in the tower.
  *
- * @see TowerEmitter
+ * @see TowerTargeter
  */
 public class DoSelectEnemies implements Event {
     private Set<EntityRef> targets = new HashSet<>();

@@ -26,7 +26,7 @@ import java.util.Set;
  */
 public class TowerComponent implements Component {
     public Set<Long> cores = new HashSet<>();
-    public Set<Long> effects = new HashSet<>();
-    public Set<Long> emitters = new HashSet<>();
+    public Set<Long> effector = new HashSet<>();
+    public Set<Long> targeter = new HashSet<>();
     public Set<Long> plains = new HashSet<>();
 }
