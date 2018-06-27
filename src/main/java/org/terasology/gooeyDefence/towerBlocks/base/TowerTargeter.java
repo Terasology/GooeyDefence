@@ -15,6 +15,15 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.base;
 
+/**
+ * Base class for all the Targeter blocks.
+ * <p>
+ * Targeters select the enemies the tower will attack.
+ * They require power, provided by {@link TowerCore}'s
+ *
+ * @see TowerCore
+ * @see TowerEffector
+ */
 public abstract class TowerTargeter {
     private int drain;
     private int range;

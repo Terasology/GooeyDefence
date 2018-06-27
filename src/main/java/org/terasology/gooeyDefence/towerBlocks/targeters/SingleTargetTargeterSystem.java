@@ -30,6 +30,11 @@ import org.terasology.registry.In;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Targets the first enemy within range.
+ *
+ * @see SingleTargetTargeterComponent
+ */
 @RegisterSystem
 public class SingleTargetTargeterSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(SingleTargetTargeterSystem.class);
@@ -42,7 +47,7 @@ public class SingleTargetTargeterSystem extends BaseComponentSystem {
      * @param event             The event to store the result in
      * @param entity            The emitter entity searching
      * @param locationComponent The location component of the entity
-     * @param targeterComponent  The emitter component of the entity
+     * @param targeterComponent The emitter component of the entity
      */
     @ReceiveEvent
     public void onDoSelectEnemies(DoSelectEnemies event, EntityRef entity, LocationComponent locationComponent, SingleTargetTargeterComponent targeterComponent) {

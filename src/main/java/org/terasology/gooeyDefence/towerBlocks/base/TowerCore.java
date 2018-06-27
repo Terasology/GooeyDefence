@@ -15,9 +15,20 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.base;
 
+/**
+ * Base class for all the Core blocks
+ * <p>
+ * Tower Cores provide power to the other blocks in the tower.
+ *
+ * @see TowerEffector
+ * @see TowerTargeter
+ */
 public abstract class TowerCore {
     private int power;
 
+    /**
+     * @return How much power this core provides
+     */
     public int getPower() {
         return power;
     }

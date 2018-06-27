@@ -18,6 +18,12 @@ package org.terasology.gooeyDefence.towerBlocks.effectors;
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 
+/**
+ * Applies an effect that highlights the enemy.
+ * Test Effector
+ *
+ * @see FireEffectorSystem
+ */
 public class FireEffectorComponent extends TowerEffector implements Component {
 
 }

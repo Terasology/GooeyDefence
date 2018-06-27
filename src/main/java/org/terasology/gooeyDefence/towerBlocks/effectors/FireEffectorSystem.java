@@ -28,6 +28,11 @@ import org.terasology.math.geom.Vector3i;
 import org.terasology.rendering.world.selection.BlockSelectionRenderer;
 import org.terasology.utilities.Assets;
 
+/**
+ * Draws a translucent red block above the enemy.
+ *
+ * @see FireEffectorComponent
+ */
 @RegisterSystem
 public class FireEffectorSystem extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
 
@@ -40,6 +45,13 @@ public class FireEffectorSystem extends BaseComponentSystem implements RenderSys
         flagRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:ShrineDamaged").get());
     }
 
+    /**
+     * Called every tick to apply the fire effect onto a target
+     * <p>
+     * Filters on FireEffectorComponent
+     *
+     * @see ApplyEffectEvent
+     */
     @ReceiveEvent
     public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, FireEffectorComponent effectorComponent) {
         targetEntity = event.getTarget();
