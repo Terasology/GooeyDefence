@@ -24,8 +24,6 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.DestructibleBlockComponent;
-import org.terasology.gooeyDefence.components.ShrineComponent;
-import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.logic.characters.events.AttackEvent;
 import org.terasology.logic.common.ActivateEvent;
@@ -89,15 +87,6 @@ public class DefenceWorldManager extends BaseComponentSystem {
         if (entity.getParentPrefab().getName().equals("GooeyDefence:PlainWorldGen")) {
             event.consume();
             factory.newInstance(blockManager.getBlockFamily("GooeyDefence:Plain")).send(new DropItemEvent(component.getWorldPosition()));
-        }
-    }
-
-
-    @ReceiveEvent
-    public void onDamageShrine(DamageShrineEvent event, EntityRef entity) {
-        ShrineComponent component = DefenceField.getShrineEntity().getComponent(ShrineComponent.class);
-        if (component != null) {
-            component.reduceHealth(event.getDamage());
         }
     }
 

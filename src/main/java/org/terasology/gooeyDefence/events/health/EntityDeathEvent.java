@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.events;
+package org.terasology.gooeyDefence.events.health;
 
 import org.terasology.entitySystem.event.Event;
-import org.terasology.gooeyDefence.components.ShrineComponent;
 
 /**
- * Event to deal damage to the shrine.
- * Sent against the entity doing the damage.
- *
- * @see ShrineComponent
+ * Event sent when an entity reaches zero health.
+ * Sent against the dead entity.
  */
-public class DamageShrineEvent implements Event {
-    private int damage;
-
-    public DamageShrineEvent(int damage) {
-        this.damage = damage;
-    }
-
-    /**
-     * @return the damage being dealt by this attack.
-     */
-    public int getDamage() {
-        return damage;
-    }
+public class EntityDeathEvent implements Event {
 }

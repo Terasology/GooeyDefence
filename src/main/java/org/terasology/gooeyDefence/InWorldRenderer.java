@@ -21,7 +21,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
-import org.terasology.gooeyDefence.events.DamageShrineEvent;
+import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.rendering.world.selection.BlockSelectionRenderer;
@@ -50,7 +50,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     @ReceiveEvent
-    public void onDamageShrine(DamageShrineEvent event, EntityRef entity) {
+    public void onDamageShrine(DamageEntityEvent event, EntityRef entity) {
         shrineDamaged = 100;
     }
 
