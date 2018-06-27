@@ -13,11 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.towerBlocks.effects;
+package org.terasology.gooeyDefence.towerBlocks.base;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEffect;
+public abstract class TowerTargeter {
+    private int drain;
+    private int range;
 
-public class FireEffectComponent extends TowerEffect implements Component {
+    public int getDrain() {
+        return drain;
+    }
 
+    public int getRange() {
+        return range;
+    }
 }

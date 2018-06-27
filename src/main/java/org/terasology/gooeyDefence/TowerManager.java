@@ -29,8 +29,8 @@ import org.terasology.gooeyDefence.events.combat.DoSelectEnemies;
 import org.terasology.gooeyDefence.events.tower.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.tower.TowerDestroyedEvent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEffect;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.registry.In;
@@ -83,7 +83,7 @@ public class TowerManager extends BaseComponentSystem {
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, TowerComponent component) {
         if (event.getActionId().equals("towerUpdate" + entity.getId())) {
             int corePower = getTotalCorePower(component);
-            int totalDrain = getEffectsDrain(component) + getEmitterDrain(component);
+            int totalDrain = getEffectorDrain(component) + getEmitterDrain(component);
             if (corePower >= totalDrain) {
                 handleTowerShooting(component);
             }
@@ -98,31 +98,31 @@ public class TowerManager extends BaseComponentSystem {
     private void handleTowerShooting(TowerComponent towerComponent) {
         /* Run emitter event */
         DoSelectEnemies shootEvent = new DoSelectEnemies();
-        for (long emitterID : towerComponent.emitters) {
+        for (long emitterID : towerComponent.targeter) {
             EntityRef emitter = entityManager.getEntity(emitterID);
             emitter.send(shootEvent);
         }
         /* Run effect event */
-        for (long effectID : towerComponent.effects) {
-            EntityRef effect = entityManager.getEntity(effectID);
+        for (long effectorID : towerComponent.effector) {
+            EntityRef effector = entityManager.getEntity(effectorID);
             for (EntityRef entity : shootEvent.getTargets()) {
                 ApplyEffectEvent effectEvent = new ApplyEffectEvent(entity);
-                effect.send(effectEvent);
+                effector.send(effectEvent);
             }
         }
     }
 
     /**
-     * Get the drain caused by all the emitters on a tower
+     * Get the drain caused by all the targeters on a tower
      *
      * @param towerComponent The TowerComponent of the tower entity
-     * @return The total drain. Zero if the tower has no emitters
+     * @return The total drain. Zero if the tower has no targeters
      */
     private int getEmitterDrain(TowerComponent towerComponent) {
         int drain = 0;
-        for (long emitterID : towerComponent.emitters) {
+        for (long emitterID : towerComponent.targeter) {
             EntityRef emitterEntity = entityManager.getEntity(emitterID);
-            TowerEmitter emitter = getComponentExtending(emitterEntity, TowerEmitter.class);
+            TowerTargeter emitter = getComponentExtending(emitterEntity, TowerTargeter.class);
             if (emitter != null) {
                 drain += emitter.getDrain();
             }
@@ -131,18 +131,18 @@ public class TowerManager extends BaseComponentSystem {
     }
 
     /**
-     * Get the drain caused by all the effects on a tower
+     * Get the drain caused by all the effector on a tower
      *
      * @param towerComponent The TowerComponent of the tower entity
-     * @return The total drain. Zero if the tower has no effects
+     * @return The total drain. Zero if the tower has no effector
      */
-    private int getEffectsDrain(TowerComponent towerComponent) {
+    private int getEffectorDrain(TowerComponent towerComponent) {
         int drain = 0;
-        for (long effectID : towerComponent.effects) {
-            EntityRef effectEntity = entityManager.getEntity(effectID);
-            TowerEffect effect = getComponentExtending(effectEntity, TowerEffect.class);
-            if (effect != null) {
-                drain += effect.getDrain();
+        for (long effectorID : towerComponent.effector) {
+            EntityRef effectorEntity = entityManager.getEntity(effectorID);
+            TowerEffector effector = getComponentExtending(effectorEntity, TowerEffector.class);
+            if (effector != null) {
+                drain += effector.getDrain();
             }
         }
         return drain;

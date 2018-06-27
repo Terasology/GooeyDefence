@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.towerBlocks.emitters;
+package org.terasology.gooeyDefence.towerBlocks.targeters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +31,8 @@ import java.util.Optional;
 import java.util.Set;
 
 @RegisterSystem
-public class SingleTargetEmitterSystem extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(SingleTargetEmitterSystem.class);
+public class SingleTargetTargeterSystem extends BaseComponentSystem {
+    private static final Logger logger = LoggerFactory.getLogger(SingleTargetTargeterSystem.class);
     @In
     private EnemyManager enemyManager;
 
@@ -42,13 +42,13 @@ public class SingleTargetEmitterSystem extends BaseComponentSystem {
      * @param event             The event to store the result in
      * @param entity            The emitter entity searching
      * @param locationComponent The location component of the entity
-     * @param emitterComponent  The emitter component of the entity
+     * @param targeterComponent  The emitter component of the entity
      */
     @ReceiveEvent
-    public void onDoSelectEnemies(DoSelectEnemies event, EntityRef entity, LocationComponent locationComponent, SingleTargetEmitterComponent emitterComponent) {
+    public void onDoSelectEnemies(DoSelectEnemies event, EntityRef entity, LocationComponent locationComponent, SingleTargetTargeterComponent targeterComponent) {
         Set<EntityRef> targets = enemyManager.getEnemiesInRange(
                 locationComponent.getWorldPosition(),
-                emitterComponent.getRange());
+                targeterComponent.getRange());
         Optional<EntityRef> firstEnemy = targets.stream().min((first, second) -> {
             PathComponent firstComponent = EnemyManager.getPathComponent(first);
             PathComponent secondComponent = EnemyManager.getPathComponent(second);
