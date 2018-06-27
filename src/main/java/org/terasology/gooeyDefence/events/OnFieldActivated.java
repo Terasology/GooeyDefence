@@ -18,7 +18,7 @@ package org.terasology.gooeyDefence.events;
 import org.terasology.entitySystem.event.Event;
 
 /**
- * Event sent to initialise a field after a new game or a save has been loaded.
+ * Event sent to initialise the field after a new game or a save has been loaded.
  */
 public class OnFieldActivated implements Event {
     private Runnable callback;

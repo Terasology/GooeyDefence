@@ -17,22 +17,40 @@ package org.terasology.gooeyDefence.events.combat;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Event sent to select the enemies that will be attacked.
+ * Sent against the Emitter blocks in the tower.
+ *
+ * @see TowerEmitter
+ */
 public class DoSelectEnemies implements Event {
     private Set<EntityRef> targets = new HashSet<>();
 
+    /**
+     * This method should only be used by the sending system after the event has been sent and processed
+     *
+     * @return the targets that have been selected by this event.
+     */
     public Set<EntityRef> getTargets() {
         return targets;
     }
 
+    /**
+     * @param targets A collection of all the enemies to add to the target list
+     */
     public void addMultiple(Collection<EntityRef> targets) {
         this.targets.addAll(targets);
     }
 
+    /**
+     * @param target The single enemy to add to this list
+     */
     public void addToList(EntityRef target) {
         this.targets.add(target);
     }

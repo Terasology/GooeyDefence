@@ -17,7 +17,14 @@ package org.terasology.gooeyDefence.events.combat;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEffect;
 
+/**
+ * Event sent to apply an effect to a target
+ * Sent against the Effector blocks in the tower.
+ *
+ * @see TowerEffect
+ */
 public class ApplyEffectEvent implements Event {
     private EntityRef target;
 
@@ -25,6 +32,9 @@ public class ApplyEffectEvent implements Event {
         this.target = target;
     }
 
+    /**
+     * @return the enemy being targeted by this event.
+     */
     public EntityRef getTarget() {
         return target;
     }

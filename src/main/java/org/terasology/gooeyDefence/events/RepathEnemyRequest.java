@@ -21,6 +21,7 @@ import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
 
 /**
  * Event is sent when an enemy is no longer on an entrance path.
+ * Sent against the entity wishing to be repathed
  * <p>
  * Calls the {@link PathfindingManager} to re-path this enemy towards the shrine
  *
