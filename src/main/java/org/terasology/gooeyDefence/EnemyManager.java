@@ -60,7 +60,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     @In
     private EntityManager entityManager;
     @In
-    private PathfindingSystem pathfindingSystem;
+    private PathfindingManager pathfindingManager;
     @In
     private DelayManager delayManager;
 
@@ -93,7 +93,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         enemies.clear();
         entityManager.getEntitiesWith(GooeyComponent.class).forEach(enemies::add);
         enemies.stream().filter(enemy -> enemy.hasComponent(EntrancePathComponent.class))
-                .forEach(enemy -> enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingSystem));
+                .forEach(enemy -> enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingManager));
 
         //delayManager.addPeriodicAction(DefenceField.getShrineEntity(), "SpawnEnemyEvent", 500, 500);
     }
@@ -138,7 +138,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
                 enemy.removeComponent(pathComponent.getClass());
                 EntrancePathComponent entranceComponent = new EntrancePathComponent(
                         event.getPathId(),
-                        pathfindingSystem,
+                        pathfindingManager,
                         newPath.indexOf(goal));
                 enemy.addComponent(entranceComponent);
             } else {
@@ -162,7 +162,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         EntityRef entity = entityManager.create("GooeyDefence:Gooey", DefenceField.entrancePos(entranceNumber).toVector3f());
 
         /* Setup pathfinding component */
-        EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingSystem);
+        EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingManager);
         entity.addComponent(component);
 
         enemies.add(entity);

@@ -42,10 +42,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-@Share(PathfindingSystem.class)
+@Share(PathfindingManager.class)
 @RegisterSystem
-public class PathfindingSystem extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(PathfindingSystem.class);
+public class PathfindingManager extends BaseComponentSystem {
+    private static final Logger logger = LoggerFactory.getLogger(PathfindingManager.class);
     /**
      * How long the pathfinding system should try and find a path for before giving up.
      * In seconds.
