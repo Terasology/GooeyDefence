@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components.enemies;
+package org.terasology.gooeyDefence.towerBlocks.effectors;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 
 /**
- * Stores information on how to move the enemy.
+ * Slows down an enemy.
+ * It does not deal any damage to the enemy.
+ *
+ * @see IceEffectorSystem
  */
-public class MovementComponent implements Component {
-    private float speed;
+public class IceEffectorComponent extends TowerEffector implements Component {
+    /**
+     * A multiplier for the enemies speed.
+     * 0.9 will make them 10% slower, or 90% of their full speed;
+     */
+    private float slow;
 
-    public float getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
+    public float getSlow() {
+        return slow;
     }
 }
