@@ -1,7 +1,0 @@
-{
-  "tile": "GooeyDefence:Plain",
-  "entity": {
-    "prefab":"GooeyDefence:PlainBlock"
-  },
-  "translucent":true
-}
