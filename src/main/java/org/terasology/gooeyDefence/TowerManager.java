@@ -122,9 +122,7 @@ public class TowerManager extends BaseComponentSystem {
         for (long emitterID : towerComponent.targeter) {
             EntityRef emitterEntity = entityManager.getEntity(emitterID);
             TowerTargeter emitter = DefenceField.getComponentExtending(emitterEntity, TowerTargeter.class);
-            if (emitter != null) {
-                drain += emitter.getDrain();
-            }
+            drain += emitter.getDrain();
         }
         return drain;
     }
@@ -140,9 +138,7 @@ public class TowerManager extends BaseComponentSystem {
         for (long effectorID : towerComponent.effector) {
             EntityRef effectorEntity = entityManager.getEntity(effectorID);
             TowerEffector effector = DefenceField.getComponentExtending(effectorEntity, TowerEffector.class);
-            if (effector != null) {
-                drain += effector.getDrain();
-            }
+            drain += effector.getDrain();
         }
         return drain;
     }
@@ -158,9 +154,7 @@ public class TowerManager extends BaseComponentSystem {
         for (long coreID : towerComponent.cores) {
             EntityRef coreEntity = entityManager.getEntity(coreID);
             TowerCore core = DefenceField.getComponentExtending(coreEntity, TowerCore.class);
-            if (core != null) {
-                power += core.getPower();
-            }
+            power += core.getPower();
         }
         return power;
     }

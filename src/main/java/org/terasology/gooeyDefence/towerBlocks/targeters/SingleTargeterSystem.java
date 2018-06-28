@@ -59,7 +59,6 @@ public class SingleTargeterSystem extends BaseComponentSystem {
         Optional<EntityRef> firstEnemy = targets.stream().min((first, second) -> {
             PathComponent firstComponent = DefenceField.getComponentExtending(first, PathComponent.class);
             PathComponent secondComponent = DefenceField.getComponentExtending(second, PathComponent.class);
-            /* We don't null check because we shouldn't ever have the components be null */
             return firstComponent.getStep() - secondComponent.getStep();
         });
         firstEnemy.ifPresent(event::addToList);

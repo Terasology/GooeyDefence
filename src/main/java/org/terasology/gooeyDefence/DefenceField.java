@@ -229,6 +229,6 @@ public final class DefenceField {
                 return superClass.cast(component);
             }
         }
-        return null;
+        throw new IllegalArgumentException("Entity didn't have any component extending " + superClass.getSimpleName());
     }
 }
