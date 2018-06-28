@@ -34,30 +34,32 @@ import java.util.Set;
 /**
  * Targets the first enemy within range.
  *
- * @see SingleTargetTargeterComponent
+ * @see SingleTargeterComponent
  */
 @RegisterSystem
-public class SingleTargetTargeterSystem extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(SingleTargetTargeterSystem.class);
+public class SingleTargeterSystem extends BaseComponentSystem {
+    private static final Logger logger = LoggerFactory.getLogger(SingleTargeterSystem.class);
     @In
     private EnemyManager enemyManager;
 
     /**
      * Determine which enemies should be attacked.
+     * Called against the targeter entity.
+     * <p>
+     * Filters on {@link LocationComponent} and {@link SingleTargeterComponent}
      *
-     * @param event             The event to store the result in
-     * @param entity            The emitter entity searching
-     * @param locationComponent The location component of the entity
-     * @param targeterComponent The emitter component of the entity
+     * @see DoSelectEnemies
      */
     @ReceiveEvent
-    public void onDoSelectEnemies(DoSelectEnemies event, EntityRef entity, LocationComponent locationComponent, SingleTargetTargeterComponent targeterComponent) {
+    public void onDoSelectEnemies(DoSelectEnemies event, EntityRef entity, LocationComponent locationComponent, SingleTargeterComponent targeterComponent) {
         Set<EntityRef> targets = enemyManager.getEnemiesInRange(
                 locationComponent.getWorldPosition(),
                 targeterComponent.getRange());
+
         Optional<EntityRef> firstEnemy = targets.stream().min((first, second) -> {
             PathComponent firstComponent = DefenceField.getComponentExtending(first, PathComponent.class);
             PathComponent secondComponent = DefenceField.getComponentExtending(second, PathComponent.class);
+            /* We don't null check because we shouldn't ever have the components be null */
             return firstComponent.getStep() - secondComponent.getStep();
         });
         firstEnemy.ifPresent(event::addToList);
