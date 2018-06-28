@@ -1,6 +1,6 @@
 {
   "parent": "GooeyDefence:PlainBlock",
-  "CoreOne": {
+  "Core": {
     "power": 50
   }
 }
