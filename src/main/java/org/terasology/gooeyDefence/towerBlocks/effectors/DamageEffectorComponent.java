@@ -16,13 +16,14 @@
 package org.terasology.gooeyDefence.towerBlocks.effectors;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 
 /**
  * Effector that only deals damage to the enemies.
  *
  * @see DamageEffectorSystem
  */
-public class DamageEffectorComponent implements Component {
+public class DamageEffectorComponent extends TowerEffector implements Component {
     private int damage;
 
     public int getDamage() {
