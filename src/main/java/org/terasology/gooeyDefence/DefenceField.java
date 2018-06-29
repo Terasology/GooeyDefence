@@ -216,7 +216,7 @@ public final class DefenceField {
     }
 
     /**
-     * Helper method for getting a component given one of it's superclasses
+     * Helper method for getting a component given one of its superclasses
      *
      * @param entity     The entity to search on
      * @param superClass The superclass of the component to filter for

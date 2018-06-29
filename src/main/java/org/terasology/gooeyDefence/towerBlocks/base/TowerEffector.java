@@ -19,7 +19,7 @@ package org.terasology.gooeyDefence.towerBlocks.base;
  * Base class for all the Effector blocks.
  * <p>
  * Effectors apply damage and special effects to the enemies.
- * They require power, provided by {@link TowerCore}'s
+ * They require power, provided by {@link TowerCore}s
  *
  * @see TowerCore
  * @see TowerTargeter

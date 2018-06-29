@@ -22,7 +22,7 @@ import java.util.Set;
 
 /**
  * Component for the abstract tower entity.
- * Stores the ID's of all the blocks that make up the tower.
+ * Stores the IDs of all the blocks that make up the tower.
  */
 public class TowerComponent implements Component {
     public Set<Long> cores = new HashSet<>();

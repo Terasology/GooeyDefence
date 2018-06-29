@@ -19,7 +19,7 @@ import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 
 /**
- * Targets the first enemy in it's range.
+ * Targets the first enemy in its range.
  * Test targeter.
  *
  * @see SingleTargetTargeterSystem
