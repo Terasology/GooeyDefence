@@ -19,28 +19,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.gooeyDefence.DefenceField;
-import org.terasology.gooeyDefence.EnemyManager;
-import org.terasology.gooeyDefence.components.enemies.PathComponent;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.registry.In;
 
-import java.util.Optional;
 import java.util.Set;
 
 /**
  * Targets the first enemy within range.
+ * <p>
+ * Inherits methods and properties from {@link BaseTargeterSystem}
  *
  * @see SingleTargeterComponent
+ * @see BaseTargeterSystem
  */
 @RegisterSystem
-public class SingleTargeterSystem extends BaseComponentSystem {
+public class SingleTargeterSystem extends BaseTargeterSystem {
     private static final Logger logger = LoggerFactory.getLogger(SingleTargeterSystem.class);
-    @In
-    private EnemyManager enemyManager;
 
     /**
      * Determine which enemies should be attacked.
@@ -55,12 +50,9 @@ public class SingleTargeterSystem extends BaseComponentSystem {
         Set<EntityRef> targets = enemyManager.getEnemiesInRange(
                 locationComponent.getWorldPosition(),
                 targeterComponent.getRange());
-
-        Optional<EntityRef> firstEnemy = targets.stream().min((first, second) -> {
-            PathComponent firstComponent = DefenceField.getComponentExtending(first, PathComponent.class);
-            PathComponent secondComponent = DefenceField.getComponentExtending(second, PathComponent.class);
-            return firstComponent.getStep() - secondComponent.getStep();
-        });
-        firstEnemy.ifPresent(event::addToList);
+        EntityRef target = getSingleTarget(targets, targeterComponent.getSelectionMethod());
+        if (target.exists()) {
+            event.addToList(target);
+        }
     }
 }
