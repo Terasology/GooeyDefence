@@ -15,6 +15,11 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.base;
 
+import org.terasology.entitySystem.entity.EntityRef;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Base class for all the Targeter blocks.
  * <p>
@@ -28,6 +33,7 @@ public abstract class TowerTargeter {
     private int drain;
     private int range;
     private int attackSpeed;
+    private Set<EntityRef> lastTargets = new HashSet<>();
 
     public int getDrain() {
         return drain;
@@ -39,5 +45,13 @@ public abstract class TowerTargeter {
 
     public int getAttackSpeed() {
         return attackSpeed;
+    }
+
+    public Set<EntityRef> getLastTargets() {
+        return lastTargets;
+    }
+
+    public void setLastTargets(Set<EntityRef> lastTargets) {
+        this.lastTargets = lastTargets;
     }
 }

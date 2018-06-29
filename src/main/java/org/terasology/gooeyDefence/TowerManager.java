@@ -41,8 +41,6 @@ import org.terasology.registry.In;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 @RegisterSystem
 public class TowerManager extends BaseComponentSystem {
@@ -91,7 +89,7 @@ public class TowerManager extends BaseComponentSystem {
                         buildEventId(towerEntity, newBlock),
                         targeter.getAttackSpeed(),
                         targeter.getAttackSpeed());
-            } catch (NullPointerException ignored) {
+            } catch (IllegalArgumentException ignored) {
                 /* The block is not a Targeter so we ignore it. */
             }
         }
@@ -109,50 +107,6 @@ public class TowerManager extends BaseComponentSystem {
             delayManager.cancelPeriodicAction(towerEntity, buildEventId(towerEntity, targeter));
         }
         towerEntities.remove(towerEntity);
-
-    }
-
-    /**
-     * Get the attack rates of this tower.
-     *
-     * @param targeters The targeters of the tower
-     * @return The attack speeds of the tower
-     */
-    private Set<Integer> getAttackSpeeds(Set<EntityRef> targeters) {
-        /* Collect the attack rates of all the cores */
-        SortedSet<Integer> attackRates = new TreeSet<>();
-        for (EntityRef targeter : targeters) {
-            TowerTargeter component = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
-            attackRates.add(component.getAttackSpeed());
-        }
-        return filterFactors(attackRates);
-    }
-
-    /**
-     * Removes any elements that are a factor of another element.
-     * That is, no element in the set will divide another element in the set.
-     *
-     * @param input The sorted set to filter
-     * @return A set with no elements as factors.
-     */
-    private Set<Integer> filterFactors(SortedSet<Integer> input) {
-        /* Only keep those that do not divide each other */
-        Set<Integer> results = new HashSet<>();
-        while (!input.isEmpty()) {
-            Integer first = input.first();
-            input.remove(first);
-            boolean isDivisible = false;
-            for (Integer attackRate : results) {
-                if (first % attackRate == 0) {
-                    isDivisible = true;
-                    break;
-                }
-            }
-            if (!isDivisible) {
-                results.add(first);
-            }
-        }
-        return results;
     }
 
     /**
@@ -168,7 +122,9 @@ public class TowerManager extends BaseComponentSystem {
             int corePower = getTotalCorePower(component);
             int totalDrain = getEffectorDrain(component) + getTargeterDrain(component);
             if (corePower >= totalDrain) {
-                handleTowerShooting(component);
+                EntityRef targeter = entityManager.getEntity(getTargeterId(event.getActionId()));
+                //TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
+                handleTowerShooting(component, targeter);
             }
         }
     }
@@ -222,26 +178,27 @@ public class TowerManager extends BaseComponentSystem {
      * Handles the steps involved in making the tower shoot.
      *
      * @param towerComponent The TowerComponent of the tower entity shooting.
+     * @param targeter       The targeter that's shooting
      */
-    private void handleTowerShooting(TowerComponent towerComponent) {
-        Set<EntityRef> currentTargets = getTargetedEnemies(towerComponent.targeter);
-        applyEffectsToTargets(towerComponent.effector, currentTargets, towerComponent.lastTargets);
-        towerComponent.lastTargets = currentTargets;
+    private void handleTowerShooting(TowerComponent towerComponent, EntityRef targeter) {
+        Set<EntityRef> currentTargets = getTargetedEnemies(targeter);
+        TowerTargeter towerTargeter = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
+
+        applyEffectsToTargets(towerComponent.effector, currentTargets, towerTargeter.getLastTargets());
+
+        towerTargeter.setLastTargets(currentTargets);
     }
 
     /**
-     * Runs all the targeters in the tower and gets the targeted enemies.
+     * Calls on the targeter to obtain the enemies it's targeting.
      *
-     * @param targeters The targeters to run through
-     * @return All entities targeted by the tower.
+     * @param targeter The targeter to call on
+     * @return All entities targeted by that targeter.
      * @see TowerTargeter
      */
-    private Set<EntityRef> getTargetedEnemies(Set<EntityRef> targeters) {
-        /* Run emitter event */
+    private Set<EntityRef> getTargetedEnemies(EntityRef targeter) {
         SelectEnemiesEvent shootEvent = new SelectEnemiesEvent();
-        for (EntityRef emitter : targeters) {
-            emitter.send(shootEvent);
-        }
+        targeter.send(shootEvent);
         return shootEvent.getTargets();
     }
 
@@ -344,7 +301,7 @@ public class TowerManager extends BaseComponentSystem {
      * @return The ID of the targeter entity ref
      */
     private static long getTargeterId(String eventId) {
-        String id = eventId.substring(eventId.indexOf('|'));
+        String id = eventId.substring(eventId.indexOf('|') + 1);
         return Long.parseLong(id);
     }
 }
