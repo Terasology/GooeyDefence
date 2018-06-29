@@ -263,6 +263,7 @@ public class TowerManager extends BaseComponentSystem {
         Set<EntityRef> newTargets = Sets.difference(currentTargets, lastTargets);
         Set<EntityRef> oldTargets = Sets.difference(lastTargets, currentTargets);
 
+
         for (long effectorID : effectors) {
             EntityRef effector = entityManager.getEntity(effectorID);
             applyEffect(effector, currentTargets, newTargets);
@@ -291,7 +292,7 @@ public class TowerManager extends BaseComponentSystem {
                 throw new EnumConstantNotPresentException(EffectCount.class, effectorComponent.getEffectCount().toString());
         }
         for (EntityRef entity : targets) {
-            ApplyEffectEvent effectEvent = new ApplyEffectEvent(entity);
+            ApplyEffectEvent effectEvent = new ApplyEffectEvent(entity, 1, 1);
             effector.send(effectEvent);
         }
     }

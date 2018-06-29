@@ -27,9 +27,13 @@ import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
  */
 public class ApplyEffectEvent implements Event {
     private EntityRef target;
+    private float damageMultiplier;
+    private float effectMultiplier;
 
-    public ApplyEffectEvent(EntityRef target) {
+    public ApplyEffectEvent(EntityRef target, float damageMultiplier, float effectMultiplier) {
         this.target = target;
+        this.damageMultiplier = damageMultiplier;
+        this.effectMultiplier = effectMultiplier;
     }
 
     /**
@@ -37,5 +41,13 @@ public class ApplyEffectEvent implements Event {
      */
     public EntityRef getTarget() {
         return target;
+    }
+
+    public float getEffectMultiplier() {
+        return effectMultiplier;
+    }
+
+    public float getDamageMultiplier() {
+        return damageMultiplier;
     }
 }
