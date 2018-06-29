@@ -15,8 +15,12 @@
  */
 package org.terasology.gooeyDefence.events.tower;
 
+import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Event sent when a tower is changed.
@@ -25,5 +29,17 @@ import org.terasology.gooeyDefence.components.towers.TowerComponent;
  * @see TowerComponent
  */
 public class TowerChangedEvent implements Event {
+    private Set<EntityRef> changedBlocks;
 
+    public TowerChangedEvent(EntityRef changedBlock) {
+        changedBlocks = Collections.singleton(changedBlock);
+    }
+
+    public TowerChangedEvent(Set<EntityRef> changedBlocks) {
+        this.changedBlocks = changedBlocks;
+    }
+
+    public Set<EntityRef> getChangedBlocks() {
+        return changedBlocks;
+    }
 }
