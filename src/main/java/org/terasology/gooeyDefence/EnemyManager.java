@@ -77,7 +77,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         //delayManager.addPeriodicAction(DefenceField.getShrineEntity(), "SpawnEnemyEvent", 500, 500);
     }
 
-    /**
+    /*
      * Test handler to allow easy enemy spawning
      */
     @ReceiveEvent
@@ -87,7 +87,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         }
     }
 
-    /**
+    /*
      * Test handler to allow easy enemy spawning
      */
     @ReceiveEvent
