@@ -18,11 +18,9 @@ package org.terasology.gooeyDefence.towerBlocks.targeters;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.gooeyDefence.DefenceField;
-import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.components.enemies.PathComponent;
 import org.terasology.gooeyDefence.health.HealthComponent;
 import org.terasology.gooeyDefence.towerBlocks.SelectionMethod;
-import org.terasology.registry.In;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,8 +35,7 @@ import java.util.Set;
 
 public class BaseTargeterSystem extends BaseComponentSystem {
 
-    @In
-    protected EnemyManager enemyManager;
+
 
     protected EntityRef getSingleTarget(Set<EntityRef> targets, SelectionMethod selectionMethod) {
         Comparator<EntityRef> comparator;

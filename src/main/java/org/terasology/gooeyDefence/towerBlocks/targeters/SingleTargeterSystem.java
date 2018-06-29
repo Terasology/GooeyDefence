@@ -20,8 +20,10 @@ import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.registry.In;
 
 import java.util.Set;
 
@@ -37,6 +39,8 @@ import java.util.Set;
 public class SingleTargeterSystem extends BaseTargeterSystem {
     private static final Logger logger = LoggerFactory.getLogger(SingleTargeterSystem.class);
 
+    @In
+    protected EnemyManager enemyManager;
     /**
      * Determine which enemies should be attacked.
      * Called against the targeter entity.
