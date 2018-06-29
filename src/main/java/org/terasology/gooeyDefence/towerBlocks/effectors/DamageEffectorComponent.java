@@ -15,7 +15,8 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.effectors;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.towerBlocks.EffectCount;
+import org.terasology.gooeyDefence.towerBlocks.EffectDuration;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 
 /**
@@ -23,10 +24,20 @@ import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
  *
  * @see DamageEffectorSystem
  */
-public class DamageEffectorComponent extends TowerEffector implements Component {
+public class DamageEffectorComponent extends TowerEffector {
     private int damage;
 
     public int getDamage() {
         return damage;
+    }
+
+    @Override
+    public EffectCount getEffectCount() {
+        return EffectCount.PER_SHOT;
+    }
+
+    @Override
+    public EffectDuration getEffectDuration() {
+        return EffectDuration.INSTANT;
     }
 }

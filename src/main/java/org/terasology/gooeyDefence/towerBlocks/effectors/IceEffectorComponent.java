@@ -15,7 +15,8 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.effectors;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.towerBlocks.EffectCount;
+import org.terasology.gooeyDefence.towerBlocks.EffectDuration;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 
 /**
@@ -24,7 +25,7 @@ import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
  *
  * @see IceEffectorSystem
  */
-public class IceEffectorComponent extends TowerEffector implements Component {
+public class IceEffectorComponent extends TowerEffector {
     /**
      * A multiplier for the enemies speed.
      * 0.9 will make them 10% slower, or 90% of their full speed;
@@ -33,5 +34,15 @@ public class IceEffectorComponent extends TowerEffector implements Component {
 
     public float getSlow() {
         return slow;
+    }
+
+    @Override
+    public EffectCount getEffectCount() {
+        return EffectCount.CONTINUOUS;
+    }
+
+    @Override
+    public EffectDuration getEffectDuration() {
+        return EffectDuration.LASTING;
     }
 }
