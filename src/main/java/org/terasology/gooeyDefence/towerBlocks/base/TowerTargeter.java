@@ -15,7 +15,9 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.base;
 
+import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.gooeyDefence.towerBlocks.SelectionMethod;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +31,8 @@ import java.util.Set;
  * @see TowerCore
  * @see TowerEffector
  */
-public abstract class TowerTargeter {
+public abstract class TowerTargeter implements Component {
+    private SelectionMethod selectionMethod;
     private int drain;
     private int range;
     private int attackSpeed;
@@ -56,4 +59,8 @@ public abstract class TowerTargeter {
     }
 
     public abstract float getMultiplier();
+
+    public SelectionMethod getSelectionMethod() {
+        return selectionMethod;
+    }
 }
