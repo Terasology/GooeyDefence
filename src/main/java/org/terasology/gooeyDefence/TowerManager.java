@@ -65,18 +65,17 @@ public class TowerManager extends BaseComponentSystem {
     @ReceiveEvent
     public void onTowerCreated(TowerCreatedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
         towerEntities.add(towerEntity);
-
-        Set<Integer> attackSpeeds = getAttackSpeeds(towerComponent.targeter);
-        towerComponent.attackCount = attackSpeeds.size();
-        int i = 0;
-        for (Integer speed : attackSpeeds) {
-            delayManager.addPeriodicAction(towerEntity, buildEventId(towerEntity, i), speed, speed);
-            i++;
+        for (EntityRef targeter : towerComponent.targeter) {
+            TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
+            delayManager.addPeriodicAction(towerEntity,
+                    buildEventId(towerEntity, targeter),
+                    targeterComponent.getAttackSpeed(),
+                    targeterComponent.getAttackSpeed());
         }
     }
 
     /**
-     * Called when a tower is changed.
+     * Called when a block is added to a tower.
      * Cancels the old periodic actions and schedules new ones.
      * <p>
      * Filters on {@link TowerComponent}
@@ -85,15 +84,16 @@ public class TowerManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onTowerChanged(TowerChangedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
-        for (int i = 0; i < towerComponent.attackCount; i++) {
-            delayManager.cancelPeriodicAction(towerEntity, buildEventId(towerEntity, i));
-        }
-        Set<Integer> attackSpeeds = getAttackSpeeds(towerComponent.targeter);
-        towerComponent.attackCount = attackSpeeds.size();
-        int i = 0;
-        for (Integer speed : attackSpeeds) {
-            delayManager.addPeriodicAction(towerEntity, buildEventId(towerEntity, i), speed, speed);
-            i++;
+        for (EntityRef newBlock : event.getChangedBlocks()) {
+            try {
+                TowerTargeter targeter = DefenceField.getComponentExtending(newBlock, TowerTargeter.class);
+                delayManager.addPeriodicAction(towerEntity,
+                        buildEventId(towerEntity, newBlock),
+                        targeter.getAttackSpeed(),
+                        targeter.getAttackSpeed());
+            } catch (NullPointerException ignored) {
+                /* The block is not a Targeter so we ignore it. */
+            }
         }
     }
 
@@ -105,10 +105,11 @@ public class TowerManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onTowerDestroyed(TowerDestroyedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
-        towerEntities.remove(towerEntity);
-        for (int i = 0; i < towerComponent.attackCount; i++) {
-            delayManager.cancelPeriodicAction(towerEntity, buildEventId(towerEntity, i));
+        for (EntityRef targeter : towerComponent.targeter) {
+            delayManager.cancelPeriodicAction(towerEntity, buildEventId(towerEntity, targeter));
         }
+        towerEntities.remove(towerEntity);
+
     }
 
     /**
@@ -163,7 +164,7 @@ public class TowerManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, TowerComponent component) {
-        if (event.getActionId().startsWith("towerDefence" + entity.getId())) {
+        if (isEventIdCorrect(entity, event.getActionId())) {
             int corePower = getTotalCorePower(component);
             int totalDrain = getEffectorDrain(component) + getTargeterDrain(component);
             if (corePower >= totalDrain) {
