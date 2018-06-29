@@ -15,11 +15,10 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.cores;
 
-import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
 
 /**
- * Test core component.
+ * Basic tower core.
  */
-public class CoreComponent extends TowerCore implements Component {
+public class CoreComponent extends TowerCore {
 }

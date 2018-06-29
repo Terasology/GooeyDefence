@@ -15,6 +15,8 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.base;
 
+import org.terasology.entitySystem.Component;
+
 /**
  * Base class for all the Core blocks
  * <p>
@@ -23,8 +25,23 @@ package org.terasology.gooeyDefence.towerBlocks.base;
  * @see TowerEffector
  * @see TowerTargeter
  */
-public abstract class TowerCore {
+public abstract class TowerCore implements Component {
+    /**
+     * The power this core provides
+     */
     private int power;
+
+    /**
+     * The period that each attack occurs at. In ms
+     */
+    private Long attackSpeed;
+
+    /**
+     * @return The time between attacks in ms
+     */
+    public Long getAttackSpeed() {
+        return attackSpeed;
+    }
 
     /**
      * @return How much power this core provides
@@ -32,5 +49,4 @@ public abstract class TowerCore {
     public int getPower() {
         return power;
     }
-
 }
