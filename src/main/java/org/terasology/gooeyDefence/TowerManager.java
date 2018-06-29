@@ -25,7 +25,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
-import org.terasology.gooeyDefence.events.combat.DoSelectEnemies;
+import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
 import org.terasology.gooeyDefence.events.tower.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.tower.TowerDestroyedEvent;
@@ -163,7 +163,7 @@ public class TowerManager extends BaseComponentSystem {
      */
     private Set<EntityRef> getTargetedEnemies(Set<Long> targeters) {
         /* Run emitter event */
-        DoSelectEnemies shootEvent = new DoSelectEnemies();
+        SelectEnemiesEvent shootEvent = new SelectEnemiesEvent();
         for (long emitterID : targeters) {
             EntityRef emitter = entityManager.getEntity(emitterID);
             emitter.send(shootEvent);

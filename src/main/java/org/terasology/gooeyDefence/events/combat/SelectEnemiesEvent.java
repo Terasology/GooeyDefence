@@ -29,7 +29,7 @@ import java.util.Set;
  *
  * @see TowerTargeter
  */
-public class DoSelectEnemies implements Event {
+public class SelectEnemiesEvent implements Event {
     private Set<EntityRef> targets = new HashSet<>();
 
     /**

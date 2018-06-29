@@ -24,7 +24,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.components.enemies.PathComponent;
-import org.terasology.gooeyDefence.events.combat.DoSelectEnemies;
+import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 
@@ -48,10 +48,10 @@ public class SingleTargeterSystem extends BaseComponentSystem {
      * <p>
      * Filters on {@link LocationComponent} and {@link SingleTargeterComponent}
      *
-     * @see DoSelectEnemies
+     * @see SelectEnemiesEvent
      */
     @ReceiveEvent
-    public void onDoSelectEnemies(DoSelectEnemies event, EntityRef entity, LocationComponent locationComponent, SingleTargeterComponent targeterComponent) {
+    public void onDoSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SingleTargeterComponent targeterComponent) {
         Set<EntityRef> targets = enemyManager.getEnemiesInRange(
                 locationComponent.getWorldPosition(),
                 targeterComponent.getRange());
