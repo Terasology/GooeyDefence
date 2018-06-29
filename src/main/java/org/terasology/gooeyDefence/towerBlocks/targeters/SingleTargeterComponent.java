@@ -24,18 +24,9 @@ import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
  * @see SingleTargeterSystem
  */
 public class SingleTargeterComponent extends TowerTargeter {
-    private EntityRef lastTarget;
 
     @Override
     public float getMultiplier() {
         return 1;
-    }
-
-    public EntityRef getLastTarget() {
-        return lastTarget;
-    }
-
-    public void setLastTarget(EntityRef lastTarget) {
-        this.lastTarget = lastTarget;
     }
 }

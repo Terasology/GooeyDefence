@@ -221,7 +221,7 @@ public class TowerManager extends BaseComponentSystem {
 
         applyEffectsToTargets(towerComponent.effector, currentTargets, towerTargeter);
 
-        towerTargeter.setLastTargets(currentTargets);
+        towerTargeter.setAffectedEnemies(currentTargets);
     }
 
     /**
@@ -246,14 +246,14 @@ public class TowerManager extends BaseComponentSystem {
      * @see TowerEffector
      */
     private void applyEffectsToTargets(Set<EntityRef> effectors, Set<EntityRef> currentTargets, TowerTargeter towerTargeter) {
-        Set<EntityRef> exTargets = Sets.difference(towerTargeter.getLastTargets(), currentTargets);
+        Set<EntityRef> exTargets = Sets.difference(towerTargeter.getAffectedEnemies(), currentTargets);
 
         /* Apply effects to targeted enemies */
         currentTargets.forEach(target ->
                 applyEffects(effectors,
                         target,
                         towerTargeter.getMultiplier(),
-                        !towerTargeter.getLastTargets().contains(target)));
+                        !towerTargeter.getAffectedEnemies().contains(target)));
 
         /* Process all the enemies that are no longer targeted */
         for (EntityRef exTarget : exTargets) {

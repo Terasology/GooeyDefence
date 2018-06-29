@@ -27,16 +27,49 @@ import java.util.Set;
  * <p>
  * Targeters select the enemies the tower will attack.
  * They require power, provided by {@link TowerCore}'s
+ * <p>
+ * Provides a number of common properties.
  *
  * @see TowerCore
  * @see TowerEffector
  */
 public abstract class TowerTargeter implements Component {
+    /**
+     * How much energy this targeter will use
+     */
     private int drain;
+    /**
+     * The range of this targeter
+     * given in blocks
+     */
     private int range;
+    /**
+     * The time between attacks for this targeter
+     * given in ms
+     */
     private int attackSpeed;
+    /**
+     * The method used to determine which enemy to select within range.
+     * Not always applicable
+     */
     private SelectionMethod selectionMethod = SelectionMethod.FIRST;
-    private Set<EntityRef> lastTargets = new HashSet<>();
+    /**
+     * All enemies hit by an effect last attack
+     */
+    private Set<EntityRef> affectedEnemies = new HashSet<>();
+    /**
+     * The enemy attacked last attack
+     * Not always applicable
+     */
+    private EntityRef lastTarget = EntityRef.NULL;
+
+    public EntityRef getLastTarget() {
+        return lastTarget;
+    }
+
+    public void setLastTarget(EntityRef lastTarget) {
+        this.lastTarget = lastTarget;
+    }
 
     public int getDrain() {
         return drain;
@@ -50,12 +83,12 @@ public abstract class TowerTargeter implements Component {
         return attackSpeed;
     }
 
-    public Set<EntityRef> getLastTargets() {
-        return lastTargets;
+    public Set<EntityRef> getAffectedEnemies() {
+        return affectedEnemies;
     }
 
-    public void setLastTargets(Set<EntityRef> lastTargets) {
-        this.lastTargets = lastTargets;
+    public void setAffectedEnemies(Set<EntityRef> affectedEnemies) {
+        this.affectedEnemies = affectedEnemies;
     }
 
     public abstract float getMultiplier();
