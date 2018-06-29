@@ -219,7 +219,7 @@ public class TowerManager extends BaseComponentSystem {
         Set<EntityRef> currentTargets = getTargetedEnemies(targeter);
         TowerTargeter towerTargeter = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
 
-        applyEffectsToTargets(towerComponent.effector, currentTargets, towerTargeter.getLastTargets());
+        applyEffectsToTargets(towerComponent.effector, currentTargets, towerTargeter);
 
         towerTargeter.setLastTargets(currentTargets);
     }
@@ -242,16 +242,17 @@ public class TowerManager extends BaseComponentSystem {
      *
      * @param effectors      The effectors on the tower
      * @param currentTargets The current targets of the tower
-     * @param lastTargets    The enemies targeted last attack
+     * @param towerTargeter  The targeter shooting
      * @see TowerEffector
      */
-    private void applyEffectsToTargets(Set<EntityRef> effectors, Set<EntityRef> currentTargets, Set<EntityRef> lastTargets) {
-        Set<EntityRef> newTargets = Sets.difference(currentTargets, lastTargets);
-        Set<EntityRef> oldTargets = Sets.difference(lastTargets, currentTargets);
+    private void applyEffectsToTargets(Set<EntityRef> effectors, Set<EntityRef> currentTargets, TowerTargeter towerTargeter) {
+
+        Set<EntityRef> newTargets = Sets.difference(currentTargets, towerTargeter.getLastTargets());
+        Set<EntityRef> oldTargets = Sets.difference(towerTargeter.getLastTargets(), currentTargets);
 
         for (EntityRef effector : effectors) {
-            applyEffect(effector, currentTargets, newTargets);
-            endEffects(effector, oldTargets);
+            applyEffect(effector, currentTargets, newTargets, towerTargeter.getMultiplier());
+            endEffects(effector, oldTargets, towerTargeter.getMultiplier());
         }
     }
 
@@ -261,8 +262,9 @@ public class TowerManager extends BaseComponentSystem {
      * @param effector       The effectors to check through
      * @param currentTargets All targets this attack round.
      * @param newTargets     The enemies that have been newly targeted this round
+     * @param multiplier     The effect multiplier to apply to the event
      */
-    private void applyEffect(EntityRef effector, Set<EntityRef> currentTargets, Set<EntityRef> newTargets) {
+    private void applyEffect(EntityRef effector, Set<EntityRef> currentTargets, Set<EntityRef> newTargets, float multiplier) {
         TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
         Set<EntityRef> targets;
         switch (effectorComponent.getEffectCount()) {
@@ -276,7 +278,7 @@ public class TowerManager extends BaseComponentSystem {
                 throw new EnumConstantNotPresentException(EffectCount.class, effectorComponent.getEffectCount().toString());
         }
         for (EntityRef entity : targets) {
-            ApplyEffectEvent effectEvent = new ApplyEffectEvent(entity, 1, 1);
+            ApplyEffectEvent effectEvent = new ApplyEffectEvent(entity, multiplier);
             effector.send(effectEvent);
         }
     }
@@ -285,9 +287,10 @@ public class TowerManager extends BaseComponentSystem {
      * Calls on each effector to end the effect on a target, where applicable.
      *
      * @param effector   The effectors to check through
+     * @param multiplier The effect multiplier to apply to the event
      * @param oldTargets The targets to remove the effects from
      */
-    private void endEffects(EntityRef effector, Set<EntityRef> oldTargets) {
+    private void endEffects(EntityRef effector, Set<EntityRef> oldTargets, float multiplier) {
         TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
         switch (effectorComponent.getEffectDuration()) {
             case INSTANT:
@@ -296,7 +299,7 @@ public class TowerManager extends BaseComponentSystem {
                 break;
             case LASTING:
                 for (EntityRef entity : oldTargets) {
-                    RemoveEffectEvent effectEvent = new RemoveEffectEvent(entity);
+                    RemoveEffectEvent effectEvent = new RemoveEffectEvent(entity, multiplier);
                     effector.send(effectEvent);
                 }
                 break;

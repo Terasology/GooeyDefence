@@ -54,4 +54,6 @@ public abstract class TowerTargeter {
     public void setLastTargets(Set<EntityRef> lastTargets) {
         this.lastTargets = lastTargets;
     }
+
+    public abstract float getMultiplier();
 }

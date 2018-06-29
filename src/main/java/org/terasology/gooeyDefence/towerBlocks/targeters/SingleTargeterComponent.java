@@ -15,7 +15,6 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.targeters;
 
-import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 
 /**
@@ -23,5 +22,9 @@ import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
  *
  * @see SingleTargeterSystem
  */
-public class SingleTargeterComponent extends TowerTargeter implements Component {
+public class SingleTargeterComponent extends TowerTargeter {
+    @Override
+    public float getMultiplier() {
+        return 1;
+    }
 }

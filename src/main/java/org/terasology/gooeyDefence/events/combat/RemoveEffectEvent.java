@@ -27,12 +27,18 @@ import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
  */
 public class RemoveEffectEvent implements Event {
     private EntityRef target;
+    private float multiplier;
 
-    public RemoveEffectEvent(EntityRef target) {
+    public RemoveEffectEvent(EntityRef target, float multiplier) {
         this.target = target;
+        this.multiplier = multiplier;
     }
 
     public EntityRef getTarget() {
         return target;
+    }
+
+    public float getMultiplier() {
+        return multiplier;
     }
 }
