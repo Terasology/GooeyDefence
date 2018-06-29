@@ -27,6 +27,7 @@ package org.terasology.gooeyDefence.towerBlocks.base;
 public abstract class TowerTargeter {
     private int drain;
     private int range;
+    private int attackSpeed;
 
     public int getDrain() {
         return drain;
@@ -34,5 +35,9 @@ public abstract class TowerTargeter {
 
     public int getRange() {
         return range;
+    }
+
+    public int getAttackSpeed() {
+        return attackSpeed;
     }
 }

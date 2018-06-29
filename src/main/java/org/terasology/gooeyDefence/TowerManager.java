@@ -65,10 +65,11 @@ public class TowerManager extends BaseComponentSystem {
     @ReceiveEvent
     public void onTowerCreated(TowerCreatedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
         towerEntities.add(towerEntity);
-        Set<Long> attackSpeeds = getAttackSpeeds(towerComponent.cores);
+
+        Set<Integer> attackSpeeds = getAttackSpeeds(towerComponent.targeter);
         towerComponent.attackCount = attackSpeeds.size();
         int i = 0;
-        for (Long speed : attackSpeeds) {
+        for (Integer speed : attackSpeeds) {
             delayManager.addPeriodicAction(towerEntity, buildEventId(towerEntity, i), speed, speed);
             i++;
         }
@@ -87,10 +88,10 @@ public class TowerManager extends BaseComponentSystem {
         for (int i = 0; i < towerComponent.attackCount; i++) {
             delayManager.cancelPeriodicAction(towerEntity, buildEventId(towerEntity, i));
         }
-        Set<Long> attackSpeeds = getAttackSpeeds(towerComponent.cores);
+        Set<Integer> attackSpeeds = getAttackSpeeds(towerComponent.targeter);
         towerComponent.attackCount = attackSpeeds.size();
         int i = 0;
-        for (Long speed : attackSpeeds) {
+        for (Integer speed : attackSpeeds) {
             delayManager.addPeriodicAction(towerEntity, buildEventId(towerEntity, i), speed, speed);
             i++;
         }
@@ -113,15 +114,15 @@ public class TowerManager extends BaseComponentSystem {
     /**
      * Get the attack rates of this tower.
      *
-     * @param cores The cores of the tower
+     * @param targeters The targeters of the tower
      * @return The attack speeds of the tower
      */
-    private Set<Long> getAttackSpeeds(Set<EntityRef> cores) {
+    private Set<Integer> getAttackSpeeds(Set<EntityRef> targeters) {
         /* Collect the attack rates of all the cores */
-        SortedSet<Long> attackRates = new TreeSet<>();
-        for (EntityRef coreEntity : cores) {
-            TowerCore towerCore = DefenceField.getComponentExtending(coreEntity, TowerCore.class);
-            attackRates.add(towerCore.getAttackSpeed());
+        SortedSet<Integer> attackRates = new TreeSet<>();
+        for (EntityRef targeter : targeters) {
+            TowerTargeter component = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
+            attackRates.add(component.getAttackSpeed());
         }
         return filterFactors(attackRates);
     }
@@ -133,14 +134,14 @@ public class TowerManager extends BaseComponentSystem {
      * @param input The sorted set to filter
      * @return A set with no elements as factors.
      */
-    private Set<Long> filterFactors(SortedSet<Long> input) {
+    private Set<Integer> filterFactors(SortedSet<Integer> input) {
         /* Only keep those that do not divide each other */
-        Set<Long> results = new HashSet<>();
+        Set<Integer> results = new HashSet<>();
         while (!input.isEmpty()) {
-            Long first = input.first();
+            Integer first = input.first();
             input.remove(first);
             boolean isDivisible = false;
-            for (Long attackRate : results) {
+            for (Integer attackRate : results) {
                 if (first % attackRate == 0) {
                     isDivisible = true;
                     break;
@@ -255,7 +256,6 @@ public class TowerManager extends BaseComponentSystem {
     private void applyEffectsToTargets(Set<EntityRef> effectors, Set<EntityRef> currentTargets, Set<EntityRef> lastTargets) {
         Set<EntityRef> newTargets = Sets.difference(currentTargets, lastTargets);
         Set<EntityRef> oldTargets = Sets.difference(lastTargets, currentTargets);
-
 
         for (EntityRef effector : effectors) {
             applyEffect(effector, currentTargets, newTargets);

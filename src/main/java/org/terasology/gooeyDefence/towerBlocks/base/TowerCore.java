@@ -32,18 +32,6 @@ public abstract class TowerCore implements Component {
     private int power;
 
     /**
-     * The period that each attack occurs at. In ms
-     */
-    private Long attackSpeed;
-
-    /**
-     * @return The time between attacks in ms
-     */
-    public Long getAttackSpeed() {
-        return attackSpeed;
-    }
-
-    /**
      * @return How much power this core provides
      */
     public int getPower() {
