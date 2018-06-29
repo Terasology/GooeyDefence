@@ -145,7 +145,8 @@ public class TowerManager extends BaseComponentSystem {
     }
 
     /**
-     * Called every attack cycle. Checks if a tower can fire.
+     * Called every attack cycle per targeter.
+     * Checks if the tower can fire, and if so, fires that targeter.
      *
      * @param event     The periodic event
      * @param entity    The tower entity
@@ -210,7 +211,7 @@ public class TowerManager extends BaseComponentSystem {
     }
 
     /**
-     * Handles the steps involved in making the tower shoot.
+     * Handles the steps involved in making a targeter shoot.
      *
      * @param towerComponent The TowerComponent of the tower entity shooting.
      * @param targeter       The targeter that's shooting
