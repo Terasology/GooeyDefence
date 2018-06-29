@@ -159,7 +159,6 @@ public class TowerManager extends BaseComponentSystem {
             int totalDrain = getEffectorDrain(component) + getTargeterDrain(component);
             if (corePower >= totalDrain) {
                 EntityRef targeter = entityManager.getEntity(getTargeterId(event.getActionId()));
-                //TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
                 handleTowerShooting(component, targeter);
             }
         }
@@ -247,65 +246,70 @@ public class TowerManager extends BaseComponentSystem {
      * @see TowerEffector
      */
     private void applyEffectsToTargets(Set<EntityRef> effectors, Set<EntityRef> currentTargets, TowerTargeter towerTargeter) {
+        Set<EntityRef> exTargets = Sets.difference(towerTargeter.getLastTargets(), currentTargets);
 
-        Set<EntityRef> newTargets = Sets.difference(currentTargets, towerTargeter.getLastTargets());
-        Set<EntityRef> oldTargets = Sets.difference(towerTargeter.getLastTargets(), currentTargets);
+        /* Apply effects to targeted enemies */
+        currentTargets.forEach(target ->
+                applyEffects(effectors,
+                        target,
+                        towerTargeter.getMultiplier(),
+                        !towerTargeter.getLastTargets().contains(target)));
 
-        for (EntityRef effector : effectors) {
-            applyEffect(effector, currentTargets, newTargets, towerTargeter.getMultiplier());
-            endEffects(effector, oldTargets, towerTargeter.getMultiplier());
+        /* Process all the enemies that are no longer targeted */
+        for (EntityRef exTarget : exTargets) {
+            endEffects(effectors, exTarget, towerTargeter.getMultiplier());
         }
     }
 
     /**
-     * Calls on the effectors to apply effects to the targets
+     * Applies all the effects on a tower to an enemy.
      *
-     * @param effector       The effectors to check through
-     * @param currentTargets All targets this attack round.
-     * @param newTargets     The enemies that have been newly targeted this round
-     * @param multiplier     The effect multiplier to apply to the event
+     * @param effectors   The effectors to use to apply the effects
+     * @param target      The target enemy
+     * @param multiplier  The multiplier from the targeter
+     * @param isTargetNew Indicates if the enemy is newly targeted. Used to filter effectors
      */
-    private void applyEffect(EntityRef effector, Set<EntityRef> currentTargets, Set<EntityRef> newTargets, float multiplier) {
-        TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
-        Set<EntityRef> targets;
-        switch (effectorComponent.getEffectCount()) {
-            case PER_SHOT:
-                targets = currentTargets;
-                break;
-            case CONTINUOUS:
-                targets = newTargets;
-                break;
-            default:
-                throw new EnumConstantNotPresentException(EffectCount.class, effectorComponent.getEffectCount().toString());
-        }
-        for (EntityRef entity : targets) {
-            ApplyEffectEvent effectEvent = new ApplyEffectEvent(entity, multiplier);
-            effector.send(effectEvent);
+    private void applyEffects(Set<EntityRef> effectors, EntityRef target, float multiplier, boolean isTargetNew) {
+        ApplyEffectEvent event = new ApplyEffectEvent(target, multiplier);
+
+        for (EntityRef effector : effectors) {
+            TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
+            switch (effectorComponent.getEffectCount()) {
+                case CONTINUOUS:
+                    if (isTargetNew) {
+                        effector.send(event);
+                    }
+                    break;
+                case PER_SHOT:
+                    effector.send(event);
+                    break;
+                default:
+                    throw new EnumConstantNotPresentException(EffectCount.class, effectorComponent.getEffectCount().toString());
+            }
         }
     }
 
     /**
      * Calls on each effector to end the effect on a target, where applicable.
      *
-     * @param effector   The effectors to check through
+     * @param effectors  The effectors to check through
+     * @param oldTarget  The target to remove the effects from
      * @param multiplier The effect multiplier to apply to the event
-     * @param oldTargets The targets to remove the effects from
      */
-    private void endEffects(EntityRef effector, Set<EntityRef> oldTargets, float multiplier) {
-        TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
-        switch (effectorComponent.getEffectDuration()) {
-            case INSTANT:
-                break;
-            case PERMANENT:
-                break;
-            case LASTING:
-                for (EntityRef entity : oldTargets) {
-                    RemoveEffectEvent effectEvent = new RemoveEffectEvent(entity, multiplier);
-                    effector.send(effectEvent);
-                }
-                break;
-            default:
-                throw new EnumConstantNotPresentException(EffectDuration.class, effectorComponent.getEffectCount().toString());
+    private void endEffects(Set<EntityRef> effectors, EntityRef oldTarget, float multiplier) {
+        RemoveEffectEvent event = new RemoveEffectEvent(oldTarget, multiplier);
+        for (EntityRef effector : effectors) {
+            TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
+            switch (effectorComponent.getEffectDuration()) {
+                case LASTING:
+                    effector.send(event);
+                    break;
+                case INSTANT:
+                case PERMANENT:
+                    break;
+                default:
+                    throw new EnumConstantNotPresentException(EffectDuration.class, effectorComponent.getEffectCount().toString());
+            }
         }
     }
 }
