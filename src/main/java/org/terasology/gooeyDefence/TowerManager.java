@@ -25,8 +25,9 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
-import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
+import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
+import org.terasology.gooeyDefence.events.tower.TowerChangedEvent;
 import org.terasology.gooeyDefence.events.tower.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.tower.TowerDestroyedEvent;
 import org.terasology.gooeyDefence.towerBlocks.EffectCount;
@@ -40,6 +41,8 @@ import org.terasology.registry.In;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @RegisterSystem
 public class TowerManager extends BaseComponentSystem {
@@ -52,27 +55,103 @@ public class TowerManager extends BaseComponentSystem {
     private Set<EntityRef> towerEntities = new HashSet<>();
 
     /**
-     * Adds a tower to the central store.
+     * Called when a tower is created.
+     * Adds the tower to the list and sets the periodic actions for it's attacks
+     * <p>
+     * Filters on {@link TowerComponent}
      *
-     * @param event  The the addition event
-     * @param entity The tower entity
+     * @see TowerCreatedEvent
      */
-    @ReceiveEvent(components = {TowerComponent.class})
-    public void onTowerCreated(TowerCreatedEvent event, EntityRef entity) {
-        towerEntities.add(entity);
-        delayManager.addPeriodicAction(entity, "towerUpdate" + entity.getId(), 100, 100);
+    @ReceiveEvent
+    public void onTowerCreated(TowerCreatedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
+        towerEntities.add(towerEntity);
+        Set<Long> attackSpeeds = getAttackSpeeds(towerComponent.cores);
+        towerComponent.attackCount = attackSpeeds.size();
+        int i = 0;
+        for (Long speed : attackSpeeds) {
+            delayManager.addPeriodicAction(towerEntity, buildEventId(towerEntity, i), speed, speed);
+            i++;
+        }
     }
 
     /**
-     * Removes a tower to the central store.
+     * Called when a tower is changed.
+     * Cancels the old periodic actions and schedules new ones.
+     * <p>
+     * Filters on {@link TowerComponent}
      *
-     * @param event  The tower destroyed event
-     * @param entity The tower entity to remove
+     * @see TowerChangedEvent
      */
-    @ReceiveEvent(components = {TowerComponent.class})
-    public void onTowerDestroyed(TowerDestroyedEvent event, EntityRef entity) {
-        towerEntities.remove(entity);
-        delayManager.cancelPeriodicAction(entity, "towerUpdate" + entity.getId());
+    @ReceiveEvent
+    public void onTowerChanged(TowerChangedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
+        for (int i = 0; i < towerComponent.attackCount; i++) {
+            delayManager.cancelPeriodicAction(towerEntity, buildEventId(towerEntity, i));
+        }
+        Set<Long> attackSpeeds = getAttackSpeeds(towerComponent.cores);
+        towerComponent.attackCount = attackSpeeds.size();
+        int i = 0;
+        for (Long speed : attackSpeeds) {
+            delayManager.addPeriodicAction(towerEntity, buildEventId(towerEntity, i), speed, speed);
+            i++;
+        }
+    }
+
+    /**
+     * Called when a tower is destroyed.
+     * Removes all the periodic actions and the tower from the store.
+     * <p>
+     * Filters on {@link TowerComponent}
+     */
+    @ReceiveEvent
+    public void onTowerDestroyed(TowerDestroyedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
+        towerEntities.remove(towerEntity);
+        for (int i = 0; i < towerComponent.attackCount; i++) {
+            delayManager.cancelPeriodicAction(towerEntity, buildEventId(towerEntity, i));
+        }
+    }
+
+    /**
+     * Get the attack rates of this tower.
+     *
+     * @param cores The cores of the tower
+     * @return The attack speeds of the tower
+     */
+    private Set<Long> getAttackSpeeds(Set<Long> cores) {
+        /* Collect the attack rates of all the cores */
+        SortedSet<Long> attackRates = new TreeSet<>();
+        for (Long coreID : cores) {
+            EntityRef coreEntity = entityManager.getEntity(coreID);
+            TowerCore towerCore = DefenceField.getComponentExtending(coreEntity, TowerCore.class);
+            attackRates.add(towerCore.getAttackSpeed());
+        }
+        return filterFactors(attackRates);
+    }
+
+    /**
+     * Removes any elements that are a factor of another element.
+     * That is, no element in the set will divide another element in the set.
+     *
+     * @param input The sorted set to filter
+     * @return A set with no elements as factors.
+     */
+    private Set<Long> filterFactors(SortedSet<Long> input) {
+        /* Only keep those that do not divide each other */
+        Set<Long> results = new HashSet<>();
+        while (!input.isEmpty()) {
+            Long first = input.first();
+            input.remove(first);
+            boolean isDivisible = false;
+            for (Long attackRate : results) {
+                if (first % attackRate == 0) {
+                    isDivisible = true;
+                    break;
+                }
+            }
+            if (!isDivisible) {
+                results.add(first);
+            }
+        }
+        return results;
     }
 
     /**
@@ -84,7 +163,7 @@ public class TowerManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, TowerComponent component) {
-        if (event.getActionId().equals("towerUpdate" + entity.getId())) {
+        if (event.getActionId().startsWith("towerUpdate" + entity.getId())) {
             int corePower = getTotalCorePower(component);
             int totalDrain = getEffectorDrain(component) + getEmitterDrain(component);
             if (corePower >= totalDrain) {
@@ -92,6 +171,7 @@ public class TowerManager extends BaseComponentSystem {
             }
         }
     }
+
 
     /**
      * Get the drain caused by all the targeters on a tower

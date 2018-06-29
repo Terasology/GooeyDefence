@@ -30,5 +30,6 @@ public class TowerComponent implements Component {
     public Set<Long> effector = new HashSet<>();
     public Set<Long> targeter = new HashSet<>();
     public Set<Long> plains = new HashSet<>();
+    public int attackCount;
     public Set<EntityRef> lastTargets = new HashSet<>();
 }
