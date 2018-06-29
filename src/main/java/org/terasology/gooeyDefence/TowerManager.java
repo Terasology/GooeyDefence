@@ -313,7 +313,38 @@ public class TowerManager extends BaseComponentSystem {
         }
     }
 
-    private static String buildEventId(EntityRef entity, int index) {
-        return "towerDefence" + entity.getId() + "|" + index;
+    /**
+     * Creates the periodic event id for the targeter on a tower
+     *
+     * @param tower    The tower the targeter is on
+     * @param targeter The targeter the event is sending for
+     * @return The id for that periodic action event.
+     * @see PeriodicActionTriggeredEvent
+     */
+    private static String buildEventId(EntityRef tower, EntityRef targeter) {
+        return "towerDefence" + tower.getId() + "|" + targeter.getId();
+    }
+
+    /**
+     * Checks that the periodic event is intended for the given tower.
+     *
+     * @param tower   The tower to check for
+     * @param eventId The id of the periodic event
+     * @return True if the event belongs to the tower
+     * @see PeriodicActionTriggeredEvent
+     */
+    private static boolean isEventIdCorrect(EntityRef tower, String eventId) {
+        return eventId.startsWith("towerDefence" + tower.getId());
+    }
+
+    /**
+     * Gets the ID of the targeter from the periodic event id.
+     *
+     * @param eventId The id of the periodic event
+     * @return The ID of the targeter entity ref
+     */
+    private static long getTargeterId(String eventId) {
+        String id = eventId.substring(eventId.indexOf('|'));
+        return Long.parseLong(id);
     }
 }
