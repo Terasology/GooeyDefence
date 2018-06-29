@@ -165,13 +165,12 @@ public class TowerManager extends BaseComponentSystem {
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, TowerComponent component) {
         if (event.getActionId().startsWith("towerDefence" + entity.getId())) {
             int corePower = getTotalCorePower(component);
-            int totalDrain = getEffectorDrain(component) + getEmitterDrain(component);
+            int totalDrain = getEffectorDrain(component) + getTargeterDrain(component);
             if (corePower >= totalDrain) {
                 handleTowerShooting(component);
             }
         }
     }
-
 
     /**
      * Get the drain caused by all the targeters on a tower
@@ -179,7 +178,7 @@ public class TowerManager extends BaseComponentSystem {
      * @param towerComponent The TowerComponent of the tower entity
      * @return The total drain. Zero if the tower has no targeters
      */
-    private int getEmitterDrain(TowerComponent towerComponent) {
+    private int getTargeterDrain(TowerComponent towerComponent) {
         int drain = 0;
         for (EntityRef emitterEntity : towerComponent.targeter) {
             TowerTargeter emitter = DefenceField.getComponentExtending(emitterEntity, TowerTargeter.class);
