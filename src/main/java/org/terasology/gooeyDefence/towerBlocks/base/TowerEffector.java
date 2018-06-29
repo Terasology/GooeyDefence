@@ -13,11 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.towerBlocks.effects;
+package org.terasology.gooeyDefence.towerBlocks.base;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEffect;
+/**
+ * Base class for all the Effector blocks.
+ * <p>
+ * Effectors apply damage and special effects to the enemies.
+ * They require power, provided by {@link TowerCore}s
+ *
+ * @see TowerCore
+ * @see TowerTargeter
+ */
+public abstract class TowerEffector {
+    private int drain;
 
-public class FireEffectComponent extends TowerEffect implements Component {
-
+    /**
+     * @return The amount of power required by this Effector
+     */
+    public int getDrain() {
+        return drain;
+    }
 }

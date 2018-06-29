@@ -19,8 +19,13 @@ import org.terasology.entitySystem.Component;
 import org.terasology.math.geom.Vector3i;
 
 /**
- * A component that marks a path for the enemy to follow.
+ * A component that provides a path for the enemy to follow.
+ * <p>
  * Intended to have multiple implementations for different pathfollowing situations.
+ *
+ * @see EntrancePathComponent
+ * @see BlankPathComponent
+ * @see CustomPathComponent
  */
 public interface PathComponent extends Component {
 
@@ -44,6 +49,7 @@ public interface PathComponent extends Component {
     /**
      * Check if the enemy is at the end of the path.
      * Step zero must indicate the end.
+     *
      * @return If the enemy is at step zero.
      */
     default boolean atEnd() {

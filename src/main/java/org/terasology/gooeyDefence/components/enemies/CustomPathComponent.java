@@ -23,6 +23,8 @@ import java.util.List;
  * Moves the enemy along a path stored internally in the component.
  * <p>
  * Used for enemies that don't follow the standard entrance path.
+ *
+ * @see EntrancePathComponent
  */
 public class CustomPathComponent implements PathComponent {
     private List<Vector3i> path;

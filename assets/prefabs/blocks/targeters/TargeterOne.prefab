@@ -1,6 +1,6 @@
 {
   "parent": "GooeyDefence:PlainBlock",
-  "SingleTargetEmitter": {
+  "SingleTargetTargeter": {
     "drain": 5,
     "range": 2
   }

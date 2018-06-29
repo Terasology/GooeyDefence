@@ -13,10 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.towerBlocks.emitters;
+package org.terasology.gooeyDefence.towerBlocks.targeters;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEmitter;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 
-public class SingleTargetEmitterComponent extends TowerEmitter implements Component {
+/**
+ * Targets the first enemy in its range.
+ * Test targeter.
+ *
+ * @see SingleTargetTargeterSystem
+ */
+public class SingleTargetTargeterComponent extends TowerTargeter implements Component {
 }

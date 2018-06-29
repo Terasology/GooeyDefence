@@ -16,10 +16,18 @@
 package org.terasology.gooeyDefence.events;
 
 import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.PathfindingManager;
 import org.terasology.math.geom.Vector3i;
 
 import java.util.List;
 
+/**
+ * Event sent when an entrance path is changed.
+ * <p>
+ * This event is not sent when other non-entrance paths are changed.
+ *
+ * @see PathfindingManager
+ */
 public class OnEntrancePathChanged implements Event {
     private int pathId;
     private List<Vector3i> newPath;
@@ -29,10 +37,16 @@ public class OnEntrancePathChanged implements Event {
         this.newPath = newPath;
     }
 
+    /**
+     * @return The new path that was changed.
+     */
     public List<Vector3i> getNewPath() {
         return newPath;
     }
 
+    /**
+     * @return The ID of the path that was changed.
+     */
     public int getPathId() {
         return pathId;
     }

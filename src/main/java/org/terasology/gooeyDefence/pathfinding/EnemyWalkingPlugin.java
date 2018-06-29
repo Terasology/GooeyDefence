@@ -20,6 +20,10 @@ import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.world.WorldProvider;
 
+/**
+ * Plugin that defines how the standard enemies will walk.
+ * This plugin allows enemies to move horizontally and vertically
+ */
 public class EnemyWalkingPlugin extends WalkingPlugin {
     public EnemyWalkingPlugin(WorldProvider world, float width, float height) {
         super(world, width, height);

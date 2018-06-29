@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.components.enemies;
 
-import org.terasology.gooeyDefence.PathfindingSystem;
+import org.terasology.gooeyDefence.PathfindingManager;
 import org.terasology.math.geom.Vector3i;
 
 import java.util.List;
@@ -24,15 +24,17 @@ import java.util.List;
  * Moves the enemy along a path from an entrance to the shrine.
  * <p>
  * Doesn't store the path internally to reduce on memory, instead stores a
- * reference to the PathfindingSystem that holds the path.
+ * reference to the PathfindingManager that holds the path.
+ * This does result in needing to re-set the pathManager every time the game is loaded/created.
  *
- * @see PathfindingSystem
+ * @see PathfindingManager
+ * @see CustomPathComponent
  */
 public class EntrancePathComponent implements PathComponent {
     private int step;
     private int entranceId;
     private Vector3i goal;
-    private PathfindingSystem pathManager;
+    private PathfindingManager pathManager;
 
     /**
      * Empty constructor for deserialisation.
@@ -44,10 +46,10 @@ public class EntrancePathComponent implements PathComponent {
      * Create a new entrance path component specifying the position along the path to start at.
      *
      * @param entranceId  The ID of the entrance
-     * @param pathManager The PathfindingSystem the path is stored in
+     * @param pathManager The PathfindingManager the path is stored in
      * @param startStep   The step to start from. This must be a valid index in the path.
      */
-    public EntrancePathComponent(int entranceId, PathfindingSystem pathManager, int startStep) {
+    public EntrancePathComponent(int entranceId, PathfindingManager pathManager, int startStep) {
         this.entranceId = entranceId;
         this.pathManager = pathManager;
         /* The startStep given must be in the range of the path */
@@ -58,7 +60,7 @@ public class EntrancePathComponent implements PathComponent {
         goal = pathManager.getPath(entranceId).get(step);
     }
 
-    public EntrancePathComponent(int entranceId, PathfindingSystem pathManager) {
+    public EntrancePathComponent(int entranceId, PathfindingManager pathManager) {
         this.entranceId = entranceId;
         this.pathManager = pathManager;
         step = pathManager.getPath(entranceId).size() - 1;
@@ -66,12 +68,12 @@ public class EntrancePathComponent implements PathComponent {
     }
 
     /**
-     * Set the PathfindingSystem the paths are stored in.
+     * Set the PathfindingManager the paths are stored in.
      * The field storing it cannot be serialised so it must be manually set.
      *
      * @param pathManager The new path manager to set
      */
-    public void setPathManager(PathfindingSystem pathManager) {
+    public void setPathManager(PathfindingManager pathManager) {
         this.pathManager = pathManager;
     }
 

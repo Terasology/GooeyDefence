@@ -39,7 +39,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     @In
     private Time time;
     @In
-    private PathfindingSystem pathfindingSystem;
+    private PathfindingManager pathfindingManager;
 
     private int shrineDamaged = 0;
 
@@ -57,7 +57,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     @Override
     public void renderAlphaBlend() {
         pathBlockRenderer.beginRenderOverlay();
-        List<List<Vector3i>> paths = pathfindingSystem.getPaths();
+        List<List<Vector3i>> paths = pathfindingManager.getPaths();
         for (List<Vector3i> path : paths) {
             if (path != null) {
                 for (Vector3i pos : path) {

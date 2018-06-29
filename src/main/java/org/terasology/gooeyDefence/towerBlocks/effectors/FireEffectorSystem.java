@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.towerBlocks.effects;
+package org.terasology.gooeyDefence.towerBlocks.effectors;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -28,8 +28,13 @@ import org.terasology.math.geom.Vector3i;
 import org.terasology.rendering.world.selection.BlockSelectionRenderer;
 import org.terasology.utilities.Assets;
 
+/**
+ * Draws a translucent red block above the enemy.
+ *
+ * @see FireEffectorComponent
+ */
 @RegisterSystem
-public class FireEffectSystem extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
+public class FireEffectorSystem extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
 
     private EntityRef targetEntity;
 
@@ -40,8 +45,15 @@ public class FireEffectSystem extends BaseComponentSystem implements RenderSyste
         flagRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:ShrineDamaged").get());
     }
 
+    /**
+     * Called every tick to apply the fire effect onto a target
+     * <p>
+     * Filters on FireEffectorComponent
+     *
+     * @see ApplyEffectEvent
+     */
     @ReceiveEvent
-    public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, FireEffectComponent emitterComponent) {
+    public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, FireEffectorComponent effectorComponent) {
         targetEntity = event.getTarget();
     }
 

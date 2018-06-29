@@ -16,7 +16,14 @@
 package org.terasology.gooeyDefence.events;
 
 import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.components.ShrineComponent;
 
+/**
+ * Event to deal damage to the shrine.
+ * Sent against the entity doing the damage.
+ *
+ * @see ShrineComponent
+ */
 public class DamageShrineEvent implements Event {
     private int damage;
 
@@ -24,12 +31,10 @@ public class DamageShrineEvent implements Event {
         this.damage = damage;
     }
 
-
+    /**
+     * @return the damage being dealt by this attack.
+     */
     public int getDamage() {
         return damage;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
     }
 }

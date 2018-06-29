@@ -19,6 +19,8 @@ import org.terasology.entitySystem.Component;
 
 /**
  * Marks that a block can be destroyed.
+ * <p>
+ * All blocks without this are blocked from being destroyed.
  */
 public class DestructibleBlockComponent implements Component {
 }

@@ -18,7 +18,6 @@ package org.terasology.gooeyDefence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -30,8 +29,8 @@ import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
 import org.terasology.gooeyDefence.components.enemies.MovementComponent;
 import org.terasology.gooeyDefence.components.enemies.PathComponent;
 import org.terasology.gooeyDefence.events.DamageShrineEvent;
-import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
+import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.RepathEnemyRequest;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
@@ -60,29 +59,9 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     @In
     private EntityManager entityManager;
     @In
-    private PathfindingSystem pathfindingSystem;
+    private PathfindingManager pathfindingManager;
     @In
     private DelayManager delayManager;
-
-    /**
-     * Get the PathComponent used on the entity.
-     * <p>
-     * An entity should only have one implementation of the path component.
-     * As such, this method makes no guarantee about which component will be returned if the
-     * entity has multiple implementations.
-     *
-     * @param entity The entity to look on
-     * @return The first path component found on the entity.
-     * @throws IllegalArgumentException If the entity lacks a PathComponent
-     */
-    public static PathComponent getPathComponent(EntityRef entity) {
-        for (Component component : entity.iterateComponents()) {
-            if (component instanceof PathComponent) {
-                return (PathComponent) component;
-            }
-        }
-        throw new IllegalArgumentException("Path Component requested on entity that lacks one.");
-    }
 
     /**
      * Called when the field is activated.
@@ -93,11 +72,14 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         enemies.clear();
         entityManager.getEntitiesWith(GooeyComponent.class).forEach(enemies::add);
         enemies.stream().filter(enemy -> enemy.hasComponent(EntrancePathComponent.class))
-                .forEach(enemy -> enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingSystem));
+                .forEach(enemy -> enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingManager));
 
         //delayManager.addPeriodicAction(DefenceField.getShrineEntity(), "SpawnEnemyEvent", 500, 500);
     }
 
+    /*
+     * Test handler to allow easy enemy spawning
+     */
     @ReceiveEvent
     public void onActivate(ActivateEvent event, EntityRef entity) {
         for (int i = 0; i < DefenceField.entranceCount(); i++) {
@@ -105,6 +87,9 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         }
     }
 
+    /*
+     * Test handler to allow easy enemy spawning
+     */
     @ReceiveEvent
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity) {
         if (event.getActionId().equals("SpawnEnemyEvent")) {
@@ -130,7 +115,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
             }
 
             /* Check if the goal is on the new path */
-            PathComponent pathComponent = getPathComponent(enemy);
+            PathComponent pathComponent = DefenceField.getComponentExtending(enemy, PathComponent.class);
             Vector3i goal = pathComponent.getGoal();
             List<Vector3i> newPath = event.getNewPath();
             if (newPath.contains(goal)) {
@@ -138,7 +123,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
                 enemy.removeComponent(pathComponent.getClass());
                 EntrancePathComponent entranceComponent = new EntrancePathComponent(
                         event.getPathId(),
-                        pathfindingSystem,
+                        pathfindingManager,
                         newPath.indexOf(goal));
                 enemy.addComponent(entranceComponent);
             } else {
@@ -162,7 +147,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         EntityRef entity = entityManager.create("GooeyDefence:Gooey", DefenceField.entrancePos(entranceNumber).toVector3f());
 
         /* Setup pathfinding component */
-        EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingSystem);
+        EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingManager);
         entity.addComponent(component);
 
         enemies.add(entity);
@@ -213,7 +198,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param entity the enemy to move
      */
     private void moveEnemyAlongPath(EntityRef entity, float delta) {
-        PathComponent pathComponent = getPathComponent(entity);
+        PathComponent pathComponent = DefenceField.getComponentExtending(entity, PathComponent.class);
         LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
 
         float distSqr = locationComponent.getWorldPosition().distanceSquared(pathComponent.getGoal().toVector3f());
