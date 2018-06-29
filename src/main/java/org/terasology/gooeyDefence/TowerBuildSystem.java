@@ -179,6 +179,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
         destComponent.plains.addAll(component.plains);
 
         /* Destroy the old tower entity */
+        source.send(new TowerDestroyedEvent());
         removeTower(source);
     }
 
@@ -250,6 +251,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
     public void onDoDestroy(DoDestroyEvent event, EntityRef entity, TowerMultiBlockComponent component) {
         EntityRef tower = component.getTowerEntity();
         if (tower.exists()) {
+            tower.send(new TowerDestroyedEvent());
             removeBlockFromTower(tower, entity);
             rebuildTower(tower);
         }
@@ -277,7 +279,6 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * @param tower The tower to remove
      */
     private void removeTower(EntityRef tower) {
-        tower.send(new TowerDestroyedEvent());
         tower.destroy();
     }
 
