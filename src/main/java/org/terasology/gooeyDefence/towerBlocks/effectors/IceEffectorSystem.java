@@ -21,6 +21,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.enemies.MovementComponent;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
+import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
 
 /**
  * Slows the target enemy by the given amount.
@@ -42,7 +43,20 @@ public class IceEffectorSystem extends BaseComponentSystem {
         EntityRef enemy = event.getTarget();
         MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
         double reducedSpeed = movementComponent.getSpeed() * component.getSlow();
-        /* No need for floor as (int) does the same */
-        movementComponent.setSpeed((int) reducedSpeed);
+        movementComponent.setSpeed((float) reducedSpeed);
+    }
+
+    /**
+     * Removes the slow effect from the target
+     * <p>
+     * Filters on {@link IceEffectorComponent}
+     *
+     * @see RemoveEffectEvent
+     */
+    @ReceiveEvent
+    public void onRemoveEffect(RemoveEffectEvent event, EntityRef entity, IceEffectorComponent component) {
+        EntityRef enemy = event.getTarget();
+        MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
+        movementComponent.setSpeed(movementComponent.getSpeed() / component.getSlow());
     }
 }
