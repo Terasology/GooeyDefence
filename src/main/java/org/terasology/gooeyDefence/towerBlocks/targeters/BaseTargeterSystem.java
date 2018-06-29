@@ -35,8 +35,13 @@ import java.util.Set;
 
 public class BaseTargeterSystem extends BaseComponentSystem {
 
-
-
+    /**
+     * Picks the target from all within range based upon the selection method
+     *
+     * @param targets         All enemies within range
+     * @param selectionMethod The selection method
+     * @return The single target, according to the selection method
+     */
     protected EntityRef getSingleTarget(Set<EntityRef> targets, SelectionMethod selectionMethod) {
         Comparator<EntityRef> comparator;
         switch (selectionMethod) {
