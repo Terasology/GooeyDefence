@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence;
 
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -25,8 +26,11 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.gooeyDefence.events.combat.DoSelectEnemies;
+import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
 import org.terasology.gooeyDefence.events.tower.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.tower.TowerDestroyedEvent;
+import org.terasology.gooeyDefence.towerBlocks.EffectCount;
+import org.terasology.gooeyDefence.towerBlocks.EffectDuration;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
@@ -90,28 +94,6 @@ public class TowerManager extends BaseComponentSystem {
     }
 
     /**
-     * Handles the steps involved in making the tower shoot.
-     *
-     * @param towerComponent The TowerComponent of the tower entity shooting.
-     */
-    private void handleTowerShooting(TowerComponent towerComponent) {
-        /* Run emitter event */
-        DoSelectEnemies shootEvent = new DoSelectEnemies();
-        for (long emitterID : towerComponent.targeter) {
-            EntityRef emitter = entityManager.getEntity(emitterID);
-            emitter.send(shootEvent);
-        }
-        /* Run effect event */
-        for (long effectorID : towerComponent.effector) {
-            EntityRef effector = entityManager.getEntity(effectorID);
-            for (EntityRef entity : shootEvent.getTargets()) {
-                ApplyEffectEvent effectEvent = new ApplyEffectEvent(entity);
-                effector.send(effectEvent);
-            }
-        }
-    }
-
-    /**
      * Get the drain caused by all the targeters on a tower
      *
      * @param towerComponent The TowerComponent of the tower entity
@@ -159,4 +141,102 @@ public class TowerManager extends BaseComponentSystem {
         return power;
     }
 
+    /**
+     * Handles the steps involved in making the tower shoot.
+     *
+     * @param towerComponent The TowerComponent of the tower entity shooting.
+     */
+    private void handleTowerShooting(TowerComponent towerComponent) {
+        Set<EntityRef> currentTargets = getTargetedEnemies(towerComponent.targeter);
+
+        applyEffectsToTargets(towerComponent.effector, currentTargets, towerComponent.lastTargets);
+
+        towerComponent.lastTargets = currentTargets;
+    }
+
+    /**
+     * Runs all the targeters in the tower and gets the targeted enemies.
+     *
+     * @param targeters The targeters to run through
+     * @return All entities targeted by the tower.
+     * @see TowerTargeter
+     */
+    private Set<EntityRef> getTargetedEnemies(Set<Long> targeters) {
+        /* Run emitter event */
+        DoSelectEnemies shootEvent = new DoSelectEnemies();
+        for (long emitterID : targeters) {
+            EntityRef emitter = entityManager.getEntity(emitterID);
+            emitter.send(shootEvent);
+        }
+        return shootEvent.getTargets();
+    }
+
+    /**
+     * Applies all the effects on a tower to the targeted enemies
+     *
+     * @param effectors      The effectors on the tower
+     * @param currentTargets The current targets of the tower
+     * @param lastTargets    The enemies targeted last attack
+     * @see TowerEffector
+     */
+    private void applyEffectsToTargets(Set<Long> effectors, Set<EntityRef> currentTargets, Set<EntityRef> lastTargets) {
+        Set<EntityRef> newTargets = Sets.difference(currentTargets, lastTargets);
+        Set<EntityRef> oldTargets = Sets.difference(lastTargets, currentTargets);
+
+        for (long effectorID : effectors) {
+            EntityRef effector = entityManager.getEntity(effectorID);
+            applyEffect(effector, currentTargets, newTargets);
+            endEffects(effector, oldTargets);
+        }
+    }
+
+    /**
+     * Calls on the effectors to apply effects to the targets
+     *
+     * @param effector       The effectors to check through
+     * @param currentTargets All targets this attack round.
+     * @param newTargets     The enemies that have been newly targeted this round
+     */
+    private void applyEffect(EntityRef effector, Set<EntityRef> currentTargets, Set<EntityRef> newTargets) {
+        TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
+        Set<EntityRef> targets;
+        switch (effectorComponent.getEffectCount()) {
+            case PER_SHOT:
+                targets = currentTargets;
+                break;
+            case CONTINUOUS:
+                targets = newTargets;
+                break;
+            default:
+                throw new EnumConstantNotPresentException(EffectCount.class, effectorComponent.getEffectCount().toString());
+        }
+        for (EntityRef entity : targets) {
+            ApplyEffectEvent effectEvent = new ApplyEffectEvent(entity);
+            effector.send(effectEvent);
+        }
+    }
+
+    /**
+     * Calls on each effector to end the effect on a target, where applicable.
+     *
+     * @param effector   The effectors to check through
+     * @param oldTargets The targets to remove the effects from
+     */
+    private void endEffects(EntityRef effector, Set<EntityRef> oldTargets) {
+        TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
+        switch (effectorComponent.getEffectDuration()) {
+            case INSTANT:
+                break;
+            case PERMANENT:
+                break;
+            case LASTING:
+                for (EntityRef entity : oldTargets) {
+                    RemoveEffectEvent effectEvent = new RemoveEffectEvent(entity);
+                    effector.send(effectEvent);
+                }
+                break;
+            default:
+                throw new EnumConstantNotPresentException(EffectDuration.class, effectorComponent.getEffectCount().toString());
+        }
+    }
 }

@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.components.towers;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.entity.EntityRef;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,4 +30,5 @@ public class TowerComponent implements Component {
     public Set<Long> effector = new HashSet<>();
     public Set<Long> targeter = new HashSet<>();
     public Set<Long> plains = new HashSet<>();
+    public Set<EntityRef> lastTargets = new HashSet<>();
 }
