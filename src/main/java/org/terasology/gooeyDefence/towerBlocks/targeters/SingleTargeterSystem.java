@@ -23,6 +23,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 
 import java.util.Set;
@@ -41,6 +42,7 @@ public class SingleTargeterSystem extends BaseTargeterSystem {
 
     @In
     protected EnemyManager enemyManager;
+
     /**
      * Determine which enemies should be attacked.
      * Called against the targeter entity.
@@ -51,12 +53,27 @@ public class SingleTargeterSystem extends BaseTargeterSystem {
      */
     @ReceiveEvent
     public void onDoSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SingleTargeterComponent targeterComponent) {
-        Set<EntityRef> targets = enemyManager.getEnemiesInRange(
-                locationComponent.getWorldPosition(),
-                targeterComponent.getRange());
-        EntityRef target = getSingleTarget(targets, targeterComponent.getSelectionMethod());
-        if (target.exists()) {
-            event.addToList(target);
+        EntityRef lastTarget = targeterComponent.getLastTarget();
+        if (canSelectEnemy(lastTarget, locationComponent.getWorldPosition(), targeterComponent)) {
+            event.addToList(lastTarget);
+        } else {
+            Set<EntityRef> targets = enemyManager.getEnemiesInRange(
+                    locationComponent.getWorldPosition(),
+                    targeterComponent.getRange());
+            EntityRef target = getSingleTarget(targets, targeterComponent.getSelectionMethod());
+            if (target.exists()) {
+                targeterComponent.setLastTarget(target);
+                event.addToList(target);
+            }
         }
     }
+
+
+    private boolean canSelectEnemy(EntityRef target, Vector3f targeterPos, SingleTargeterComponent targeterComponent) {
+        return target.exists() &&
+                target.getComponent(LocationComponent.class)
+                        .getWorldPosition()
+                        .distance(targeterPos) < targeterComponent.getRange();
+    }
+
 }
