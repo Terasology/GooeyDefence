@@ -239,4 +239,8 @@ public class TowerManager extends BaseComponentSystem {
                 throw new EnumConstantNotPresentException(EffectDuration.class, effectorComponent.getEffectCount().toString());
         }
     }
+
+    private static String buildEventId(EntityRef entity, int index) {
+        return "towerDefence" + entity.getId() + "|" + index;
+    }
 }
