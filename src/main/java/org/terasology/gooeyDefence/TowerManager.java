@@ -147,10 +147,10 @@ public class TowerManager extends BaseComponentSystem {
     /**
      * Called every attack cycle per targeter.
      * Checks if the tower can fire, and if so, fires that targeter.
+     * <p>
+     * Filters on {@link TowerComponent}
      *
-     * @param event     The periodic event
-     * @param entity    The tower entity
-     * @param component The TowerComponent of the entity
+     * @see PeriodicActionTriggeredEvent
      */
     @ReceiveEvent
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, TowerComponent component) {
