@@ -53,6 +53,41 @@ public class TowerManager extends BaseComponentSystem {
     private Set<EntityRef> towerEntities = new HashSet<>();
 
     /**
+     * Creates the periodic event id for the targeter on a tower
+     *
+     * @param tower    The tower the targeter is on
+     * @param targeter The targeter the event is sending for
+     * @return The id for that periodic action event.
+     * @see PeriodicActionTriggeredEvent
+     */
+    private static String buildEventId(EntityRef tower, EntityRef targeter) {
+        return "towerDefence" + tower.getId() + "|" + targeter.getId();
+    }
+
+    /**
+     * Checks that the periodic event is intended for the given tower.
+     *
+     * @param tower   The tower to check for
+     * @param eventId The id of the periodic event
+     * @return True if the event belongs to the tower
+     * @see PeriodicActionTriggeredEvent
+     */
+    private static boolean isEventIdCorrect(EntityRef tower, String eventId) {
+        return eventId.startsWith("towerDefence" + tower.getId());
+    }
+
+    /**
+     * Gets the ID of the targeter from the periodic event id.
+     *
+     * @param eventId The id of the periodic event
+     * @return The ID of the targeter entity ref
+     */
+    private static long getTargeterId(String eventId) {
+        String id = eventId.substring(eventId.indexOf('|') + 1);
+        return Long.parseLong(id);
+    }
+
+    /**
      * Called when a tower is created.
      * Adds the tower to the list and sets the periodic actions for it's attacks
      * <p>
@@ -268,40 +303,5 @@ public class TowerManager extends BaseComponentSystem {
             default:
                 throw new EnumConstantNotPresentException(EffectDuration.class, effectorComponent.getEffectCount().toString());
         }
-    }
-
-    /**
-     * Creates the periodic event id for the targeter on a tower
-     *
-     * @param tower    The tower the targeter is on
-     * @param targeter The targeter the event is sending for
-     * @return The id for that periodic action event.
-     * @see PeriodicActionTriggeredEvent
-     */
-    private static String buildEventId(EntityRef tower, EntityRef targeter) {
-        return "towerDefence" + tower.getId() + "|" + targeter.getId();
-    }
-
-    /**
-     * Checks that the periodic event is intended for the given tower.
-     *
-     * @param tower   The tower to check for
-     * @param eventId The id of the periodic event
-     * @return True if the event belongs to the tower
-     * @see PeriodicActionTriggeredEvent
-     */
-    private static boolean isEventIdCorrect(EntityRef tower, String eventId) {
-        return eventId.startsWith("towerDefence" + tower.getId());
-    }
-
-    /**
-     * Gets the ID of the targeter from the periodic event id.
-     *
-     * @param eventId The id of the periodic event
-     * @return The ID of the targeter entity ref
-     */
-    private static long getTargeterId(String eventId) {
-        String id = eventId.substring(eventId.indexOf('|') + 1);
-        return Long.parseLong(id);
     }
 }
