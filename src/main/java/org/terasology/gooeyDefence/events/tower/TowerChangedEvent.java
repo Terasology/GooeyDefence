@@ -24,11 +24,15 @@ import java.util.Set;
 
 /**
  * Event sent when a tower is changed.
+ * Note that this event can only be sent when a block is added.
+ * If a block is destroyed the whole tower is destroyed and rebuilt
+ * <p>
  * Sent against the newly changed tower
  *
  * @see TowerComponent
  */
 public class TowerChangedEvent implements Event {
+    /*TODO: split this into the different block types */
     private Set<EntityRef> changedBlocks;
 
     public TowerChangedEvent(EntityRef changedBlock) {
