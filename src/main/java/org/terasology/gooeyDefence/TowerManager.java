@@ -116,11 +116,10 @@ public class TowerManager extends BaseComponentSystem {
      * @param cores The cores of the tower
      * @return The attack speeds of the tower
      */
-    private Set<Long> getAttackSpeeds(Set<Long> cores) {
+    private Set<Long> getAttackSpeeds(Set<EntityRef> cores) {
         /* Collect the attack rates of all the cores */
         SortedSet<Long> attackRates = new TreeSet<>();
-        for (Long coreID : cores) {
-            EntityRef coreEntity = entityManager.getEntity(coreID);
+        for (EntityRef coreEntity : cores) {
             TowerCore towerCore = DefenceField.getComponentExtending(coreEntity, TowerCore.class);
             attackRates.add(towerCore.getAttackSpeed());
         }
@@ -181,8 +180,7 @@ public class TowerManager extends BaseComponentSystem {
      */
     private int getEmitterDrain(TowerComponent towerComponent) {
         int drain = 0;
-        for (long emitterID : towerComponent.targeter) {
-            EntityRef emitterEntity = entityManager.getEntity(emitterID);
+        for (EntityRef emitterEntity : towerComponent.targeter) {
             TowerTargeter emitter = DefenceField.getComponentExtending(emitterEntity, TowerTargeter.class);
             drain += emitter.getDrain();
         }
@@ -197,8 +195,7 @@ public class TowerManager extends BaseComponentSystem {
      */
     private int getEffectorDrain(TowerComponent towerComponent) {
         int drain = 0;
-        for (long effectorID : towerComponent.effector) {
-            EntityRef effectorEntity = entityManager.getEntity(effectorID);
+        for (EntityRef effectorEntity : towerComponent.effector) {
             TowerEffector effector = DefenceField.getComponentExtending(effectorEntity, TowerEffector.class);
             drain += effector.getDrain();
         }
@@ -213,8 +210,7 @@ public class TowerManager extends BaseComponentSystem {
      */
     private int getTotalCorePower(TowerComponent towerComponent) {
         int power = 0;
-        for (long coreID : towerComponent.cores) {
-            EntityRef coreEntity = entityManager.getEntity(coreID);
+        for (EntityRef coreEntity : towerComponent.cores) {
             TowerCore core = DefenceField.getComponentExtending(coreEntity, TowerCore.class);
             power += core.getPower();
         }
@@ -228,9 +224,7 @@ public class TowerManager extends BaseComponentSystem {
      */
     private void handleTowerShooting(TowerComponent towerComponent) {
         Set<EntityRef> currentTargets = getTargetedEnemies(towerComponent.targeter);
-
         applyEffectsToTargets(towerComponent.effector, currentTargets, towerComponent.lastTargets);
-
         towerComponent.lastTargets = currentTargets;
     }
 
@@ -241,11 +235,10 @@ public class TowerManager extends BaseComponentSystem {
      * @return All entities targeted by the tower.
      * @see TowerTargeter
      */
-    private Set<EntityRef> getTargetedEnemies(Set<Long> targeters) {
+    private Set<EntityRef> getTargetedEnemies(Set<EntityRef> targeters) {
         /* Run emitter event */
         SelectEnemiesEvent shootEvent = new SelectEnemiesEvent();
-        for (long emitterID : targeters) {
-            EntityRef emitter = entityManager.getEntity(emitterID);
+        for (EntityRef emitter : targeters) {
             emitter.send(shootEvent);
         }
         return shootEvent.getTargets();
@@ -259,13 +252,12 @@ public class TowerManager extends BaseComponentSystem {
      * @param lastTargets    The enemies targeted last attack
      * @see TowerEffector
      */
-    private void applyEffectsToTargets(Set<Long> effectors, Set<EntityRef> currentTargets, Set<EntityRef> lastTargets) {
+    private void applyEffectsToTargets(Set<EntityRef> effectors, Set<EntityRef> currentTargets, Set<EntityRef> lastTargets) {
         Set<EntityRef> newTargets = Sets.difference(currentTargets, lastTargets);
         Set<EntityRef> oldTargets = Sets.difference(lastTargets, currentTargets);
 
 
-        for (long effectorID : effectors) {
-            EntityRef effector = entityManager.getEntity(effectorID);
+        for (EntityRef effector : effectors) {
             applyEffect(effector, currentTargets, newTargets);
             endEffects(effector, oldTargets);
         }

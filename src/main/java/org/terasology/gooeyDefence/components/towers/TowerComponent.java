@@ -26,10 +26,10 @@ import java.util.Set;
  * Stores the ID's of all the blocks that make up the tower.
  */
 public class TowerComponent implements Component {
-    public Set<Long> cores = new HashSet<>();
-    public Set<Long> effector = new HashSet<>();
-    public Set<Long> targeter = new HashSet<>();
-    public Set<Long> plains = new HashSet<>();
+    public Set<EntityRef> cores = new HashSet<>();
+    public Set<EntityRef> effector = new HashSet<>();
+    public Set<EntityRef> targeter = new HashSet<>();
+    public Set<EntityRef> plains = new HashSet<>();
     public int attackCount;
     public Set<EntityRef> lastTargets = new HashSet<>();
 }
