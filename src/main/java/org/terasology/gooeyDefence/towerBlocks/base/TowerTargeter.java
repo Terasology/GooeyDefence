@@ -32,10 +32,10 @@ import java.util.Set;
  * @see TowerEffector
  */
 public abstract class TowerTargeter implements Component {
-    private SelectionMethod selectionMethod;
     private int drain;
     private int range;
     private int attackSpeed;
+    private SelectionMethod selectionMethod = SelectionMethod.FIRST;
     private Set<EntityRef> lastTargets = new HashSet<>();
 
     public int getDrain() {
