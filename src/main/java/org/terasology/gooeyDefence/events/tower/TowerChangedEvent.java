@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@ import org.terasology.entitySystem.event.Event;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 
 /**
- * Event sent when a tower is created
- * Sent against the new tower.
+ * Event sent when a tower is changed.
+ * Sent against the newly changed tower
  *
  * @see TowerComponent
  */
-public class TowerCreatedEvent implements Event {
+public class TowerChangedEvent implements Event {
+
 }
