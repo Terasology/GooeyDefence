@@ -28,7 +28,7 @@ import org.terasology.registry.In;
 import java.util.Set;
 
 /**
- *
+ * Targets a base enemy and then chains off to nearby enemies as well.
  */
 @RegisterSystem
 public class ChainTargeterSystem extends BaseTargeterSystem {
@@ -89,6 +89,15 @@ public class ChainTargeterSystem extends BaseTargeterSystem {
         return result;
     }
 
+    /**
+     * Checks if the enemy can be targeted.
+     * Used to check if the enemy from last round can be reused.
+     *
+     * @param target            The target to check for
+     * @param targeterPos       The position of the target
+     * @param targeterComponent The targeter
+     * @return True if the targeter can attack the enemy
+     */
     private boolean canSelectEnemy(EntityRef target, Vector3f targeterPos, ChainTargeterComponent targeterComponent) {
         return target.exists() &&
                 target.getComponent(LocationComponent.class)
