@@ -61,8 +61,8 @@ public class SingleTargeterSystem extends BaseTargeterSystem {
                     locationComponent.getWorldPosition(),
                     targeterComponent.getRange());
             EntityRef target = getSingleTarget(targets, targeterComponent.getSelectionMethod());
+            targeterComponent.setLastTarget(target);
             if (target.exists()) {
-                targeterComponent.setLastTarget(target);
                 event.addToList(target);
             }
         }
