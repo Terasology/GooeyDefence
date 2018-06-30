@@ -46,21 +46,17 @@ public class ChainTargeterSystem extends BaseTargeterSystem {
      */
     @ReceiveEvent
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, ChainTargeterComponent targeterComponent) {
-        EntityRef lastTarget = targeterComponent.getLastTarget();
-        if (canSelectEnemy(lastTarget, locationComponent.getWorldPosition(), targeterComponent)) {
-            event.addToList(lastTarget);
-        } else {
+        EntityRef target = targeterComponent.getLastTarget();
+        if (!canSelectEnemy(target, locationComponent.getWorldPosition(), targeterComponent)) {
             Set<EntityRef> targets = enemyManager.getEnemiesInRange(
                     locationComponent.getWorldPosition(),
                     targeterComponent.getRange());
-
-            EntityRef target = getSingleTarget(targets, targeterComponent.getSelectionMethod());
-            if (target.exists()) {
-
-                targeterComponent.setLastTarget(target);
-                event.addToList(chainToNearby(target, targeterComponent.getChainLength(), targeterComponent.getChainRange()));
-            }
+            target = getSingleTarget(targets, targeterComponent.getSelectionMethod());
         }
+        if (target.exists()) {
+            event.addToList(chainToNearby(target, targeterComponent.getChainLength(), targeterComponent.getChainRange()));
+        }
+        targeterComponent.setLastTarget(target);
     }
 
     /**
