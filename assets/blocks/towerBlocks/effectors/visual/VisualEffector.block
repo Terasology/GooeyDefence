@@ -1,0 +1,6 @@
+{
+  "entity": {
+    "prefab": "GooeyDefence:VisualEffector"
+  },
+  "blockTile": "GooeyDefence:VisualEffector"
+}
