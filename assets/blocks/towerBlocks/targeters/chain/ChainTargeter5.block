@@ -1,0 +1,7 @@
+{
+  "entity": {
+    "prefab": "GooeyDefence:ChainTargeter5"
+  },
+  "blockTile": "GooeyDefence:ChainTargeter5",
+  "translucent":true
+}
