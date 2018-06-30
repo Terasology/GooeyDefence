@@ -15,19 +15,15 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.effectors;
 
-import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
-import org.terasology.gooeyDefence.PathfindingManager;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
-import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.In;
 import org.terasology.rendering.world.selection.BlockSelectionRenderer;
 import org.terasology.utilities.Assets;
 
@@ -42,11 +38,6 @@ public class VisualEffectorSystem extends BaseComponentSystem implements RenderS
 
     private Set<EntityRef> targets = new HashSet<>();
     private BlockSelectionRenderer enemyRenderer;
-    @In
-    private Time time;
-    @In
-    private PathfindingManager pathfindingManager;
-    private int shrineDamaged = 0;
 
     /**
      * Draws a visual cue above the targeted enemy
@@ -77,18 +68,15 @@ public class VisualEffectorSystem extends BaseComponentSystem implements RenderS
         enemyRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:ShrineDamaged").get());
     }
 
-    @ReceiveEvent
-    public void onDamageShrine(DamageEntityEvent event, EntityRef entity) {
-        shrineDamaged = 100;
-    }
-
     @Override
     public void renderAlphaBlend() {
         enemyRenderer.beginRenderOverlay();
         for (EntityRef enemy : targets) {
             LocationComponent locationComponent = enemy.getComponent(LocationComponent.class);
-            Vector3i pos = new Vector3i(locationComponent.getWorldPosition());
-            enemyRenderer.renderMark2(Vector3i.up().add(pos));
+            if (locationComponent != null) {
+                Vector3i pos = new Vector3i(locationComponent.getWorldPosition());
+                enemyRenderer.renderMark2(Vector3i.up().add(pos));
+            }
         }
         enemyRenderer.endRenderOverlay();
     }
