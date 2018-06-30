@@ -28,10 +28,11 @@ import org.terasology.gooeyDefence.components.enemies.EntrancePathComponent;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
 import org.terasology.gooeyDefence.components.enemies.MovementComponent;
 import org.terasology.gooeyDefence.components.enemies.PathComponent;
-import org.terasology.gooeyDefence.events.DamageShrineEvent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.RepathEnemyRequest;
+import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
+import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
@@ -134,6 +135,17 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     }
 
     /**
+     * Called when an entity reaches zero health.
+     * Filters on {@link GooeyComponent}
+     *
+     * @see EntityDeathEvent
+     */
+    @ReceiveEvent
+    public void onEntityDeath(EntityDeathEvent event, EntityRef entity, GooeyComponent component) {
+        destroyEnemy(entity);
+    }
+
+    /**
      * Spawns an enemy at the given entrance.
      * Also begins it travelling down the path.
      *
@@ -159,7 +171,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param enemy The enemy to destroy
      */
     public void destroyEnemy(EntityRef enemy) {
-        enemiesToRemove.add(enemy);
+        enemies.remove(enemy);
         enemy.destroy();
     }
 
@@ -187,6 +199,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         if (DefenceField.isFieldActivated()) {
             enemies.forEach(entity -> moveEnemyAlongPath(entity, delta));
             enemiesToRemove.forEach(enemies::remove);
+            enemiesToRemove.forEach(EntityRef::destroy);
             enemiesToRemove.clear();
         }
     }
@@ -219,8 +232,8 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     private void updateToNextStep(EntityRef entity, PathComponent pathComponent) {
         if (pathComponent.atEnd()) {
             GooeyComponent gooeyComponent = entity.getComponent(GooeyComponent.class);
-            entity.send(new DamageShrineEvent(gooeyComponent.damage));
-            destroyEnemy(entity);
+            entity.send(new DamageEntityEvent(gooeyComponent.damage));
+            enemiesToRemove.add(entity);
         } else {
             pathComponent.nextStep();
         }

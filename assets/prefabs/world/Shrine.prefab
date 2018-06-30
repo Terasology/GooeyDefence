@@ -1,4 +1,7 @@
 {
   "alwaysRelevant": true,
-  "Shrine": {}
+  "Shrine": {},
+  "Health": {
+    "health": 100
+  }
 }

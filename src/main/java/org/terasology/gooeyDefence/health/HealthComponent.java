@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components;
+package org.terasology.gooeyDefence.health;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.world.block.ForceBlockActive;
 
 /**
- * Component for the central shrine entity.
- * Stores information relating to the shrine and to the general field.
+ * Adds health functionality to an entity.
  */
-@ForceBlockActive
-public class ShrineComponent implements Component {
+public class HealthComponent implements Component {
+    private int health;
+
+    /**
+     * Reduce the health by a given amount.
+     *
+     * @param damage The amount to reduce the health by.
+     */
+    public void dealDamage(int damage) {
+        health = Math.max(health - damage, 0);
+    }
+
+    /**
+     * @return How much health the entity has
+     */
+    public int getHealth() {
+        return health;
+    }
 }
