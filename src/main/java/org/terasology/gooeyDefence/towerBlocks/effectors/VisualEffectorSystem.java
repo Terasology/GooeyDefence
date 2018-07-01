@@ -23,7 +23,6 @@ import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.rendering.logic.SkeletalMeshComponent;
-import org.terasology.rendering.nui.Color;
 
 /**
  *
@@ -42,7 +41,6 @@ public class VisualEffectorSystem extends BaseComponentSystem {
     public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, VisualEffectorComponent component) {
         SkeletalMeshComponent targetMesh = event.getTarget().getComponent(SkeletalMeshComponent.class);
         targetMesh.scale = Vector3f.one().scale(0.4f);
-        targetMesh.color = new Color(event.getDamageMultiplier(), event.getDamageMultiplier(), event.getDamageMultiplier());
 
         event.getTarget().saveComponent(targetMesh);
     }
@@ -58,7 +56,6 @@ public class VisualEffectorSystem extends BaseComponentSystem {
     public void onRemoveEffect(RemoveEffectEvent event, EntityRef entity, VisualEffectorComponent component) {
         SkeletalMeshComponent targetMesh = event.getTarget().getComponent(SkeletalMeshComponent.class);
         targetMesh.scale = Vector3f.one().scale(0.25f);
-        targetMesh.color = Color.WHITE;
         event.getTarget().saveComponent(targetMesh);
     }
 }
