@@ -19,25 +19,17 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.entitySystem.systems.RenderSystem;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3i;
-import org.terasology.rendering.world.selection.BlockSelectionRenderer;
-import org.terasology.utilities.Assets;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.terasology.math.geom.Vector3f;
+import org.terasology.rendering.logic.SkeletalMeshComponent;
+import org.terasology.rendering.nui.Color;
 
 /**
  *
  */
 @RegisterSystem
-public class VisualEffectorSystem extends BaseComponentSystem implements RenderSystem {
-
-    private Set<EntityRef> targets = new HashSet<>();
-    private BlockSelectionRenderer enemyRenderer;
+public class VisualEffectorSystem extends BaseComponentSystem {
 
     /**
      * Draws a visual cue above the targeted enemy
@@ -48,7 +40,11 @@ public class VisualEffectorSystem extends BaseComponentSystem implements RenderS
      */
     @ReceiveEvent
     public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, VisualEffectorComponent component) {
-        targets.add(event.getTarget());
+        SkeletalMeshComponent targetMesh = event.getTarget().getComponent(SkeletalMeshComponent.class);
+        targetMesh.scale = Vector3f.one().scale(0.4f);
+        targetMesh.color = new Color(event.getDamageMultiplier(), event.getDamageMultiplier(), event.getDamageMultiplier());
+
+        event.getTarget().saveComponent(targetMesh);
     }
 
     /**
@@ -60,37 +56,9 @@ public class VisualEffectorSystem extends BaseComponentSystem implements RenderS
      */
     @ReceiveEvent
     public void onRemoveEffect(RemoveEffectEvent event, EntityRef entity, VisualEffectorComponent component) {
-        targets.remove(event.getTarget());
-    }
-
-    @Override
-    public void initialise() {
-        enemyRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:ShrineDamaged").get());
-    }
-
-    @Override
-    public void renderAlphaBlend() {
-        enemyRenderer.beginRenderOverlay();
-        for (EntityRef enemy : targets) {
-            LocationComponent locationComponent = enemy.getComponent(LocationComponent.class);
-            if (locationComponent != null) {
-                Vector3i pos = new Vector3i(locationComponent.getWorldPosition());
-                enemyRenderer.renderMark2(Vector3i.up().add(pos));
-            }
-        }
-        enemyRenderer.endRenderOverlay();
-    }
-
-    @Override
-    public void renderOpaque() {
-    }
-
-    @Override
-    public void renderOverlay() {
-    }
-
-    @Override
-    public void renderShadows() {
-
+        SkeletalMeshComponent targetMesh = event.getTarget().getComponent(SkeletalMeshComponent.class);
+        targetMesh.scale = Vector3f.one().scale(0.25f);
+        targetMesh.color = Color.WHITE;
+        event.getTarget().saveComponent(targetMesh);
     }
 }
