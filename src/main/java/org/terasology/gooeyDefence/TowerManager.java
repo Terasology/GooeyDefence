@@ -88,6 +88,20 @@ public class TowerManager extends BaseComponentSystem {
     }
 
     /**
+     * Remove all scheduled delays before the game is shutdown.
+     */
+    @Override
+    public void shutdown() {
+        for (EntityRef tower : towerEntities) {
+            TowerComponent towerComponent = tower.getComponent(TowerComponent.class);
+            for (EntityRef targeter : towerComponent.targeter) {
+                delayManager.cancelPeriodicAction(tower, buildEventId(tower, targeter));
+            }
+            tower.destroy();
+        }
+    }
+
+    /**
      * Called when a tower is created.
      * Adds the tower to the list and sets the periodic actions for it's attacks
      * <p>
@@ -139,7 +153,7 @@ public class TowerManager extends BaseComponentSystem {
     @ReceiveEvent
     public void onTowerDestroyed(TowerDestroyedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
         for (EntityRef targeter : towerComponent.targeter) {
-            delayManager.cancelPeriodicAction(towerEntity, buildEventId(towerEntity, targeter));
+            handleTargeterRemoval(towerEntity, targeter);
         }
         towerEntities.remove(towerEntity);
     }
@@ -161,6 +175,24 @@ public class TowerManager extends BaseComponentSystem {
                 EntityRef targeter = entityManager.getEntity(getTargeterId(event.getActionId()));
                 handleTowerShooting(component, targeter);
             }
+        }
+    }
+
+    /**
+     * Handles the removal of a targeter from a tower.
+     * Does this by calling the tower to end the effects on the
+     *
+     * @param tower
+     * @param targeter
+     */
+    private void handleTargeterRemoval(EntityRef tower, EntityRef targeter) {
+
+        delayManager.cancelPeriodicAction(tower, buildEventId(tower, targeter));
+
+        TowerComponent towerComponent = tower.getComponent(TowerComponent.class);
+        TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
+        for (EntityRef enemy : targeterComponent.getAffectedEnemies()) {
+            endEffects(towerComponent.effector, enemy, targeterComponent.getMultiplier());
         }
     }
 

@@ -75,6 +75,9 @@ public class TowerBuildSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onFieldActivated(OnFieldActivated event, EntityRef savedDataEntity) {
+        Iterable<EntityRef> towerEntities = entityManager.getEntitiesWith(TowerComponent.class);
+        towerEntities.forEach(EntityRef::destroy);
+
         Iterable<EntityRef> blockEntities = entityManager.getEntitiesWith(TowerMultiBlockComponent.class);
         /* Clear entities */
         blockEntities.forEach(entity -> entity.getComponent(TowerMultiBlockComponent.class).setTowerEntity(EntityRef.NULL));
