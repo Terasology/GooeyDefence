@@ -23,8 +23,6 @@ import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 
-import java.util.Set;
-
 /**
  * Selects a single target enemy and then targets all enemies within a small range of that enemy.
  */
@@ -35,19 +33,21 @@ public class SplashTargeterSystem extends BaseTargeterSystem {
     private EnemyManager enemyManager;
 
     /**
-     * Selects a target enemy and then all within a small range of that target
+     * Determine which enemies should be attacked.
+     * Called against the targeter entity.
      * <p>
-     * Filters on {@link SplashTargeterComponent}
+     * Filters on {@link LocationComponent} and {@link SplashTargeterComponent}
      *
      * @see SelectEnemiesEvent
      */
     @ReceiveEvent
-    public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SplashTargeterComponent towerTargeter) {
-        Set<EntityRef> enemiesInRange = enemyManager.getEnemiesInRange(locationComponent.getWorldPosition(), towerTargeter.getRange());
-        EntityRef target = getSingleTarget(enemiesInRange, towerTargeter.getSelectionMethod());
+    public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SplashTargeterComponent targeterComponent) {
+        EntityRef target = getTarget(locationComponent.getWorldPosition(), targeterComponent, enemyManager);
+
         if (target.exists()) {
             LocationComponent targetLocation = target.getComponent(LocationComponent.class);
-            event.addToList(enemyManager.getEnemiesInRange(targetLocation.getWorldPosition(), towerTargeter.getSplashRange()));
+            event.addToList(enemyManager.getEnemiesInRange(targetLocation.getWorldPosition(), targeterComponent.getSplashRange()));
         }
+        targeterComponent.setLastTarget(target);
     }
 }

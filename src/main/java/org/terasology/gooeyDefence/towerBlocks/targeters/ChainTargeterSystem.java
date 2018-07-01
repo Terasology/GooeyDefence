@@ -46,13 +46,8 @@ public class ChainTargeterSystem extends BaseTargeterSystem {
      */
     @ReceiveEvent
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, ChainTargeterComponent targeterComponent) {
-        EntityRef target = targeterComponent.getLastTarget();
-        if (!canSelectEnemy(target, locationComponent.getWorldPosition(), targeterComponent)) {
-            Set<EntityRef> targets = enemyManager.getEnemiesInRange(
-                    locationComponent.getWorldPosition(),
-                    targeterComponent.getRange());
-            target = getSingleTarget(targets, targeterComponent.getSelectionMethod());
-        }
+        EntityRef target = getTarget(locationComponent.getWorldPosition(), targeterComponent, enemyManager);
+
         if (target.exists()) {
             event.addToList(chainToNearby(target, targeterComponent.getChainLength(), targeterComponent.getChainRange()));
         }
@@ -89,19 +84,5 @@ public class ChainTargeterSystem extends BaseTargeterSystem {
         return result;
     }
 
-    /**
-     * Checks if the enemy can be targeted.
-     * Used to check if the enemy from last round can be reused.
-     *
-     * @param target            The target to check for
-     * @param targeterPos       The position of the target
-     * @param targeterComponent The targeter
-     * @return True if the targeter can attack the enemy
-     */
-    private boolean canSelectEnemy(EntityRef target, Vector3f targeterPos, ChainTargeterComponent targeterComponent) {
-        return target.exists() &&
-                target.getComponent(LocationComponent.class)
-                        .getWorldPosition()
-                        .distance(targeterPos) < targeterComponent.getRange();
-    }
+
 }

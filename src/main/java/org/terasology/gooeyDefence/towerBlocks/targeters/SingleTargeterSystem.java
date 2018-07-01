@@ -23,10 +23,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
-
-import java.util.Set;
 
 /**
  * Targets the first enemy within range.
@@ -53,27 +50,13 @@ public class SingleTargeterSystem extends BaseTargeterSystem {
      */
     @ReceiveEvent
     public void onDoSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SingleTargeterComponent targeterComponent) {
-        EntityRef lastTarget = targeterComponent.getLastTarget();
-        if (canSelectEnemy(lastTarget, locationComponent.getWorldPosition(), targeterComponent)) {
-            event.addToList(lastTarget);
-        } else {
-            Set<EntityRef> targets = enemyManager.getEnemiesInRange(
-                    locationComponent.getWorldPosition(),
-                    targeterComponent.getRange());
-            EntityRef target = getSingleTarget(targets, targeterComponent.getSelectionMethod());
-            targeterComponent.setLastTarget(target);
-            if (target.exists()) {
-                event.addToList(target);
-            }
+        EntityRef target = getTarget(locationComponent.getWorldPosition(), targeterComponent, enemyManager);
+
+        if (target.exists()) {
+            event.addToList(target);
         }
+        targeterComponent.setLastTarget(target);
     }
 
-
-    private boolean canSelectEnemy(EntityRef target, Vector3f targeterPos, SingleTargeterComponent targeterComponent) {
-        return target.exists() &&
-                target.getComponent(LocationComponent.class)
-                        .getWorldPosition()
-                        .distance(targeterPos) < targeterComponent.getRange();
-    }
 
 }
