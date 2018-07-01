@@ -166,7 +166,7 @@ public class TowerManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, TowerComponent component) {
-        if (isEventIdCorrect(entity, event.getActionId())) {
+        if (DefenceField.isFieldActivated() && isEventIdCorrect(entity, event.getActionId())) {
             int corePower = getTotalCorePower(component);
             int totalDrain = getEffectorDrain(component) + getTargeterDrain(component);
             if (corePower >= totalDrain) {
