@@ -131,15 +131,13 @@ public class TowerManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onTowerChanged(TowerChangedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
-        for (EntityRef newBlock : event.getChangedBlocks()) {
-            try {
-                TowerTargeter targeter = DefenceField.getComponentExtending(newBlock, TowerTargeter.class);
+        for (EntityRef targeter : towerComponent.targeter) {
+            if (event.getChangedBlocks().contains(targeter)) {
+                TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
                 delayManager.addPeriodicAction(towerEntity,
-                        buildEventId(towerEntity, newBlock),
-                        targeter.getAttackSpeed(),
-                        targeter.getAttackSpeed());
-            } catch (IllegalArgumentException ignored) {
-                /* The block is not a Targeter so we ignore it. */
+                        buildEventId(towerEntity, targeter),
+                        targeterComponent.getAttackSpeed(),
+                        targeterComponent.getAttackSpeed());
             }
         }
     }
