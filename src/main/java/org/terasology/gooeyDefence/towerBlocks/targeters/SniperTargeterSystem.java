@@ -45,16 +45,8 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
      */
     @ReceiveEvent
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SniperTargeterComponent targeterComponent) {
-        EntityRef target = targeterComponent.getLastTarget();
         Vector3f worldPos = locationComponent.getWorldPosition();
-        if (!canUseTarget(target, worldPos, targeterComponent)) {
-
-            Set<EntityRef> outerEnemies = enemyManager.getEnemiesInRange(worldPos, targeterComponent.getRange());
-            Set<EntityRef> innerEnemies = enemyManager.getEnemiesInRange(worldPos, targeterComponent.getMinimumRange());
-            Set<EntityRef> inRangeEnemies = Sets.difference(outerEnemies, innerEnemies);
-
-            target = getSingleTarget(inRangeEnemies, targeterComponent.getSelectionMethod());
-        }
+        EntityRef target = getTarget(worldPos, targeterComponent, enemyManager);
         if (target.exists()) {
             event.addToList(target);
         }
@@ -69,7 +61,7 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
      * @param targeterComponent The targeter
      * @return True if the targeter can attack the enemy
      */
-    private boolean canUseTarget(EntityRef target, Vector3f targeterPos, SniperTargeterComponent targeterComponent) {
+    protected boolean canUseTarget(EntityRef target, Vector3f targeterPos, SniperTargeterComponent targeterComponent) {
         if (target.exists()) {
             Vector3f enemyLocation = target.getComponent(LocationComponent.class).getWorldPosition();
             float enemyDistance = targeterPos.distanceSquared(enemyLocation);
@@ -78,5 +70,29 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Gets a single targetable enemy within the tower's range
+     * <p>
+     * Attempts to use the entity that was targeted last round.
+     * If that is not possible it picks an enemy in range based on the selection method listed
+     *
+     * @param targeterPos       The position of the targeter block
+     * @param targeterComponent The targeter component on the targeter
+     * @param enemyManager      The enemy manager to use if a new enemy needs to be picked
+     * @return A suitable enemy in range, or the null entity if none was found
+     */
+    protected EntityRef getTarget(Vector3f targeterPos, SniperTargeterComponent targeterComponent, EnemyManager enemyManager) {
+        EntityRef target = targeterComponent.getLastTarget();
+        if (!canUseTarget(target, targeterPos, targeterComponent)) {
+
+            Set<EntityRef> outerEnemies = enemyManager.getEnemiesInRange(targeterPos, targeterComponent.getRange());
+            Set<EntityRef> innerEnemies = enemyManager.getEnemiesInRange(targeterPos, targeterComponent.getMinimumRange());
+            Set<EntityRef> inRangeEnemies = Sets.difference(outerEnemies, innerEnemies);
+
+            target = getSingleTarget(inRangeEnemies, targeterComponent.getSelectionMethod());
+        }
+        return target;
     }
 }
