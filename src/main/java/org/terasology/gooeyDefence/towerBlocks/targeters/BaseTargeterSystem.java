@@ -30,9 +30,8 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- *
+ * A base system for tower targeters that provides common methods.
  */
-
 public class BaseTargeterSystem extends BaseComponentSystem {
 
     /**
