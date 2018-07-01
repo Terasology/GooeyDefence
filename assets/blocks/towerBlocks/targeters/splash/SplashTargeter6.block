@@ -1,0 +1,7 @@
+{
+  "entity": {
+    "prefab": "GooeyDefence:SplashTargeter6"
+  },
+  "blockTile": "GooeyDefence:SplashTargeter6",
+  "translucent":true
+}
