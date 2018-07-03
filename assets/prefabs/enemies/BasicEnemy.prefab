@@ -1,0 +1,39 @@
+{
+  "alwaysRelevant": true,
+  "DisplayName": {
+    "name": "Basic Enemy",
+    "description": "The basic attacker"
+  },
+  "skeletalmesh": {
+    "mesh": "enemy",
+    "heightOffset": -2.0,
+    "material": "basicEnemy",
+    "animationPool": [
+      "gooeyIdleBreathing"
+    ],
+    "loop": true,
+    "scale": [
+      0.25,
+      0.25,
+      0.25
+    ]
+  },
+  "Location": {},
+  "Network": {},
+  "BoxShape": {
+    "extents": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "Gooey": {
+  },
+  "Movement": {
+    "speed": 3
+  },
+  "GooeyDefence:Health": {
+    "health": 20
+  }
+}
+
