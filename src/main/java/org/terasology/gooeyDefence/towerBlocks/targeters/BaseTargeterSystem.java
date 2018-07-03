@@ -18,9 +18,13 @@ package org.terasology.gooeyDefence.towerBlocks.targeters;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.components.enemies.PathComponent;
 import org.terasology.gooeyDefence.health.HealthComponent;
 import org.terasology.gooeyDefence.towerBlocks.SelectionMethod;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
+import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.geom.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,9 +34,8 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- *
+ * A base system for tower targeters that provides common methods.
  */
-
 public class BaseTargeterSystem extends BaseComponentSystem {
 
     /**
@@ -75,5 +78,42 @@ public class BaseTargeterSystem extends BaseComponentSystem {
         }
         Optional<EntityRef> chosenEnemy = targets.stream().min(comparator);
         return chosenEnemy.orElse(EntityRef.NULL);
+    }
+
+    /**
+     * Checks if the enemy from last round can be reused.
+     *
+     * @param targeterPos       The position of the target
+     * @param targeterComponent The targeter
+     * @return True if the targeter can attack the enemy
+     */
+    protected boolean canUseTarget(EntityRef target, Vector3f targeterPos, TowerTargeter targeterComponent) {
+        return target.exists() &&
+                target.getComponent(LocationComponent.class)
+                        .getWorldPosition()
+                        .distance(targeterPos) < targeterComponent.getRange();
+    }
+
+    /**
+     * Gets a single targetable enemy within the tower's range
+     * <p>
+     * Attempts to use the entity that was targeted last round.
+     * If that is not possible it picks an enemy in range based on the selection method listed
+     *
+     * @param targeterPos       The position of the targeter block
+     * @param targeterComponent The targeter component on the targeter
+     * @param enemyManager      The enemy manager to use if a new enemy needs to be picked
+     * @return A suitable enemy in range, or the null entity if none was found
+     */
+    protected EntityRef getTarget(Vector3f targeterPos, TowerTargeter targeterComponent, EnemyManager enemyManager) {
+        EntityRef target = targeterComponent.getLastTarget();
+
+        if (!canUseTarget(target, targeterPos, targeterComponent)) {
+            Set<EntityRef> enemiesInRange = enemyManager.getEnemiesInRange(
+                    targeterPos,
+                    targeterComponent.getRange());
+            target = getSingleTarget(enemiesInRange, targeterComponent.getSelectionMethod());
+        }
+        return target;
     }
 }

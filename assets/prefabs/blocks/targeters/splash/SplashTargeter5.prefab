@@ -1,0 +1,9 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "SplashTargeter": {
+    "drain": 5,
+    "range": 6,
+    "attackSpeed":200,
+	"splashRange": 3
+  }
+}

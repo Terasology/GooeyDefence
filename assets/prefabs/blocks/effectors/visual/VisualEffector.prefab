@@ -1,0 +1,6 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "VisualEffector": {
+    "drain": 0
+  }
+}

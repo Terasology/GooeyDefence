@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.targeters;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -26,37 +24,30 @@ import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 
 /**
- * Targets the first enemy within range.
- * <p>
- * Inherits methods and properties from {@link BaseTargeterSystem}
- *
- * @see SingleTargeterComponent
- * @see BaseTargeterSystem
+ * Selects a single target enemy and then targets all enemies within a small range of that enemy.
  */
 @RegisterSystem
-public class SingleTargeterSystem extends BaseTargeterSystem {
-    private static final Logger logger = LoggerFactory.getLogger(SingleTargeterSystem.class);
+public class SplashTargeterSystem extends BaseTargeterSystem {
 
     @In
-    protected EnemyManager enemyManager;
+    private EnemyManager enemyManager;
 
     /**
      * Determine which enemies should be attacked.
      * Called against the targeter entity.
      * <p>
-     * Filters on {@link LocationComponent} and {@link SingleTargeterComponent}
+     * Filters on {@link LocationComponent} and {@link SplashTargeterComponent}
      *
      * @see SelectEnemiesEvent
      */
     @ReceiveEvent
-    public void onDoSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SingleTargeterComponent targeterComponent) {
+    public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SplashTargeterComponent targeterComponent) {
         EntityRef target = getTarget(locationComponent.getWorldPosition(), targeterComponent, enemyManager);
 
         if (target.exists()) {
-            event.addToList(target);
+            LocationComponent targetLocation = target.getComponent(LocationComponent.class);
+            event.addToList(enemyManager.getEnemiesInRange(targetLocation.getWorldPosition(), targeterComponent.getSplashRange()));
         }
         targeterComponent.setLastTarget(target);
     }
-
-
 }

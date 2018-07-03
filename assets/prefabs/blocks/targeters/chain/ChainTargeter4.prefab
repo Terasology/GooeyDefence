@@ -1,0 +1,10 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "ChainTargeter": {
+    "drain": 5,
+    "range": 2,
+    "attackSpeed": 500,
+    "chainLength": 5,
+    "chainRange": 4
+  }
+}

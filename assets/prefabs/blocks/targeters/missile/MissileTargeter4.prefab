@@ -1,0 +1,10 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "MissileTargeter": {
+    "drain": 5,
+	"splashRange": 2.5,
+    "minimumRange": 10,
+    "range": 35,
+    "attackSpeed":1400
+  }
+}

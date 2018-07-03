@@ -224,6 +224,9 @@ public final class DefenceField {
      * @return The component that extends the superclass
      */
     public static <Y> Y getComponentExtending(EntityRef entity, Class<Y> superClass) {
+        if (!entity.exists()) {
+            throw new IllegalArgumentException("Component extending " + superClass.getSimpleName() + " requested from a null entity");
+        }
         for (Component component : entity.iterateComponents()) {
             if (superClass.isInstance(component)) {
                 return superClass.cast(component);

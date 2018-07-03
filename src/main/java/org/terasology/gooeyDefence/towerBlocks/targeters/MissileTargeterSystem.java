@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,48 +15,49 @@
  */
 package org.terasology.gooeyDefence.towerBlocks.targeters;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 
+import java.util.Set;
+
 /**
- * Targets the first enemy within range.
+ * Uses the same base target selection as the SniperTargeter
  * <p>
- * Inherits methods and properties from {@link BaseTargeterSystem}
+ * Targets in an AOE around a distant enemy.
  *
- * @see SingleTargeterComponent
- * @see BaseTargeterSystem
+ * @see SniperTargeterSystem
  */
 @RegisterSystem
-public class SingleTargeterSystem extends BaseTargeterSystem {
-    private static final Logger logger = LoggerFactory.getLogger(SingleTargeterSystem.class);
+public class MissileTargeterSystem extends SniperTargeterSystem {
 
     @In
-    protected EnemyManager enemyManager;
+    private EnemyManager enemyManager;
 
     /**
      * Determine which enemies should be attacked.
      * Called against the targeter entity.
      * <p>
-     * Filters on {@link LocationComponent} and {@link SingleTargeterComponent}
+     * Filters on {@link LocationComponent} and {@link MissileTargeterComponent}
      *
      * @see SelectEnemiesEvent
      */
     @ReceiveEvent
-    public void onDoSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SingleTargeterComponent targeterComponent) {
-        EntityRef target = getTarget(locationComponent.getWorldPosition(), targeterComponent, enemyManager);
+    public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, MissileTargeterComponent targeterComponent) {
+
+        Vector3f worldPos = locationComponent.getWorldPosition();
+        EntityRef target = getTarget(worldPos, targeterComponent, enemyManager);
 
         if (target.exists()) {
-            event.addToList(target);
+            Vector3f targetPos = target.getComponent(LocationComponent.class).getWorldPosition();
+            Set<EntityRef> targets = enemyManager.getEnemiesInRange(targetPos, targeterComponent.getSplashRange());
+            event.addToList(targets);
         }
         targeterComponent.setLastTarget(target);
     }
-
-
 }

@@ -88,6 +88,20 @@ public class TowerManager extends BaseComponentSystem {
     }
 
     /**
+     * Remove all scheduled delays before the game is shutdown.
+     */
+    @Override
+    public void shutdown() {
+        for (EntityRef tower : towerEntities) {
+            TowerComponent towerComponent = tower.getComponent(TowerComponent.class);
+            for (EntityRef targeter : towerComponent.targeter) {
+                delayManager.cancelPeriodicAction(tower, buildEventId(tower, targeter));
+            }
+            tower.destroy();
+        }
+    }
+
+    /**
      * Called when a tower is created.
      * Adds the tower to the list and sets the periodic actions for it's attacks
      * <p>
@@ -117,15 +131,13 @@ public class TowerManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onTowerChanged(TowerChangedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
-        for (EntityRef newBlock : event.getChangedBlocks()) {
-            try {
-                TowerTargeter targeter = DefenceField.getComponentExtending(newBlock, TowerTargeter.class);
+        for (EntityRef targeter : towerComponent.targeter) {
+            if (event.getChangedBlocks().contains(targeter)) {
+                TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
                 delayManager.addPeriodicAction(towerEntity,
-                        buildEventId(towerEntity, newBlock),
-                        targeter.getAttackSpeed(),
-                        targeter.getAttackSpeed());
-            } catch (IllegalArgumentException ignored) {
-                /* The block is not a Targeter so we ignore it. */
+                        buildEventId(towerEntity, targeter),
+                        targeterComponent.getAttackSpeed(),
+                        targeterComponent.getAttackSpeed());
             }
         }
     }
@@ -139,7 +151,7 @@ public class TowerManager extends BaseComponentSystem {
     @ReceiveEvent
     public void onTowerDestroyed(TowerDestroyedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
         for (EntityRef targeter : towerComponent.targeter) {
-            delayManager.cancelPeriodicAction(towerEntity, buildEventId(towerEntity, targeter));
+            handleTargeterRemoval(towerEntity, targeter);
         }
         towerEntities.remove(towerEntity);
     }
@@ -154,13 +166,31 @@ public class TowerManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, TowerComponent component) {
-        if (isEventIdCorrect(entity, event.getActionId())) {
+        if (DefenceField.isFieldActivated() && isEventIdCorrect(entity, event.getActionId())) {
             int corePower = getTotalCorePower(component);
             int totalDrain = getEffectorDrain(component) + getTargeterDrain(component);
             if (corePower >= totalDrain) {
                 EntityRef targeter = entityManager.getEntity(getTargeterId(event.getActionId()));
                 handleTowerShooting(component, targeter);
             }
+        }
+    }
+
+    /**
+     * Handles the removal of a targeter from a tower.
+     * Does this by calling the tower to end the effects on the
+     *
+     * @param tower
+     * @param targeter
+     */
+    private void handleTargeterRemoval(EntityRef tower, EntityRef targeter) {
+
+        delayManager.cancelPeriodicAction(tower, buildEventId(tower, targeter));
+
+        TowerComponent towerComponent = tower.getComponent(TowerComponent.class);
+        TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
+        for (EntityRef enemy : targeterComponent.getAffectedEnemies()) {
+            endEffects(towerComponent.effector, enemy, targeterComponent.getMultiplier());
         }
     }
 
