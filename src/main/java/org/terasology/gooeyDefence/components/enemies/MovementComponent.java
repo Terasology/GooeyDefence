@@ -21,13 +21,13 @@ import org.terasology.entitySystem.Component;
  * Stores information on how to move the enemy.
  */
 public class MovementComponent implements Component {
-    private int speed;
+    private float speed;
 
-    public int getSpeed() {
+    public float getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(float speed) {
         this.speed = speed;
     }
 }

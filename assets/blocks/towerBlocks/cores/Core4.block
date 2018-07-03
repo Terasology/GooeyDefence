@@ -1,0 +1,7 @@
+{
+  "entity": {
+    "prefab": "GooeyDefence:Core4"
+  },
+  "blockTile": "GooeyDefence:Core4",
+  "translucent":true
+}

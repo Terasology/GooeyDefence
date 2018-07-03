@@ -182,8 +182,8 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param range The range to search in.
      * @return A set of all enemies found within this range.
      */
-    public Set<EntityRef> getEnemiesInRange(Vector3f pos, int range) {
-        int rangeSqr = range * range;
+    public Set<EntityRef> getEnemiesInRange(Vector3f pos, float range) {
+        float rangeSqr = range * range;
         Set<EntityRef> result = new HashSet<>();
         for (EntityRef enemy : enemies) {
             Vector3f enemyPos = enemy.getComponent(LocationComponent.class).getWorldPosition();

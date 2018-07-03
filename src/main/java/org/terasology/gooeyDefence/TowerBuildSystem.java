@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence;
 
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.Component;
@@ -26,6 +27,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.components.towers.TowerMultiBlockComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.gooeyDefence.events.tower.TowerChangedEvent;
 import org.terasology.gooeyDefence.events.tower.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.tower.TowerDestroyedEvent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
@@ -40,12 +42,12 @@ import org.terasology.registry.In;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.items.OnBlockItemPlaced;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+/**
+ * Handles the creation and destruction of towers
+ */
 @RegisterSystem
 public class TowerBuildSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(TowerBuildSystem.class);
@@ -64,14 +66,18 @@ public class TowerBuildSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onActivate(ActivateEvent event, EntityRef entity, TowerMultiBlockComponent component) {
         logger.info("Tower Entity: " + component.getTowerEntity());
-
     }
 
+    /**
+     * Called when the field is activated, either from a new game or loaded save.
+     *
+     * @see OnFieldActivated
+     */
     @ReceiveEvent
     public void onFieldActivated(OnFieldActivated event, EntityRef savedDataEntity) {
         Iterable<EntityRef> blockEntities = entityManager.getEntitiesWith(TowerMultiBlockComponent.class);
         /* Clear entities */
-        blockEntities.forEach(entity -> entity.getComponent(TowerMultiBlockComponent.class).setTowerEntity(-1));
+        blockEntities.forEach(entity -> entity.getComponent(TowerMultiBlockComponent.class).setTowerEntity(EntityRef.NULL));
         /* Rebuild towers */
         blockEntities.forEach(this::handleTowerBlock);
     }
@@ -90,34 +96,11 @@ public class TowerBuildSystem extends BaseComponentSystem {
     }
 
     /**
-     * Handles a tower block being placed
+     * Wrapper to allow easy iteration over a collection of entities.
      *
-     * @param pos         The position of the block being placed
-     * @param blockEntity The entity of the block being placed
+     * @param entityRef The block entity to handle
+     * @see #handleTowerBlock(Vector3i, EntityRef)
      */
-    private void handleTowerBlock(Vector3i pos, EntityRef blockEntity) {
-        /* Find all tower blocks nearby */
-        List<EntityRef> attachedTowers = findAttachedTowers(pos);
-        Set<Long> towers = new HashSet<>();
-        attachedTowers.forEach(entityRef -> towers.add(entityRef.getComponent(TowerMultiBlockComponent.class).getTowerEntity()));
-        switch (towers.size()) {
-            /* No neighboring tower */
-            case 0:
-                addToTower(createNewTower(), blockEntity);
-                break;
-            /* One neighboring tower */
-            case 1:
-                addToTower(entityManager.getEntity(towers.iterator().next()), blockEntity);
-                break;
-            /* Multiple neighboring towers */
-            default:
-                /* We add the block to any tower. It will be correctly sorted in the next line */
-                addToTower(entityManager.getEntity(towers.iterator().next()), blockEntity);
-                mergeTowers(towers);
-                break;
-        }
-    }
-
     private void handleTowerBlock(EntityRef entityRef) {
         if (entityRef.hasComponent(LocationComponent.class)) {
             handleTowerBlock(new Vector3i(entityRef.getComponent(LocationComponent.class).getWorldPosition()), entityRef);
@@ -125,32 +108,79 @@ public class TowerBuildSystem extends BaseComponentSystem {
     }
 
     /**
+     * Handles a tower block being placed
+     *
+     * @param pos         The position of the block being placed
+     * @param blockEntity The entity of the block being placed
+     */
+    private void handleTowerBlock(Vector3i pos, EntityRef blockEntity) {
+        /* Find all tower blocks nearby */
+        Set<EntityRef> towers = findAttachedTowers(pos);
+        switch (towers.size()) {
+            /* No neighboring tower */
+            case 0:
+                addToTower(createNewTower(), blockEntity)
+                        .send(new TowerCreatedEvent());
+                break;
+            /* One neighboring tower */
+            case 1:
+                addToTower(towers.iterator().next(), blockEntity)
+                        .send(new TowerChangedEvent(blockEntity));
+                break;
+            /* Multiple neighboring towers */
+            default:
+                /* Pick a tower to merge all the others into */
+                EntityRef targetTower = towers.iterator().next();
+                addToTower(targetTower, blockEntity);
+                towers.remove(targetTower);
+
+                Set<EntityRef> oldBlocks = getAllFrom(targetTower);
+
+                mergeTowers(targetTower, towers);
+
+                Set<EntityRef> newBlocks = getAllFrom(targetTower);
+                newBlocks = Sets.difference(newBlocks, oldBlocks);
+                targetTower.send(new TowerChangedEvent(newBlocks));
+                break;
+        }
+    }
+
+    /**
      * Merge multiple towers into a single tower entity
      *
-     * @param towers The towers to merge
+     * @param towers      The towers to merge
+     * @param targetTower The tower to merge all the others into
      */
-    private void mergeTowers(Set<Long> towers) {
+    private void mergeTowers(EntityRef targetTower, Set<EntityRef> towers) {
         /* Select a tower to merge into */
-        EntityRef newTower = entityManager.getEntity(towers.iterator().next());
-        TowerComponent newComponent = newTower.getComponent(TowerComponent.class);
-        towers.remove(newTower.getId());
-        for (long towerID : towers) {
-            /* Get all the blocks from the old tower */
-            EntityRef towerEntity = entityManager.getEntity(towerID);
-            Set<EntityRef> blocks = getAllFrom(towerEntity);
-            /* Set them all to the new tower */
-            blocks.forEach(entityRef -> entityRef.getComponent(TowerMultiBlockComponent.class).setTowerEntity(newTower.getId()));
-
-            /* Store them into the new tower */
-            TowerComponent component = towerEntity.getComponent(TowerComponent.class);
-            newComponent.cores.addAll(component.cores);
-            newComponent.effector.addAll(component.effector);
-            newComponent.targeter.addAll(component.targeter);
-            newComponent.plains.addAll(component.plains);
-
-            /* Destroy the old tower entity */
-            removeTower(towerEntity);
+        for (EntityRef oldTower : towers) {
+            mergeTowers(targetTower, oldTower);
         }
+    }
+
+    /**
+     * Merges two towers into a single tower entity.
+     *
+     * @param destination The tower to merge into
+     * @param source      The tower merging into the other. This entity will be destroyed.
+     */
+    private void mergeTowers(EntityRef destination, EntityRef source) {
+        TowerComponent destComponent = destination.getComponent(TowerComponent.class);
+        /* Get all the blocks from the old tower */
+        Set<EntityRef> blocks = getAllFrom(source);
+        /* Set them all to the new tower */
+        blocks.forEach(entityRef -> entityRef.getComponent(TowerMultiBlockComponent.class).setTowerEntity(destination));
+
+        /* Store them into the new tower */
+        TowerComponent component = source.getComponent(TowerComponent.class);
+        destComponent.cores.addAll(component.cores);
+        destComponent.effector.addAll(component.effector);
+        destComponent.targeter.addAll(component.targeter);
+        destComponent.plains.addAll(component.plains);
+
+        /* Destroy the old tower entity */
+        source.send(new TowerDestroyedEvent());
+        removeTower(source);
     }
 
     /**
@@ -159,24 +189,25 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * @param blockEntity The block entity to add.
      * @param towerEntity The tower entity to add it to.
      */
-    private void addToTower(EntityRef towerEntity, EntityRef blockEntity) {
-        blockEntity.getComponent(TowerMultiBlockComponent.class).setTowerEntity(towerEntity.getId());
+    private EntityRef addToTower(EntityRef towerEntity, EntityRef blockEntity) {
+        blockEntity.getComponent(TowerMultiBlockComponent.class).setTowerEntity(towerEntity);
         TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
 
         /* Add it to the relevant list of blocks */
         for (Component component : blockEntity.iterateComponents()) {
             if (component instanceof TowerCore) {
-                towerComponent.cores.add(blockEntity.getId());
-                return;
+                towerComponent.cores.add(blockEntity);
+                return towerEntity;
             } else if (component instanceof TowerEffector) {
-                towerComponent.effector.add(blockEntity.getId());
-                return;
+                towerComponent.effector.add(blockEntity);
+                return towerEntity;
             } else if (component instanceof TowerTargeter) {
-                towerComponent.targeter.add(blockEntity.getId());
-                return;
+                towerComponent.targeter.add(blockEntity);
+                return towerEntity;
             }
         }
-        towerComponent.plains.add(blockEntity.getId());
+        towerComponent.plains.add(blockEntity);
+        return towerEntity;
     }
 
     /**
@@ -185,25 +216,24 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * @return The new tower entity
      */
     private EntityRef createNewTower() {
-        EntityRef towerEntity = entityManager.create("GooeyDefence:TowerEntity");
-        towerEntity.send(new TowerCreatedEvent());
-        return towerEntity;
+        return entityManager.create("GooeyDefence:TowerEntity");
     }
 
     /**
-     * Scan around the position and find any tower blocks that ar part of an existing structure.
+     * Scan around the position and find any tower blocks that are a part of an existing structure.
      *
      * @param position The position to scan around
-     * @return Any block entities that are part of a tower.
+     * @return The neighbouring towers
      */
-    private List<EntityRef> findAttachedTowers(Vector3i position) {
-        List<EntityRef> results = new ArrayList<>();
+    private Set<EntityRef> findAttachedTowers(Vector3i position) {
+        Set<EntityRef> results = new HashSet<>();
         for (Side side : Side.values()) {
             Vector3i sidePos = new Vector3i(side.getVector3i()).add(position);
             EntityRef entity = blockEntityRegistry.getExistingEntityAt(sidePos);
+
             TowerMultiBlockComponent component = entity.getComponent(TowerMultiBlockComponent.class);
-            if (component != null && component.getTowerEntity() != -1) {
-                results.add(entity);
+            if (component != null && component.getTowerEntity().exists()) {
+                results.add(component.getTowerEntity());
             }
         }
         return results;
@@ -219,10 +249,11 @@ public class TowerBuildSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onDoDestroy(DoDestroyEvent event, EntityRef entity, TowerMultiBlockComponent component) {
-        if (component.getTowerEntity() != -1) {
-            long towerId = component.getTowerEntity();
-            removeBlockFromTower(entityManager.getEntity(towerId), entity);
-            rebuildTower(towerId);
+        EntityRef tower = component.getTowerEntity();
+        if (tower.exists()) {
+            tower.send(new TowerDestroyedEvent());
+            removeBlockFromTower(tower, entity);
+            rebuildTower(tower);
         }
     }
 
@@ -234,11 +265,11 @@ public class TowerBuildSystem extends BaseComponentSystem {
      */
     private void removeBlockFromTower(EntityRef tower, EntityRef block) {
         TowerComponent component = tower.getComponent(TowerComponent.class);
-        component.cores.remove(block.getId());
-        component.targeter.remove(block.getId());
-        component.effector.remove(block.getId());
-        component.plains.remove(block.getId());
-        block.getComponent(TowerMultiBlockComponent.class).setTowerEntity(-1);
+        component.cores.remove(block);
+        component.targeter.remove(block);
+        component.effector.remove(block);
+        component.plains.remove(block);
+        block.getComponent(TowerMultiBlockComponent.class).setTowerEntity(EntityRef.NULL);
     }
 
     /**
@@ -248,21 +279,21 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * @param tower The tower to remove
      */
     private void removeTower(EntityRef tower) {
-        tower.send(new TowerDestroyedEvent());
         tower.destroy();
     }
 
     /**
      * Rebuilds a given tower into one or multiple towers
      *
-     * @param towerID The tower to rebuild
+     * @param tower The tower to rebuild
      */
-    private void rebuildTower(long towerID) {
-        Set<EntityRef> blocks = getAllFrom(entityManager.getEntity(towerID));
-        /* Remove their references to a tower entity */
-        blocks.forEach(entityRef -> entityRef.getComponent(TowerMultiBlockComponent.class).setTowerEntity(-1));
+    private void rebuildTower(EntityRef tower) {
+        Set<EntityRef> blocks = getAllFrom(tower);
+        removeTower(tower);
 
-        removeTower(entityManager.getEntity(towerID));
+        /* Remove their references to a tower entity */
+        blocks.forEach(entityRef -> entityRef.getComponent(TowerMultiBlockComponent.class).setTowerEntity(EntityRef.NULL));
+
         for (EntityRef block : blocks) {
             Vector3i pos = new Vector3i(block.getComponent(LocationComponent.class).getWorldPosition());
             handleTowerBlock(pos, block);
@@ -277,14 +308,13 @@ public class TowerBuildSystem extends BaseComponentSystem {
      */
     private Set<EntityRef> getAllFrom(EntityRef tower) {
         TowerComponent component = tower.getComponent(TowerComponent.class);
-        Set<Long> results = new HashSet<>();
+        Set<EntityRef> results = new HashSet<>();
         results.addAll(component.cores);
         results.addAll(component.effector);
         results.addAll(component.targeter);
         results.addAll(component.plains);
 
-        /* Convert the Longs to Entity Refs */
-        return results.stream().map(id -> entityManager.getEntity(id)).collect(Collectors.toSet());
+        return results;
     }
 
 }

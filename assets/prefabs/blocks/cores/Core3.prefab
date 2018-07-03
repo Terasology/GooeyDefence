@@ -1,0 +1,7 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "Core": {
+    "power": 30,
+    "attackSpeed": 300
+  }
+}

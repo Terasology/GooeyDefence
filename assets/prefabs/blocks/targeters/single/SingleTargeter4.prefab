@@ -1,0 +1,8 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "SingleTargeter": {
+    "drain": 5,
+    "range": 5,
+    "attackSpeed":250
+  }
+}

@@ -16,10 +16,13 @@
 package org.terasology.gooeyDefence.events.tower;
 
 import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.components.towers.TowerComponent;
 
 /**
  * Event sent when a tower is destroyed.
  * Sent against the destroyed tower.
+ *
+ * @see TowerComponent
  */
 public class TowerDestroyedEvent implements Event {
 }

@@ -1,7 +1,0 @@
-{
-  "parent": "GooeyDefence:PlainBlock",
-  "SingleTargetTargeter": {
-    "drain": 5,
-    "range": 2
-  }
-}

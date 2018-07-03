@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.components.towers;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.entity.EntityRef;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,8 +26,10 @@ import java.util.Set;
  * Stores the IDs of all the blocks that make up the tower.
  */
 public class TowerComponent implements Component {
-    public Set<Long> cores = new HashSet<>();
-    public Set<Long> effector = new HashSet<>();
-    public Set<Long> targeter = new HashSet<>();
-    public Set<Long> plains = new HashSet<>();
+    public Set<EntityRef> cores = new HashSet<>();
+    public Set<EntityRef> effector = new HashSet<>();
+    public Set<EntityRef> targeter = new HashSet<>();
+    public Set<EntityRef> plains = new HashSet<>();
+    public int attackCount;
+    public Set<EntityRef> lastTargets = new HashSet<>();
 }
