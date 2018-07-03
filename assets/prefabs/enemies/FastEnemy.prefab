@@ -1,0 +1,39 @@
+{
+  "alwaysRelevant": true,
+  "DisplayName": {
+    "name": "Fast Enemy",
+    "description": "A fast but weak enemy type"
+  },
+  "skeletalmesh": {
+    "mesh": "enemy",
+    "heightOffset": -2.0,
+    "material": "fastEnemy",
+    "animationPool": [
+      "gooeyIdleBreathing"
+    ],
+    "loop": true,
+    "scale": [
+      0.25,
+      0.25,
+      0.25
+    ]
+  },
+  "Location": {},
+  "Network": {},
+  "BoxShape": {
+    "extents": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "Gooey": {
+  },
+  "Movement": {
+    "speed": 6
+  },
+  "GooeyDefence:Health": {
+    "health": 5
+  }
+}
+
