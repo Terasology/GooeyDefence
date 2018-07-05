@@ -134,11 +134,10 @@ public class TowerBuildSystem extends BaseComponentSystem {
             default:
                 /* Pick a tower to merge all the others into */
                 EntityRef targetTower = towers.iterator().next();
-                addToTower(targetTower, blockEntity);
-                towers.remove(targetTower);
-
                 Set<EntityRef> oldBlocks = getAllFrom(targetTower);
 
+                addToTower(targetTower, blockEntity);
+                towers.remove(targetTower);
                 mergeTowers(targetTower, towers);
 
                 Set<EntityRef> newBlocks = getAllFrom(targetTower);
