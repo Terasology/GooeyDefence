@@ -61,7 +61,7 @@ public class TowerManager extends BaseComponentSystem {
      * @see PeriodicActionTriggeredEvent
      */
     private static String buildEventId(EntityRef tower, EntityRef targeter) {
-        return "towerDefence" + tower.getId() + "|" + targeter.getId();
+        return "towerDefence|" + targeter.getId();
     }
 
     /**
@@ -73,7 +73,7 @@ public class TowerManager extends BaseComponentSystem {
      * @see PeriodicActionTriggeredEvent
      */
     private static boolean isEventIdCorrect(EntityRef tower, String eventId) {
-        return eventId.startsWith("towerDefence" + tower.getId());
+        return eventId.startsWith("towerDefence");
     }
 
     /**
