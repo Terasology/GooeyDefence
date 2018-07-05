@@ -1,0 +1,112 @@
+{
+  "type": "TowerInfoScreen",
+  "contents": {
+    "type": "RelativeLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "layoutInfo": {
+          "use-content-height": false,
+          "use-content-width": false,
+          "position-left": {
+            "offset": 32
+          },
+          "position-right": {
+            "offset": 32
+          },
+          "position-top": {
+            "offset": 32
+          },
+          "position-bottom": {
+            "offset": 32
+          }
+        },
+        "content": {
+          "type": "RelativeLayout",
+          "contents": [
+            {
+              "type": "UILabel",
+              "text": "Targeters",
+              "id": "targetersTitle",
+              "layoutInfo": {
+                "use-content-height": true,
+                "use-content-width": true,
+                "position-left": {
+                  "offset": 16
+                },
+                "position-top": {
+                  "offset": 16
+                }
+              }
+            },
+            {
+              "type": "ScrollableArea",
+              "id": "targeterListArea",
+              "content": {
+                "type": "ColumnLayout",
+                "id": "targeterList",
+                "verticalSpacing": 4,
+                "fillVerticalSpace": false
+              },
+              "layoutInfo": {
+                "use-content-height": false,
+                "use-content-width": true,
+                "position-left": {
+                  "offset": 16
+                },
+                "position-top": {
+                  "target": "BOTTOM",
+                  "offset": 6,
+                  "widget": "targetersTitle"
+                },
+                "position-bottom": {
+                  "target": "TOP",
+                  "offset": 16,
+                  "widget": "effectorTitle"
+                }
+              }
+            },
+            {
+              "type": "UILabel",
+              "text": "Effectors",
+              "id": "effectorTitle",
+              "layoutInfo": {
+                "use-content-height": true,
+                "use-content-width": true,
+                "position-left": {
+                  "offset": 16
+                },
+                "position-vertical-center": {}
+              }
+            },
+            {
+              "type": "ScrollableArea",
+              "id": "effectorsListArea",
+              "content": {
+                "type": "ColumnLayout",
+                "id": "effectorList",
+                "verticalSpacing": 4,
+                "fillVerticalSpace": false
+              },
+              "layoutInfo": {
+                "use-content-height": false,
+                "use-content-width": true,
+                "position-left": {
+                  "offset": 16
+                },
+                "position-top": {
+                  "target": "BOTTOM",
+                  "offset": 6,
+                  "widget": "effectorTitle"
+                },
+                "position-bottom": {
+                  "offset": 16
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
