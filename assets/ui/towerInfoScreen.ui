@@ -2,9 +2,11 @@
   "type": "TowerInfoScreen",
   "contents": {
     "type": "RelativeLayout",
+    "id": "outerLayout",
     "contents": [
       {
         "type": "UIBox",
+        "id": "outerBox",
         "layoutInfo": {
           "use-content-height": false,
           "use-content-width": false,
@@ -22,87 +24,129 @@
           }
         },
         "content": {
-          "type": "RelativeLayout",
+          "type": "ColumnLayout",
+          "id": "outerColumnLayout",
+          "columns": 2,
+          "column-widths": [
+            0.32,
+            0.68
+          ],
           "contents": [
             {
-              "type": "UILabel",
-              "text": "Targeters",
-              "id": "targetersTitle",
-              "layoutInfo": {
-                "use-content-height": true,
-                "use-content-width": true,
-                "position-left": {
-                  "offset": 16
+              "type": "RelativeLayout",
+              "id": "blockListLayout",
+              "contents": [
+                {
+                  "type": "UILabel",
+                  "text": "Targeters",
+                  "id": "targetersTitle",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-top": {
+                      "offset": 16
+                    }
+                  }
                 },
-                "position-top": {
-                  "offset": 16
+                {
+                  "type": "ScrollableArea",
+                  "id": "targeterListArea",
+                  "content": {
+                    "type": "ColumnLayout",
+                    "id": "targeterList",
+                    "verticalSpacing": 4,
+                    "fillVerticalSpace": false
+                  },
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    },
+                    "position-top": {
+                      "target": "BOTTOM",
+                      "offset": 6,
+                      "widget": "targetersTitle"
+                    },
+                    "position-bottom": {
+                      "target": "TOP",
+                      "offset": 16,
+                      "widget": "effectorTitle"
+                    }
+                  }
+                },
+                {
+                  "type": "UILabel",
+                  "text": "Effectors",
+                  "id": "effectorTitle",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-vertical-center": {}
+                  }
+                },
+                {
+                  "type": "ScrollableArea",
+                  "id": "effectorsListArea",
+                  "content": {
+                    "type": "ColumnLayout",
+                    "id": "effectorList",
+                    "verticalSpacing": 4,
+                    "fillVerticalSpace": false
+                  },
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    },
+                    "position-top": {
+                      "target": "BOTTOM",
+                      "offset": 6,
+                      "widget": "effectorTitle"
+                    },
+                    "position-bottom": {
+                      "offset": 16
+                    }
+                  }
                 }
-              }
+              ]
             },
             {
-              "type": "ScrollableArea",
-              "id": "targeterListArea",
-              "content": {
-                "type": "ColumnLayout",
-                "id": "targeterList",
-                "verticalSpacing": 4,
-                "fillVerticalSpace": false
-              },
-              "layoutInfo": {
-                "use-content-height": false,
-                "use-content-width": true,
-                "position-left": {
-                  "offset": 16
-                },
-                "position-top": {
-                  "target": "BOTTOM",
-                  "offset": 6,
-                  "widget": "targetersTitle"
-                },
-                "position-bottom": {
-                  "target": "TOP",
-                  "offset": 16,
-                  "widget": "effectorTitle"
+              "type": "RelativeLayout",
+              "id": "towerInfoLayout",
+              "contents": [
+                {
+                  "type": "UIBox",
+                  "id": "placeholderBox",
+                  "layoutInfo": {
+                    "position-top": {
+                      "offset": 4
+                    },
+                    "position-bottom": {
+                      "offset": 4
+                    },
+                    "position-left": {
+                      "offset": 4
+                    },
+                    "position-right": {
+                      "offset": 4
+                    }
+                  }
                 }
-              }
-            },
-            {
-              "type": "UILabel",
-              "text": "Effectors",
-              "id": "effectorTitle",
-              "layoutInfo": {
-                "use-content-height": true,
-                "use-content-width": true,
-                "position-left": {
-                  "offset": 16
-                },
-                "position-vertical-center": {}
-              }
-            },
-            {
-              "type": "ScrollableArea",
-              "id": "effectorsListArea",
-              "content": {
-                "type": "ColumnLayout",
-                "id": "effectorList",
-                "verticalSpacing": 4,
-                "fillVerticalSpace": false
-              },
-              "layoutInfo": {
-                "use-content-height": false,
-                "use-content-width": true,
-                "position-left": {
-                  "offset": 16
-                },
-                "position-top": {
-                  "target": "BOTTOM",
-                  "offset": 6,
-                  "widget": "effectorTitle"
-                },
-                "position-bottom": {
-                  "offset": 16
-                }
-              }
+              ]
             }
           ]
         }
