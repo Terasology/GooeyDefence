@@ -1,7 +1,40 @@
 {
   "parent": "GooeyDefence:PlainBlock",
   "Core": {
-    "power": 10,
-    "attackSpeed": 500
+    "power": 10
+  },
+  "BlockUpgrades": {
+    "componentName": "Core",
+    "upgrades": [
+      {
+        "name": "Core Power",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "power": 1
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "power": 2
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "power": 3
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "power": 4
+            }
+          }
+        ]
+      }
+    ]
   }
 }
