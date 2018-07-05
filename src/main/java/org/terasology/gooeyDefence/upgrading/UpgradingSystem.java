@@ -63,7 +63,7 @@ public class UpgradingSystem extends BaseComponentSystem {
             logger.info("Applying upgrade " + upgradeList.getUpgradeName());
             List<UpgradeInfo> stages = upgradeList.getStages();
             if (!stages.isEmpty()) {
-                applyUpgrade(entity, stages.remove(0));
+                applyUpgrade(getComponentToUpgrade(entity, upgraderComponent), stages.remove(0));
             }
         }
         logger.info(entity.toFullDescription());
@@ -72,22 +72,42 @@ public class UpgradingSystem extends BaseComponentSystem {
     /**
      * Applies a given upgrade to the entity.
      *
-     * @param entity  The entity to upgrade
-     * @param upgrade The upgrade to apply
+     * @param component The component to apply the upgrade onto
+     * @param upgrade   The upgrade to apply
      * @see UpgradeInfo
      */
-    public void applyUpgrade(EntityRef entity, UpgradeInfo upgrade) {
-        /* Get needed data */
-        BlockUpgradesComponent upgradesComponent = entity.getComponent(BlockUpgradesComponent.class);
-        ComponentMetadata<?> componentMeta = componentLibrary.resolve(upgradesComponent.getComponentName());
-        Class<? extends Component> componentClass = componentMeta.getType();
-        Component component = entity.getComponent(componentClass);
+    public void applyUpgrade(Component component, UpgradeInfo upgrade) {
+        ComponentMetadata<? extends Component> componentMeta = componentLibrary.getMetadata(component);
 
         /* Apply upgrade for each field */
         for (Map.Entry<String, Number> entry : upgrade.getValues().entrySet()) {
             ComponentFieldMetadata<?, ?> fieldMeta = componentMeta.getField(entry.getKey());
             setField(fieldMeta, component, entry.getValue());
         }
+    }
+
+    /**
+     * Gets the instance of the component to upgrade
+     *
+     * @param entity            The entity to get the component from
+     * @param upgradesComponent The component containing the upgrade data
+     * @return
+     */
+    public Component getComponentToUpgrade(EntityRef entity, BlockUpgradesComponent upgradesComponent) {
+        /* Get needed data */
+        ComponentMetadata<?> componentMeta = componentLibrary.resolve(upgradesComponent.getComponentName());
+        if (componentMeta == null) {
+            throw new IllegalArgumentException("Cannot upgrade entity as "
+                    + upgradesComponent.getComponentName()
+                    + " is not a valid component.");
+        }
+        Component component = entity.getComponent(componentMeta.getType());
+        if (component == null) {
+            throw new IllegalArgumentException("Cannot upgrade entity as it lacks any "
+                    + upgradesComponent.getComponentName()
+                    + " to upgrade");
+        }
+        return component;
     }
 
     /**
