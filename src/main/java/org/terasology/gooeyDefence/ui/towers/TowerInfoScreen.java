@@ -17,11 +17,13 @@ package org.terasology.gooeyDefence.ui.towers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.CoreScreenLayer;
@@ -31,8 +33,6 @@ import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 
-import java.util.function.Supplier;
-
 public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
 
@@ -41,8 +41,10 @@ public class TowerInfoScreen extends CoreScreenLayer {
 
     private RelativeLayout effectorLayout;
     private UILabel effectorName;
+    private UIBlockStats effectorStats;
 
     private TowerEffector currentEffector = null;
+    private UpgradingSystem upgradingSystem;
 
     @Override
     public void initialise() {
@@ -51,6 +53,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
         effectorList = find("effectorList", ColumnLayout.class);
         effectorLayout = find("effectorLayout", RelativeLayout.class);
         effectorName = find("effectorName", UILabel.class);
+        effectorStats = find("effectorStats", UIBlockStats.class);
         bindEffectorWidgets();
     }
 
@@ -63,9 +66,15 @@ public class TowerInfoScreen extends CoreScreenLayer {
         });
         effectorName.bindText(
                 new ReadOnlyBinding<String>() {
+                    @Override
+                    public String get() {
+                        return currentEffector.getClass().getSimpleName();
+                    }
+                });
+        effectorStats.bindComponent(new ReadOnlyBinding<Component>() {
             @Override
-            public String get() {
-                return currentEffector.getClass().getSimpleName();
+            public Component get() {
+                return currentEffector;
             }
         });
     }
@@ -102,6 +111,13 @@ public class TowerInfoScreen extends CoreScreenLayer {
     @Override
     public Vector2i getPreferredContentSize(Canvas canvas, Vector2i areaHint) {
         return areaHint;
+    }
+
+    public void setUpgradingSystem(UpgradingSystem newSystem) {
+        if (upgradingSystem == null) {
+            upgradingSystem = newSystem;
+            effectorStats.setUpgradingSystem(newSystem);
+        }
     }
 }
 

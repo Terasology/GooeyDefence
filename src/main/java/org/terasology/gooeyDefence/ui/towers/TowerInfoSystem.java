@@ -21,6 +21,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.components.towers.TowerMultiBlockComponent;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
@@ -35,6 +36,8 @@ public class TowerInfoSystem extends BaseComponentSystem {
 
     @In
     private NUIManager nuiManager;
+    @In
+    private UpgradingSystem upgradingSystem;
 
     /**
      * Called when a tower block is interacted with
@@ -46,7 +49,7 @@ public class TowerInfoSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onActivate(ActivateEvent event, EntityRef entity, TowerMultiBlockComponent component) {
         TowerInfoScreen infoScreen = (TowerInfoScreen) nuiManager.pushScreen("GooeyDefence:TowerInfoScreen");
-
+        infoScreen.setUpgradingSystem(upgradingSystem);
         EntityRef tower = component.getTowerEntity();
         infoScreen.setTower(tower.getComponent(TowerComponent.class));
     }

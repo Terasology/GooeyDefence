@@ -11,16 +11,16 @@
           "use-content-height": false,
           "use-content-width": false,
           "position-left": {
-            "offset": 32
+            "offset": 64
           },
           "position-right": {
-            "offset": 32
+            "offset": 64
           },
           "position-top": {
-            "offset": 32
+            "offset": 64
           },
           "position-bottom": {
-            "offset": 32
+            "offset": 64
           }
         },
         "content": {
@@ -143,6 +143,18 @@
                     {
                       "type": "UILabel",
                       "id": "effectorName",
+                      "layoutInfo": {
+                        "use-content-width": true,
+                        "use-content-height": true,
+                        "position-horizontal-center": {},
+                        "position-top": {
+                          "offset": 32
+                        }
+                      }
+                    },
+                    {
+                      "type": "UIBlockStats",
+                      "id": "effectorStats",
                       "layoutInfo": {
                         "use-content-width": true,
                         "use-content-height": true,
