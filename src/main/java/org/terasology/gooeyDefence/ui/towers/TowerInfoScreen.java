@@ -36,22 +36,24 @@ import org.terasology.rendering.nui.widgets.UILabel;
 public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
 
-    private ColumnLayout targeterList;
-    private ColumnLayout effectorList;
-
 
     private UILabel blockName;
     private UIBlockStats blockStats;
 
+    private ColumnLayout effectorList;
     private RelativeLayout effectorLayout;
 
+    private ColumnLayout targeterList;
+    private RelativeLayout targeterLayout;
+
     private TowerEffector currentEffector = null;
+    private TowerTargeter currentTargeter = null;
     private UpgradingSystem upgradingSystem;
 
     private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
         @Override
         public Boolean get() {
-            return currentEffector != null;
+            return getSelectedComponent() != null;
         }
     };
     private ReadOnlyBinding<Boolean> effectorVisibleBinding = new ReadOnlyBinding<Boolean>() {
@@ -60,19 +62,32 @@ public class TowerInfoScreen extends CoreScreenLayer {
             return currentEffector != null;
         }
     };
+    private ReadOnlyBinding<Boolean> targeterVisibleBinding = new ReadOnlyBinding<Boolean>() {
+        @Override
+        public Boolean get() {
+            return currentTargeter != null;
+        }
+    };
 
     @Override
     public void initialise() {
-        targeterList = find("targeterList", ColumnLayout.class);
+        blockName = find("blockName", UILabel.class);
+        blockStats = find("blockStats", UIBlockStats.class);
 
         effectorList = find("effectorList", ColumnLayout.class);
         effectorLayout = find("effectorLayout", RelativeLayout.class);
 
-        blockName = find("blockName", UILabel.class);
-        blockStats = find("blockStats", UIBlockStats.class);
+        targeterList = find("targeterList", ColumnLayout.class);
+        targeterLayout = find("targeterLayout", RelativeLayout.class);
+
 
         bindGeneralWidgets();
         bindEffectorWidgets();
+        bindTargeterWidgets();
+    }
+
+    private Component getSelectedComponent() {
+        return currentEffector != null ? currentEffector : currentTargeter;
     }
 
     /**
@@ -85,14 +100,14 @@ public class TowerInfoScreen extends CoreScreenLayer {
         blockName.bindText(new ReadOnlyBinding<String>() {
             @Override
             public String get() {
-                return currentEffector != null ? currentEffector.getClass().getSimpleName() : "";
+                return getSelectedComponent() != null ? getSelectedComponent().getClass().getSimpleName() : "";
             }
         });
 
         blockStats.bindComponent(new ReadOnlyBinding<Component>() {
             @Override
             public Component get() {
-                return currentEffector;
+                return getSelectedComponent();
             }
         });
     }
@@ -102,6 +117,13 @@ public class TowerInfoScreen extends CoreScreenLayer {
      */
     private void bindEffectorWidgets() {
         effectorLayout.bindVisible(effectorVisibleBinding);
+    }
+
+    /**
+     * Setup all the binding for the targeter widgets
+     */
+    private void bindTargeterWidgets() {
+        targeterLayout.bindVisible(targeterVisibleBinding);
     }
 
     /**
@@ -136,6 +158,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * @param effector The effector of the pushed button
      */
     private void effectorButtonPressed(TowerEffector effector) {
+        currentTargeter = null;
         currentEffector = effector;
         logger.info("Button for effector " + effector.getClass().getSimpleName() + " was pressed");
     }
@@ -148,6 +171,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      */
     private void targeterButtonPressed(TowerTargeter targeter) {
         currentEffector = null;
+        currentTargeter = targeter;
         logger.info("Button for targeter " + targeter.getClass().getSimpleName() + " was pressed");
     }
 

@@ -182,6 +182,35 @@
                       }
                     }
                   ]
+                },
+                {
+                  "type": "RelativeLayout",
+                  "id": "targeterLayout",
+                  "layoutInfo": {
+                    "use-content-width": false,
+                    "use-content-height": false,
+                    "position-left": {},
+                    "position-right": {},
+                    "position-bottom": {},
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "blockStats"
+                    }
+                  },
+                  "contents": [
+                    {
+                      "type": "UILabel",
+                      "id": "targeterFlagLabel",
+                      "text": "TARGETER SELECTED",
+                      "layoutInfo": {
+                        "use-content-width": true,
+                        "use-content-height": true,
+                        "position-horizontal-center": {},
+                        "position-vertical-center": {}
+                      }
+                    }
+                  ]
                 }
               ]
             }
