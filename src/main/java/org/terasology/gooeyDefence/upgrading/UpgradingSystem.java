@@ -147,11 +147,19 @@ public class UpgradingSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Get a mapping between all the fields and their values for a component.
+     *
+     * @param component The component to get all fields on
+     * @return All the fields and their values, as strings.
+     */
     public Map<String, String> getComponentValues(Component component) {
         ComponentMetadata<? extends Component> metadata = componentLibrary.getMetadata(component);
         Map<String, String> result = new HashMap<>();
-        for (ComponentFieldMetadata<?, ?> field : metadata.getFields()) {
-            result.put(field.getName(), String.valueOf(field.getValue(component)));
+        if (metadata != null) {
+            for (ComponentFieldMetadata<?, ?> field : metadata.getFields()) {
+                result.put(field.getName(), String.valueOf(field.getValue(component)));
+            }
         }
         return result;
     }
