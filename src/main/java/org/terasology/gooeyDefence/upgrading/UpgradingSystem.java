@@ -30,6 +30,7 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -144,5 +145,14 @@ public class UpgradingSystem extends BaseComponentSystem {
                         + field.getField().getGenericType().getTypeName()
                         + ". Type must be a Number primitive");
         }
+    }
+
+    public Map<String, String> getComponentValues(Component component) {
+        ComponentMetadata<? extends Component> metadata = componentLibrary.getMetadata(component);
+        Map<String, String> result = new HashMap<>();
+        for (ComponentFieldMetadata<?, ?> field : metadata.getFields()) {
+            result.put(field.getName(), String.valueOf(field.getValue(component)));
+        }
+        return result;
     }
 }
