@@ -39,12 +39,27 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private ColumnLayout targeterList;
     private ColumnLayout effectorList;
 
+
+    private UILabel blockName;
+    private UIBlockStats blockStats;
+
     private RelativeLayout effectorLayout;
-    private UILabel effectorName;
-    private UIBlockStats effectorStats;
 
     private TowerEffector currentEffector = null;
     private UpgradingSystem upgradingSystem;
+
+    private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
+        @Override
+        public Boolean get() {
+            return currentEffector != null;
+        }
+    };
+    private ReadOnlyBinding<Boolean> effectorVisibleBinding = new ReadOnlyBinding<Boolean>() {
+        @Override
+        public Boolean get() {
+            return currentEffector != null;
+        }
+    };
 
     @Override
     public void initialise() {
@@ -52,26 +67,29 @@ public class TowerInfoScreen extends CoreScreenLayer {
 
         effectorList = find("effectorList", ColumnLayout.class);
         effectorLayout = find("effectorLayout", RelativeLayout.class);
-        effectorName = find("effectorName", UILabel.class);
-        effectorStats = find("effectorStats", UIBlockStats.class);
+
+        blockName = find("blockName", UILabel.class);
+        blockStats = find("blockStats", UIBlockStats.class);
+
+        bindGeneralWidgets();
         bindEffectorWidgets();
     }
 
-    private void bindEffectorWidgets() {
-        effectorLayout.bindVisible(new ReadOnlyBinding<Boolean>() {
+    /**
+     * Setup all the binding for the general block info widgets
+     */
+    private void bindGeneralWidgets() {
+        blockName.bindEnabled(generalVisibleBinding);
+        blockStats.bindEnabled(generalVisibleBinding);
+
+        blockName.bindText(new ReadOnlyBinding<String>() {
             @Override
-            public Boolean get() {
-                return currentEffector != null;
+            public String get() {
+                return currentEffector != null ? currentEffector.getClass().getSimpleName() : "";
             }
         });
-        effectorName.bindText(
-                new ReadOnlyBinding<String>() {
-                    @Override
-                    public String get() {
-                        return currentEffector.getClass().getSimpleName();
-                    }
-                });
-        effectorStats.bindComponent(new ReadOnlyBinding<Component>() {
+
+        blockStats.bindComponent(new ReadOnlyBinding<Component>() {
             @Override
             public Component get() {
                 return currentEffector;
@@ -79,6 +97,19 @@ public class TowerInfoScreen extends CoreScreenLayer {
         });
     }
 
+    /**
+     * Set up all the bindings for all the effector specific widgets
+     */
+    private void bindEffectorWidgets() {
+        effectorLayout.bindVisible(effectorVisibleBinding);
+    }
+
+    /**
+     * Set the tower to display.
+     * Handles refreshing all the widgets and info.
+     *
+     * @param tower The new tower to set
+     */
     public void setTower(TowerComponent tower) {
         effectorList.removeAllWidgets();
         for (EntityRef effector : tower.effector) {
@@ -98,26 +129,44 @@ public class TowerInfoScreen extends CoreScreenLayer {
         }
     }
 
+    /**
+     * Subscriber called when a button on the list of effectors is pushed.
+     * Sets the current effector and nulls the current targeter
+     *
+     * @param effector The effector of the pushed button
+     */
     private void effectorButtonPressed(TowerEffector effector) {
         currentEffector = effector;
         logger.info("Button for effector " + effector.getClass().getSimpleName() + " was pressed");
     }
 
+    /**
+     * Subscriber called when a button on the list of targeters is pushed.
+     * Sets the current targeter and nulls the current effector
+     *
+     * @param targeter The targeter of the pushed button
+     */
     private void targeterButtonPressed(TowerTargeter targeter) {
         currentEffector = null;
         logger.info("Button for targeter " + targeter.getClass().getSimpleName() + " was pressed");
     }
 
-    @Override
-    public Vector2i getPreferredContentSize(Canvas canvas, Vector2i areaHint) {
-        return areaHint;
-    }
-
+    /**
+     * Sets the upgrader system used by some of the child widgets.
+     * Caches the value to prevent multiple resettings of child components
+     *
+     * @param newSystem The upgrader system to set.
+     */
     public void setUpgradingSystem(UpgradingSystem newSystem) {
         if (upgradingSystem == null) {
             upgradingSystem = newSystem;
-            effectorStats.setUpgradingSystem(newSystem);
+            blockStats.setUpgradingSystem(newSystem);
         }
+    }
+
+    @Override
+    public Vector2i getPreferredContentSize(Canvas canvas, Vector2i areaHint) {
+        return areaHint;
     }
 }
 
