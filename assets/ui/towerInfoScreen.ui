@@ -28,8 +28,8 @@
           "id": "outerColumnLayout",
           "columns": 2,
           "column-widths": [
-            0.32,
-            0.68
+            0.4,
+            0.6
           ],
           "contents": [
             {
@@ -129,22 +129,28 @@
               "id": "towerInfoLayout",
               "contents": [
                 {
-                  "type": "UIBox",
-                  "id": "placeholderBox",
+                  "type": "RelativeLayout",
+                  "id": "effectorLayout",
                   "layoutInfo": {
-                    "position-top": {
-                      "offset": 4
-                    },
-                    "position-bottom": {
-                      "offset": 4
-                    },
-                    "position-left": {
-                      "offset": 4
-                    },
-                    "position-right": {
-                      "offset": 4
+                    "use-content-width": false,
+                    "use-content-height": false,
+                    "position-left": {},
+                    "position-right": {},
+                    "position-top": {},
+                    "position-bottom": {}
+                  },
+                  "contents": [
+                    {
+                      "type": "UILabel",
+                      "id": "effectorName",
+                      "layoutInfo": {
+                        "use-content-width": true,
+                        "use-content-height": true,
+                        "position-horizontal-center": {},
+                        "position-vertical-center": {}
+                      }
                     }
-                  }
+                  ]
                 }
               ]
             }

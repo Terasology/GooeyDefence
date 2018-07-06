@@ -25,8 +25,13 @@ import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layouts.ColumnLayout;
+import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
 import org.terasology.rendering.nui.widgets.UIButton;
+import org.terasology.rendering.nui.widgets.UILabel;
+
+import java.util.function.Supplier;
 
 public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
@@ -34,10 +39,35 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private ColumnLayout targeterList;
     private ColumnLayout effectorList;
 
+    private RelativeLayout effectorLayout;
+    private UILabel effectorName;
+
+    private TowerEffector currentEffector = null;
+
     @Override
     public void initialise() {
         targeterList = find("targeterList", ColumnLayout.class);
+
         effectorList = find("effectorList", ColumnLayout.class);
+        effectorLayout = find("effectorLayout", RelativeLayout.class);
+        effectorName = find("effectorName", UILabel.class);
+        bindEffectorWidgets();
+    }
+
+    private void bindEffectorWidgets() {
+        effectorLayout.bindVisible(new ReadOnlyBinding<Boolean>() {
+            @Override
+            public Boolean get() {
+                return currentEffector != null;
+            }
+        });
+        effectorName.bindText(
+                new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return currentEffector.getClass().getSimpleName();
+            }
+        });
     }
 
     public void setTower(TowerComponent tower) {
@@ -60,10 +90,12 @@ public class TowerInfoScreen extends CoreScreenLayer {
     }
 
     private void effectorButtonPressed(TowerEffector effector) {
+        currentEffector = effector;
         logger.info("Button for effector " + effector.getClass().getSimpleName() + " was pressed");
     }
 
     private void targeterButtonPressed(TowerTargeter targeter) {
+        currentEffector = null;
         logger.info("Button for targeter " + targeter.getClass().getSimpleName() + " was pressed");
     }
 
