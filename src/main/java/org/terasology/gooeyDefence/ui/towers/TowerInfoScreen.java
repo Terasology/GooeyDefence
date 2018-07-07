@@ -39,9 +39,11 @@ import org.terasology.rendering.nui.widgets.UILabel;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Screen for displaying a myriad of stats and options about a tower.
+ */
 public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
-
 
     private UILabel blockName;
     private UIBlockStats blockStats;
@@ -95,8 +97,22 @@ public class TowerInfoScreen extends CoreScreenLayer {
         bindTargeterWidgets();
     }
 
-    private Component getSelectedComponent() {
-        return currentEffector != null ? currentEffector : currentTargeter;
+    /**
+     * Called when the screen is closed to clear the widgets and selections
+     */
+    @Override
+    public void onClosed() {
+        currentUpgrade = null;
+        currentEffector = null;
+        currentTargeter = null;
+        effectorList.removeAllWidgets();
+        targeterList.removeAllWidgets();
+        super.onClosed();
+    }
+
+    @Override
+    public Vector2i getPreferredContentSize(Canvas canvas, Vector2i areaHint) {
+        return areaHint;
     }
 
     /**
@@ -150,13 +166,19 @@ public class TowerInfoScreen extends CoreScreenLayer {
     }
 
     /**
+     * @return The currently selected component, or null if none is selected.
+     */
+    private Component getSelectedComponent() {
+        return currentEffector != null ? currentEffector : currentTargeter;
+    }
+
+    /**
      * Set the tower to display.
      * Handles refreshing all the widgets and info.
      *
      * @param tower The new tower to set
      */
     public void setTower(TowerComponent tower) {
-        effectorList.removeAllWidgets();
         for (EntityRef effector : tower.effector) {
             TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
             UIButton button = new UIButton();
@@ -164,7 +186,6 @@ public class TowerInfoScreen extends CoreScreenLayer {
             button.subscribe((widget) -> effectorButtonPressed(effectorComponent, effector));
             effectorList.addWidget(button);
         }
-        targeterList.removeAllWidgets();
         for (EntityRef targeter : tower.targeter) {
             TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
             UIButton button = new UIButton();
@@ -221,18 +242,12 @@ public class TowerInfoScreen extends CoreScreenLayer {
     }
 
     /**
-     * Sets the upgrader system used by some of the child widgets.
-     * Caches the value to prevent multiple resettings of child components
+     * Sets the upgrader system used to calculate values for the children
      *
      * @param newSystem The upgrader system to set.
      */
     public void setUpgradingSystem(UpgradingSystem newSystem) {
         upgradingSystem = newSystem;
-    }
-
-    @Override
-    public Vector2i getPreferredContentSize(Canvas canvas, Vector2i areaHint) {
-        return areaHint;
     }
 }
 
