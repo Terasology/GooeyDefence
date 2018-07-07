@@ -129,44 +129,72 @@
               "id": "towerInfoLayout",
               "contents": [
                 {
-                  "type": "UILabel",
-                  "id": "blockName",
+                  "type": "ColumnLayout",
+                  "id": "towerColumnLayout",
+                  "columns": 2,
+                  "column-widths": [
+                    0.5,
+                    0.5
+                  ],
                   "layoutInfo": {
-                    "use-content-width": true,
+                    "use-content-width": false,
                     "use-content-height": true,
-                    "position-horizontal-center": {},
-                    "position-top": {
-                      "offset": 32
+                    "position-top": {},
+                    "position-left": {},
+                    "position-right": {}
+                  },
+                  "contents": [
+                    {
+                      "type": "RelativeLayout",
+                      "id": "infoPanel",
+                      "contents": [
+                        {
+                          "type": "UILabel",
+                          "id": "blockName",
+                          "layoutInfo": {
+                            "use-content-width": true,
+                            "use-content-height": true,
+                            "position-horizontal-center": {},
+                            "position-top": {
+                              "offset": 32
+                            }
+                          }
+                        },
+                        {
+                          "type": "UILabel",
+                          "id": "blockDescription",
+                          "layoutInfo": {
+                            "use-content-width": true,
+                            "use-content-height": true,
+                            "position-horizontal-center": {},
+                            "position-top": {
+                              "offset": 16,
+                              "target": "BOTTOM",
+                              "widget": "blockName"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "RelativeLayout",
+                      "id": "upgradesPanel",
+                      "contents": [
+                        {
+                          "type": "UIUpgrader",
+                          "id": "upgrading",
+                          "layoutInfo": {
+                            "use-content-width": true,
+                            "use-content-height": true,
+                            "position-horizontal-center": {},
+                            "position-top": {
+                              "offset": 32
+                            }
+                          }
+                        }
+                      ]
                     }
-                  }
-                },
-                {
-                  "type": "UILabel",
-                  "id": "blockDescription",
-                  "layoutInfo": {
-                    "use-content-width": true,
-                    "use-content-height": true,
-                    "position-horizontal-center": {},
-                    "position-top": {
-                      "offset": 16,
-                      "target": "BOTTOM",
-                      "widget": "blockName"
-                    }
-                  }
-                },
-                {
-                  "type": "UIUpgrader",
-                  "id": "upgrading",
-                  "layoutInfo": {
-                    "use-content-width": true,
-                    "use-content-height": true,
-                    "position-horizontal-center": {},
-                    "position-top": {
-                      "offset": 16,
-                      "target": "BOTTOM",
-                      "widget": "blockDescription"
-                    }
-                  }
+                  ]
                 },
                 {
                   "type": "RelativeLayout",
@@ -176,11 +204,12 @@
                     "use-content-height": false,
                     "position-left": {},
                     "position-right": {},
-                    "position-bottom": {},
+                    "position-bottom": {
+                    },
                     "position-top": {
                       "offset": 16,
                       "target": "BOTTOM",
-                      "widget": "blockUpgrades"
+                      "widget": "towerColumnLayout"
                     }
                   },
                   "contents": [
@@ -209,7 +238,7 @@
                     "position-top": {
                       "offset": 16,
                       "target": "BOTTOM",
-                      "widget": "blockUpgrades"
+                      "widget": "towerColumnLayout"
                     }
                   },
                   "contents": [
