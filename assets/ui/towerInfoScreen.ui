@@ -169,7 +169,7 @@
                   }
                 },
                 {
-                  "type": "UIUpgrades",
+                  "type": "UIUpgradePaths",
                   "id": "blockUpgrades",
                   "layoutInfo": {
                     "use-content-width": true,

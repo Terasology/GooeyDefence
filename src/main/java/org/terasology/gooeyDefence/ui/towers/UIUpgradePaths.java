@@ -28,8 +28,8 @@ import org.terasology.rendering.nui.widgets.UIButton;
 
 import java.util.function.Consumer;
 
-public class UIUpgrades extends CoreWidget {
-    private static final Logger logger = LoggerFactory.getLogger(UIUpgrades.class);
+public class UIUpgradePaths extends CoreWidget {
+    private static final Logger logger = LoggerFactory.getLogger(UIUpgradePaths.class);
     private FlowLayout upgrades = new FlowLayout();
     private Consumer<UpgradeList> listener;
 
