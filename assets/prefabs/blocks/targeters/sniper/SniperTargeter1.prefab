@@ -4,6 +4,84 @@
     "drain": 5,
     "minimumRange": 5,
     "range": 20,
-    "attackSpeed":2000
+    "attackSpeed": 2000
+  },
+  "BlockUpgrades": {
+    "componentName": "Core",
+    "upgrades": [
+      {
+        "upgradeName": "Attack Speed",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -200
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -200
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -200
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -200
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -200
+            }
+          }
+        ]
+      },
+      {
+        "upgradeName": "Range",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "range": 5,
+              "minimumRange": 5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 5,
+              "minimumRange": 5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 5,
+              "minimumRange": 5
+            }
+          }
+        ]
+      }
+    ]
   }
 }
