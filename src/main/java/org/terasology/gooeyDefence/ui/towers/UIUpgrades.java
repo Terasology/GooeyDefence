@@ -18,11 +18,11 @@ package org.terasology.gooeyDefence.ui.towers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.gooeyDefence.upgrading.BlockUpgradesComponent;
-import org.terasology.gooeyDefence.upgrading.UpgradeInfo;
 import org.terasology.gooeyDefence.upgrading.UpgradeList;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.CoreWidget;
+import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layouts.FlowLayout;
 import org.terasology.rendering.nui.widgets.UIButton;
 
@@ -45,6 +45,12 @@ public class UIUpgrades extends CoreWidget {
                 UIButton upgradeButton = new UIButton();
                 upgradeButton.setText(upgradeList.getUpgradeName());
                 upgradeButton.subscribe(widget -> upgradeButtonPressed(upgradeList));
+                upgradeButton.bindEnabled(new ReadOnlyBinding<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return !upgradeList.getStages().isEmpty();
+                    }
+                });
                 upgrades.addWidget(upgradeButton, null);
             }
         }
