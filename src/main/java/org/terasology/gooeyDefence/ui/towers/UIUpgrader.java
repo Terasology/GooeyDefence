@@ -36,11 +36,15 @@ import java.util.Map;
 public class UIUpgrader extends CoreWidget {
     private UIComponentFields componentFields = new UIComponentFields();
     private UIUpgradePaths upgradePaths = new UIUpgradePaths();
-
-
     private Binding<EntityRef> entity = new DefaultBinding<>(EntityRef.NULL);
     private UpgradeInfo currentUpgrade = null;
     private UpgradingSystem upgradingSystem;
+    private Binding<BlockUpgradesComponent> upgradesComponent = new ReadOnlyBinding<BlockUpgradesComponent>() {
+        @Override
+        public BlockUpgradesComponent get() {
+            return isEnabled() ? entity.get().getComponent(BlockUpgradesComponent.class) : null;
+        }
+    };
 
     public UIUpgrader() {
         componentFields.bindFields(new ReadOnlyBinding<Map<String, String>>() {
@@ -110,11 +114,7 @@ public class UIUpgrader extends CoreWidget {
     }
 
     private Component getTargetComponent() {
-        return isEnabled() ? upgradingSystem.getComponentToUpgrade(entity.get(), getUpgraderComponent()) : null;
-    }
-
-    private BlockUpgradesComponent getUpgraderComponent() {
-        return isEnabled() ? entity.get().getComponent(BlockUpgradesComponent.class) : null;
+        return isEnabled() ? upgradingSystem.getComponentToUpgrade(entity.get(), upgradesComponent.get()) : null;
     }
 
     public void setUpgradingSystem(UpgradingSystem upgradingSystem) {
@@ -123,5 +123,9 @@ public class UIUpgrader extends CoreWidget {
 
     public void bindEntity(Binding<EntityRef> entity) {
         this.entity = entity;
+    }
+
+    public void bindUpgradesComponent(Binding<BlockUpgradesComponent> upgradesBinding) {
+        upgradesComponent = upgradesBinding;
     }
 }
