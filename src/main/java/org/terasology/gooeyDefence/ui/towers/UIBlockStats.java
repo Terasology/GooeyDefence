@@ -15,8 +15,6 @@
  */
 package org.terasology.gooeyDefence.ui.towers;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.assets.font.Font;
 import org.terasology.rendering.nui.Canvas;
@@ -25,22 +23,26 @@ import org.terasology.rendering.nui.TextLineBuilder;
 import org.terasology.rendering.nui.databinding.Binding;
 import org.terasology.rendering.nui.databinding.DefaultBinding;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class UIBlockStats extends CoreWidget {
-    private UpgradingSystem upgradingSystem;
-    private Binding<Component> component = new DefaultBinding<>();
+    private Binding<Map<String, String>> fields = new DefaultBinding<>(new HashMap<>());
 
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawText(buildText());
     }
 
+    /**
+     * Combines the map of fields into a single string to display
+     *
+     * @return The contents of the fields as a string
+     */
     private String buildText() {
         StringBuilder result = new StringBuilder();
-        Map<String, String> fields = upgradingSystem.getComponentValues(component.get());
-        for (Map.Entry<String, String> entry : fields.entrySet()) {
+        for (Map.Entry<String, String> entry : fields.get().entrySet()) {
             result.append(entry.getKey())
                     .append(": ")
                     .append(entry.getValue())
@@ -56,12 +58,14 @@ public class UIBlockStats extends CoreWidget {
         return font.getSize(lines);
     }
 
-
-    public void bindComponent(Binding<Component> componentBinding) {
-        component = componentBinding;
+    /**
+     * Set the binding to use for the field values
+     *
+     * @param fieldBinding The binding to use
+     */
+    public void bindFields(Binding<Map<String, String>> fieldBinding) {
+        this.fields = fieldBinding;
     }
 
-    public void setUpgradingSystem(UpgradingSystem upgradingSystem) {
-        this.upgradingSystem = upgradingSystem;
     }
 }

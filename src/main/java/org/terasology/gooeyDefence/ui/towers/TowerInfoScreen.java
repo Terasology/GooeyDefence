@@ -37,6 +37,7 @@ import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 
 import java.util.List;
+import java.util.Map;
 
 public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
@@ -111,11 +112,10 @@ public class TowerInfoScreen extends CoreScreenLayer {
                 return getSelectedComponent() != null ? getSelectedComponent().getClass().getSimpleName() : "";
             }
         });
-
-        blockStats.bindComponent(new ReadOnlyBinding<Component>() {
+        blockStats.bindFields(new ReadOnlyBinding<Map<String, String>>() {
             @Override
-            public Component get() {
-                return getSelectedComponent();
+            public Map<String, String> get() {
+                return upgradingSystem.getComponentValues(getSelectedComponent());
             }
         });
 
@@ -173,7 +173,6 @@ public class TowerInfoScreen extends CoreScreenLayer {
         currentEffector = effector;
 
         blockUpgrades.setUpgrades(entity.getComponent(BlockUpgradesComponent.class));
-        logger.info("Button for effector " + effector.getClass().getSimpleName() + " was pressed");
     }
 
     /**
@@ -187,7 +186,6 @@ public class TowerInfoScreen extends CoreScreenLayer {
         currentTargeter = targeter;
 
         blockUpgrades.setUpgrades(entity.getComponent(BlockUpgradesComponent.class));
-        logger.info("Button for targeter " + targeter.getClass().getSimpleName() + " was pressed");
     }
 
     /**
@@ -209,10 +207,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * @param newSystem The upgrader system to set.
      */
     public void setUpgradingSystem(UpgradingSystem newSystem) {
-        if (upgradingSystem == null) {
-            upgradingSystem = newSystem;
-            blockStats.setUpgradingSystem(newSystem);
-        }
+        upgradingSystem = newSystem;
     }
 
     @Override
