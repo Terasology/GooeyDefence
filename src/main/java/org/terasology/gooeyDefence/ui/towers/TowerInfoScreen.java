@@ -169,6 +169,12 @@ public class TowerInfoScreen extends CoreScreenLayer {
         });
 
         blockUpgrades.subscribe(this::upgradePressed);
+        blockUpgrades.bindUpgradesComponent(new ReadOnlyBinding<BlockUpgradesComponent>() {
+            @Override
+            public BlockUpgradesComponent get() {
+                return currentEntity.getComponent(BlockUpgradesComponent.class);
+            }
+        });
     }
 
     /**
@@ -226,8 +232,6 @@ public class TowerInfoScreen extends CoreScreenLayer {
         currentEntity = entity;
         currentTargeter = null;
         currentEffector = effector;
-
-        blockUpgrades.setUpgrades(entity.getComponent(BlockUpgradesComponent.class));
     }
 
     /**
@@ -240,8 +244,6 @@ public class TowerInfoScreen extends CoreScreenLayer {
         currentEntity = entity;
         currentEffector = null;
         currentTargeter = targeter;
-
-        blockUpgrades.setUpgrades(entity.getComponent(BlockUpgradesComponent.class));
     }
 
     /**

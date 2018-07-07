@@ -22,37 +22,50 @@ import org.terasology.gooeyDefence.upgrading.UpgradeList;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.CoreWidget;
+import org.terasology.rendering.nui.databinding.Binding;
+import org.terasology.rendering.nui.databinding.DefaultBinding;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layouts.FlowLayout;
 import org.terasology.rendering.nui.widgets.UIButton;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class UIUpgradePaths extends CoreWidget {
-    private static final Logger logger = LoggerFactory.getLogger(UIUpgradePaths.class);
     private FlowLayout upgrades = new FlowLayout();
     private Consumer<UpgradeList> listener;
+    private List<UpgradeList> upgradeLists;
+    private Binding<BlockUpgradesComponent> upgradesComponent = new DefaultBinding<>();
 
     @Override
     public void onDraw(Canvas canvas) {
+        if (upgradesComponent.get() != null) {
+            List<UpgradeList> newUpgrades = upgradesComponent.get().getUpgrades();
+            if (upgradeLists != newUpgrades) {
+                upgradeLists = newUpgrades;
+                rebuildUpgradeButtons();
+            }
+        } else {
+            upgradeLists = new ArrayList<>();
+            rebuildUpgradeButtons();
+        }
         canvas.drawWidget(upgrades);
     }
 
-    public void setUpgrades(BlockUpgradesComponent upgradesComponent) {
+    public void rebuildUpgradeButtons() {
         upgrades.removeAllWidgets();
-        if (upgradesComponent != null) {
-            for (UpgradeList upgradeList : upgradesComponent.getUpgrades()) {
-                UIButton upgradeButton = new UIButton();
-                upgradeButton.setText(upgradeList.getUpgradeName());
-                upgradeButton.subscribe(widget -> upgradeButtonPressed(upgradeList));
-                upgradeButton.bindEnabled(new ReadOnlyBinding<Boolean>() {
-                    @Override
-                    public Boolean get() {
-                        return !upgradeList.getStages().isEmpty();
-                    }
-                });
-                upgrades.addWidget(upgradeButton, null);
-            }
+        for (UpgradeList upgradeList : upgradeLists) {
+            UIButton upgradeButton = new UIButton();
+            upgradeButton.setText(upgradeList.getUpgradeName());
+            upgradeButton.subscribe(widget -> upgradeButtonPressed(upgradeList));
+            upgradeButton.bindEnabled(new ReadOnlyBinding<Boolean>() {
+                @Override
+                public Boolean get() {
+                    return !upgradeList.getStages().isEmpty();
+                }
+            });
+            upgrades.addWidget(upgradeButton, null);
         }
     }
 
@@ -60,12 +73,16 @@ public class UIUpgradePaths extends CoreWidget {
         listener = newListener;
     }
 
-    public void upgradeButtonPressed(UpgradeList upgrade) {
+    private void upgradeButtonPressed(UpgradeList upgrade) {
         listener.accept(upgrade);
     }
 
     @Override
     public Vector2i getPreferredContentSize(Canvas canvas, Vector2i sizeHint) {
         return upgrades.getPreferredContentSize(canvas, sizeHint);
+    }
+
+    public void bindUpgradesComponent(Binding<BlockUpgradesComponent> upgradesComponent) {
+        this.upgradesComponent = upgradesComponent;
     }
 }
