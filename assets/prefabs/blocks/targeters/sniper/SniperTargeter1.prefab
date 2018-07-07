@@ -7,7 +7,7 @@
     "attackSpeed": 2000
   },
   "BlockUpgrades": {
-    "componentName": "Core",
+    "componentName": "SniperTargeter",
     "upgrades": [
       {
         "upgradeName": "Attack Speed",
