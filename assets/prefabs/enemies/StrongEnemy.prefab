@@ -1,0 +1,39 @@
+{
+  "alwaysRelevant": true,
+  "DisplayName": {
+    "name": "Strong Enemy",
+    "description": "A slow, but powerful enemy type"
+  },
+  "skeletalmesh": {
+    "mesh": "enemy",
+    "heightOffset": -2.0,
+    "material": "strongEnemy",
+    "animationPool": [
+      "gooeyIdleBreathing"
+    ],
+    "loop": true,
+    "scale": [
+      0.25,
+      0.25,
+      0.25
+    ]
+  },
+  "Location": {},
+  "Network": {},
+  "BoxShape": {
+    "extents": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "Gooey": {
+  },
+  "Movement": {
+    "speed": 1
+  },
+  "GooeyDefence:Health": {
+    "health": 50
+  }
+}
+
