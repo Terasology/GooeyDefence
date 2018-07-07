@@ -17,6 +17,7 @@ package org.terasology.gooeyDefence.upgrading;
 
 import org.terasology.reflection.MappedContainer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,12 +31,12 @@ public class UpgradeList {
     /**
      * The name of this sequence of upgrades
      */
-    private String upgradeName;
+    private String upgradeName = "";
     /**
      * The list of upgrade stages.
      * Order is important, and should be ordered such that 0 is first.
      */
-    private List<UpgradeInfo> stages;
+    private List<UpgradeInfo> stages = new ArrayList<>();
 
     public List<UpgradeInfo> getStages() {
         return stages;
