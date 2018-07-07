@@ -141,6 +141,20 @@
                   }
                 },
                 {
+                  "type": "UILabel",
+                  "id": "blockDescription",
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-horizontal-center": {},
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "blockName"
+                    }
+                  }
+                },
+                {
                   "type": "UIBlockStats",
                   "id": "blockStats",
                   "layoutInfo": {
@@ -150,7 +164,7 @@
                     "position-top": {
                       "offset": 16,
                       "target": "BOTTOM",
-                      "widget": "blockName"
+                      "widget": "blockDescription"
                     }
                   }
                 },

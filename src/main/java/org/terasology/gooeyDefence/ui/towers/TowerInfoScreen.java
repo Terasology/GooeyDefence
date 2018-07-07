@@ -27,6 +27,7 @@ import org.terasology.gooeyDefence.upgrading.BlockUpgradesComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradeInfo;
 import org.terasology.gooeyDefence.upgrading.UpgradeList;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
+import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.CoreScreenLayer;
@@ -46,6 +47,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
 
     private UILabel blockName;
+    private UILabel blockDescription;
     private UIBlockStats blockStats;
     private UIUpgrades blockUpgrades;
 
@@ -58,6 +60,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private TowerEffector currentEffector = null;
     private TowerTargeter currentTargeter = null;
     private UpgradeInfo currentUpgrade = null;
+    private EntityRef currentEntity = EntityRef.NULL;
     private UpgradingSystem upgradingSystem;
 
     private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
@@ -82,6 +85,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     @Override
     public void initialise() {
         blockName = find("blockName", UILabel.class);
+        blockDescription = find("blockDescription", UILabel.class);
         blockStats = find("blockStats", UIBlockStats.class);
         blockUpgrades = find("blockUpgrades", UIUpgrades.class);
 
@@ -105,6 +109,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
         currentUpgrade = null;
         currentEffector = null;
         currentTargeter = null;
+        currentEntity = EntityRef.NULL;
         effectorList.removeAllWidgets();
         targeterList.removeAllWidgets();
         super.onClosed();
@@ -119,14 +124,29 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * Setup all the binding for the general block info widgets
      */
     private void bindGeneralWidgets() {
-        blockName.bindEnabled(generalVisibleBinding);
-        blockStats.bindEnabled(generalVisibleBinding);
-        blockUpgrades.bindEnabled(generalVisibleBinding);
+        blockName.bindVisible(generalVisibleBinding);
+        blockDescription.bindVisible(generalVisibleBinding);
+        blockStats.bindVisible(generalVisibleBinding);
+        blockUpgrades.bindVisible(generalVisibleBinding);
 
         blockName.bindText(new ReadOnlyBinding<String>() {
             @Override
             public String get() {
-                return getSelectedComponent() != null ? getSelectedComponent().getClass().getSimpleName() : "";
+                if (currentEntity == EntityRef.NULL) {
+                    return "";
+                }
+                if (currentEntity.hasComponent(DisplayNameComponent.class)) {
+                    return currentEntity.getComponent(DisplayNameComponent.class).name;
+                } else {
+                    return currentEntity.getParentPrefab().getName();
+                }
+            }
+        });
+        blockDescription.bindText(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                DisplayNameComponent displayComponent = currentEntity.getComponent(DisplayNameComponent.class);
+                return displayComponent != null ? displayComponent.description : "";
             }
         });
         blockStats.bindFields(new ReadOnlyBinding<Map<String, String>>() {
@@ -203,6 +223,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * @param effector The effector of the pushed button
      */
     private void effectorButtonPressed(TowerEffector effector, EntityRef entity) {
+        currentEntity = entity;
         currentTargeter = null;
         currentEffector = effector;
 
@@ -216,6 +237,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * @param targeter The targeter of the pushed button
      */
     private void targeterButtonPressed(TowerTargeter targeter, EntityRef entity) {
+        currentEntity = entity;
         currentEffector = null;
         currentTargeter = targeter;
 
