@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.ui.towers;
 
+import org.terasology.gooeyDefence.upgrading.UpgradeInfo;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.assets.font.Font;
 import org.terasology.rendering.nui.Canvas;
@@ -29,6 +30,8 @@ import java.util.Map;
 
 public class UIBlockStats extends CoreWidget {
     private Binding<Map<String, String>> fields = new DefaultBinding<>(new HashMap<>());
+    private Binding<UpgradeInfo> upgrade = new DefaultBinding<>();
+    private Binding<Boolean> showUpgrade = new DefaultBinding<>(false);
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -42,11 +45,18 @@ public class UIBlockStats extends CoreWidget {
      */
     private String buildText() {
         StringBuilder result = new StringBuilder();
+        Map<String, Number> upgradeValues = showUpgrade.get() ? upgrade.get().getValues() : new HashMap<>();
+
         for (Map.Entry<String, String> entry : fields.get().entrySet()) {
             result.append(entry.getKey())
                     .append(": ")
-                    .append(entry.getValue())
-                    .append('\n');
+                    .append(entry.getValue());
+            if (showUpgrade.get() && upgradeValues.containsKey(entry.getKey())) {
+                String value = String.valueOf(upgradeValues.get(entry.getKey()));
+                result.append(value.startsWith("-") ? "    " : "    +")
+                        .append(value);
+            }
+            result.append('\n');
         }
         return result.toString();
     }
@@ -67,5 +77,11 @@ public class UIBlockStats extends CoreWidget {
         this.fields = fieldBinding;
     }
 
+    public void bindUpgrade(Binding<UpgradeInfo> upgradeBinding) {
+        upgrade = upgradeBinding;
+    }
+
+    public void bindShowUpgrade(Binding<Boolean> showBinding) {
+        showUpgrade = showBinding;
     }
 }

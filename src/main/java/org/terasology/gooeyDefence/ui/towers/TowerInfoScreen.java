@@ -55,6 +55,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
 
     private TowerEffector currentEffector = null;
     private TowerTargeter currentTargeter = null;
+    private UpgradeInfo currentUpgrade = null;
     private UpgradingSystem upgradingSystem;
 
     private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
@@ -116,6 +117,18 @@ public class TowerInfoScreen extends CoreScreenLayer {
             @Override
             public Map<String, String> get() {
                 return upgradingSystem.getComponentValues(getSelectedComponent());
+            }
+        });
+        blockStats.bindUpgrade(new ReadOnlyBinding<UpgradeInfo>() {
+            @Override
+            public UpgradeInfo get() {
+                return currentUpgrade;
+            }
+        });
+        blockStats.bindShowUpgrade(new ReadOnlyBinding<Boolean>() {
+            @Override
+            public Boolean get() {
+                return currentUpgrade != null;
             }
         });
 
@@ -195,8 +208,15 @@ public class TowerInfoScreen extends CoreScreenLayer {
      */
     private void upgradePressed(UpgradeList upgrade) {
         List<UpgradeInfo> stages = upgrade.getStages();
-        if (!stages.isEmpty()) {
-            upgradingSystem.applyUpgrade(getSelectedComponent(), stages.remove(0));
+        /* Stages can never be empty because button is disabled if it is */
+        UpgradeInfo upgradeInfo = stages.get(0);
+
+        if (currentUpgrade == upgradeInfo) {
+            upgradingSystem.applyUpgrade(getSelectedComponent(), upgradeInfo);
+            stages.remove(0);
+            currentUpgrade = stages.isEmpty() ? null : stages.get(0);
+        } else {
+            currentUpgrade = upgradeInfo;
         }
     }
 
