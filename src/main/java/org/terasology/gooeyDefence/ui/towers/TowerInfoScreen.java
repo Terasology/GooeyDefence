@@ -22,7 +22,6 @@ import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
-import org.terasology.gooeyDefence.upgrading.UpgradeInfo;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.math.geom.Vector2i;
@@ -54,7 +53,6 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private boolean isEffectorSelected = false;
     private boolean isTargeterSelected = false;
     private EntityRef currentEntity = EntityRef.NULL;
-    private UpgradingSystem upgradingSystem;
 
     private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
         @Override
@@ -204,7 +202,6 @@ public class TowerInfoScreen extends CoreScreenLayer {
      */
     public void setUpgradingSystem(UpgradingSystem newSystem) {
         upgrading.setUpgradingSystem(newSystem);
-        upgradingSystem = newSystem;
     }
 }
 

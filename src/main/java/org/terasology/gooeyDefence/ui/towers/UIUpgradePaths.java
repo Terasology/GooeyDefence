@@ -15,8 +15,6 @@
  */
 package org.terasology.gooeyDefence.ui.towers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.gooeyDefence.upgrading.BlockUpgradesComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradeList;
 import org.terasology.math.geom.Vector2i;
