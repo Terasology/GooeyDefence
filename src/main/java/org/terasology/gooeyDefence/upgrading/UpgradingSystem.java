@@ -55,6 +55,9 @@ public class UpgradingSystem extends BaseComponentSystem {
      * @see UpgradeInfo
      */
     public void applyUpgrade(Component component, UpgradeInfo upgrade) {
+        if (component == null || upgrade == null) {
+            return;
+        }
         ComponentMetadata<? extends Component> componentMeta = componentLibrary.getMetadata(component);
 
         /* Apply upgrade for each field */
@@ -72,6 +75,9 @@ public class UpgradingSystem extends BaseComponentSystem {
      * @return The component that this component should be applied to.
      */
     public Component getComponentToUpgrade(EntityRef entity, BlockUpgradesComponent upgradesComponent) {
+        if (upgradesComponent == null || entity == EntityRef.NULL) {
+            return null;
+        }
         /* Get needed data */
         ComponentMetadata<?> componentMeta = componentLibrary.resolve(upgradesComponent.getComponentName());
         if (componentMeta == null) {
