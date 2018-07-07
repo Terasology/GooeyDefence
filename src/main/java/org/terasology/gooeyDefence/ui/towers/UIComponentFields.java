@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UIBlockStats extends CoreWidget {
+public class UIComponentFields extends CoreWidget {
     private Binding<Map<String, String>> fields = new DefaultBinding<>(new HashMap<>());
     private Binding<UpgradeInfo> upgrade = new DefaultBinding<>();
     private Binding<Boolean> showUpgrade = new DefaultBinding<>(false);

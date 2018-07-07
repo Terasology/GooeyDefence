@@ -155,7 +155,7 @@
                   }
                 },
                 {
-                  "type": "UIBlockStats",
+                  "type": "UIComponentFields",
                   "id": "blockStats",
                   "layoutInfo": {
                     "use-content-width": true,

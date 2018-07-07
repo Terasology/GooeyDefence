@@ -48,7 +48,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
 
     private UILabel blockName;
     private UILabel blockDescription;
-    private UIBlockStats blockStats;
+    private UIComponentFields blockStats;
     private UIUpgradePaths blockUpgrades;
 
     private ColumnLayout effectorList;
@@ -86,7 +86,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     public void initialise() {
         blockName = find("blockName", UILabel.class);
         blockDescription = find("blockDescription", UILabel.class);
-        blockStats = find("blockStats", UIBlockStats.class);
+        blockStats = find("blockStats", UIComponentFields.class);
         blockUpgrades = find("blockUpgrades", UIUpgradePaths.class);
 
         effectorList = find("effectorList", ColumnLayout.class);
