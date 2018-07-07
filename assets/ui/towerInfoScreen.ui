@@ -155,6 +155,20 @@
                   }
                 },
                 {
+                  "type": "UIUpgrader",
+                  "id": "upgrading",
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-horizontal-center": {},
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "blockDescription"
+                    }
+                  }
+                },
+                {
                   "type": "UIComponentFields",
                   "id": "blockStats",
                   "layoutInfo": {
@@ -164,7 +178,7 @@
                     "position-top": {
                       "offset": 16,
                       "target": "BOTTOM",
-                      "widget": "blockDescription"
+                      "widget": "upgraderTest"
                     }
                   }
                 },
