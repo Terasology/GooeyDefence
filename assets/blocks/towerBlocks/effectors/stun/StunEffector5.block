@@ -1,0 +1,7 @@
+{
+  "entity": {
+    "prefab": "GooeyDefence:StunEffector5"
+  },
+  "blockTile": "GooeyDefence:StunEffector5",
+  "translucent":true
+}

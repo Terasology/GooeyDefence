@@ -1,0 +1,7 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "StunEffector": {
+    "drain": 5,
+    "stunDuration": 900
+  }
+}

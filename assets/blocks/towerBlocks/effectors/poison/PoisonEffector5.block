@@ -1,0 +1,7 @@
+{
+  "entity": {
+    "prefab": "GooeyDefence:PoisonEffector5"
+  },
+  "blockTile": "GooeyDefence:PoisonEffector5",
+  "translucent":true
+}

@@ -1,0 +1,7 @@
+{
+  "entity": {
+    "prefab": "GooeyDefence:FireEffector6"
+  },
+  "blockTile": "GooeyDefence:FireEffector6",
+  "translucent":true
+}
