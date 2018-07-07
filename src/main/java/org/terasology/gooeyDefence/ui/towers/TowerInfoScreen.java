@@ -23,6 +23,9 @@ import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
+import org.terasology.gooeyDefence.upgrading.BlockUpgradesComponent;
+import org.terasology.gooeyDefence.upgrading.UpgradeInfo;
+import org.terasology.gooeyDefence.upgrading.UpgradeList;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.nui.Canvas;
@@ -33,12 +36,15 @@ import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 
+import java.util.List;
+
 public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
 
 
     private UILabel blockName;
     private UIBlockStats blockStats;
+    private UIUpgrades blockUpgrades;
 
     private ColumnLayout effectorList;
     private RelativeLayout effectorLayout;
@@ -73,6 +79,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     public void initialise() {
         blockName = find("blockName", UILabel.class);
         blockStats = find("blockStats", UIBlockStats.class);
+        blockUpgrades = find("blockUpgrades", UIUpgrades.class);
 
         effectorList = find("effectorList", ColumnLayout.class);
         effectorLayout = find("effectorLayout", RelativeLayout.class);
@@ -96,6 +103,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private void bindGeneralWidgets() {
         blockName.bindEnabled(generalVisibleBinding);
         blockStats.bindEnabled(generalVisibleBinding);
+        blockUpgrades.bindEnabled(generalVisibleBinding);
 
         blockName.bindText(new ReadOnlyBinding<String>() {
             @Override
@@ -110,6 +118,8 @@ public class TowerInfoScreen extends CoreScreenLayer {
                 return getSelectedComponent();
             }
         });
+
+        blockUpgrades.subscribe(this::upgradePressed);
     }
 
     /**
@@ -138,7 +148,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
             TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
             UIButton button = new UIButton();
             button.setText(effectorComponent.getClass().getSimpleName());
-            button.subscribe((widget) -> effectorButtonPressed(effectorComponent));
+            button.subscribe((widget) -> effectorButtonPressed(effectorComponent, effector));
             effectorList.addWidget(button);
         }
         targeterList.removeAllWidgets();
@@ -146,10 +156,11 @@ public class TowerInfoScreen extends CoreScreenLayer {
             TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
             UIButton button = new UIButton();
             button.setText(targeterComponent.getClass().getSimpleName());
-            button.subscribe((widget) -> targeterButtonPressed(targeterComponent));
+            button.subscribe((widget) -> targeterButtonPressed(targeterComponent, targeter));
             targeterList.addWidget(button);
         }
     }
+
 
     /**
      * Subscriber called when a button on the list of effectors is pushed.
@@ -157,9 +168,11 @@ public class TowerInfoScreen extends CoreScreenLayer {
      *
      * @param effector The effector of the pushed button
      */
-    private void effectorButtonPressed(TowerEffector effector) {
+    private void effectorButtonPressed(TowerEffector effector, EntityRef entity) {
         currentTargeter = null;
         currentEffector = effector;
+
+        blockUpgrades.setUpgrades(entity.getComponent(BlockUpgradesComponent.class));
         logger.info("Button for effector " + effector.getClass().getSimpleName() + " was pressed");
     }
 
@@ -169,10 +182,24 @@ public class TowerInfoScreen extends CoreScreenLayer {
      *
      * @param targeter The targeter of the pushed button
      */
-    private void targeterButtonPressed(TowerTargeter targeter) {
+    private void targeterButtonPressed(TowerTargeter targeter, EntityRef entity) {
         currentEffector = null;
         currentTargeter = targeter;
+
+        blockUpgrades.setUpgrades(entity.getComponent(BlockUpgradesComponent.class));
         logger.info("Button for targeter " + targeter.getClass().getSimpleName() + " was pressed");
+    }
+
+    /**
+     * Applies the given upgrade to the currently selected component
+     *
+     * @param upgrade The upgrade to apply
+     */
+    private void upgradePressed(UpgradeList upgrade) {
+        List<UpgradeInfo> stages = upgrade.getStages();
+        if (!stages.isEmpty()) {
+            upgradingSystem.applyUpgrade(getSelectedComponent(), stages.remove(0));
+        }
     }
 
     /**

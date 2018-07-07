@@ -18,6 +18,7 @@ package org.terasology.gooeyDefence.ui.towers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.gooeyDefence.upgrading.BlockUpgradesComponent;
+import org.terasology.gooeyDefence.upgrading.UpgradeInfo;
 import org.terasology.gooeyDefence.upgrading.UpgradeList;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.nui.Canvas;
@@ -25,9 +26,12 @@ import org.terasology.rendering.nui.CoreWidget;
 import org.terasology.rendering.nui.layouts.FlowLayout;
 import org.terasology.rendering.nui.widgets.UIButton;
 
+import java.util.function.Consumer;
+
 public class UIUpgrades extends CoreWidget {
     private static final Logger logger = LoggerFactory.getLogger(UIUpgrades.class);
     private FlowLayout upgrades = new FlowLayout();
+    private Consumer<UpgradeList> listener;
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -35,15 +39,23 @@ public class UIUpgrades extends CoreWidget {
     }
 
     public void setUpgrades(BlockUpgradesComponent upgradesComponent) {
-        for (UpgradeList upgradeList : upgradesComponent.getUpgrades()) {
-            UIButton upgradeButton = new UIButton(upgradeList.getUpgradeName());
-            upgradeButton.subscribe(widget -> upgradeButtonPressed(upgradeList));
-            upgrades.addWidget(upgradeButton, null);
+        upgrades.removeAllWidgets();
+        if (upgradesComponent != null) {
+            for (UpgradeList upgradeList : upgradesComponent.getUpgrades()) {
+                UIButton upgradeButton = new UIButton();
+                upgradeButton.setText(upgradeList.getUpgradeName());
+                upgradeButton.subscribe(widget -> upgradeButtonPressed(upgradeList));
+                upgrades.addWidget(upgradeButton, null);
+            }
         }
     }
 
+    public void subscribe(Consumer<UpgradeList> newListener) {
+        listener = newListener;
+    }
+
     public void upgradeButtonPressed(UpgradeList upgrade) {
-        logger.info(upgrade.getUpgradeName());
+        listener.accept(upgrade);
     }
 
     @Override
