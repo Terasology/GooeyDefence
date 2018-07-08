@@ -41,6 +41,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
 
     private UIUpgrader upgrading;
 
+    private RelativeLayout towerInfoLayout;
     private UILabel blockName;
     private UILabel blockDescription;
 
@@ -78,6 +79,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
         upgrading = find("upgrading", UIUpgrader.class);
         blockName = find("blockName", UILabel.class);
         blockDescription = find("blockDescription", UILabel.class);
+        towerInfoLayout = find("towerInfoLayout", RelativeLayout.class);
 
         effectorList = find("effectorList", ColumnLayout.class);
         effectorLayout = find("effectorLayout", RelativeLayout.class);
@@ -113,9 +115,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * Setup all the binding for the general block info widgets
      */
     private void bindGeneralWidgets() {
-        blockName.bindVisible(generalVisibleBinding);
-        blockDescription.bindVisible(generalVisibleBinding);
-        upgrading.bindVisible(generalVisibleBinding);
+        towerInfoLayout.bindVisible(generalVisibleBinding);
 
         upgrading.bindEntity(new ReadOnlyBinding<EntityRef>() {
             @Override

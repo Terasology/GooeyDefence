@@ -181,6 +181,19 @@
                       "id": "upgradesPanel",
                       "contents": [
                         {
+                          "type": "UILabel",
+                          "id": "upgradePanelLabel",
+                          "text": "Stats & Upgrades",
+                          "layoutInfo": {
+                            "use-content-width": true,
+                            "use-content-height": true,
+                            "position-horizontal-center": {},
+                            "position-top": {
+                              "offset": 32
+                            }
+                          }
+                        },
+                        {
                           "type": "UIUpgrader",
                           "id": "upgrading",
                           "layoutInfo": {
@@ -188,7 +201,9 @@
                             "use-content-height": true,
                             "position-horizontal-center": {},
                             "position-top": {
-                              "offset": 32
+                              "offset": 16,
+                              "target": "BOTTOM",
+                              "widget": "upgradePanelLabel"
                             }
                           }
                         }
@@ -204,8 +219,7 @@
                     "use-content-height": false,
                     "position-left": {},
                     "position-right": {},
-                    "position-bottom": {
-                    },
+                    "position-bottom": {},
                     "position-top": {
                       "offset": 16,
                       "target": "BOTTOM",
@@ -221,7 +235,7 @@
                         "use-content-width": true,
                         "use-content-height": true,
                         "position-horizontal-center": {},
-                        "position-vertical-center": {}
+                        "position-top": {}
                       }
                     }
                   ]
@@ -250,7 +264,7 @@
                         "use-content-width": true,
                         "use-content-height": true,
                         "position-horizontal-center": {},
-                        "position-vertical-center": {}
+                        "position-top": {}
                       }
                     }
                   ]
