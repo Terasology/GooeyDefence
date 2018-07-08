@@ -1,0 +1,126 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "DisplayName": {
+    "name": "Missile Targeter",
+    "description": "Targets an enemy far away and effects all enemies nearby the target"
+  }, 
+  "MissileTargeter": {
+    "drain": 5,
+	"splashRange": 1,
+    "minimumRange": 5,
+    "range": 20,
+    "attackSpeed":2000
+  },
+  "BlockUpgrades": {
+    "componentName": "MissileTargeter",
+    "upgrades": [
+      {
+        "upgradeName": "Attack Speed",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -200
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -200
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -200
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -200
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -200
+            }
+          }
+        ]
+      },
+      {
+        "upgradeName": "Range",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "range": 5,
+              "minimumRange": 5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 5,
+              "minimumRange": 5
+            }
+          }
+        ]
+      },
+      {
+        "upgradeName": "Spash Radius",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "splashRange": 0.5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "splashRange": 0.5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "splashRange": 0.5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "splashRange": 0.5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "splashRange": 0.5
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
