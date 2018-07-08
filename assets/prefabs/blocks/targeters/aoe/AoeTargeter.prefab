@@ -1,0 +1,87 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "DisplayName": {
+    "name": "Area Of Effect Targeter",
+    "description": "This targeter attacks every single enemy within range. It has greatly reduced power in return. Useful for applying an effect over a large area."
+  },
+  "AoeTargeter": {
+    "drain": 5,
+    "range": 2,
+    "attackSpeed": 500
+  },
+  "BlockUpgrades": {
+    "componentName": "AoeTargeter",
+    "upgrades": [
+      {
+        "upgradeName": "Attack Speed",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -100
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -100
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -50
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -50
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "attackSpeed": -50
+            }
+          }
+        ]
+      },
+      {
+        "upgradeName": "Range",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "range": 1
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 1
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 1
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 1
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "range": 1
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
