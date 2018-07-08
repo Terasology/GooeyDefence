@@ -85,12 +85,11 @@ public class UIUpgrader extends CoreWidget {
         Vector2i canvasSize = canvas.size();
 
         Vector2i fieldsSize = canvas.calculateRestrictedSize(componentFields, canvasSize);
-        canvas.drawWidget(componentFields, Rect2i.createFromMinAndSize(0, 0, canvasSize.x, fieldsSize.y));
-
-        canvasSize.subY(fieldsSize.y);
-
         Vector2i pathsSize = canvas.calculateRestrictedSize(upgradePaths, canvasSize);
-        canvas.drawWidget(upgradePaths, Rect2i.createFromMinAndSize(0, fieldsSize.y, canvasSize.x, pathsSize.y));
+        int width = Math.max(fieldsSize.x, pathsSize.x);
+
+        canvas.drawWidget(componentFields, Rect2i.createFromMinAndSize((width - fieldsSize.x) / 2, 0, canvasSize.x, fieldsSize.y));
+        canvas.drawWidget(upgradePaths, Rect2i.createFromMinAndSize((width - pathsSize.x) / 2, fieldsSize.y, canvasSize.x, pathsSize.y));
     }
 
     @Override
