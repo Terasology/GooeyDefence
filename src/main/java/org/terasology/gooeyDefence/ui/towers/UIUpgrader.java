@@ -33,6 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Displays the upgrades on a component and allows for application of them
+ */
 public class UIUpgrader extends CoreWidget {
     private UIComponentFields componentFields = new UIComponentFields();
     private UIUpgradePaths upgradePaths = new UIUpgradePaths();
@@ -46,6 +49,9 @@ public class UIUpgrader extends CoreWidget {
         }
     };
 
+    /**
+     * Constructor to setup all the bindings for the component widgets
+     */
     public UIUpgrader() {
         componentFields.bindFields(new ReadOnlyBinding<Map<String, String>>() {
             @Override
@@ -99,6 +105,12 @@ public class UIUpgrader extends CoreWidget {
         return super.isEnabled() && upgradingSystem != null;
     }
 
+    /**
+     * Called when an upgrade button is pressed.
+     * Handles the initial selection and the application of that upgrade.
+     *
+     * @param upgrade The upgrade path selected
+     */
     private void upgradePressed(UpgradeList upgrade) {
         List<UpgradeInfo> stages = upgrade.getStages();
         /* Stages can never be empty because button is disabled if it is */
@@ -113,18 +125,37 @@ public class UIUpgrader extends CoreWidget {
         }
     }
 
+    /**
+     * @return The component to display and apply upgrades to.
+     */
     private Component getTargetComponent() {
         return isEnabled() ? upgradingSystem.getComponentToUpgrade(entity.get(), upgradesComponent.get()) : null;
     }
 
+    /**
+     * Set the upgrading system used in this widget.
+     *
+     * @param upgradingSystem The upgrading system to use
+     */
     public void setUpgradingSystem(UpgradingSystem upgradingSystem) {
         this.upgradingSystem = upgradingSystem;
     }
 
-    public void bindEntity(Binding<EntityRef> entity) {
-        this.entity = entity;
+    /**
+     * Bind which entity to show.
+     *
+     * @param entityBinding The new binding to apply
+     */
+    public void bindEntity(Binding<EntityRef> entityBinding) {
+        entity = entityBinding;
     }
 
+    /**
+     * Bind which upgrade component to use.
+     * By default uses the one present on the entity (If it exists)
+     *
+     * @param upgradesBinding The new binding to apply
+     */
     public void bindUpgradesComponent(Binding<BlockUpgradesComponent> upgradesBinding) {
         upgradesComponent = upgradesBinding;
     }
