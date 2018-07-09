@@ -11,7 +11,7 @@
 	"splashRange": 1
   },
   "BlockUpgrades": {
-    "componentName": "SingleTargeter",
+    "componentName": "SplashTargeter",
     "upgrades": [
       {
         "upgradeName": "Attack Speed",
@@ -79,6 +79,41 @@
             "cost": 5,
             "values": {
               "range": 1
+            }
+          }
+        ]
+      },
+      {
+        "upgradeName": "Spash Radius",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "splashRange": 0.5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "splashRange": 0.5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "splashRange": 0.5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "splashRange": 0.5
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "splashRange": 0.5
             }
           }
         ]
