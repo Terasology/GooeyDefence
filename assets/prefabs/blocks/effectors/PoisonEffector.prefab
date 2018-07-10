@@ -1,0 +1,123 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "DisplayName": {
+    "name": "Poison Effector",
+    "description": "Deals an initial damage and then poisons the target, dealing more damage over time. Being hit again by the same effector will cause it to refresh the duration. An enemy can be poisoned by multiple different effectors."
+  },
+  "PoisonEffector": {
+    "drain": 5,
+    "damage": 1,
+    "poisonDamage": 1,
+    "poisonDuration": 500
+  },
+  "BlockUpgrades": {
+    "componentName": "PoisonEffector",
+    "upgrades": [
+      {
+        "upgradeName": "Damage",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "damage": 2
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 3
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 6
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 12
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 24
+            }
+          }
+        ]
+      },
+      {
+        "upgradeName": "Poison Damage",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "poisonDamage": 1
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "poisonDamage": 2
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "poisonDamage": 2
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "poisonDamage": 2
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "poisonDamage": 4
+            }
+          }
+        ]
+      },
+      {
+        "upgradeName": "Poison Duration",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "poisonDuration": 500
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "poisonDuration": 500
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "poisonDuration": 500
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "poisonDuration": 500
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "poisonDuration": 500
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

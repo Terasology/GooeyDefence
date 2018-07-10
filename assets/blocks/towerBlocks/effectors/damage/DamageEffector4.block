@@ -1,7 +1,0 @@
-{
-  "entity": {
-    "prefab": "GooeyDefence:DamageEffector4"
-  },
-  "blockTile": "GooeyDefence:DamageEffector4",
-  "translucent":true
-}

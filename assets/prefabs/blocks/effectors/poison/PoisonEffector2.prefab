@@ -1,9 +1,0 @@
-{
-  "parent": "GooeyDefence:PlainBlock",
-  "PoisonEffector": {
-    "drain": 5,
-    "damage": 3,
-	"poisonDamage": 1,
-	"poisonDuration": 1000
-  }
-}

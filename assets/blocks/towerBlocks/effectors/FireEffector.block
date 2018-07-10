@@ -1,0 +1,8 @@
+{
+  "displayName": "Fire Effector",
+  "entity": {
+    "prefab": "GooeyDefence:FireEffector"
+  },
+  "blockTile": "GooeyDefence:FireEffector",
+  "translucent":true
+}

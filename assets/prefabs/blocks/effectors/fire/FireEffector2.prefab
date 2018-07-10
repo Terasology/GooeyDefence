@@ -1,8 +1,0 @@
-{
-  "parent": "GooeyDefence:PlainBlock",
-  "FireEffector": {
-    "drain": 5,
-    "damage": 4,
-	"fireDuration": 2500
-  }
-}

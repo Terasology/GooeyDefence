@@ -1,0 +1,8 @@
+{
+  "displayName": "Poison Effector",
+  "entity": {
+    "prefab": "GooeyDefence:PoisonEffector"
+  },
+  "blockTile": "GooeyDefence:PoisonEffector",
+  "translucent":true
+}
