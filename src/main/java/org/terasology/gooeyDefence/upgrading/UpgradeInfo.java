@@ -17,6 +17,7 @@ package org.terasology.gooeyDefence.upgrading;
 
 import org.terasology.reflection.MappedContainer;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -30,12 +31,12 @@ public class UpgradeInfo {
     /**
      * How much the upgrade will cost
      */
-    private int cost;
+    private int cost = 0;
     /**
      * A mapping between the fields to set, and how much to change them by.
      * Eg, <code>"power": 5</code> will try to increase the field <code>power</code> by 5
      */
-    private Map<String, Number> values;
+    private Map<String, Number> values = new HashMap<>();
 
     public int getCost() {
         return cost;
