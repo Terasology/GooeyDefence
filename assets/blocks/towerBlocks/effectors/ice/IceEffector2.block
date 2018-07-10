@@ -1,7 +1,0 @@
-{
-  "entity": {
-    "prefab": "GooeyDefence:IceEffector2"
-  },
-  "blockTile": "GooeyDefence:IceEffector2",
-  "translucent":true
-}

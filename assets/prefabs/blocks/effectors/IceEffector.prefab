@@ -1,0 +1,51 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "DisplayName": {
+    "name": "Ice Effector",
+    "description": "Slows down the target by freezing them. The freezing doesn't do any damage"
+  },
+  "IceEffector": {
+    "drain": 5,
+    "slow": 0.9
+  },
+  "BlockUpgrades": {
+    "componentName": "IceEffector",
+    "upgrades": [
+      {
+        "upgradeName": "Slow Multiplier",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "slow": -0.1
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "slow": -0.1
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "slow": -0.1
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "slow": -0.1
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "field": -0.1
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

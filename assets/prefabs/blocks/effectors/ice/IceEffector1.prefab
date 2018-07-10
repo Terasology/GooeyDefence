@@ -1,7 +1,0 @@
-{
-  "parent": "GooeyDefence:PlainBlock",
-  "IceEffector": {
-    "drain": 5,
-    "slow": 0.9
-  }
-}
