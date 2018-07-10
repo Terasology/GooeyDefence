@@ -20,17 +20,15 @@ import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.metadata.ComponentFieldMetadata;
 import org.terasology.entitySystem.metadata.ComponentLibrary;
 import org.terasology.entitySystem.metadata.ComponentMetadata;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.common.ActivateEvent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -50,26 +48,6 @@ public class UpgradingSystem extends BaseComponentSystem {
     }
 
     /**
-     * Test handler.
-     * <p>
-     * Filters on {@link BlockUpgradesComponent}
-     *
-     * @see ActivateEvent
-     */
-    @ReceiveEvent
-    public void onActivate(ActivateEvent event, EntityRef entity, BlockUpgradesComponent upgraderComponent) {
-        for (UpgradeList upgradeList : upgraderComponent.getUpgrades()) {
-            /* Print out the name and apply the upgrade */
-            logger.info("Applying upgrade " + upgradeList.getUpgradeName());
-            List<UpgradeInfo> stages = upgradeList.getStages();
-            if (!stages.isEmpty()) {
-                applyUpgrade(getComponentToUpgrade(entity, upgraderComponent), stages.remove(0));
-            }
-        }
-        logger.info(entity.toFullDescription());
-    }
-
-    /**
      * Applies a given upgrade to the entity.
      *
      * @param component The component to apply the upgrade onto
@@ -77,6 +55,9 @@ public class UpgradingSystem extends BaseComponentSystem {
      * @see UpgradeInfo
      */
     public void applyUpgrade(Component component, UpgradeInfo upgrade) {
+        if (component == null || upgrade == null) {
+            return;
+        }
         ComponentMetadata<? extends Component> componentMeta = componentLibrary.getMetadata(component);
 
         /* Apply upgrade for each field */
@@ -91,9 +72,12 @@ public class UpgradingSystem extends BaseComponentSystem {
      *
      * @param entity            The entity to get the component from
      * @param upgradesComponent The component containing the upgrade data
-     * @return
+     * @return The component that this component should be applied to.
      */
     public Component getComponentToUpgrade(EntityRef entity, BlockUpgradesComponent upgradesComponent) {
+        if (upgradesComponent == null || entity == EntityRef.NULL) {
+            return null;
+        }
         /* Get needed data */
         ComponentMetadata<?> componentMeta = componentLibrary.resolve(upgradesComponent.getComponentName());
         if (componentMeta == null) {
@@ -144,5 +128,22 @@ public class UpgradingSystem extends BaseComponentSystem {
                         + field.getField().getGenericType().getTypeName()
                         + ". Type must be a Number primitive");
         }
+    }
+
+    /**
+     * Get a mapping between all the fields and their values for a component.
+     *
+     * @param component The component to get all fields on
+     * @return All the fields and their values, as strings.
+     */
+    public Map<String, String> getComponentValues(Component component) {
+        ComponentMetadata<? extends Component> metadata = componentLibrary.getMetadata(component);
+        Map<String, String> result = new HashMap<>();
+        if (metadata != null) {
+            for (ComponentFieldMetadata<?, ?> field : metadata.getFields()) {
+                result.put(field.getName(), String.valueOf(field.getValue(component)));
+            }
+        }
+        return result;
     }
 }
