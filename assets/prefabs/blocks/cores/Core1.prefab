@@ -1,6 +1,0 @@
-{
-  "parent": "GooeyDefence:PlainBlock",
-  "Core": {
-    "power": 10
-  }
-}

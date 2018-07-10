@@ -1,0 +1,50 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "DisplayName": {
+    "name": "Tower Core",
+    "description": "Provides power for the tower's other blocks. If you don't have enough power you won't be able to run your tower."
+  },
+  "Core": {
+    "power": 10
+  },
+  "BlockUpgrades": {
+    "componentName": "Core",
+    "upgrades": [
+      {
+        "upgradeName": "Power",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "power": 10
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "power": 10
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "power": 10
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "power": 10
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "power": 10
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
