@@ -1,0 +1,87 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "DisplayName": {
+    "name": "Fire Effector",
+    "description": "Ignites the target. Burning targets have a chance to set nearby targets on fire, thus spreading the effect."
+  },
+  "FireEffector": {
+    "drain": 5,
+    "damage": 2,
+    "fireDuration": 2000
+  },
+  "BlockUpgrades": {
+    "componentName": "FireEffector",
+    "upgrades": [
+      {
+        "upgradeName": "Damage",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "damage": 2
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 2
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 2
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 2
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 2
+            }
+          }
+        ]
+      },
+      {
+        "upgradeName": "Fire Duration",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "fireDuration": 500
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "fireDuration": 500
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "fireDuration": 500
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "fireDuration": 500
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "fireDuration": 500
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
