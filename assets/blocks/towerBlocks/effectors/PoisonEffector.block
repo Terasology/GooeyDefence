@@ -1,4 +1,5 @@
 {
+  "displayName": "Poison Effector",
   "entity": {
     "prefab": "GooeyDefence:PoisonEffector"
   },

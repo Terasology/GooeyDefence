@@ -1,4 +1,5 @@
 {
+  "displayName": "Visual Test Effector",
   "entity": {
     "prefab": "GooeyDefence:VisualEffector"
   },
