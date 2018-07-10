@@ -1,0 +1,51 @@
+{
+  "parent": "GooeyDefence:PlainBlock",
+  "DisplayName": {
+    "name": "Plain Damage Effector",
+    "description": "Simply directly deals damage to the target. Has no other side effect."
+  },
+  "DamageEffector": {
+    "drain": 5,
+    "damage": 2
+  },
+  "BlockUpgrades": {
+    "componentName": "DamageEffector",
+    "upgrades": [
+      {
+        "upgradeName": "Damage",
+        "stages": [
+          {
+            "cost": 5,
+            "values": {
+              "damage": 2
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 4
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 8
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 16
+            }
+          },
+          {
+            "cost": 5,
+            "values": {
+              "damage": 32
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
