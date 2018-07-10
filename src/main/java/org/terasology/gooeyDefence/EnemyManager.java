@@ -156,7 +156,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
             return;
         }
 
-        EntityRef entity = entityManager.create("GooeyDefence:Gooey", DefenceField.entrancePos(entranceNumber).toVector3f());
+        EntityRef entity = entityManager.create("GooeyDefence:BasicEnemy", DefenceField.entrancePos(entranceNumber).toVector3f());
 
         /* Setup pathfinding component */
         EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingManager);
