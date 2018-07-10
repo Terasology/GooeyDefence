@@ -1,7 +1,0 @@
-{
-  "entity": {
-    "prefab": "GooeyDefence:SingleTargeter5"
-  },
-  "blockTile": "GooeyDefence:SingleTargeter5",
-  "translucent":true
-}

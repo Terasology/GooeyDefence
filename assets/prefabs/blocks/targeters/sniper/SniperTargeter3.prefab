@@ -1,9 +1,0 @@
-{
-  "parent": "GooeyDefence:PlainBlock",
-  "SniperTargeter": {
-    "drain": 5,
-    "minimumRange": 10,
-    "range": 30,
-    "attackSpeed":1600
-  }
-}

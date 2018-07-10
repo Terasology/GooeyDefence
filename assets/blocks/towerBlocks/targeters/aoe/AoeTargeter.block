@@ -1,0 +1,8 @@
+{
+  "displayName": "Area Of Effect Targeter",
+  "entity": {
+    "prefab": "GooeyDefence:AoeTargeter"
+  },
+  "blockTile": "GooeyDefence:AoeTargeter",
+  "translucent":true
+}

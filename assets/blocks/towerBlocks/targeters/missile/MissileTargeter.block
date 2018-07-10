@@ -1,0 +1,8 @@
+{
+  "displayName": "Missile Targeter",
+  "entity": {
+    "prefab": "GooeyDefence:MissileTargeter"
+  },
+  "blockTile": "GooeyDefence:MissileTargeter",
+  "translucent":true
+}

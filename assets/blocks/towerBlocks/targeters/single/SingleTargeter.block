@@ -1,0 +1,8 @@
+{
+  "displayName": "Single Targeter",
+  "entity": {
+    "prefab": "GooeyDefence:SingleTargeter"
+  },
+  "blockTile": "GooeyDefence:SingleTargeter",
+  "translucent":true
+}
