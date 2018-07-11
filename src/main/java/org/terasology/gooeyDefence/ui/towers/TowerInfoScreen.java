@@ -45,6 +45,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private UILabel blockName;
     private UILabel blockDescription;
 
+    private UIList<EntityRef> coreList;
     private UIList<EntityRef> effectorList;
     private UIList<EntityRef> targeterList;
 
@@ -72,12 +73,14 @@ public class TowerInfoScreen extends CoreScreenLayer {
         blockDescription = find("blockDescription", UILabel.class);
         blockInfoPanel = find("blockInfoPanel", RelativeLayout.class);
 
+        coreList = find("coreList", UIList.class);
         effectorList = find("effectorList", UIList.class);
         targeterList = find("targeterList", UIList.class);
 
         bindGeneralWidgets();
         bindEffectorWidgets();
         bindTargeterWidgets();
+        bindCoreWidgets();
     }
 
     /**
@@ -125,11 +128,31 @@ public class TowerInfoScreen extends CoreScreenLayer {
         });
     }
 
+
+    /**
+     * Setup the bindings for the core specific widgets
+     */
+    private void bindCoreWidgets() {
+        subscribeSelection(coreList, targeterList, effectorList);
+        coreList.setItemRenderer(entityToStringRenderer);
+        coreList.bindList(new ReadOnlyBinding<List<EntityRef>>() {
+            @Override
+            public List<EntityRef> get() {
+                if (towerEntity == EntityRef.NULL) {
+                    return new ArrayList<>();
+                } else {
+                    TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
+                    return new ArrayList<>(towerComponent.cores);
+                }
+            }
+        });
+    }
+
     /**
      * Set up all the bindings for all the effector specific widgets
      */
     private void bindEffectorWidgets() {
-        effectorList.subscribeSelection((widget, item) -> towerBlockSelected(item, false));
+        subscribeSelection(effectorList, targeterList, coreList);
         effectorList.setItemRenderer(entityToStringRenderer);
         effectorList.bindList(new ReadOnlyBinding<List<EntityRef>>() {
             @Override
@@ -148,7 +171,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * Setup all the binding for the targeter widgets
      */
     private void bindTargeterWidgets() {
-        targeterList.subscribeSelection((widget, item) -> towerBlockSelected(item, true));
+        subscribeSelection(targeterList, effectorList, coreList);
         targeterList.setItemRenderer(entityToStringRenderer);
         targeterList.bindList(new ReadOnlyBinding<List<EntityRef>>() {
             @Override
@@ -159,6 +182,23 @@ public class TowerInfoScreen extends CoreScreenLayer {
                     TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
                     return new ArrayList<>(towerComponent.targeter);
                 }
+            }
+        });
+    }
+
+    /**
+     * Subscribes a block list widget to being clicked.
+     *
+     * @param listWidget The widget to subscribe
+     * @param otherOne   One of the other list widgets
+     * @param otherTwo   One of the other list widgets
+     */
+    private void subscribeSelection(UIList<EntityRef> listWidget, UIList<EntityRef> otherOne, UIList<EntityRef> otherTwo) {
+        listWidget.subscribeSelection((widget, item) -> {
+            if (item != null) {
+                otherOne.setSelection(null);
+                otherTwo.setSelection(null);
+                towerBlockSelected(item);
             }
         });
     }
@@ -179,14 +219,9 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * Subscriber called when a button on the list of effectors is pushed.
      * Sets the current effector and nulls the current targeter
      */
-    private void towerBlockSelected(EntityRef entity, boolean isBlockTargeter) {
+    private void towerBlockSelected(EntityRef entity) {
         if (entity != null) {
             blockEntity = entity;
-            if (isBlockTargeter){
-                effectorList.setSelection(null);
-            } else {
-                targeterList.setSelection(null);
-            }
         }
     }
 
