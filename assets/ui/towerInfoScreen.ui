@@ -64,7 +64,7 @@
                     "position-top": {
                       "target": "BOTTOM",
                       "offset": 8,
-                      "widget": "targetersTitle"
+                      "widget": "targeterListLabel"
                     },
                     "position-left": {
                       "offset": 16
@@ -75,7 +75,7 @@
                     "position-bottom": {
                       "target": "TOP",
                       "offset": 16,
-                      "widget": "effectorTitle"
+                      "widget": "effectorListLabel"
                     }
                   },
                   "content": {
@@ -108,7 +108,7 @@
                     "position-top": {
                       "target": "BOTTOM",
                       "offset": 8,
-                      "widget": "effectorTitle"
+                      "widget": "effectorListLabel"
                     },
                     "position-left": {
                       "offset": 16
