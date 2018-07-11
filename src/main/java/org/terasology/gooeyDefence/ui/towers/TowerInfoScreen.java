@@ -18,20 +18,20 @@ package org.terasology.gooeyDefence.ui.towers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
-import org.terasology.rendering.nui.layouts.ColumnLayout;
+import org.terasology.rendering.nui.itemRendering.StringTextRenderer;
 import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
-import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
+import org.terasology.rendering.nui.widgets.UIList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Screen for displaying a myriad of stats and options about a tower.
@@ -39,54 +39,41 @@ import org.terasology.rendering.nui.widgets.UILabel;
 public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
 
-    private UIUpgrader upgrading;
+    private UIUpgrader blockUpgrades;
 
-    private RelativeLayout towerInfoLayout;
+    private RelativeLayout blockInfoPanel;
     private UILabel blockName;
     private UILabel blockDescription;
 
-    private ColumnLayout effectorList;
-    private RelativeLayout effectorLayout;
+    private UIList<EntityRef> effectorList;
+    private UIList<EntityRef> targeterList;
 
-    private ColumnLayout targeterList;
-    private RelativeLayout targeterLayout;
-
-    private boolean isEffectorSelected = false;
-    private boolean isTargeterSelected = false;
-    private EntityRef currentEntity = EntityRef.NULL;
+    private EntityRef blockEntity = EntityRef.NULL;
+    private EntityRef towerEntity = EntityRef.NULL;
 
     private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
         @Override
         public Boolean get() {
-            return isEffectorSelected || isTargeterSelected;
+            return blockEntity != EntityRef.NULL;
         }
     };
-    private ReadOnlyBinding<Boolean> effectorVisibleBinding = new ReadOnlyBinding<Boolean>() {
+    private StringTextRenderer<EntityRef> entityToStringRenderer = new StringTextRenderer<EntityRef>() {
         @Override
-        public Boolean get() {
-            return isEffectorSelected;
-        }
-    };
-    private ReadOnlyBinding<Boolean> targeterVisibleBinding = new ReadOnlyBinding<Boolean>() {
-        @Override
-        public Boolean get() {
-            return isTargeterSelected;
+        public String getString(EntityRef entity) {
+            DisplayNameComponent nameComponent = entity.getComponent(DisplayNameComponent.class);
+            return nameComponent != null ? nameComponent.name : entity.getParentPrefab().getName();
         }
     };
 
     @Override
     public void initialise() {
-        upgrading = find("upgrading", UIUpgrader.class);
+        blockUpgrades = find("blockUpgrades", UIUpgrader.class);
         blockName = find("blockName", UILabel.class);
         blockDescription = find("blockDescription", UILabel.class);
-        towerInfoLayout = find("towerInfoLayout", RelativeLayout.class);
+        blockInfoPanel = find("blockInfoPanel", RelativeLayout.class);
 
-        effectorList = find("effectorList", ColumnLayout.class);
-        effectorLayout = find("effectorLayout", RelativeLayout.class);
-
-        targeterList = find("targeterList", ColumnLayout.class);
-        targeterLayout = find("targeterLayout", RelativeLayout.class);
-
+        effectorList = find("effectorList", UIList.class);
+        targeterList = find("targeterList", UIList.class);
 
         bindGeneralWidgets();
         bindEffectorWidgets();
@@ -98,11 +85,11 @@ public class TowerInfoScreen extends CoreScreenLayer {
      */
     @Override
     public void onClosed() {
-        isEffectorSelected = false;
-        isTargeterSelected = false;
-        currentEntity = EntityRef.NULL;
-        effectorList.removeAllWidgets();
-        targeterList.removeAllWidgets();
+        blockEntity = EntityRef.NULL;
+        towerEntity = EntityRef.NULL;
+
+        effectorList.setSelection(null);
+        targeterList.setSelection(null);
         super.onClosed();
     }
 
@@ -115,31 +102,24 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * Setup all the binding for the general block info widgets
      */
     private void bindGeneralWidgets() {
-        towerInfoLayout.bindVisible(generalVisibleBinding);
+        blockInfoPanel.bindVisible(generalVisibleBinding);
 
-        upgrading.bindEntity(new ReadOnlyBinding<EntityRef>() {
+        blockUpgrades.bindEntity(new ReadOnlyBinding<EntityRef>() {
             @Override
             public EntityRef get() {
-                return currentEntity;
+                return blockEntity;
             }
         });
         blockName.bindText(new ReadOnlyBinding<String>() {
             @Override
             public String get() {
-                if (currentEntity == EntityRef.NULL) {
-                    return "";
-                }
-                if (currentEntity.hasComponent(DisplayNameComponent.class)) {
-                    return currentEntity.getComponent(DisplayNameComponent.class).name;
-                } else {
-                    return currentEntity.getParentPrefab().getName();
-                }
+                return entityToStringRenderer.getString(blockEntity);
             }
         });
         blockDescription.bindText(new ReadOnlyBinding<String>() {
             @Override
             public String get() {
-                DisplayNameComponent displayComponent = currentEntity.getComponent(DisplayNameComponent.class);
+                DisplayNameComponent displayComponent = blockEntity.getComponent(DisplayNameComponent.class);
                 return displayComponent != null ? displayComponent.description : "";
             }
         });
@@ -149,14 +129,38 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * Set up all the bindings for all the effector specific widgets
      */
     private void bindEffectorWidgets() {
-        effectorLayout.bindVisible(effectorVisibleBinding);
+        effectorList.subscribeSelection((widget, item) -> towerBlockSelected(item, false));
+        effectorList.setItemRenderer(entityToStringRenderer);
+        effectorList.bindList(new ReadOnlyBinding<List<EntityRef>>() {
+            @Override
+            public List<EntityRef> get() {
+                if (towerEntity == EntityRef.NULL) {
+                    return new ArrayList<>();
+                } else {
+                    TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
+                    return new ArrayList<>(towerComponent.effector);
+                }
+            }
+        });
     }
 
     /**
      * Setup all the binding for the targeter widgets
      */
     private void bindTargeterWidgets() {
-        targeterLayout.bindVisible(targeterVisibleBinding);
+        targeterList.subscribeSelection((widget, item) -> towerBlockSelected(item, true));
+        targeterList.setItemRenderer(entityToStringRenderer);
+        targeterList.bindList(new ReadOnlyBinding<List<EntityRef>>() {
+            @Override
+            public List<EntityRef> get() {
+                if (towerEntity == EntityRef.NULL) {
+                    return new ArrayList<>();
+                } else {
+                    TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
+                    return new ArrayList<>(towerComponent.targeter);
+                }
+            }
+        });
     }
 
 
@@ -166,21 +170,8 @@ public class TowerInfoScreen extends CoreScreenLayer {
      *
      * @param tower The new tower to set
      */
-    public void setTower(TowerComponent tower) {
-        for (EntityRef effector : tower.effector) {
-            TowerEffector effectorComponent = DefenceField.getComponentExtending(effector, TowerEffector.class);
-            UIButton button = new UIButton();
-            button.setText(effectorComponent.getClass().getSimpleName());
-            button.subscribe((widget) -> towerBlockSelected(effector, false));
-            effectorList.addWidget(button);
-        }
-        for (EntityRef targeter : tower.targeter) {
-            TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
-            UIButton button = new UIButton();
-            button.setText(targeterComponent.getClass().getSimpleName());
-            button.subscribe((widget) -> towerBlockSelected(targeter, true));
-            targeterList.addWidget(button);
-        }
+    public void setTower(EntityRef tower) {
+        towerEntity = tower;
     }
 
 
@@ -189,9 +180,14 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * Sets the current effector and nulls the current targeter
      */
     private void towerBlockSelected(EntityRef entity, boolean isBlockTargeter) {
-        currentEntity = entity;
-        isTargeterSelected = isBlockTargeter;
-        isEffectorSelected = !isBlockTargeter;
+        if (entity != null) {
+            blockEntity = entity;
+            if (isBlockTargeter){
+                effectorList.setSelection(null);
+            } else {
+                targeterList.setSelection(null);
+            }
+        }
     }
 
 
@@ -201,7 +197,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * @param newSystem The upgrader system to set.
      */
     public void setUpgradingSystem(UpgradingSystem newSystem) {
-        upgrading.setUpgradingSystem(newSystem);
+        blockUpgrades.setUpgradingSystem(newSystem);
     }
 }
 

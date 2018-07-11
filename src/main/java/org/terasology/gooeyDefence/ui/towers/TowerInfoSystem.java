@@ -51,6 +51,6 @@ public class TowerInfoSystem extends BaseComponentSystem {
         TowerInfoScreen infoScreen = (TowerInfoScreen) nuiManager.pushScreen("GooeyDefence:TowerInfoScreen");
         infoScreen.setUpgradingSystem(upgradingSystem);
         EntityRef tower = component.getTowerEntity();
-        infoScreen.setTower(tower.getComponent(TowerComponent.class));
+        infoScreen.setTower(tower);
     }
 }
