@@ -48,6 +48,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private UILabel blockName;
     private UILabel blockDescription;
 
+    private UILabel powerProductionLabel;
     private UILabel powerProduction;
     private UILabel powerUsage;
 
@@ -56,7 +57,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private UIList<EntityRef> targeterList;
 
     private EntityRef blockEntity = EntityRef.NULL;
-    private EntityRef towerEntity = EntityRef.NULL;
+    private TowerComponent towerComponent = null;
 
     private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
         @Override
@@ -90,7 +91,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     @Override
     public void onClosed() {
         blockEntity = EntityRef.NULL;
-        towerEntity = EntityRef.NULL;
+        towerComponent = null;
 
         effectorList.setSelection(null);
         targeterList.setSelection(null);
@@ -113,6 +114,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
         blockName = find("blockName", UILabel.class);
         blockDescription = find("blockDescription", UILabel.class);
 
+        powerProductionLabel = find("powerProductionLabel", UILabel.class);
         powerProduction = find("powerProduction", UILabel.class);
         powerUsage = find("powerUsage", UILabel.class);
 
@@ -157,13 +159,12 @@ public class TowerInfoScreen extends CoreScreenLayer {
             public String get() {
                 return String.valueOf(
                         TowerManager.getTotalCorePower(
-                                towerEntity.getComponent(TowerComponent.class)));
+                                towerComponent));
             }
         });
         powerUsage.bindText(new ReadOnlyBinding<String>() {
             @Override
             public String get() {
-                TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
                 return String.valueOf(
                         TowerManager.getEffectorDrain(towerComponent) +
                                 TowerManager.getTargeterDrain(towerComponent));
@@ -173,7 +174,13 @@ public class TowerInfoScreen extends CoreScreenLayer {
         powerProduction.bindFamily(new ReadOnlyBinding<String>() {
             @Override
             public String get() {
-                TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
+                return towerComponent == null || TowerManager.hasEnoughPower(towerComponent) ? WHITE_TEXT : RED_TEXT;
+            }
+        });
+
+        powerProductionLabel.bindFamily(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
                 return towerComponent == null || TowerManager.hasEnoughPower(towerComponent) ? WHITE_TEXT : RED_TEXT;
             }
         });
@@ -188,12 +195,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
         coreList.bindList(new ReadOnlyBinding<List<EntityRef>>() {
             @Override
             public List<EntityRef> get() {
-                if (towerEntity == EntityRef.NULL) {
-                    return new ArrayList<>();
-                } else {
-                    TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
-                    return new ArrayList<>(towerComponent.cores);
-                }
+                return towerComponent == null ? new ArrayList<>() : new ArrayList<>(towerComponent.cores);
             }
         });
     }
@@ -207,12 +209,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
         effectorList.bindList(new ReadOnlyBinding<List<EntityRef>>() {
             @Override
             public List<EntityRef> get() {
-                if (towerEntity == EntityRef.NULL) {
-                    return new ArrayList<>();
-                } else {
-                    TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
-                    return new ArrayList<>(towerComponent.effector);
-                }
+                return towerComponent == null ? new ArrayList<>() : new ArrayList<>(towerComponent.effector);
             }
         });
     }
@@ -226,12 +223,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
         targeterList.bindList(new ReadOnlyBinding<List<EntityRef>>() {
             @Override
             public List<EntityRef> get() {
-                if (towerEntity == EntityRef.NULL) {
-                    return new ArrayList<>();
-                } else {
-                    TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
-                    return new ArrayList<>(towerComponent.targeter);
-                }
+                return towerComponent == null ? new ArrayList<>() : new ArrayList<>(towerComponent.targeter);
             }
         });
     }
@@ -262,7 +254,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * @param tower The new tower to set
      */
     public void setTower(EntityRef tower) {
-        towerEntity = tower;
+        towerComponent = tower.getComponent(TowerComponent.class);
     }
 
 
