@@ -38,20 +38,23 @@ public interface BaseParser {
     /**
      * Converts a raw value from a field into a human readable version.
      *
-     * @param field The name of the field being converted.
+     * @param field    The name of the field being converted.
      * @param rawValue The value of the field being converted.
      * @return The human readable string to display.
      */
-    String handleField(String field, Object rawValue);
+    default String handleField(String field, Object rawValue) {
+        return rawValue.toString();
+    }
 
     /**
      * Converts a raw upgrade value into a human readable version
      *
-     * @param field The name of the field being converted
+     * @param field    The name of the field being converted
      * @param rawValue The value of the upgrade field being converted
      * @return The human readable variant of the field.
      */
     default String handleUpgrade(String field, Object rawValue) {
-        return handleField(field, rawValue);
+        return "+" + handleField(field, rawValue);
     }
+
 }
