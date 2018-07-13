@@ -144,8 +144,7 @@ public class UpgradingSystem extends BaseComponentSystem {
                 field.setValue(component, (byte) field.getValue(component) + value.byteValue());
                 break;
             default:
-                //TODO: work out what to throw here
-                throw new Error("Can't set field of type: "
+                throw new IllegalArgumentException("Can't set field of type: "
                         + field.getField().getGenericType().getTypeName()
                         + ". Type must be a Number primitive");
         }
