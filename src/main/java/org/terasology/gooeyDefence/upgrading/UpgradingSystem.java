@@ -334,7 +334,7 @@ public class UpgradingSystem extends BaseComponentSystem {
      * @return The converted string.
      */
     private String parseWithBackup(BaseParser parser, String fieldName, Object value, boolean isUpgrade) {
-        if (isUpgrade) {
+        if (!isUpgrade) {
             return parser.handleField(fieldName, value);
         } else {
             return parser.handleUpgrade(fieldName, value);
