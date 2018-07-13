@@ -1,0 +1,11 @@
+{
+  "inherit": "default",
+  "families": {
+    "redText": {
+      "text-color": "FF0000FF"
+    },
+    "whiteText": {
+      "text-color": "FFFFFFFF"
+    }
+  }
+}

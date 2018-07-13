@@ -1,5 +1,6 @@
 {
   "type": "TowerInfoScreen",
+  "skin": "defenseDefault",
   "contents": {
     "type": "RelativeLayout",
     "id": "outerLayout",
@@ -352,27 +353,37 @@
                   },
                   "contents": [
                     {
-                      "type": "UIBox",
-                      "id": "towerStatsBox",
+                      "type": "ColumnLayout",
+                      "id": "towerInfoColumn",
+                      "columns": 2,
+                      "fillVerticalSpace": false,
+                      "autoSizeColumns": true,
                       "layoutInfo": {
-                        "use-content-width": false,
-                        "use-content-height": false,
                         "position-top": {},
                         "position-left": {},
                         "position-right": {},
                         "position-bottom": {}
                       },
-                      "content": {
-                        "type": "UILabel",
-                        "id": "towerStatsFlag",
-                        "text": "TOWER STATS HERE",
-                        "layoutInfo": {
-                          "use-content-width": true,
-                          "use-content-height": true,
-                          "position-horizontal-center": {},
-                          "position-vertical-center": {}
+                      "contents": [
+                        {
+                          "type": "UILabel",
+                          "id": "powerProductionLabel",
+                          "text": "Total Power Produced: "
+                        },
+                        {
+                          "type": "UILabel",
+                          "id": "powerProduction"
+                        },
+                        {
+                          "type": "UILabel",
+                          "id": "powerUsageLabel",
+                          "text": "Total Power Used: "
+                        },
+                        {
+                          "type": "UILabel",
+                          "id": "powerUsage"
                         }
-                      }
+                      ]
                     }
                   ]
                 }

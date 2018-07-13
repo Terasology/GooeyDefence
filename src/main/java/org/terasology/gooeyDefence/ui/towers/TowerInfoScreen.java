@@ -18,6 +18,7 @@ package org.terasology.gooeyDefence.ui.towers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.gooeyDefence.TowerManager;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.logic.common.DisplayNameComponent;
@@ -38,12 +39,17 @@ import java.util.List;
  */
 public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
+    private static final String WHITE_TEXT = "whiteText";
+    private static final String RED_TEXT = "redText";
 
     private UIUpgrader blockUpgrades;
 
     private RelativeLayout blockInfoPanel;
     private UILabel blockName;
     private UILabel blockDescription;
+
+    private UILabel powerProduction;
+    private UILabel powerUsage;
 
     private UIList<EntityRef> coreList;
     private UIList<EntityRef> effectorList;
@@ -68,20 +74,15 @@ public class TowerInfoScreen extends CoreScreenLayer {
 
     @Override
     public void initialise() {
-        blockUpgrades = find("blockUpgrades", UIUpgrader.class);
-        blockName = find("blockName", UILabel.class);
-        blockDescription = find("blockDescription", UILabel.class);
-        blockInfoPanel = find("blockInfoPanel", RelativeLayout.class);
-
-        coreList = find("coreList", UIList.class);
-        effectorList = find("effectorList", UIList.class);
-        targeterList = find("targeterList", UIList.class);
+        findAllWidgets();
 
         bindGeneralWidgets();
+        bindGeneralInfoWigets();
         bindEffectorWidgets();
         bindTargeterWidgets();
         bindCoreWidgets();
     }
+
 
     /**
      * Called when the screen is closed to clear the widgets and selections
@@ -99,6 +100,25 @@ public class TowerInfoScreen extends CoreScreenLayer {
     @Override
     public Vector2i getPreferredContentSize(Canvas canvas, Vector2i areaHint) {
         return areaHint;
+    }
+
+    /**
+     * `{@link #find(String, Class)}'s all the widgets needed for this screen.
+     */
+    private void findAllWidgets() {
+
+        blockUpgrades = find("blockUpgrades", UIUpgrader.class);
+
+        blockInfoPanel = find("blockInfoPanel", RelativeLayout.class);
+        blockName = find("blockName", UILabel.class);
+        blockDescription = find("blockDescription", UILabel.class);
+
+        powerProduction = find("powerProduction", UILabel.class);
+        powerUsage = find("powerUsage", UILabel.class);
+
+        coreList = find("coreList", UIList.class);
+        effectorList = find("effectorList", UIList.class);
+        targeterList = find("targeterList", UIList.class);
     }
 
     /**
@@ -128,6 +148,36 @@ public class TowerInfoScreen extends CoreScreenLayer {
         });
     }
 
+    /**
+     * Setup all the bindings for the general tower info widgets.
+     */
+    private void bindGeneralInfoWigets() {
+        powerProduction.bindText(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return String.valueOf(
+                        TowerManager.getTotalCorePower(
+                                towerEntity.getComponent(TowerComponent.class)));
+            }
+        });
+        powerUsage.bindText(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
+                return String.valueOf(
+                        TowerManager.getEffectorDrain(towerComponent) +
+                                TowerManager.getTargeterDrain(towerComponent));
+            }
+        });
+
+        powerProduction.bindFamily(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
+                return towerComponent == null || TowerManager.hasEnoughPower(towerComponent) ? WHITE_TEXT : RED_TEXT;
+            }
+        });
+    }
 
     /**
      * Setup the bindings for the core specific widgets
