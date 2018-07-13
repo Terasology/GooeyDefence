@@ -258,6 +258,27 @@ public class UpgradingSystem extends BaseComponentSystem {
         return upgrades;
     }
 
+    /**
+     * Attempts to parse a value into a human readable format.
+     * <p>
+     * First tries to call a method on the parser with the following properties:
+     * <p>
+     * 1. Same name as the field
+     * 2. Return type of string
+     * 3. First parameter is a boolean
+     * 4. Second parameter is the same type as the field.
+     * <p>
+     * If it cannot find an appropriate method, it will instead use the
+     * {@link BaseParser#handleUpgrade(String, Object)} or {@link BaseParser#handleField(String, Object)} methods.
+     * By default these simply call {@code String.valueOf()} on the value.
+     *
+     * @param parser    The parser to use
+     * @param value     The value to convert
+     * @param fieldName The name of the field being converted
+     * @param fieldType The type of the field being converted
+     * @param isUpgrade True if the value is an upgrade value, false otherwise
+     * @return The human readable version of the value
+     */
     private String tryParseValue(BaseParser parser, Number value, String fieldName, Class<?> fieldType, boolean isUpgrade) {
         MethodHandle method = getHandleForMethod(parser, fieldName, fieldType);
         if (method == null) {
@@ -272,6 +293,16 @@ public class UpgradingSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Wrapper handler to invoke a method with the correct primitive number type.
+     *
+     * @param method    The method to invoke
+     * @param isUpgrade True if the value is an upgrade value, false otherwise
+     * @param value     The value to pass to the method being invoked
+     * @param type      The type to convert the value to. Must be a primitive number.
+     * @return The value returned by the invocation
+     * @throws Throwable Any error returned by the invocation
+     */
     private Object invokeWithType(MethodHandle method, boolean isUpgrade, Number value, Class<?> type) throws Throwable {
         switch (type.getSimpleName()) {
             case "int":
@@ -291,6 +322,17 @@ public class UpgradingSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * The backup parser. Calls either of
+     * {@link BaseParser#handleUpgrade(String, Object)} or {@link BaseParser#handleField(String, Object)}
+     * on the target parser.
+     *
+     * @param parser    The parser to use to do the converting..
+     * @param fieldName The name of the field being converted.
+     * @param value     The value to convert
+     * @param isUpgrade True if the value is an upgrade value, false otherwise.
+     * @return The converted string.
+     */
     private String parseWithBackup(BaseParser parser, String fieldName, Object value, boolean isUpgrade) {
         if (isUpgrade) {
             return parser.handleField(fieldName, value);
@@ -299,17 +341,23 @@ public class UpgradingSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Gets the method handler to call on the parser in order to convert the value.
+     *
+     * @param parser    The parser to search on
+     * @param name      The name of the field
+     * @param parameter The type of the value to convert
+     * @return The method handler if there is one, null otherwise.
+     */
     private MethodHandle getHandleForMethod(BaseParser parser, String name, Class<?> parameter) {
         MethodType methodType = MethodType.methodType(String.class, boolean.class, parameter);
         MethodHandles.Lookup lookup = MethodHandles.lookup();
         try {
             return lookup.bind(parser, name, methodType);
-        } catch (NoSuchMethodException e) {
-            logger.error("Formatting method not found for " + name + " on " + parser.getClass().getSimpleName());
-        } catch (IllegalAccessException e) {
-            logger.error("Unable to access formatting method " + name + " on " + parser.getClass().getSimpleName());
+        } catch (NoSuchMethodException | IllegalAccessException ignored) {
+            /* We don't do anything. Instead we will try the default parser. */
+            return null;
         }
-        return null;
     }
 
 
