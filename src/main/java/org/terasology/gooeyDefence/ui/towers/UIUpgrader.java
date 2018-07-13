@@ -164,4 +164,8 @@ public class UIUpgrader extends CoreWidget {
     public void bindUpgradesComponent(Binding<BlockUpgradesComponent> upgradesBinding) {
         upgradesComponent = upgradesBinding;
     }
+
+    public void clearUpgrade() {
+        currentUpgrade = null;
+    }
 }

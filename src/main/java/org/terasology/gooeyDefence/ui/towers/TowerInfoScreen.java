@@ -196,6 +196,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private void subscribeSelection(UIList<EntityRef> listWidget, UIList<EntityRef> otherOne, UIList<EntityRef> otherTwo) {
         listWidget.subscribeSelection((widget, item) -> {
             if (item != null) {
+                blockUpgrades.clearUpgrade();
                 otherOne.setSelection(null);
                 otherTwo.setSelection(null);
                 towerBlockSelected(item);
