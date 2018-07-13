@@ -29,13 +29,18 @@ import org.terasology.rendering.nui.databinding.DefaultBinding;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Displays the fields, values and current upgrade for a component.
+ */
 public class UIComponentFields extends CoreWidget {
+    /**
+     * The spacing between the columns of values.
+     */
     private static int SPACING = 10;
     private Binding<List<String>> fields = new DefaultBinding<>(new ArrayList<>());
     private Binding<List<String>> values = new DefaultBinding<>(new ArrayList<>());
     private Binding<List<String>> upgrades = new DefaultBinding<>(new ArrayList<>());
     private Binding<Boolean> showUpgrade = new DefaultBinding<>(false);
-
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -97,22 +102,29 @@ public class UIComponentFields extends CoreWidget {
     }
 
     /**
-     * Set the binding to use for the field values
-     *
-     * @param fieldBinding The binding to use
+     * @param fieldBinding The binding to use for the field names
      */
     public void bindFields(Binding<List<String>> fieldBinding) {
         fields = fieldBinding;
     }
 
+    /**
+     * @param valueBinding The binding to use for component values.
+     */
     public void bindValues(Binding<List<String>> valueBinding) {
         values = valueBinding;
     }
 
+    /**
+     * @param upgradeBinding The binding to use for upgrade values.
+     */
     public void bindUpgrade(Binding<List<String>> upgradeBinding) {
         upgrades = upgradeBinding;
     }
 
+    /**
+     * @param showBinding The binding to use for if the upgrades should be displayed.
+     */
     public void bindShowUpgrade(Binding<Boolean> showBinding) {
         showUpgrade = showBinding;
     }

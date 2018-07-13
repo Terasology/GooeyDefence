@@ -165,6 +165,9 @@ public class UIUpgrader extends CoreWidget {
         upgradesComponent = upgradesBinding;
     }
 
+    /**
+     * Clears the upgrade selected.
+     */
     public void clearUpgrade() {
         currentUpgrade = null;
     }

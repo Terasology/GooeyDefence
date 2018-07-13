@@ -93,7 +93,7 @@ public class UpgradingSystem extends BaseComponentSystem {
      *
      * @param entity            The entity to get the component from
      * @param upgradesComponent The component containing the upgrade data
-     * @return The component that this component should be applied to.
+     * @return The component that the upgrades should be applied to.
      */
     public Component getComponentToUpgrade(EntityRef entity, BlockUpgradesComponent upgradesComponent) {
         if (upgradesComponent == null || entity == EntityRef.NULL) {
@@ -124,7 +124,6 @@ public class UpgradingSystem extends BaseComponentSystem {
      * @param value     The value to set the field to
      */
     private void setField(ComponentFieldMetadata field, Component component, Number value) {
-        logger.info((field.getType() == int.class) + "");
         switch (field.getType().getSimpleName()) {
             case "int":
                 field.setValue(component, (int) field.getValue(component) + value.intValue());
@@ -157,6 +156,15 @@ public class UpgradingSystem extends BaseComponentSystem {
         return getComponentFields(component, true);
     }
 
+    /**
+     * Get a list of all the fields on the component to display in UI.
+     * This list is sorted alphabetically.
+     *
+     * @param component The component to get the fields from
+     * @param formatted Flag indicating if the returned fields should use the ui name or the field name
+     * @param <T>       The type of the component
+     * @return A list of all the fields to display in the component.
+     */
     private <T extends Component> List<String> getComponentFields(T component, boolean formatted) {
         if (component == null) {
             return Collections.emptyList();
@@ -170,10 +178,12 @@ public class UpgradingSystem extends BaseComponentSystem {
     }
 
     /**
-     * Get a mapping between all the fields and their values for a component.
+     * Get a list of all the values of the component to display in the UI.
+     * The values in this list are ordered the same as those in {@link #getComponentFields(Component, boolean)}.
      *
-     * @param component The component to get all fields on
-     * @return All the fields and their values, as strings.
+     * @param component The component to get the values from
+     * @param <T>       The type of the component
+     * @return An ordered list of all the values to display from the component.
      */
     public <T extends Component> List<String> getComponentValues(T component) {
         if (component == null) {
@@ -193,6 +203,16 @@ public class UpgradingSystem extends BaseComponentSystem {
         return values;
     }
 
+    /**
+     * Returns a list of all the values from an upgrade to display.
+     * This list is ordered the same as the values from {@link #getComponentFields(Component, boolean)}.
+     * If a field does not have an upgrade value, then a blank string is used.
+     *
+     * @param component   The component the upgrade will be applied to
+     * @param upgradeInfo The upgrade to display
+     * @param <T>         The type of the component
+     * @return An ordered list of all the values to display.
+     */
     public <T extends Component> List<String> getComponentUpgrades(T component, UpgradeInfo upgradeInfo) {
         if (component == null) {
             return Collections.emptyList();
@@ -218,6 +238,12 @@ public class UpgradingSystem extends BaseComponentSystem {
         return upgrades;
     }
 
+    /**
+     * A default implementation of the parsers.
+     * Returns all the fields on a component, and does not apply any formatting to values.
+     *
+     * @see BaseParser
+     */
     public class DefaultParser implements BaseParser {
         private Component component;
 
