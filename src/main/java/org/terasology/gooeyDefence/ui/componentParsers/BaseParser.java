@@ -39,19 +39,19 @@ public interface BaseParser {
      * Converts a raw value from a field into a human readable version.
      *
      * @param field The name of the field being converted.
-     * @param value The value of the field being converted.
+     * @param rawValue The value of the field being converted.
      * @return The human readable string to display.
      */
-    String handleField(String field, Object value);
+    String handleField(String field, Object rawValue);
 
     /**
      * Converts a raw upgrade value into a human readable version
      *
      * @param field The name of the field being converted
-     * @param value The value of the upgrade field being converted
+     * @param rawValue The value of the upgrade field being converted
      * @return The human readable variant of the field.
      */
-    default String handleUpgrade(String field, Object value) {
-        return handleField(field, value);
+    default String handleUpgrade(String field, Object rawValue) {
+        return handleField(field, rawValue);
     }
 }
