@@ -30,6 +30,9 @@ import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -200,7 +203,13 @@ public class UpgradingSystem extends BaseComponentSystem {
 
         for (String field : fields) {
             ComponentFieldMetadata<T, ?> fieldMetadata = metadata.getField(field);
-            values.add(parser.handleField(field, fieldMetadata.getValue(component)));
+            values.add(
+                    tryParseValue(
+                            parser,
+                            (Number) fieldMetadata.getValue(component),
+                            field,
+                            fieldMetadata.getType(),
+                            false));
         }
 
         return values;
@@ -223,23 +232,86 @@ public class UpgradingSystem extends BaseComponentSystem {
 
         List<String> fields = getComponentFields(component, false);
         List<String> upgrades = new ArrayList<>(fields.size());
-        BaseParser parser = parserMap.getOrDefault(component.getClass(), new DefaultParser());
 
         if (upgradeInfo == null) {
             return Collections.nCopies(fields.size(), "");
         }
 
+        ComponentMetadata<T> metadata = componentLibrary.getMetadata(component);
+        BaseParser parser = parserMap.getOrDefault(component.getClass(), new DefaultParser());
         for (String field : fields) {
+            ComponentFieldMetadata<T, ?> fieldMetadata = metadata.getField(field);
             Number upgradeValue = upgradeInfo.getValues().getOrDefault(field, null);
             if (upgradeValue == null) {
                 upgrades.add("");
             } else {
-                upgrades.add(parser.handleUpgrade(field, upgradeValue));
+                upgrades.add(
+                        tryParseValue(
+                                parser,
+                                upgradeValue,
+                                field,
+                                fieldMetadata.getType(),
+                                true));
             }
         }
 
         return upgrades;
     }
+
+    private String tryParseValue(BaseParser parser, Number value, String fieldName, Class<?> fieldType, boolean isUpgrade) {
+        MethodHandle method = getHandleForMethod(parser, fieldName, fieldType);
+        if (method == null) {
+            return parseWithBackup(parser, fieldName, value, isUpgrade);
+        } else {
+            try {
+                return invokeWithType(method, isUpgrade, value, fieldType).toString();
+            } catch (Throwable throwable) {
+                logger.error(String.format("Unable to call method for %s on %s. It threw %s", fieldName, parser.getClass().getSimpleName(), throwable.toString()));
+                return parseWithBackup(parser, fieldName, value, isUpgrade);
+            }
+        }
+    }
+
+    private Object invokeWithType(MethodHandle method, boolean isUpgrade, Number value, Class<?> type) throws Throwable {
+        switch (type.getSimpleName()) {
+            case "int":
+                return method.invoke(isUpgrade, value.intValue());
+            case "float":
+                return method.invoke(isUpgrade, value.floatValue());
+            case "long":
+                return method.invoke(isUpgrade, value.longValue());
+            case "double":
+                return method.invoke(isUpgrade, value.doubleValue());
+            case "short":
+                return method.invoke(isUpgrade, value.shortValue());
+            case "byte":
+                return method.invoke(isUpgrade, value.byteValue());
+            default:
+                throw new IllegalArgumentException("Cannot convert " + value + " as it is of the type " + type.getSimpleName());
+        }
+    }
+
+    private String parseWithBackup(BaseParser parser, String fieldName, Object value, boolean isUpgrade) {
+        if (isUpgrade) {
+            return parser.handleField(fieldName, value);
+        } else {
+            return parser.handleUpgrade(fieldName, value);
+        }
+    }
+
+    private MethodHandle getHandleForMethod(BaseParser parser, String name, Class<?> parameter) {
+        MethodType methodType = MethodType.methodType(String.class, boolean.class, parameter);
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+        try {
+            return lookup.bind(parser, name, methodType);
+        } catch (NoSuchMethodException e) {
+            logger.error("Formatting method not found for " + name + " on " + parser.getClass().getSimpleName());
+        } catch (IllegalAccessException e) {
+            logger.error("Unable to access formatting method " + name + " on " + parser.getClass().getSimpleName());
+        }
+        return null;
+    }
+
 
     /**
      * A default implementation of the parsers.
