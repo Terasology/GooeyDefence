@@ -170,11 +170,15 @@ public class UpgradingSystem extends BaseComponentSystem {
             return Collections.emptyList();
         }
         BaseParser parser = parserMap.getOrDefault(component.getClass(), new DefaultParser(component));
-        return (formatted ? parser.getFields().values()
-                : parser.getFields().keySet())
-                .stream()
-                .sorted()
-                .collect(Collectors.toList());
+        Map<String, String> fieldMap = parser.getFields();
+        List<String> keys = fieldMap.keySet().stream().sorted().collect(Collectors.toList());
+        if (formatted) {
+            List<String> values = new ArrayList<>();
+            keys.forEach(value -> values.add(fieldMap.get(value)));
+            return values;
+        } else {
+            return keys;
+        }
     }
 
     /**
