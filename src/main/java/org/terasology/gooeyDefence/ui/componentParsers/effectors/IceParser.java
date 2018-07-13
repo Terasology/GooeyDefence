@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers;
+package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towerBlocks.effectors.IceEffectorComponent;
+import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class IceParser implements BaseParser {
+public class IceParser extends BaseParser {
     @Override
     public Class<? extends Component> getComponentClass() {
         return IceEffectorComponent.class;

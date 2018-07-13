@@ -13,29 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers;
+package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.effectors.StunEffectorComponent;
+import org.terasology.gooeyDefence.towerBlocks.effectors.DamageEffectorComponent;
+import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StunParser implements BaseParser {
+public class DamageParser extends BaseParser {
     @Override
     public Class<? extends Component> getComponentClass() {
-        return StunEffectorComponent.class;
+        return DamageEffectorComponent.class;
     }
 
     @Override
     public Map<String, String> getFields() {
-        Map<String, String> result = new HashMap<>();
-        result.put("stunDuration", "Stun Duration");
+        Map<String, String> result = super.getFields();
+        result.put("damage", "Damage");
         return result;
-    }
-
-    public String stunDuration(boolean isUpgrade, int value) {
-        return isUpgrade ? "+" : "" + String.format("%.1fs", (float) value / 1000);
     }
 }

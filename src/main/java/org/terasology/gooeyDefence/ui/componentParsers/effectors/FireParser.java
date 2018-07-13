@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers;
+package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towerBlocks.effectors.FireEffectorComponent;

@@ -367,7 +367,7 @@ public class UpgradingSystem extends BaseComponentSystem {
      *
      * @see BaseParser
      */
-    public class DefaultParser implements BaseParser {
+    public class DefaultParser extends BaseParser {
         private Component component;
 
         public DefaultParser() {

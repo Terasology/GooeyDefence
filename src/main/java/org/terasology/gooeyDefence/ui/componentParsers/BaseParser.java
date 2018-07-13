@@ -17,23 +17,28 @@ package org.terasology.gooeyDefence.ui.componentParsers;
 
 import org.terasology.entitySystem.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Provides information on how to convert data from a component or upgrade into human readable strings.
  */
-public interface BaseParser {
+public abstract class BaseParser {
     /**
      * @return The class that this parser applies to.
      */
-    Class<? extends Component> getComponentClass();
+    public abstract Class<? extends Component> getComponentClass();
 
     /**
      * The fields that should be displayed as well as the display name.
      *
      * @return A mapping between field and display name
      */
-    Map<String, String> getFields();
+    public Map<String, String> getFields() {
+        Map<String, String> result = new HashMap<>();
+        result.put("drain", "Drain");
+        return result;
+    }
 
     /**
      * Converts a raw value from a field into a human readable version.
@@ -42,7 +47,7 @@ public interface BaseParser {
      * @param rawValue The value of the field being converted.
      * @return The human readable string to display.
      */
-    default String handleField(String field, Object rawValue) {
+    public String handleField(String field, Object rawValue) {
         return rawValue.toString();
     }
 
@@ -53,7 +58,7 @@ public interface BaseParser {
      * @param rawValue The value of the upgrade field being converted
      * @return The human readable variant of the field.
      */
-    default String handleUpgrade(String field, Object rawValue) {
+    public String handleUpgrade(String field, Object rawValue) {
         return "+" + handleField(field, rawValue);
     }
 
