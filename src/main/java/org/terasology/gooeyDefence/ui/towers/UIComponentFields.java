@@ -22,7 +22,6 @@ import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.Color;
 import org.terasology.rendering.nui.CoreWidget;
 import org.terasology.rendering.nui.HorizontalAlign;
-import org.terasology.rendering.nui.TextLineBuilder;
 import org.terasology.rendering.nui.VerticalAlign;
 import org.terasology.rendering.nui.databinding.Binding;
 import org.terasology.rendering.nui.databinding.DefaultBinding;
@@ -31,34 +30,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UIComponentFields extends CoreWidget {
+    private static int SPACING = 10;
     private Binding<List<String>> fields = new DefaultBinding<>(new ArrayList<>());
     private Binding<List<String>> values = new DefaultBinding<>(new ArrayList<>());
     private Binding<List<String>> upgrades = new DefaultBinding<>(new ArrayList<>());
     private Binding<Boolean> showUpgrade = new DefaultBinding<>(false);
 
+
     @Override
     public void onDraw(Canvas canvas) {
-        List<String> fieldList = fields.get();
-        Vector2i textArea = canvas.size();
-        textArea.divX(3);
-        if (fieldList != null) {
-            canvas.drawTextRaw(String.join("\n", fieldList),
-                    canvas.getCurrentStyle().getFont(),
-                    Color.WHITE,
-                    Rect2i.createFromMinAndSize(Vector2i.zero(), textArea));
+        Font font = canvas.getCurrentStyle().getFont();
+        List<String> list = fields.get();
 
-            canvas.drawTextRaw(String.join("\n", values.get()),
-                    canvas.getCurrentStyle().getFont(),
+        if (list != null) {
+            int offset = (canvas.size().x - getPreferredContentSize(canvas, canvas.size()).x) / 2;
+            Vector2i listSize = font.getSize(list);
+            canvas.drawTextRaw(String.join("\n", list),
+                    font,
                     Color.WHITE,
-                    Rect2i.createFromMinAndSize(new Vector2i(textArea.x, 0), textArea),
+                    Rect2i.createFromMinAndSize(new Vector2i(offset, 0), listSize));
+
+            list = values.get();
+            offset += listSize.x + SPACING;
+            listSize = font.getSize(list);
+            canvas.drawTextRaw(String.join("\n", values.get()),
+                    font,
+                    Color.WHITE,
+                    Rect2i.createFromMinAndSize(new Vector2i(offset, 0), listSize),
                     HorizontalAlign.CENTER,
                     VerticalAlign.TOP);
 
             if (showUpgrade.get()) {
-                canvas.drawTextRaw(String.join("\n", upgrades.get()),
-                        canvas.getCurrentStyle().getFont(),
+                list = upgrades.get();
+                offset += listSize.x + SPACING;
+                listSize = font.getSize(list);
+                canvas.drawTextRaw(String.join("\n", list),
+                        font,
                         Color.GREEN,
-                        Rect2i.createFromMinAndSize(new Vector2i(textArea.x * 2, 0), textArea),
+                        Rect2i.createFromMinAndSize(new Vector2i(offset, 0), listSize),
                         HorizontalAlign.RIGHT,
                         VerticalAlign.TOP);
             }
@@ -71,20 +80,16 @@ public class UIComponentFields extends CoreWidget {
         if (fieldList != null) {
             Font font = canvas.getCurrentStyle().getFont();
 
-            String fieldString = String.join("\n", fieldList);
-            Vector2i fieldSize = font.getSize(TextLineBuilder.getLines(font, fieldString, sizeHint.x / 3));
-
-            String valueString = String.join("\n", values.get());
-            Vector2i valueSize = font.getSize(TextLineBuilder.getLines(font, valueString, sizeHint.x / 3));
+            Vector2i fieldSize = font.getSize(fieldList);
+            Vector2i valueSize = font.getSize(values.get());
 
             Vector2i upgradeSize = Vector2i.zero();
             List<String> upgradeList = upgrades.get();
             if (upgradeList != null) {
-                String upgradeString = String.join("\n", fieldList);
-                upgradeSize = font.getSize(TextLineBuilder.getLines(font, upgradeString, sizeHint.x));
+                upgradeSize = font.getSize(upgradeList);
             }
 
-            int width = fieldSize.x + valueSize.x + upgradeSize.x;
+            int width = fieldSize.x + valueSize.x + upgradeSize.x + 2 * SPACING;
             int height = Math.max(Math.max(fieldSize.y, valueSize.y), upgradeSize.y);
             return new Vector2i(width, height);
         }
@@ -111,4 +116,5 @@ public class UIComponentFields extends CoreWidget {
     public void bindShowUpgrade(Binding<Boolean> showBinding) {
         showUpgrade = showBinding;
     }
+
 }
