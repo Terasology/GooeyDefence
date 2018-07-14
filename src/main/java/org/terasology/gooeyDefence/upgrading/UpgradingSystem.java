@@ -206,7 +206,7 @@ public class UpgradingSystem extends BaseComponentSystem {
             values.add(
                     tryParseValue(
                             parser,
-                            (Number) fieldMetadata.getValue(component),
+                            fieldMetadata.getValue(component),
                             field,
                             fieldMetadata.getType(),
                             false));
@@ -279,7 +279,7 @@ public class UpgradingSystem extends BaseComponentSystem {
      * @param isUpgrade True if the value is an upgrade value, false otherwise
      * @return The human readable version of the value
      */
-    private String tryParseValue(BaseParser parser, Number value, String fieldName, Class<?> fieldType, boolean isUpgrade) {
+    private String tryParseValue(BaseParser parser, Object value, String fieldName, Class<?> fieldType, boolean isUpgrade) {
         MethodHandle method = getHandleForMethod(parser, fieldName, fieldType);
         if (method == null) {
             return parseWithBackup(parser, fieldName, value, isUpgrade);
@@ -303,6 +303,10 @@ public class UpgradingSystem extends BaseComponentSystem {
      * @return The value, converted to the given type.
      */
     private Object convertToType(Object value, Class<?> type) {
+        /* Handle the type being an enum. Can't do this through the switch */
+        if (Enum.class.isAssignableFrom(type)) {
+            return Enum.valueOf((Class<? extends Enum>) type, value.toString());
+        }
         switch (type.getSimpleName()) {
             case "int":
                 return (Integer) value;
@@ -320,6 +324,8 @@ public class UpgradingSystem extends BaseComponentSystem {
                 return (Short) value;
             case "byte":
                 return (Byte) value;
+            case "String":
+                return String.valueOf(value);
             default:
                 throw new IllegalArgumentException("Cannot convert " + value + " as it is of the type " + type.getSimpleName());
         }
