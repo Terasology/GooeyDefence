@@ -285,7 +285,7 @@ public class UpgradingSystem extends BaseComponentSystem {
             return parseWithBackup(parser, fieldName, value, isUpgrade);
         } else {
             try {
-                return invokeWithType(method, isUpgrade, value, fieldType).toString();
+                return method.invoke(isUpgrade, convertToType(value, fieldType)).toString();
             } catch (Throwable throwable) {
                 logger.error(String.format("Unable to call method for %s on %s. It threw %s", fieldName, parser.getClass().getSimpleName(), throwable.toString()));
                 return parseWithBackup(parser, fieldName, value, isUpgrade);
@@ -294,33 +294,37 @@ public class UpgradingSystem extends BaseComponentSystem {
     }
 
     /**
-     * Wrapper handler to invoke a method with the correct primitive number type.
+     * Converts the value into the given type.
+     * The value may not be of a the correct type to be cast. Eg, float's may be passed as doubles.
+     * The value returned should be a primitive if possible.
      *
-     * @param method    The method to invoke
-     * @param isUpgrade True if the value is an upgrade value, false otherwise
-     * @param value     The value to pass to the method being invoked
-     * @param type      The type to convert the value to. Must be a primitive number.
-     * @return The value returned by the invocation
-     * @throws Throwable Any error returned by the invocation
+     * @param value The value to convert
+     * @param type  The type to convert it to
+     * @return The value, converted to the given type.
      */
-    private Object invokeWithType(MethodHandle method, boolean isUpgrade, Number value, Class<?> type) throws Throwable {
+    private Object convertToType(Object value, Class<?> type) {
         switch (type.getSimpleName()) {
             case "int":
-                return method.invoke(isUpgrade, value.intValue());
+                return (Integer) value;
             case "float":
-                return method.invoke(isUpgrade, value.floatValue());
+                /* Needed in case the value is passed in as a double. This can happen if the type is not de-serialised
+                 correctly. */
+                return Float.valueOf(String.valueOf(value)).floatValue();
             case "long":
-                return method.invoke(isUpgrade, value.longValue());
+                return (Long) value;
             case "double":
-                return method.invoke(isUpgrade, value.doubleValue());
+                /* Needed in case the value is passed in as a float. This can happen if the type is not de-serialised
+                 correctly. */
+                return Double.valueOf(String.valueOf(value)).doubleValue();
             case "short":
-                return method.invoke(isUpgrade, value.shortValue());
+                return (Short) value;
             case "byte":
-                return method.invoke(isUpgrade, value.byteValue());
+                return (Byte) value;
             default:
                 throw new IllegalArgumentException("Cannot convert " + value + " as it is of the type " + type.getSimpleName());
         }
     }
+
 
     /**
      * The backup parser. Calls either of
