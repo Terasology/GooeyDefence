@@ -16,5 +16,28 @@
 package org.terasology.gooeyDefence.towerBlocks;
 
 public enum SelectionMethod {
-    FIRST, WEAK, STRONG, RANDOM
+    FIRST {
+        @Override
+        public String toString() {
+            return "First";
+        }
+    },
+    WEAK {
+        @Override
+        public String toString() {
+            return "Weakest";
+        }
+    },
+    STRONG {
+        @Override
+        public String toString() {
+            return "Strongest";
+        }
+    },
+    RANDOM {
+        @Override
+        public String toString() {
+            return "Random";
+        }
+    }
 }
