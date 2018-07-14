@@ -307,23 +307,20 @@ public class UpgradingSystem extends BaseComponentSystem {
         if (Enum.class.isAssignableFrom(type)) {
             return Enum.valueOf((Class<? extends Enum>) type, value.toString());
         }
+        /* The boxing via String.valueOf() is because the de-serialiser /really/ likes mixing up types oddly. */
         switch (type.getSimpleName()) {
             case "int":
-                return (Integer) value;
+                return Integer.valueOf(String.valueOf(value)).intValue();
             case "float":
-                /* Needed in case the value is passed in as a double. This can happen if the type is not de-serialised
-                 correctly. */
                 return Float.valueOf(String.valueOf(value)).floatValue();
             case "long":
-                return (Long) value;
+                return Long.valueOf(String.valueOf(value)).longValue();
             case "double":
-                /* Needed in case the value is passed in as a float. This can happen if the type is not de-serialised
-                 correctly. */
                 return Double.valueOf(String.valueOf(value)).doubleValue();
             case "short":
-                return (Short) value;
+                return Short.valueOf(String.valueOf(value)).shortValue();
             case "byte":
-                return (Byte) value;
+                return Byte.valueOf(String.valueOf(value)).byteValue();
             case "String":
                 return String.valueOf(value);
             default:
@@ -374,10 +371,13 @@ public class UpgradingSystem extends BaseComponentSystem {
     /**
      * A default implementation of the parsers.
      * Returns all the fields on a component, and does not apply any formatting to values.
+     * <p>
+     * Has to be a private class of Upgrading System so it can access the Component Library.
+     * Also prevents it from being instantiated and used elsewhere.
      *
      * @see BaseParser
      */
-    public class DefaultParser extends BaseParser {
+    private class DefaultParser extends BaseParser {
         private Component component;
 
         public DefaultParser() {
