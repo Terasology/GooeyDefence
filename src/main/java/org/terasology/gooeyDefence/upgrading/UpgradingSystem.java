@@ -310,17 +310,17 @@ public class UpgradingSystem extends BaseComponentSystem {
         /* The boxing via String.valueOf() is because the de-serialiser /really/ likes mixing up types oddly. */
         switch (type.getSimpleName()) {
             case "int":
-                return Integer.valueOf(String.valueOf(value)).intValue();
+                return Double.valueOf(String.valueOf(value)).intValue();
             case "float":
-                return Float.valueOf(String.valueOf(value)).floatValue();
+                return Double.valueOf(String.valueOf(value)).floatValue();
             case "long":
-                return Long.valueOf(String.valueOf(value)).longValue();
+                return Double.valueOf(String.valueOf(value)).longValue();
             case "double":
                 return Double.valueOf(String.valueOf(value)).doubleValue();
             case "short":
-                return Short.valueOf(String.valueOf(value)).shortValue();
+                return Double.valueOf(String.valueOf(value)).shortValue();
             case "byte":
-                return Byte.valueOf(String.valueOf(value)).byteValue();
+                return Double.valueOf(String.valueOf(value)).byteValue();
             case "String":
                 return String.valueOf(value);
             default:
