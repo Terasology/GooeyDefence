@@ -28,6 +28,7 @@ import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.itemRendering.StringTextRenderer;
 import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
+import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.rendering.nui.widgets.UIList;
 
@@ -39,8 +40,26 @@ import java.util.List;
  */
 public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
+    /**
+     * The family to use to display text as white
+     */
     private static final String WHITE_TEXT = "whiteText";
+    /**
+     * The family to use to display test as red
+     */
     private static final String RED_TEXT = "redText";
+    /**
+     * The ID of the list of cores. Also the value of `blockType` if the block is a core
+     */
+    private static final String CORE_ID = "coreList";
+    /**
+     * The ID of the list of targeters. Also the value of `blockType` if the block is a targeter
+     */
+    private static final String TARGTER_ID = "targeterList";
+    /**
+     * The ID of the list of effectors. Also the value of `blockType` if the block is an effector
+     */
+    private static final String EFFECTOR_ID = "effectorList";
 
     private UIUpgrader blockUpgrades;
 
@@ -58,6 +77,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
 
     private EntityRef blockEntity = EntityRef.NULL;
     private TowerComponent towerComponent = null;
+    private String blockType = null;
 
     private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
         @Override
@@ -118,9 +138,9 @@ public class TowerInfoScreen extends CoreScreenLayer {
         powerProduction = find("powerProduction", UILabel.class);
         powerUsage = find("powerUsage", UILabel.class);
 
-        coreList = find("coreList", UIList.class);
-        effectorList = find("effectorList", UIList.class);
-        targeterList = find("targeterList", UIList.class);
+        coreList = find(CORE_ID, UIList.class);
+        effectorList = find(EFFECTOR_ID, UIList.class);
+        targeterList = find(TARGTER_ID, UIList.class);
     }
 
     /**
@@ -241,7 +261,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
                 blockUpgrades.clearUpgrade();
                 otherOne.setSelection(null);
                 otherTwo.setSelection(null);
-                towerBlockSelected(item);
+                towerBlockSelected(item, listWidget.getId());
             }
         });
     }
@@ -262,9 +282,10 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * Subscriber called when a button on the list of effectors is pushed.
      * Sets the current effector and nulls the current targeter
      */
-    private void towerBlockSelected(EntityRef entity) {
+    private void towerBlockSelected(EntityRef entity, String listID) {
         if (entity != null) {
             blockEntity = entity;
+            blockType = listID;
         }
     }
 
