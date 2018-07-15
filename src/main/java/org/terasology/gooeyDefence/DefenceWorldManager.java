@@ -26,7 +26,6 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.DestructibleBlockComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.logic.characters.events.AttackEvent;
-import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.health.DestroyEvent;
 import org.terasology.logic.health.EngineDamageTypes;
 import org.terasology.logic.inventory.events.DropItemEvent;
@@ -49,16 +48,28 @@ import org.terasology.world.sun.CelestialSystem;
 @RegisterSystem
 public class DefenceWorldManager extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(DefenceWorldManager.class);
-
+    private static boolean settingUpField = false;
     @In
     private CelestialSystem celestialSystem;
     @In
     private EntityManager entityManager;
-
     @In
     private BlockManager blockManager;
     private BlockItemFactory factory;
 
+    /**
+     * Initialises the defence field
+     */
+    public static void activateWorld() {
+        if (!settingUpField) {
+            settingUpField = true;
+            logger.info("Setting up the world.");
+            OnFieldActivated activateEvent = new OnFieldActivated(DefenceField::setFieldActivated);
+            activateEvent.beginTask();
+            DefenceField.getShrineEntity().send(activateEvent);
+            activateEvent.finishTask();
+        }
+    }
 
     @Override
     public void initialise() {
@@ -88,29 +99,6 @@ public class DefenceWorldManager extends BaseComponentSystem {
             event.consume();
             factory.newInstance(blockManager.getBlockFamily("GooeyDefence:Plain")).send(new DropItemEvent(component.getWorldPosition()));
         }
-    }
-
-
-    /**
-     * Activate the world on a interaction
-     * TODO: remove and replace with UI interaction
-     */
-    @ReceiveEvent
-    public void onActivate(ActivateEvent event, EntityRef entity) {
-        if (!DefenceField.isFieldActivated()) {
-            setupWorld();
-        }
-    }
-
-    /**
-     * Initialises the defence field
-     */
-    private void setupWorld() {
-        logger.info("Setting up the world.");
-        OnFieldActivated activateEvent = new OnFieldActivated(DefenceField::setFieldActivated);
-        activateEvent.beginTask();
-        DefenceField.getShrineEntity().send(activateEvent);
-        activateEvent.finishTask();
     }
 
 }
