@@ -34,6 +34,9 @@
   },
   "GooeyDefence:Health": {
     "health": 5
+  },
+  "Value":{
+    "value":5
   }
 }
 
