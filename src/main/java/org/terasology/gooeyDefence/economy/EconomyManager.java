@@ -16,8 +16,11 @@
 package org.terasology.gooeyDefence.economy;
 
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.EventPriority;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.inventory.events.GiveItemEvent;
 import org.terasology.registry.Share;
 
 /**
@@ -75,5 +78,23 @@ public class EconomyManager extends BaseComponentSystem {
             return component.getFunds() >= threshold;
         }
         return false;
+    }
+
+    /**
+     * Called when money is being picked up by the player. Converts it into balance in their walled
+     * <p>
+     * Sent against the item being given
+     * Filters on {@link ValueComponent}
+     * Priority must be high in order to retrieve the event before the money is placed into the inventory
+     *
+     * @see GiveItemEvent
+     */
+    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
+    public void onGiveItem(GiveItemEvent event, EntityRef entity, ValueComponent valueComponent) {
+        if (entity.getParentPrefab().getName().equals("GooeyDefence:Money")) {
+            boolean success = tryAddMoney(event.getTargetEntity(), valueComponent.getValue());
+            event.setHandled(success);
+            entity.destroy();
+        }
     }
 }
