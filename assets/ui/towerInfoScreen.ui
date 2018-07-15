@@ -208,57 +208,53 @@
                   }
                 },
                 {
-                  "type": "RelativeLayout",
+                  "type": "ColumnLayout",
                   "id": "blockSettings",
+                  "fillVerticalSpace": false,
                   "layoutInfo": {
-                    "use-content-width": false,
-                    "use-content-height": false,
+                    "use-content-width": true,
+                    "use-content-height": true,
                     "position-top": {
                       "offset": 16,
                       "target": "BOTTOM",
                       "widget": "blockUpgrades"
                     },
-                    "position-left": {
-                      "offset": 16
-                    },
-                    "position-right": {
-                      "offset": 16
-                    },
-                    "position-bottom": {
-                      "offset": 16
-                    }
+                    "position-horizontal-center": {}
                   },
                   "contents": [
                     {
-                      "type": "UIBox",
-                      "id": "blockSettingsBox",
-                      "layoutInfo": {
-                        "use-content-width": false,
-                        "use-content-height": false,
-                        "position-top": {
-                          "offset": 16
+                      "type": "FlowLayout",
+                      "id": "selectionModeLayout",
+                      "contents": [
+                        {
+                          "type": "UIButton",
+                          "id": "firstSelectionButton",
+                          "text": "First",
+                          "layoutInfo": {
+                          }
                         },
-                        "position-left": {
-                          "offset": 16
+                        {
+                          "type": "UIButton",
+                          "id": "weakSelectionButton",
+                          "text": "Weak",
+                          "layoutInfo": {
+                          }
                         },
-                        "position-right": {
-                          "offset": 16
+                        {
+                          "type": "UIButton",
+                          "id": "strongSelectionButton",
+                          "text": "Strong",
+                          "layoutInfo": {
+                          }
                         },
-                        "position-bottom": {
-                          "offset": 16
+                        {
+                          "type": "UIButton",
+                          "id": "randomSelectionButton",
+                          "text": "Random",
+                          "layoutInfo": {
+                          }
                         }
-                      },
-                      "content": {
-                        "type": "UILabel",
-                        "id": "blockSettingsFlag",
-                        "text": "BLOCK SETTINGS HERE",
-                        "layoutInfo": {
-                          "use-content-width": true,
-                          "use-content-height": true,
-                          "position-horizontal-center": {},
-                          "position-vertical-center": {}
-                        }
-                      }
+                      ]
                     }
                   ]
                 }

@@ -18,8 +18,11 @@ package org.terasology.gooeyDefence.ui.towers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.TowerManager;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
+import org.terasology.gooeyDefence.towerBlocks.SelectionMethod;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.math.geom.Vector2i;
@@ -27,6 +30,7 @@ import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.itemRendering.StringTextRenderer;
+import org.terasology.rendering.nui.layouts.FlowLayout;
 import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
@@ -61,24 +65,34 @@ public class TowerInfoScreen extends CoreScreenLayer {
      */
     private static final String EFFECTOR_ID = "effectorList";
 
-    private UIUpgrader blockUpgrades;
-
+    /* Widgets that deal with the general block information */
     private RelativeLayout blockInfoPanel;
     private UILabel blockName;
     private UILabel blockDescription;
 
+    /* Widget that deals with the block stats and upgrading */
+    private UIUpgrader blockUpgrades;
+
+    /* Widgets that deal with the options for the block */
+    private UIButton[] targetSelectionButtons = new UIButton[4];
+    private FlowLayout selectionModeLayout;
+
+    /* Widgets that deal with the general information about the tower */
     private UILabel powerProductionLabel;
     private UILabel powerProduction;
     private UILabel powerUsage;
 
+    /* Widgets that display the list of blocks */
     private UIList<EntityRef> coreList;
     private UIList<EntityRef> effectorList;
     private UIList<EntityRef> targeterList;
 
-    private EntityRef blockEntity = EntityRef.NULL;
+    /* Elements of the tower and block selected */
     private TowerComponent towerComponent = null;
+    private EntityRef blockEntity = EntityRef.NULL;
     private String blockType = null;
 
+    /* Bindings and other reused anonymous classes */
     private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
         @Override
         public Boolean get() {
@@ -133,6 +147,12 @@ public class TowerInfoScreen extends CoreScreenLayer {
         blockInfoPanel = find("blockInfoPanel", RelativeLayout.class);
         blockName = find("blockName", UILabel.class);
         blockDescription = find("blockDescription", UILabel.class);
+
+        selectionModeLayout = find("selectionModeLayout", FlowLayout.class);
+        targetSelectionButtons[0] = find("firstSelectionButton", UIButton.class);
+        targetSelectionButtons[1] = find("weakSelectionButton", UIButton.class);
+        targetSelectionButtons[2] = find("strongSelectionButton", UIButton.class);
+        targetSelectionButtons[3] = find("randomSelectionButton", UIButton.class);
 
         powerProductionLabel = find("powerProductionLabel", UILabel.class);
         powerProduction = find("powerProduction", UILabel.class);
@@ -246,6 +266,17 @@ public class TowerInfoScreen extends CoreScreenLayer {
                 return towerComponent == null ? new ArrayList<>() : new ArrayList<>(towerComponent.targeter);
             }
         });
+
+        selectionModeLayout.bindVisible(new ReadOnlyBinding<Boolean>() {
+            @Override
+            public Boolean get() {
+                return blockType.equals(TARGTER_ID);
+            }
+        });
+        targetSelectionButtons[0].subscribe(widget -> targetingOptionSelected(SelectionMethod.FIRST));
+        targetSelectionButtons[1].subscribe(widget -> targetingOptionSelected(SelectionMethod.WEAK));
+        targetSelectionButtons[2].subscribe(widget -> targetingOptionSelected(SelectionMethod.STRONG));
+        targetSelectionButtons[3].subscribe(widget -> targetingOptionSelected(SelectionMethod.RANDOM));
     }
 
     /**
@@ -277,6 +308,17 @@ public class TowerInfoScreen extends CoreScreenLayer {
         towerComponent = tower.getComponent(TowerComponent.class);
     }
 
+    /**
+     * Handles a selection button being pressed and set's the value on the block.
+     * The block will always be a targeter because the buttons are hidden otherwise.
+     *
+     * @param selectionMethod The selection method chosen
+     */
+    private void targetingOptionSelected(SelectionMethod selectionMethod) {
+        TowerTargeter targeter = DefenceField.getComponentExtending(blockEntity, TowerTargeter.class);
+        targeter.setSelectionMethod(selectionMethod);
+    }
+
 
     /**
      * Subscriber called when a button on the list of effectors is pushed.
@@ -295,7 +337,8 @@ public class TowerInfoScreen extends CoreScreenLayer {
      *
      * @param newSystem The upgrader system to set.
      */
-    public void setUpgradingSystem(UpgradingSystem newSystem) {
+    /* package-private */
+    void setUpgradingSystem(UpgradingSystem newSystem) {
         blockUpgrades.setUpgradingSystem(newSystem);
     }
 }
