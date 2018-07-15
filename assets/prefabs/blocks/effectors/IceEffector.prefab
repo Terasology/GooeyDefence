@@ -41,7 +41,7 @@
           {
             "cost": 5,
             "values": {
-              "field": -0.1
+              "slow": -0.1
             }
           }
         ]
