@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.ui.activation;
 
 import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
 import org.terasology.rendering.nui.widgets.ActivateEventListener;
 import org.terasology.rendering.nui.widgets.UIButton;
 
@@ -23,14 +24,24 @@ public class ActivateGameScreen extends CoreScreenLayer {
     private ActivateEventListener listener;
 
     private UIButton beginButton;
+    private RelativeLayout newGameLayout;
+    private RelativeLayout resumeGameLayout;
 
     @Override
     public void initialise() {
         beginButton = find("beginButton", UIButton.class);
 
+        newGameLayout = find("newGameLayout", RelativeLayout.class);
+        resumeGameLayout = find("resumeGameLayout", RelativeLayout.class);
     }
 
     public void subscribeToBegin(ActivateEventListener listener) {
         beginButton.subscribe(listener);
     }
+
+    public void setNewGame(boolean isNewGame) {
+        newGameLayout.setVisible(isNewGame);
+        resumeGameLayout.setVisible(!isNewGame);
+    }
+
 }
