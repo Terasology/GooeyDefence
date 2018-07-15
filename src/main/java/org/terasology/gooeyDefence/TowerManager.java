@@ -94,12 +94,10 @@ public class TowerManager extends BaseComponentSystem {
      * @return The total drain. Zero if the tower has no targeters
      */
     public static int getTargeterDrain(TowerComponent towerComponent) {
-        int drain = 0;
-        for (EntityRef emitterEntity : towerComponent.targeter) {
-            TowerTargeter emitter = DefenceField.getComponentExtending(emitterEntity, TowerTargeter.class);
-            drain += emitter.getDrain();
-        }
-        return drain;
+        return towerComponent.targeter.
+                stream()
+                .mapToInt(entity -> DefenceField.getComponentExtending(entity, TowerTargeter.class).getDrain())
+                .sum();
     }
 
     /**
@@ -109,12 +107,10 @@ public class TowerManager extends BaseComponentSystem {
      * @return The total drain. Zero if the tower has no effector
      */
     public static int getEffectorDrain(TowerComponent towerComponent) {
-        int drain = 0;
-        for (EntityRef effectorEntity : towerComponent.effector) {
-            TowerEffector effector = DefenceField.getComponentExtending(effectorEntity, TowerEffector.class);
-            drain += effector.getDrain();
-        }
-        return drain;
+        return towerComponent.effector.
+                stream()
+                .mapToInt(entity -> DefenceField.getComponentExtending(entity, TowerEffector.class).getDrain())
+                .sum();
     }
 
     /**
@@ -124,12 +120,10 @@ public class TowerManager extends BaseComponentSystem {
      * @return The total power. Zero if the tower has no cores
      */
     public static int getTotalCorePower(TowerComponent towerComponent) {
-        int power = 0;
-        for (EntityRef coreEntity : towerComponent.cores) {
-            TowerCore core = DefenceField.getComponentExtending(coreEntity, TowerCore.class);
-            power += core.getPower();
-        }
-        return power;
+        return towerComponent.cores.
+                stream()
+                .mapToInt(entity -> DefenceField.getComponentExtending(entity, TowerCore.class).getPower())
+                .sum();
     }
 
     /**
