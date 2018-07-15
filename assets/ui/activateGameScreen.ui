@@ -99,7 +99,20 @@
                   "target": "TOP",
                   "widget": "beginButton"
                 }
-              }
+              },
+              "contents":[
+                {
+                  "type": "UILabel",
+                  "id": "newGameInformationLabel",
+                  "text": "To resume your game, exit this screen or press the begin button.\nBe warned, the game will resume from exactly where you left it. This may include being in the middle of a wave",
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-top": {},
+                    "position-horizontal-centre": {}
+                  }
+                }
+              ]
             },
             {
               "type": "UIButton",
