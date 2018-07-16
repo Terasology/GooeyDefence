@@ -18,14 +18,17 @@ package org.terasology.gooeyDefence.economy;
 import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.console.commandSystem.annotations.Command;
+import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.permission.PermissionManager;
 import org.terasology.registry.In;
+import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockManager;
 
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,27 +38,52 @@ import java.util.stream.Collectors;
 @RegisterSystem
 public class ShopManager extends BaseComponentSystem {
 
-    private Set<Prefab> purchasablePrefabs;
+    private Set<Block> purchasableBlocks = new HashSet<>();
+    private Set<Prefab> purchasableItems = new HashSet<>();
 
     @In
     private AssetManager assetManager;
     @In
-    private PrefabManager prefabManager;
+    private BlockManager blockManager;
 
     @Override
     public void postBegin() {
-        purchasablePrefabs = assetManager.getLoadedAssets(Prefab.class)
+        purchasableItems = assetManager.getLoadedAssets(Prefab.class)
                 .stream()
-                .filter(prefab -> prefab.hasComponent(PurchasableComponent.class))
+                .filter(prefab -> prefab.hasComponent(ItemComponent.class)
+                        && prefab.hasComponent(PurchasableComponent.class))
                 .collect(Collectors.toSet());
+
+        purchasableBlocks = blockManager.listRegisteredBlocks()
+                .stream()
+                .filter(block -> block.getPrefab()
+                        .map(prefab -> prefab.hasComponent(PurchasableComponent.class))
+                        .orElse(false))
+                .collect(Collectors.toSet());
+
     }
 
-    @Command(value = "listWares", shortDescription = "List all the purchasable blocks",
+    @Command(value = "listWares", shortDescription = "List all the purchasable items and blocks",
             requiredPermission = PermissionManager.NO_PERMISSION)
     public String listWares(EntityRef sender) {
-        return String.join(", ",
-                purchasablePrefabs.stream()
-                        .map(prefab -> prefab.getUrn().getResourceName().toString())
-                        .collect(Collectors.toList()));
+        return "Items: "
+                + String.join(", ",
+                purchasableItems.stream()
+                        .map(prefab -> prefab.hasComponent(DisplayNameComponent.class)
+                                ? prefab.getComponent(DisplayNameComponent.class).name
+                                : prefab.getUrn().getResourceName().toString())
+                        .collect(Collectors.toList()))
+                + "\nBlocks: "
+                + String.join(", ",
+                purchasableBlocks.stream()
+                        .map(block -> {
+                            String displayName = block.getDisplayName();
+                            return !displayName.equals("Untitled Block") ?
+                                    displayName :
+                                    block.getURI().getIdentifier().toString();
+                        })
+                        .collect(Collectors.toSet()));
     }
+
+
 }
