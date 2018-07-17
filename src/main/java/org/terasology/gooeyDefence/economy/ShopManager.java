@@ -89,6 +89,8 @@ public class ShopManager extends BaseComponentSystem {
             requiredPermission = PermissionManager.NO_PERMISSION)
     public String showShop() {
         ShopScreen shopScreen = nuiManager.pushScreen("GooeyDefence:ShopScreen", ShopScreen.class);
+        shopScreen.setBlocks(purchasableBlocks);
+        shopScreen.setItems(purchasableItems);
         return "Screen shown.";
     }
 
