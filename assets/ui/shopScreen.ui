@@ -38,8 +38,8 @@
               "id": "wareListLayout",
               "contents": [
                 {
-                  "type": "UIBox",
-                  "id": "wareFlagBox",
+                  "type": "FlowLayout",
+                  "id": "wareList",
                   "layoutInfo": {
                     "use-content-height": false,
                     "use-content-width": false,
@@ -55,10 +55,6 @@
                     "position-bottom": {
                       "offset": 16
                     }
-                  },
-                  "content": {
-                    "type": "UILabel",
-                    "text": "WARE LIST"
                   }
                 }
               ]
