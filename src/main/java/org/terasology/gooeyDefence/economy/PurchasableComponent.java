@@ -16,10 +16,12 @@
 package org.terasology.gooeyDefence.economy;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.world.block.items.AddToBlockBasedItem;
 
 /**
  * Indicates that the item can be bought and thus will be available in the shop
  */
+@AddToBlockBasedItem
 public class PurchasableComponent implements Component {
     /**
      * The cost of buying the item.

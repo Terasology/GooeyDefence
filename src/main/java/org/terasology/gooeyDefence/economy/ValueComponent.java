@@ -16,11 +16,13 @@
 package org.terasology.gooeyDefence.economy;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.world.block.items.AddToBlockBasedItem;
 
 /**
  * Indicates that the given entity has a value.
  * This is used if the entity is turned into money.
  */
+@AddToBlockBasedItem
 public class ValueComponent implements Component {
 
     /**
