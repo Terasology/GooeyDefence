@@ -85,7 +85,7 @@ public class ShopScreen extends CoreScreenLayer {
         wareInfoLayout.bindVisible(new ReadOnlyBinding<Boolean>() {
             @Override
             public Boolean get() {
-                return selectedPrefab != null && selectedBlock != null;
+                return selectedPrefab != null || selectedBlock != null;
             }
         });
         buyButton.subscribe(widget -> attemptItemPurchase());
