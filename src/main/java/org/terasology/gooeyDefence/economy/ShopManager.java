@@ -168,7 +168,11 @@ public class ShopManager extends BaseComponentSystem {
     private Block findBlockMatching(String wareName) {
         return purchasableBlocks.stream()
                 .filter(block ->
-                        block.getURI().getIdentifier().toString().equals(wareName)
+                        block.getURI()
+                                .getBlockFamilyDefinitionUrn()
+                                .getResourceName()
+                                .toString()
+                                .equalsIgnoreCase(wareName)
                                 || block.getDisplayName().equals(wareName))
                 .findAny()
                 .orElse(null);
