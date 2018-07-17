@@ -49,6 +49,9 @@ public class ShopScreen extends CoreScreenLayer {
 
             itemIcon.setTooltipLines(Collections.singletonList(new TooltipLine(getPrefabName(item))));
             itemIcon.setIcon(itemComponent.icon);
+
+            UIInteractionWrapper wrapper = new UIInteractionWrapper();
+            wrapper.setContent(itemIcon);
             wareList.addWidget(itemIcon, null);
         }
     }
@@ -60,7 +63,10 @@ public class ShopScreen extends CoreScreenLayer {
             itemIcon.setTooltipLines(Collections.singletonList(new TooltipLine(getBlockName(block))));
             itemIcon.setMesh(block.getMeshGenerator().getStandaloneMesh());
             itemIcon.setMeshTexture(texture);
-            wareList.addWidget(itemIcon, null);
+
+            UIInteractionWrapper wrapper = new UIInteractionWrapper();
+            wrapper.setContent(itemIcon);
+            wareList.addWidget(wrapper, null);
         }
     }
 
