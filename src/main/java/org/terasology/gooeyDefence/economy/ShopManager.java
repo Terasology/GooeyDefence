@@ -28,7 +28,10 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockExplorer;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockUri;
+import org.terasology.world.block.family.BlockFamily;
 import org.terasology.world.block.items.BlockItemFactory;
 
 import java.util.HashSet;
@@ -49,6 +52,7 @@ public class ShopManager extends BaseComponentSystem {
     private AssetManager assetManager;
     @In
     private BlockManager blockManager;
+    private BlockExplorer blockExplorer;
     @In
     private InventoryManager inventoryManager;
     @In
@@ -81,6 +85,7 @@ public class ShopManager extends BaseComponentSystem {
     @Override
     public void postBegin() {
         blockItemFactory = new BlockItemFactory(entityManager);
+        blockExplorer = new BlockExplorer(assetManager);
 
         purchasableItems = assetManager.getLoadedAssets(Prefab.class)
                 .stream()
@@ -88,11 +93,15 @@ public class ShopManager extends BaseComponentSystem {
                         && prefab.hasComponent(PurchasableComponent.class))
                 .collect(Collectors.toSet());
 
-        purchasableBlocks = blockManager.listRegisteredBlocks()
-                .stream()
-                .filter(block -> block.getPrefab()
-                        .map(prefab -> prefab.hasComponent(PurchasableComponent.class))
-                        .orElse(false))
+        Set<BlockUri> blocks = new HashSet<>();
+        blocks.addAll(blockManager.listRegisteredBlockUris());
+        blocks.addAll(blockExplorer.getAvailableBlockFamilies());
+        blocks.addAll(blockExplorer.getFreeformBlockFamilies());
+        purchasableBlocks = blocks.stream()
+                .map(blockManager::getBlockFamily)
+                .map(BlockFamily::getArchetypeBlock)
+                .filter(block -> block.getPrefab().isPresent())
+                .filter(block -> block.getPrefab().get().hasComponent(PurchasableComponent.class))
                 .collect(Collectors.toSet());
 
     }
