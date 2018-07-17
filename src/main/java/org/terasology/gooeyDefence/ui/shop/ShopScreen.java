@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.ui.shop;
 
 import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.rendering.assets.texture.Texture;
 import org.terasology.rendering.nui.CoreScreenLayer;
@@ -57,6 +58,37 @@ public class ShopScreen extends CoreScreenLayer {
             itemIcon.setMeshTexture(texture);
             wareList.addWidget(itemIcon, null);
         }
+    }
+
+
+    /**
+     * Gets the name of a prefab.
+     * This is the human readable variant of it.
+     *
+     * @param prefab The prefab to get the name of
+     * @return The string name of the prefab
+     */
+    private String getPrefabName(Prefab prefab) {
+        return prefab.hasComponent(DisplayNameComponent.class)
+                ? prefab.getComponent(DisplayNameComponent.class).name
+                : prefab.getUrn().getResourceName().toString();
+    }
+
+    /**
+     * Gets the name of a block.
+     * This is the human readable variant of it.
+     *
+     * @param block The block to get the name of
+     * @return The string name of the block
+     */
+    private String getBlockName(Block block) {
+        String displayName = block.getDisplayName();
+        return !displayName.equals("Untitled Block") ?
+                displayName :
+                block.getURI()
+                        .getBlockFamilyDefinitionUrn()
+                        .getResourceName()
+                        .toString();
     }
 }
 

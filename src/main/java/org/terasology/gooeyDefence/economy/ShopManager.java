@@ -111,33 +111,6 @@ public class ShopManager extends BaseComponentSystem {
     }
 
     /**
-     * Gets the name of a prefab.
-     * This is the human readable variant of it.
-     *
-     * @param prefab The prefab to get the name of
-     * @return The string name of the prefab
-     */
-    private String getPrefabName(Prefab prefab) {
-        return prefab.hasComponent(DisplayNameComponent.class)
-                ? prefab.getComponent(DisplayNameComponent.class).name
-                : prefab.getUrn().getResourceName().toString();
-    }
-
-    /**
-     * Gets the name of a block.
-     * This is the human readable variant of it.
-     *
-     * @param block The block to get the name of
-     * @return The string name of the block
-     */
-    private String getBlockName(Block block) {
-        String displayName = block.getDisplayName();
-        return !displayName.equals("Untitled Block") ?
-                displayName :
-                block.getURI().getIdentifier().toString();
-    }
-
-    /**
      * Locates a prefab matching the given string.
      * <p>
      * If multiple are found, then no guarantee is made about which will be picked.
