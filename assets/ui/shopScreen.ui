@@ -39,18 +39,39 @@
               "id": "wareListLayout",
               "contents": [
                 {
-                  "type": "FlowLayout",
-                  "id": "wareList",
+                  "type": "UILabel",
+                  "id": "wareLabel",
+                  "text": "Available Wares",
+                  "family": "title",
                   "layoutInfo": {
-                    "use-content-height": false,
-                    "use-content-width": false,
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-top": {
+                      "offset": 16
+                    },
                     "position-left": {
                       "offset": 16
                     },
                     "position-right": {
                       "offset": 16
-                    },
+                    }
+                  }
+                },
+                {
+                  "type": "FlowLayout",
+                  "id": "wareList",
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
                     "position-top": {
+                      "offset": 8,
+                      "target": "BOTTOM",
+                      "widget": "wareLabel"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
                       "offset": 16
                     },
                     "position-bottom": {

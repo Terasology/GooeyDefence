@@ -14,5 +14,11 @@
         "right": 4
       }
     }
+  },
+  "families": {
+    "title": {
+      "font": "NotoSans-Regular-Large",
+      "text-color": "F0F0F0FF"
+    }
   }
 }
