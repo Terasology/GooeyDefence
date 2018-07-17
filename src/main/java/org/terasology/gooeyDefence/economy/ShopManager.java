@@ -63,7 +63,6 @@ public class ShopManager extends BaseComponentSystem {
     @In
     private NUIManager nuiManager;
 
-    private EntityRef character;
     private BlockItemFactory blockItemFactory;
 
     /**
@@ -88,7 +87,6 @@ public class ShopManager extends BaseComponentSystem {
 
     @Override
     public void postBegin() {
-        character = localPlayer.getCharacterEntity();
         blockItemFactory = new BlockItemFactory(entityManager);
 
         purchasableItems = assetManager.getLoadedAssets(Prefab.class)
@@ -117,7 +115,14 @@ public class ShopManager extends BaseComponentSystem {
         return "Screen shown.";
     }
 
+    /**
+     * Tries to purchase an entity, by removing the cost and giving the item.
+     *
+     * @param ware The item to buy
+     * @return True if the item was bought and given successful, false otherwise.
+     */
     private boolean purchase(EntityRef ware) {
+        EntityRef character = localPlayer.getCharacterEntity();
         return EconomyManager.tryRemoveMoney(character, getWareCost(ware))
                 && inventoryManager.giveItem(character, character, ware);
     }

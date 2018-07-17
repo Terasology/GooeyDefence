@@ -18,7 +18,6 @@ package org.terasology.gooeyDefence.ui.shop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.gooeyDefence.economy.EconomyManager;
 import org.terasology.gooeyDefence.economy.ShopManager;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.ItemComponent;
@@ -159,6 +158,9 @@ public class ShopScreen extends CoreScreenLayer {
      */
     private void handlePrefabSelected(Prefab prefab) {
         isWareBlock = false;
+        selectedPrefab = prefab;
+        selectedBlock = null;
+
         if (prefab.hasComponent(DisplayNameComponent.class)) {
             DisplayNameComponent component = prefab.getComponent(DisplayNameComponent.class);
             wareName.setText(component.name);
@@ -185,7 +187,10 @@ public class ShopScreen extends CoreScreenLayer {
         } else {
             wareName.setText(getBlockName(block));
         }
+
         isWareBlock = true;
+        selectedBlock = block;
+        selectedPrefab = null;
         wareDisplay.setMesh(block.getMeshGenerator().getStandaloneMesh());
     }
 
