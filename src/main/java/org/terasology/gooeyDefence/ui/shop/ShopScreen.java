@@ -15,6 +15,8 @@
  */
 package org.terasology.gooeyDefence.ui.shop;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.ItemComponent;
@@ -30,6 +32,7 @@ import java.util.Collections;
 import java.util.Set;
 
 public class ShopScreen extends CoreScreenLayer {
+    private static final Logger logger = LoggerFactory.getLogger(ShopScreen.class);
 
     private FlowLayout wareList;
 
@@ -46,11 +49,13 @@ public class ShopScreen extends CoreScreenLayer {
         for (Prefab item : items) {
             ItemComponent itemComponent = item.getComponent(ItemComponent.class);
             ItemIcon itemIcon = new ItemIcon();
+            String itemName = getPrefabName(item);
 
-            itemIcon.setTooltipLines(Collections.singletonList(new TooltipLine(getPrefabName(item))));
             itemIcon.setIcon(itemComponent.icon);
 
             UIInteractionWrapper wrapper = new UIInteractionWrapper();
+            wrapper.setTooltipLines(Collections.singletonList(new TooltipLine(itemName)));
+            wrapper.setListener(widget -> wareClicked(itemName));
             wrapper.setContent(itemIcon);
             wareList.addWidget(itemIcon, null);
         }
@@ -59,15 +64,21 @@ public class ShopScreen extends CoreScreenLayer {
     public void setBlocks(Set<Block> blocks) {
         for (Block block : blocks) {
             ItemIcon itemIcon = new ItemIcon();
+            String blockName = getBlockName(block);
 
-            itemIcon.setTooltipLines(Collections.singletonList(new TooltipLine(getBlockName(block))));
             itemIcon.setMesh(block.getMeshGenerator().getStandaloneMesh());
             itemIcon.setMeshTexture(texture);
 
             UIInteractionWrapper wrapper = new UIInteractionWrapper();
+            wrapper.setTooltipLines(Collections.singletonList(new TooltipLine(blockName)));
+            wrapper.setListener(widget -> wareClicked(blockName));
             wrapper.setContent(itemIcon);
             wareList.addWidget(wrapper, null);
         }
+    }
+
+    public void wareClicked(String itemName) {
+        logger.info(itemName);
     }
 
 

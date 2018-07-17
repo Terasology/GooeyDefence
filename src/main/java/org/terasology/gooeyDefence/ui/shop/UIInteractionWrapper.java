@@ -16,14 +16,47 @@
 package org.terasology.gooeyDefence.ui.shop;
 
 import org.terasology.math.geom.Vector2i;
+import org.terasology.rendering.nui.BaseInteractionListener;
 import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.CoreWidget;
+import org.terasology.rendering.nui.InteractionListener;
 import org.terasology.rendering.nui.UIWidget;
+import org.terasology.rendering.nui.databinding.DefaultBinding;
+import org.terasology.rendering.nui.events.NUIMouseClickEvent;
+import org.terasology.rendering.nui.skin.UISkin;
+import org.terasology.rendering.nui.widgets.ActivateEventListener;
+import org.terasology.rendering.nui.widgets.TooltipLine;
+import org.terasology.rendering.nui.widgets.TooltipLineRenderer;
+import org.terasology.rendering.nui.widgets.UIList;
+import org.terasology.utilities.Assets;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UIInteractionWrapper extends CoreWidget {
     private UIWidget content;
+    private ActivateEventListener listener;
+    private UIList<TooltipLine> tooltip;
+    private InteractionListener interactionListener = new BaseInteractionListener() {
+
+        @Override
+        public boolean onMouseClick(NUIMouseClickEvent event) {
+            if (listener != null) {
+                listener.onActivated(UIInteractionWrapper.this);
+            }
+            return true;
+        }
+    };
+
+    public UIInteractionWrapper() {
+        tooltip = new UIList<>();
+        tooltip.setInteractive(false);
+        tooltip.setSelectable(false);
+        final UISkin defaultSkin = Assets.getSkin("core:itemTooltip").get();
+        tooltip.setSkin(defaultSkin);
+        tooltip.setItemRenderer(new TooltipLineRenderer(defaultSkin));
+        tooltip.bindList(new DefaultBinding<>(new ArrayList<>()));
+    }
 
     public void setContent(UIWidget content) {
         this.content = content;
@@ -32,6 +65,7 @@ public class UIInteractionWrapper extends CoreWidget {
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawWidget(content);
+        canvas.addInteractionRegion(interactionListener);
     }
 
     @Override
@@ -40,12 +74,25 @@ public class UIInteractionWrapper extends CoreWidget {
     }
 
     @Override
-    public Iterator<UIWidget> iterator() {
-        return content.iterator();
-    }
-
-    @Override
     public Vector2i getMaxContentSize(Canvas canvas) {
         return content.getMaxContentSize(canvas);
+    }
+
+    public void setTooltipLines(List<TooltipLine> lines) {
+        tooltip.setList(lines);
+    }
+
+
+    @Override
+    public UIWidget getTooltip() {
+        if (tooltip.getList().size() > 0) {
+            return tooltip;
+        } else {
+            return null;
+        }
+    }
+
+    public void setListener(ActivateEventListener listener) {
+        this.listener = listener;
     }
 }
