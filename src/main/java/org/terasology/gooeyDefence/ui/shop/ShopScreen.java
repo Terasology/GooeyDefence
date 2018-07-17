@@ -17,12 +17,17 @@ package org.terasology.gooeyDefence.ui.shop;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.gooeyDefence.economy.ShopManager;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.ItemComponent;
+import org.terasology.logic.players.LocalPlayer;
+import org.terasology.registry.In;
 import org.terasology.rendering.assets.texture.Texture;
 import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
+import org.terasology.rendering.nui.layers.ingame.inventory.InventoryGrid;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.rendering.nui.layouts.FlowLayout;
 import org.terasology.rendering.nui.widgets.TooltipLine;
@@ -58,8 +63,28 @@ public class ShopScreen extends CoreScreenLayer {
             .orElseGet(() -> Assets.getTexture("engine:default").get());
 
 
+    @In
+    private LocalPlayer localPlayer;
+    @In
+    private ShopManager shopManager;
+
+    @Override
+    public void onOpened() {
+        addItems(shopManager.getAllItems());
+        addBlocks(shopManager.getAllBlocks());
+    }
+
     @Override
     public void initialise() {
+        InventoryGrid inventory = find("inventory", InventoryGrid.class);
+        inventory.bindTargetEntity(new ReadOnlyBinding<EntityRef>() {
+            @Override
+            public EntityRef get() {
+                return localPlayer.getCharacterEntity();
+            }
+        });
+        inventory.setCellOffset(10);
+
         wareList = find("wareList", FlowLayout.class);
 
         wareName = find("wareName", UILabel.class);
@@ -67,7 +92,6 @@ public class ShopScreen extends CoreScreenLayer {
         wareDescription = find("wareDescription", UILabel.class);
         wareCost = find("wareCost", UILabel.class);
         buyButton = find("buyButton", UIButton.class);
-
         wareDisplay.setMeshTexture(texture);
         buyButton.subscribe(widget -> attemptItemPurchase());
     }
@@ -80,6 +104,11 @@ public class ShopScreen extends CoreScreenLayer {
 
         wareDisplay.setMesh(null);
         wareDisplay.setIcon(null);
+    }
+
+    @Override
+    public boolean isModal() {
+        return false;
     }
 
     /**
@@ -145,9 +174,9 @@ public class ShopScreen extends CoreScreenLayer {
      */
     private void attemptItemPurchase() {
         if (isWareBlock) {
-            blockListener.accept(selectedBlock);
+            shopManager.purchase(selectedBlock);
         } else {
-            prefabListener.accept(selectedPrefab);
+            shopManager.purchase(selectedPrefab);
         }
     }
 

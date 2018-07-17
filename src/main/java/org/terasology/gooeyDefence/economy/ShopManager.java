@@ -31,6 +31,7 @@ import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
+import org.terasology.registry.Share;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
@@ -44,6 +45,7 @@ import java.util.stream.Collectors;
  * Handles the purchasing of blocks
  */
 @RegisterSystem
+@Share(ShopManager.class)
 public class ShopManager extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ShopManager.class);
 
@@ -110,9 +112,23 @@ public class ShopManager extends BaseComponentSystem {
         ShopScreen shopScreen = nuiManager.pushScreen("GooeyDefence:ShopScreen", ShopScreen.class);
         shopScreen.addBlocks(purchasableBlocks);
         shopScreen.addItems(purchasableItems);
-        shopScreen.subscribeBlockPurchase(block -> purchase(blockItemFactory.newInstance(block.getBlockFamily())));
-        shopScreen.subscribePrefabPurchase(prefab -> purchase(entityManager.create(prefab)));
         return "Screen shown.";
+    }
+
+    public boolean purchase(Block block) {
+        return purchase(blockItemFactory.newInstance(block.getBlockFamily()));
+    }
+
+    public boolean purchase(Prefab prefab) {
+        return purchase(entityManager.create(prefab));
+    }
+
+    public Set<Block> getAllBlocks() {
+        return purchasableBlocks;
+    }
+
+    public Set<Prefab> getAllItems() {
+        return purchasableItems;
     }
 
     /**
@@ -126,5 +142,4 @@ public class ShopManager extends BaseComponentSystem {
         return EconomyManager.tryRemoveMoney(character, getWareCost(ware))
                 && inventoryManager.giveItem(character, character, ware);
     }
-
 }
