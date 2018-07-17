@@ -18,6 +18,8 @@ package org.terasology.gooeyDefence.ui.shop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.gooeyDefence.economy.EconomyManager;
+import org.terasology.gooeyDefence.economy.ShopManager;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.rendering.assets.texture.Texture;
@@ -39,8 +41,9 @@ public class ShopScreen extends CoreScreenLayer {
 
     private FlowLayout wareList;
     private UILabel wareName;
-    private UILabel wareDescription;
     private ItemIcon wareDisplay;
+    private UILabel wareDescription;
+    private UILabel wareCost;
     private UIButton buyButton;
 
     private Block selectedBlock;
@@ -61,8 +64,9 @@ public class ShopScreen extends CoreScreenLayer {
         wareList = find("wareList", FlowLayout.class);
 
         wareName = find("wareName", UILabel.class);
-        wareDescription = find("wareDescription", UILabel.class);
         wareDisplay = find("wareDisplay", ItemIcon.class);
+        wareDescription = find("wareDescription", UILabel.class);
+        wareCost = find("wareCost", UILabel.class);
         buyButton = find("buyButton", UIButton.class);
 
         wareDisplay.setMeshTexture(texture);
@@ -167,6 +171,7 @@ public class ShopScreen extends CoreScreenLayer {
             ItemComponent itemComponent = prefab.getComponent(ItemComponent.class);
             wareDisplay.setIcon(itemComponent.icon);
         }
+        wareCost.setText("Cost: " + ShopManager.getWareCost(prefab));
     }
 
     /**

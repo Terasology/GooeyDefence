@@ -18,6 +18,7 @@ package org.terasology.gooeyDefence.economy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.assets.management.AssetManager;
+import org.terasology.entitySystem.ComponentContainer;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
@@ -67,6 +68,26 @@ public class ShopManager extends BaseComponentSystem {
 
     private EntityRef character;
     private BlockItemFactory blockItemFactory;
+
+    /**
+     * Gets how much money a ware will cost.
+     * Tries to use the cost on the purchasable component, with the value component as a fallback.
+     *
+     * @param ware The ware to get the price for
+     * @return The price of the ware.
+     */
+    public static int getWareCost(ComponentContainer ware) {
+        int cost = ware.getComponent(PurchasableComponent.class).getCost();
+        if (cost < 0) {
+            if (ware.hasComponent(ValueComponent.class)) {
+                return ware.getComponent(ValueComponent.class).getValue();
+            } else {
+                return 0;
+            }
+        } else {
+            return cost;
+        }
+    }
 
     @Override
     public void postBegin() {
@@ -175,25 +196,5 @@ public class ShopManager extends BaseComponentSystem {
             }
         }
         return ware;
-    }
-
-    /**
-     * Gets how much money a ware will cost.
-     * Tries to use the cost on the purchasable component, with the value component as a fallback.
-     *
-     * @param ware The ware to get the price for
-     * @return The price of the ware.
-     */
-    private int getWareCost(EntityRef ware) {
-        int cost = ware.getComponent(PurchasableComponent.class).getCost();
-        if (cost < 0) {
-            if (ware.hasComponent(ValueComponent.class)) {
-                return ware.getComponent(ValueComponent.class).getValue();
-            } else {
-                return 0;
-            }
-        } else {
-            return cost;
-        }
     }
 }

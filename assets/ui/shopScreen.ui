@@ -142,6 +142,25 @@
                     "position-bottom": {
                       "offset": 16,
                       "target": "TOP",
+                      "widget": "wareCost"
+                    }
+                  }
+                },
+                {
+                  "type": "UILabel",
+                  "id": "wareCost",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-right": {
+                      "offset": 8
+                    },
+                    "position-left": {
+                      "offset": 8
+                    },
+                    "position-bottom": {
+                      "offset": 16,
+                      "target": "TOP",
                       "widget": "buyButton"
                     }
                   }
