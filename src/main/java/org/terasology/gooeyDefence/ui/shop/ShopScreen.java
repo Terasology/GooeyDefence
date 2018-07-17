@@ -69,7 +69,12 @@ public class ShopScreen extends CoreScreenLayer {
         buyButton.subscribe(widget -> attemptItemPurchase());
     }
 
-    public void setItems(Set<Prefab> items) {
+    /**
+     * Adds a number of items to be displayed in the ware list
+     *
+     * @param items The items to add
+     */
+    public void addItems(Set<Prefab> items) {
         for (Prefab item : items) {
             ItemComponent itemComponent = item.getComponent(ItemComponent.class);
             ItemIcon itemIcon = new ItemIcon();
@@ -84,7 +89,12 @@ public class ShopScreen extends CoreScreenLayer {
         }
     }
 
-    public void setBlocks(Set<Block> blocks) {
+    /**
+     * Adds a number of blocks to be displayed in the ware list.
+     *
+     * @param blocks The block to display
+     */
+    public void addBlocks(Set<Block> blocks) {
         for (Block block : blocks) {
             ItemIcon itemIcon = new ItemIcon();
 
@@ -99,14 +109,27 @@ public class ShopScreen extends CoreScreenLayer {
         }
     }
 
+    /**
+     * Subscribes a listener to the block purchase
+     *
+     * @param listener The listener to subscribe
+     */
     public void subscribeBlockPurchase(Consumer<Block> listener) {
         blockListener = listener;
     }
 
+    /**
+     * Subscribes a listener to the prefab purchase
+     *
+     * @param listener The listener to subscribe
+     */
     public void subscribePrefabPurchase(Consumer<Prefab> listener) {
         prefabListener = listener;
     }
 
+    /**
+     * Calls the listeners to attempt to purchase the given item
+     */
     private void attemptItemPurchase() {
         if (isWareBlock) {
             blockListener.accept(selectedBlock);
@@ -115,6 +138,11 @@ public class ShopScreen extends CoreScreenLayer {
         }
     }
 
+    /**
+     * Handles the prefab being selected by setting all the information labels and displays to the correct data
+     *
+     * @param prefab The block selected
+     */
     private void handlePrefabSelected(Prefab prefab) {
         isWareBlock = false;
         if (prefab.hasComponent(DisplayNameComponent.class)) {
@@ -131,6 +159,11 @@ public class ShopScreen extends CoreScreenLayer {
         }
     }
 
+    /**
+     * Handles the block being selected by setting all the information labels and displays to the correct data
+     *
+     * @param block The block selected
+     */
     private void handleBlockSelected(Block block) {
         if (block.getPrefab().isPresent()) {
             handlePrefabSelected(block.getPrefab().get());

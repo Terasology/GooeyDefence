@@ -92,8 +92,8 @@ public class ShopManager extends BaseComponentSystem {
             requiredPermission = PermissionManager.NO_PERMISSION)
     public String showShop() {
         ShopScreen shopScreen = nuiManager.pushScreen("GooeyDefence:ShopScreen", ShopScreen.class);
-        shopScreen.setBlocks(purchasableBlocks);
-        shopScreen.setItems(purchasableItems);
+        shopScreen.addBlocks(purchasableBlocks);
+        shopScreen.addItems(purchasableItems);
         shopScreen.subscribeBlockPurchase(block -> logger.info("Block Bought"));
         shopScreen.subscribePrefabPurchase(prefab -> logger.info("Block Bought"));
         return "Screen shown.";
