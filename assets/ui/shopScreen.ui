@@ -1,0 +1,101 @@
+{
+  "type": "ShopScreen",
+  "contents": {
+    "type": "RelativeLayout",
+    "id": "outerLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "id": "outerBox",
+        "layoutInfo": {
+          "use-content-height": false,
+          "use-content-width": false,
+          "position-left": {
+            "offset": 64
+          },
+          "position-right": {
+            "offset": 64
+          },
+          "position-top": {
+            "offset": 64
+          },
+          "position-bottom": {
+            "offset": 64
+          }
+        },
+        "content": {
+          "type": "ColumnLayout",
+          "id": "innerLayout",
+          "columns": 2,
+          "column-widths": [
+            0.6,
+            0.4
+          ],
+          "fillVerticalSpace": true,
+          "contents": [
+            {
+              "type": "RelativeLayout",
+              "id": "wareListLayout",
+              "contents": [
+                {
+                  "type": "UIBox",
+                  "id": "wareFlagBox",
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    },
+                    "position-top": {
+                      "offset": 16
+                    },
+                    "position-bottom": {
+                      "offset": 16
+                    }
+                  },
+                  "content": {
+                    "type": "UILabel",
+                    "text": "WARE LIST"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "RelativeLayout",
+              "id": "wareInfoLayout",
+              "contents": [
+                {
+                  "type": "UIBox",
+                  "id": "infoFlagBox",
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    },
+                    "position-top": {
+                      "offset": 16
+                    },
+                    "position-bottom": {
+                      "offset": 16
+                    }
+                  },
+                  "content": {
+                    "type": "UILabel",
+                    "text": "WARE INFO"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
