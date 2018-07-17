@@ -21,6 +21,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.ui.shop.ShopScreen;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.console.commandSystem.annotations.Command;
 import org.terasology.logic.console.commandSystem.annotations.CommandParam;
@@ -30,6 +31,7 @@ import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
+import org.terasology.rendering.nui.NUIManager;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
@@ -57,6 +59,8 @@ public class ShopManager extends BaseComponentSystem {
     private LocalPlayer localPlayer;
     @In
     private EntityManager entityManager;
+    @In
+    private NUIManager nuiManager;
 
     private EntityRef character;
     private BlockItemFactory blockItemFactory;
@@ -81,19 +85,11 @@ public class ShopManager extends BaseComponentSystem {
 
     }
 
-    @Command(value = "listWares", shortDescription = "List all the purchasable items and blocks",
+    @Command(value = "showShop", shortDescription = "Show the shop screen",
             requiredPermission = PermissionManager.NO_PERMISSION)
-    public String listWares() {
-        return "Items: "
-                + String.join(", ",
-                purchasableItems.stream()
-                        .map(this::getPrefabName)
-                        .collect(Collectors.toList()))
-                + "\nBlocks: "
-                + String.join(", ",
-                purchasableBlocks.stream()
-                        .map(this::getBlockName)
-                        .collect(Collectors.toSet()));
+    public String showShop() {
+        ShopScreen shopScreen = nuiManager.pushScreen("GooeyDefence:ShopScreen", ShopScreen.class);
+        return "Screen shown.";
     }
 
     @Command(shortDescription = "Gives the player one of the item.")
