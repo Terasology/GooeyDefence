@@ -22,9 +22,11 @@ import org.terasology.rendering.assets.texture.Texture;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.rendering.nui.layouts.FlowLayout;
+import org.terasology.rendering.nui.widgets.TooltipLine;
 import org.terasology.utilities.Assets;
 import org.terasology.world.block.Block;
 
+import java.util.Collections;
 import java.util.Set;
 
 public class ShopScreen extends CoreScreenLayer {
@@ -45,6 +47,7 @@ public class ShopScreen extends CoreScreenLayer {
             ItemComponent itemComponent = item.getComponent(ItemComponent.class);
             ItemIcon itemIcon = new ItemIcon();
 
+            itemIcon.setTooltipLines(Collections.singletonList(new TooltipLine(getPrefabName(item))));
             itemIcon.setIcon(itemComponent.icon);
             wareList.addWidget(itemIcon, null);
         }
@@ -54,6 +57,7 @@ public class ShopScreen extends CoreScreenLayer {
         for (Block block : blocks) {
             ItemIcon itemIcon = new ItemIcon();
 
+            itemIcon.setTooltipLines(Collections.singletonList(new TooltipLine(getBlockName(block))));
             itemIcon.setMesh(block.getMeshGenerator().getStandaloneMesh());
             itemIcon.setMeshTexture(texture);
             wareList.addWidget(itemIcon, null);
@@ -91,5 +95,3 @@ public class ShopScreen extends CoreScreenLayer {
                         .toString();
     }
 }
-
-//            itemIcon.setTooltipLines(Collections.singletonList(new TooltipLine("")));
