@@ -15,8 +15,6 @@
  */
 package org.terasology.gooeyDefence.ui.shop;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.gooeyDefence.economy.ShopManager;
@@ -30,6 +28,7 @@ import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.ingame.inventory.InventoryGrid;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.rendering.nui.layouts.FlowLayout;
+import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
 import org.terasology.rendering.nui.widgets.TooltipLine;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
@@ -38,30 +37,24 @@ import org.terasology.world.block.Block;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.function.Consumer;
 
+/**
+ * Screen that displays both the shop interface and the player inventory simultaneously.
+ */
 public class ShopScreen extends CoreScreenLayer {
-    private static final Logger logger = LoggerFactory.getLogger(ShopScreen.class);
 
     private FlowLayout wareList;
     private UILabel wareName;
     private ItemIcon wareDisplay;
     private UILabel wareDescription;
     private UILabel wareCost;
-    private UIButton buyButton;
 
     private Block selectedBlock;
     private Prefab selectedPrefab;
-    private boolean isWareBlock;
 
-    private Consumer<Block> blockListener = ware -> {
-    };
-    private Consumer<Prefab> prefabListener = ware -> {
-    };
 
     private Texture texture = Assets.getTexture("engine:terrain")
             .orElseGet(() -> Assets.getTexture("engine:default").get());
-
 
     @In
     private LocalPlayer localPlayer;
@@ -77,13 +70,6 @@ public class ShopScreen extends CoreScreenLayer {
     @Override
     public void initialise() {
         InventoryGrid inventory = find("inventory", InventoryGrid.class);
-        inventory.bindTargetEntity(new ReadOnlyBinding<EntityRef>() {
-            @Override
-            public EntityRef get() {
-                return localPlayer.getCharacterEntity();
-            }
-        });
-        inventory.setCellOffset(10);
 
         wareList = find("wareList", FlowLayout.class);
 
@@ -91,9 +77,26 @@ public class ShopScreen extends CoreScreenLayer {
         wareDisplay = find("wareDisplay", ItemIcon.class);
         wareDescription = find("wareDescription", UILabel.class);
         wareCost = find("wareCost", UILabel.class);
-        buyButton = find("buyButton", UIButton.class);
-        wareDisplay.setMeshTexture(texture);
+        RelativeLayout wareInfoLayout = find("wareInfoLayout", RelativeLayout.class);
+        UIButton buyButton = find("buyButton", UIButton.class);
+
+
+        /* No null check is performed, as if a value is null then something has gone wrong and we should crash anyway */
+        wareInfoLayout.bindVisible(new ReadOnlyBinding<Boolean>() {
+            @Override
+            public Boolean get() {
+                return selectedPrefab != null && selectedBlock != null;
+            }
+        });
         buyButton.subscribe(widget -> attemptItemPurchase());
+        inventory.bindTargetEntity(new ReadOnlyBinding<EntityRef>() {
+            @Override
+            public EntityRef get() {
+                return localPlayer.getCharacterEntity();
+            }
+        });
+        inventory.setCellOffset(10);
+        wareDisplay.setMeshTexture(texture);
     }
 
     @Override
@@ -116,7 +119,7 @@ public class ShopScreen extends CoreScreenLayer {
      *
      * @param items The items to add
      */
-    public void addItems(Set<Prefab> items) {
+    private void addItems(Set<Prefab> items) {
         for (Prefab item : items) {
             ItemComponent itemComponent = item.getComponent(ItemComponent.class);
             ItemIcon itemIcon = new ItemIcon();
@@ -136,7 +139,7 @@ public class ShopScreen extends CoreScreenLayer {
      *
      * @param blocks The block to display
      */
-    public void addBlocks(Set<Block> blocks) {
+    private void addBlocks(Set<Block> blocks) {
         for (Block block : blocks) {
             ItemIcon itemIcon = new ItemIcon();
 
@@ -152,30 +155,12 @@ public class ShopScreen extends CoreScreenLayer {
     }
 
     /**
-     * Subscribes a listener to the block purchase
-     *
-     * @param listener The listener to subscribe
-     */
-    public void subscribeBlockPurchase(Consumer<Block> listener) {
-        blockListener = listener;
-    }
-
-    /**
-     * Subscribes a listener to the prefab purchase
-     *
-     * @param listener The listener to subscribe
-     */
-    public void subscribePrefabPurchase(Consumer<Prefab> listener) {
-        prefabListener = listener;
-    }
-
-    /**
-     * Calls the listeners to attempt to purchase the given item
+     * Calls on the shop manager to attempt to purchase the selected item.
      */
     private void attemptItemPurchase() {
-        if (isWareBlock) {
+        if (selectedBlock != null) {
             shopManager.purchase(selectedBlock);
-        } else {
+        } else if (selectedPrefab != null) {
             shopManager.purchase(selectedPrefab);
         }
     }
@@ -186,7 +171,6 @@ public class ShopScreen extends CoreScreenLayer {
      * @param prefab The block selected
      */
     private void handlePrefabSelected(Prefab prefab) {
-        isWareBlock = false;
         selectedPrefab = prefab;
         selectedBlock = null;
 
@@ -217,7 +201,6 @@ public class ShopScreen extends CoreScreenLayer {
             wareName.setText(getBlockName(block));
         }
 
-        isWareBlock = true;
         selectedBlock = block;
         selectedPrefab = null;
         wareDisplay.setMesh(block.getMeshGenerator().getStandaloneMesh());
