@@ -10,6 +10,11 @@
     "range": 20,
     "attackSpeed": 2000
   },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 11
+  },
   "BlockUpgrades": {
     "componentName": "SniperTargeter",
     "upgrades": [

@@ -3,13 +3,18 @@
   "DisplayName": {
     "name": "Missile Targeter",
     "description": "Targets an enemy far away and effects all enemies nearby the target"
-  }, 
+  },
   "MissileTargeter": {
     "drain": 5,
-	"splashRange": 1,
+    "splashRange": 1,
     "minimumRange": 5,
     "range": 20,
-    "attackSpeed":2000
+    "attackSpeed": 2000
+  },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 9
   },
   "BlockUpgrades": {
     "componentName": "MissileTargeter",

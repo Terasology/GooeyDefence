@@ -9,6 +9,11 @@
     "range": 2,
     "attackSpeed": 500
   },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 10
+  },
   "BlockUpgrades": {
     "componentName": "AoeTargeter",
     "upgrades": [
