@@ -7,6 +7,11 @@
   "Core": {
     "power": 10
   },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 5
+  },
   "BlockUpgrades": {
     "componentName": "Core",
     "upgrades": [

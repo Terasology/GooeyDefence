@@ -1,5 +1,10 @@
 {
   "alwaysRelevant": true,
   "TowerMultiBlock": {},
-  "DestructibleBlock": {}
+  "DestructibleBlock": {},
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 0
+  }
 }
