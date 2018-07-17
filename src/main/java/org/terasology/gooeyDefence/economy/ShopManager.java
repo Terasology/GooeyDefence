@@ -15,6 +15,8 @@
  */
 package org.terasology.gooeyDefence.economy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -45,6 +47,7 @@ import java.util.stream.Collectors;
  */
 @RegisterSystem
 public class ShopManager extends BaseComponentSystem {
+    private static final Logger logger = LoggerFactory.getLogger(ShopManager.class);
 
     private Set<Block> purchasableBlocks = new HashSet<>();
     private Set<Prefab> purchasableItems = new HashSet<>();
@@ -91,6 +94,8 @@ public class ShopManager extends BaseComponentSystem {
         ShopScreen shopScreen = nuiManager.pushScreen("GooeyDefence:ShopScreen", ShopScreen.class);
         shopScreen.setBlocks(purchasableBlocks);
         shopScreen.setItems(purchasableItems);
+        shopScreen.subscribeBlockPurchase(block -> logger.info("Block Bought"));
+        shopScreen.subscribePrefabPurchase(prefab -> logger.info("Block Bought"));
         return "Screen shown.";
     }
 
