@@ -25,6 +25,7 @@ import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.rendering.nui.layouts.FlowLayout;
 import org.terasology.rendering.nui.widgets.TooltipLine;
+import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.utilities.Assets;
 import org.terasology.world.block.Block;
 
@@ -35,6 +36,10 @@ public class ShopScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(ShopScreen.class);
 
     private FlowLayout wareList;
+    private UILabel wareName;
+    private UILabel wareDescription;
+    private ItemIcon wareDisplay;
+
     private Texture texture = Assets.getTexture("engine:terrain")
             .orElseGet(() -> Assets.getTexture("engine:default").get());
 
@@ -42,6 +47,11 @@ public class ShopScreen extends CoreScreenLayer {
     @Override
     public void initialise() {
         wareList = find("wareList", FlowLayout.class);
+
+        wareName = find("wareName", UILabel.class);
+        wareDescription = find("wareDescription", UILabel.class);
+        wareDisplay = find("wareDisplay", ItemIcon.class);
+        wareDisplay.setMeshTexture(texture);
     }
 
     public void setItems(Set<Prefab> items) {
@@ -75,11 +85,27 @@ public class ShopScreen extends CoreScreenLayer {
     }
 
     private void handlePrefabSelected(Prefab prefab) {
-        
+        if (prefab.hasComponent(DisplayNameComponent.class)) {
+            DisplayNameComponent component = prefab.getComponent(DisplayNameComponent.class);
+            wareName.setText(component.name);
+            wareDescription.setText(component.description);
+        } else {
+            wareName.setText(prefab.getUrn().getResourceName().toString());
+        }
+
+        if (prefab.hasComponent(ItemComponent.class)) {
+            ItemComponent itemComponent = prefab.getComponent(ItemComponent.class);
+            wareDisplay.setIcon(itemComponent.icon);
+        }
     }
 
     private void handleBlockSelected(Block block) {
-
+        if (block.getPrefab().isPresent()) {
+            handlePrefabSelected(block.getPrefab().get());
+        } else {
+            wareName.setText(getBlockName(block));
+        }
+        wareDisplay.setMesh(block.getMeshGenerator().getStandaloneMesh());
     }
 
     /**

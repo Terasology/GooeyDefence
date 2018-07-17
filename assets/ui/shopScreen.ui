@@ -86,27 +86,62 @@
               "id": "wareInfoLayout",
               "contents": [
                 {
-                  "type": "UIBox",
-                  "id": "infoFlagBox",
+                  "type": "UILabel",
+                  "id": "wareName",
+                  "family": "title",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-top": {
+                      "offset": 8
+                    },
+                    "position-right": {
+                      "offset": 8
+                    },
+                    "position-left": {
+                      "offset": 8
+                    }
+                  }
+                },
+                {
+                  "type": "ItemIcon",
+                  "id": "wareDisplay",
                   "layoutInfo": {
                     "use-content-height": false,
                     "use-content-width": false,
-                    "position-left": {
-                      "offset": 16
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "wareName"
                     },
                     "position-right": {
                       "offset": 16
                     },
-                    "position-top": {
+                    "position-left": {
                       "offset": 16
+                    },
+                    "position-bottom": {
+                      "offset": 16,
+                      "target": "TOP",
+                      "widget": "wareDescription"
+                    }
+                  }
+                },
+                {
+                  "type": "UILabel",
+                  "id": "wareDescription",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-right": {
+                      "offset": 8
+                    },
+                    "position-left": {
+                      "offset": 8
                     },
                     "position-bottom": {
                       "offset": 16
                     }
-                  },
-                  "content": {
-                    "type": "UILabel",
-                    "text": "WARE INFO"
                   }
                 }
               ]
