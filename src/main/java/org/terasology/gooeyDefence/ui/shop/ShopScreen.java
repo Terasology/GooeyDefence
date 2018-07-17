@@ -69,6 +69,16 @@ public class ShopScreen extends CoreScreenLayer {
         buyButton.subscribe(widget -> attemptItemPurchase());
     }
 
+    @Override
+    public void onClosed() {
+        wareList.removeAllWidgets();
+        wareName.setText("");
+        wareDescription.setText("");
+
+        wareDisplay.setMesh(null);
+        wareDisplay.setIcon(null);
+    }
+
     /**
      * Adds a number of items to be displayed in the ware list
      *
