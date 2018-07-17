@@ -15,8 +15,6 @@
  */
 package org.terasology.gooeyDefence.economy;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.ComponentContainer;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -24,15 +22,11 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.gooeyDefence.ui.shop.ShopScreen;
-import org.terasology.logic.console.commandSystem.annotations.Command;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.ItemComponent;
-import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
-import org.terasology.rendering.nui.NUIManager;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
@@ -47,7 +41,6 @@ import java.util.stream.Collectors;
 @RegisterSystem
 @Share(ShopManager.class)
 public class ShopManager extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(ShopManager.class);
 
     private Set<Block> purchasableBlocks = new HashSet<>();
     private Set<Prefab> purchasableItems = new HashSet<>();
@@ -62,8 +55,6 @@ public class ShopManager extends BaseComponentSystem {
     private LocalPlayer localPlayer;
     @In
     private EntityManager entityManager;
-    @In
-    private NUIManager nuiManager;
 
     private BlockItemFactory blockItemFactory;
 
@@ -106,29 +97,42 @@ public class ShopManager extends BaseComponentSystem {
 
     }
 
-    @Command(value = "showShop", shortDescription = "Show the shop screen",
-            requiredPermission = PermissionManager.NO_PERMISSION)
-    public String showShop() {
-        ShopScreen shopScreen = nuiManager.pushScreen("GooeyDefence:ShopScreen", ShopScreen.class);
-        shopScreen.addBlocks(purchasableBlocks);
-        shopScreen.addItems(purchasableItems);
-        return "Screen shown.";
-    }
-
-    public boolean purchase(Block block) {
-        return purchase(blockItemFactory.newInstance(block.getBlockFamily()));
-    }
-
-    public boolean purchase(Prefab prefab) {
-        return purchase(entityManager.create(prefab));
-    }
-
+    /**
+     * @return All the blocks for sale
+     */
     public Set<Block> getAllBlocks() {
         return purchasableBlocks;
     }
 
+    /**
+     * @return All the items for sale
+     */
     public Set<Prefab> getAllItems() {
         return purchasableItems;
+    }
+
+    /**
+     * Attempt to purchase a block.
+     * <p>
+     * Calls on {@link #purchase(EntityRef)}
+     *
+     * @param block The block to purchase
+     * @return True if the purchase was successful. False otherwise
+     */
+    public boolean purchase(Block block) {
+        return purchase(blockItemFactory.newInstance(block.getBlockFamily()));
+    }
+
+    /**
+     * Attempt to purchase a prefab.
+     * <p>
+     * Calls on {@link #purchase(EntityRef)}
+     *
+     * @param prefab The prefab to purchase
+     * @return True if the purchase was successful. False otherwise
+     */
+    public boolean purchase(Prefab prefab) {
+        return purchase(entityManager.create(prefab));
     }
 
     /**
