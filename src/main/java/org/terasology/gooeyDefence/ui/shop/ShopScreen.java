@@ -35,27 +35,25 @@ public class ShopScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(ShopScreen.class);
 
     private FlowLayout wareList;
-
     private Texture texture = Assets.getTexture("engine:terrain")
             .orElseGet(() -> Assets.getTexture("engine:default").get());
+
 
     @Override
     public void initialise() {
         wareList = find("wareList", FlowLayout.class);
     }
 
-
     public void setItems(Set<Prefab> items) {
         for (Prefab item : items) {
             ItemComponent itemComponent = item.getComponent(ItemComponent.class);
             ItemIcon itemIcon = new ItemIcon();
-            String itemName = getPrefabName(item);
 
             itemIcon.setIcon(itemComponent.icon);
 
             UIInteractionWrapper wrapper = new UIInteractionWrapper();
-            wrapper.setTooltipLines(Collections.singletonList(new TooltipLine(itemName)));
-            wrapper.setListener(widget -> wareClicked(itemName));
+            wrapper.setTooltipLines(Collections.singletonList(new TooltipLine(getPrefabName(item))));
+            wrapper.setListener(widget -> handlePrefabSelected(item));
             wrapper.setContent(itemIcon);
             wareList.addWidget(itemIcon, null);
         }
@@ -64,23 +62,25 @@ public class ShopScreen extends CoreScreenLayer {
     public void setBlocks(Set<Block> blocks) {
         for (Block block : blocks) {
             ItemIcon itemIcon = new ItemIcon();
-            String blockName = getBlockName(block);
 
             itemIcon.setMesh(block.getMeshGenerator().getStandaloneMesh());
             itemIcon.setMeshTexture(texture);
 
             UIInteractionWrapper wrapper = new UIInteractionWrapper();
-            wrapper.setTooltipLines(Collections.singletonList(new TooltipLine(blockName)));
-            wrapper.setListener(widget -> wareClicked(blockName));
+            wrapper.setTooltipLines(Collections.singletonList(new TooltipLine(getBlockName(block))));
+            wrapper.setListener(widget -> handleBlockSelected(block));
             wrapper.setContent(itemIcon);
             wareList.addWidget(wrapper, null);
         }
     }
 
-    public void wareClicked(String itemName) {
-        logger.info(itemName);
+    private void handlePrefabSelected(Prefab prefab) {
+        
     }
 
+    private void handleBlockSelected(Block block) {
+
+    }
 
     /**
      * Gets the name of a prefab.
