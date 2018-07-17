@@ -9,6 +9,11 @@
     "damage": 2,
     "fireDuration": 2000
   },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 9
+  },
   "BlockUpgrades": {
     "componentName": "FireEffector",
     "upgrades": [

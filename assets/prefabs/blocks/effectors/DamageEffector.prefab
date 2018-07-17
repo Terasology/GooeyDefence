@@ -8,6 +8,11 @@
     "drain": 5,
     "damage": 2
   },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 5
+  },
   "BlockUpgrades": {
     "componentName": "DamageEffector",
     "upgrades": [

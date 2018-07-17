@@ -10,6 +10,11 @@
     "poisonDamage": 1,
     "poisonDuration": 500
   },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 7
+  },
   "BlockUpgrades": {
     "componentName": "PoisonEffector",
     "upgrades": [
