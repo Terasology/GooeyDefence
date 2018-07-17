@@ -25,10 +25,7 @@ import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.ui.shop.ShopScreen;
-import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.console.commandSystem.annotations.Command;
-import org.terasology.logic.console.commandSystem.annotations.CommandParam;
-import org.terasology.logic.console.commandSystem.annotations.Sender;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.permission.PermissionManager;
@@ -115,86 +112,14 @@ public class ShopManager extends BaseComponentSystem {
         ShopScreen shopScreen = nuiManager.pushScreen("GooeyDefence:ShopScreen", ShopScreen.class);
         shopScreen.addBlocks(purchasableBlocks);
         shopScreen.addItems(purchasableItems);
-        shopScreen.subscribeBlockPurchase(block -> logger.info("Block Bought"));
-        shopScreen.subscribePrefabPurchase(prefab -> logger.info("Block Bought"));
+        shopScreen.subscribeBlockPurchase(block -> purchase(blockItemFactory.newInstance(block.getBlockFamily())));
+        shopScreen.subscribePrefabPurchase(prefab -> purchase(entityManager.create(prefab)));
         return "Screen shown.";
     }
 
-    @Command(shortDescription = "Gives the player one of the item.")
-    public String purchase(@Sender EntityRef sender, @CommandParam(value = "Name of Item") String[] wareNameSplit) {
-        String wareName = String.join(" ", wareNameSplit);
-        EntityRef ware = getWareMatching(wareName);
-        if (ware == EntityRef.NULL) {
-            return "Unable to find ware matching " + wareName;
-        } else {
-            if (EconomyManager.tryRemoveMoney(character, getWareCost(ware))
-                    && inventoryManager.giveItem(character, character, ware)) {
-                return "Given ware '" + wareName + "' to you";
-            } else {
-                return "Unable to give you the ware '" + wareName + "'";
-            }
-        }
+    private boolean purchase(EntityRef ware) {
+        return EconomyManager.tryRemoveMoney(character, getWareCost(ware))
+                && inventoryManager.giveItem(character, character, ware);
     }
 
-    /**
-     * Locates a prefab matching the given string.
-     * <p>
-     * If multiple are found, then no guarantee is made about which will be picked.
-     * If none is found, null is returned
-     *
-     * @param wareName The name of the item to search for
-     * @return The item that matches, or else null
-     */
-    private Prefab findItemMatching(String wareName) {
-        return purchasableItems.stream()
-                .filter(prefab ->
-                        prefab.getUrn().getResourceName().toString().equals(wareName)
-                                || (prefab.hasComponent(DisplayNameComponent.class)
-                                && prefab.getComponent(DisplayNameComponent.class).name.equals(wareName)))
-                .findAny()
-                .orElse(null);
-    }
-
-    /**
-     * Locates a prefab matching the given string.
-     * <p>
-     * If multiple are found, then no guarantee is made about which will be picked.
-     * If none is found, null is returned
-     *
-     * @param wareName The name of the item to search for
-     * @return The item that matches, or else null
-     */
-    private Block findBlockMatching(String wareName) {
-        return purchasableBlocks.stream()
-                .filter(block ->
-                        block.getURI()
-                                .getBlockFamilyDefinitionUrn()
-                                .getResourceName()
-                                .toString()
-                                .equalsIgnoreCase(wareName)
-                                || block.getDisplayName().equals(wareName))
-                .findAny()
-                .orElse(null);
-    }
-
-    /**
-     * Gets an entity representing the ware given by the string.
-     * If no ware could be found, then a null entity is returned.
-     *
-     * @param wareName The name of the ware to find
-     * @return The ware, or a null entity if it wasn't found
-     */
-    private EntityRef getWareMatching(String wareName) {
-        Prefab item = findItemMatching(wareName);
-        EntityRef ware = EntityRef.NULL;
-        if (item != null) {
-            ware = entityManager.create(item);
-        } else {
-            Block block = findBlockMatching(wareName);
-            if (block != null) {
-                ware = blockItemFactory.newInstance(block.getBlockFamily());
-            }
-        }
-        return ware;
-    }
 }
