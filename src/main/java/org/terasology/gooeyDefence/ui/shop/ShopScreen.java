@@ -25,12 +25,14 @@ import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.rendering.nui.layouts.FlowLayout;
 import org.terasology.rendering.nui.widgets.TooltipLine;
+import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.utilities.Assets;
 import org.terasology.world.block.Block;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class ShopScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(ShopScreen.class);
@@ -39,6 +41,16 @@ public class ShopScreen extends CoreScreenLayer {
     private UILabel wareName;
     private UILabel wareDescription;
     private ItemIcon wareDisplay;
+    private UIButton buyButton;
+
+    private Block selectedBlock;
+    private Prefab selectedPrefab;
+    private boolean isWareBlock;
+
+    private Consumer<Block> blockListener = ware -> {
+    };
+    private Consumer<Prefab> prefabListener = ware -> {
+    };
 
     private Texture texture = Assets.getTexture("engine:terrain")
             .orElseGet(() -> Assets.getTexture("engine:default").get());
@@ -51,7 +63,10 @@ public class ShopScreen extends CoreScreenLayer {
         wareName = find("wareName", UILabel.class);
         wareDescription = find("wareDescription", UILabel.class);
         wareDisplay = find("wareDisplay", ItemIcon.class);
+        buyButton = find("buyButton", UIButton.class);
+
         wareDisplay.setMeshTexture(texture);
+        buyButton.subscribe(widget -> attemptItemPurchase());
     }
 
     public void setItems(Set<Prefab> items) {
@@ -84,7 +99,24 @@ public class ShopScreen extends CoreScreenLayer {
         }
     }
 
+    public void subscribeBlockPurchase(Consumer<Block> listener) {
+        blockListener = listener;
+    }
+
+    public void subscribePrefabPurchase(Consumer<Prefab> listener) {
+        prefabListener = listener;
+    }
+
+    private void attemptItemPurchase() {
+        if (isWareBlock) {
+            blockListener.accept(selectedBlock);
+        } else {
+            prefabListener.accept(selectedPrefab);
+        }
+    }
+
     private void handlePrefabSelected(Prefab prefab) {
+        isWareBlock = false;
         if (prefab.hasComponent(DisplayNameComponent.class)) {
             DisplayNameComponent component = prefab.getComponent(DisplayNameComponent.class);
             wareName.setText(component.name);
@@ -105,6 +137,7 @@ public class ShopScreen extends CoreScreenLayer {
         } else {
             wareName.setText(getBlockName(block));
         }
+        isWareBlock = true;
         wareDisplay.setMesh(block.getMeshGenerator().getStandaloneMesh());
     }
 

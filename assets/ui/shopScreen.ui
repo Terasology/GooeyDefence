@@ -140,6 +140,21 @@
                       "offset": 8
                     },
                     "position-bottom": {
+                      "offset": 16,
+                      "target": "TOP",
+                      "widget": "buyButton"
+                    }
+                  }
+                },
+                {
+                  "type": "UIButton",
+                  "id": "buyButton",
+                  "text": "Purchase Ware",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-horizontal-center": {},
+                    "position-bottom": {
                       "offset": 16
                     }
                   }
