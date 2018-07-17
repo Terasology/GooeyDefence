@@ -1,7 +1,7 @@
 {
   "inherit": "default",
   "elements": {
-    "ItemIcon": {
+    "UIInteractionWrapper": {
       "fixed-width": 48,
       "fixed-height": 48,
       "texture-scale-mode": "scale fit",
