@@ -25,6 +25,9 @@ import org.terasology.entitySystem.systems.RenderSystem;
 import org.terasology.gooeyDefence.components.PathBlockComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
+import org.terasology.logic.location.LocationComponent;
+import org.terasology.logic.players.PlayerTargetChangedEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.particles.components.generators.VelocityRangeGeneratorComponent;
@@ -48,6 +51,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     private EntityManager entityManager;
 
     private int shrineDamaged = 0;
+    private EntityRef sphere;
 
     @Override
     public void initialise() {
@@ -56,6 +60,11 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     @Override
     public void postBegin() {
+        sphere = entityManager.create("GooeyDefence:Sphere");
+        LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
+
+        sphereLoc.setWorldPosition(Vector3f.zero());
+        sphereLoc.setLocalScale(0.1f);
         clearPathParticles();
     }
 
@@ -85,6 +94,30 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
                 component.maxVelocity.add(delta);
 
             }
+        }
+    }
+
+    /**
+     * @see PlayerTargetChangedEvent
+     */
+    @ReceiveEvent
+    public void onPlayerTargetChanged(PlayerTargetChangedEvent event, EntityRef entity) {
+
+        if (DefenceField.hasComponentExtending(event.getNewTarget(), TowerTargeter.class)) {
+            LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
+            LocationComponent targeterLoc = event.getNewTarget().getComponent(LocationComponent.class);
+            TowerTargeter targeter = DefenceField.getComponentExtending(event.getNewTarget(), TowerTargeter.class);
+
+            sphereLoc.setWorldPosition(targeterLoc.getWorldPosition());
+            sphereLoc.setLocalScale(targeter.getRange() * 2 + 1);
+
+        } else {
+
+            LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
+
+            sphereLoc.setWorldPosition(Vector3f.zero());
+            sphereLoc.setLocalScale(0.1f);
+
         }
     }
 
