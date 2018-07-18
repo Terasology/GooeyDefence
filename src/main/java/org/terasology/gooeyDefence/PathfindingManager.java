@@ -125,7 +125,7 @@ public class PathfindingManager extends BaseComponentSystem {
                 (path) -> {
                     List<Vector3i> oldPath = paths.get(id);
                     paths.set(id, path);
-                    if (oldPath != null && !oldPath.equals(path)) {
+                    if (!path.equals(oldPath)) {
                         DefenceField.getShrineEntity().send(new OnEntrancePathChanged(id, path));
                     }
                     if (callback != null) {
