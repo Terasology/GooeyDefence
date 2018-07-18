@@ -1,0 +1,41 @@
+{
+  "PathBlock": {},
+  "ParticleDataSprite": {
+    "texture": "GooeyDefence:fx_smoke"
+  },
+  "EnergyRangeGenerator": {
+    "minEnergy": 1,
+    "maxEnergy": 1
+  },
+  "ScaleRangeGenerator": {
+    "minScale": [
+      1,
+      1,
+      1
+    ],
+    "maxScale": [
+      1,
+      1,
+     1
+    ]
+  },
+  "VelocityRangeGenerator": {
+    "minVelocity": [
+      0,
+      1,
+      0
+    ],
+    "maxVelocity": [
+      0,
+      2,
+      0
+    ]
+  },
+  "VelocityAffector": {},
+  "ParticleEmitter": {
+    "spawnRateMax": 30,
+    "spawnRateMin": 10,
+    "maxParticles": 75,
+    "particleCollision": false
+  }
+}
