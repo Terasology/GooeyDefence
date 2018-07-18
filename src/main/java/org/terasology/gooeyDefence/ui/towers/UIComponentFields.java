@@ -15,73 +15,118 @@
  */
 package org.terasology.gooeyDefence.ui.towers;
 
-import org.terasology.gooeyDefence.upgrading.UpgradeInfo;
+import org.terasology.math.geom.Rect2i;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.assets.font.Font;
 import org.terasology.rendering.nui.Canvas;
+import org.terasology.rendering.nui.Color;
 import org.terasology.rendering.nui.CoreWidget;
-import org.terasology.rendering.nui.TextLineBuilder;
+import org.terasology.rendering.nui.HorizontalAlign;
+import org.terasology.rendering.nui.VerticalAlign;
 import org.terasology.rendering.nui.databinding.Binding;
 import org.terasology.rendering.nui.databinding.DefaultBinding;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * Displays the fields, values and current upgrade for a component.
+ */
 public class UIComponentFields extends CoreWidget {
-    private Binding<Map<String, String>> fields = new DefaultBinding<>(new HashMap<>());
-    private Binding<UpgradeInfo> upgrade = new DefaultBinding<>();
+    /**
+     * The spacing between the columns of values.
+     */
+    private static int SPACING = 10;
+    private Binding<List<String>> fields = new DefaultBinding<>(new ArrayList<>());
+    private Binding<List<String>> values = new DefaultBinding<>(new ArrayList<>());
+    private Binding<List<String>> upgrades = new DefaultBinding<>(new ArrayList<>());
     private Binding<Boolean> showUpgrade = new DefaultBinding<>(false);
 
     @Override
     public void onDraw(Canvas canvas) {
-        canvas.drawText(buildText());
-    }
+        Font font = canvas.getCurrentStyle().getFont();
+        List<String> list = fields.get();
 
-    /**
-     * Combines the map of fields into a single string to display
-     *
-     * @return The contents of the fields as a string
-     */
-    private String buildText() {
-        StringBuilder result = new StringBuilder();
-        Map<String, Number> upgradeValues = showUpgrade.get() ? upgrade.get().getValues() : new HashMap<>();
+        if (list != null) {
+            int offset = (canvas.size().x - getPreferredContentSize(canvas, canvas.size()).x) / 2;
+            Vector2i listSize = font.getSize(list);
+            canvas.drawTextRaw(String.join("\n", list),
+                    font,
+                    Color.WHITE,
+                    Rect2i.createFromMinAndSize(new Vector2i(offset, 0), listSize));
 
-        for (Map.Entry<String, String> entry : fields.get().entrySet()) {
-            result.append(entry.getKey())
-                    .append(": ")
-                    .append(entry.getValue());
-            if (showUpgrade.get() && upgradeValues.containsKey(entry.getKey())) {
-                String value = String.valueOf(upgradeValues.get(entry.getKey()));
-                result.append(value.startsWith("-") ? "    " : "    +")
-                        .append(value);
+            list = values.get();
+            offset += listSize.x + SPACING;
+            listSize = font.getSize(list);
+            canvas.drawTextRaw(String.join("\n", values.get()),
+                    font,
+                    Color.WHITE,
+                    Rect2i.createFromMinAndSize(new Vector2i(offset, 0), listSize),
+                    HorizontalAlign.CENTER,
+                    VerticalAlign.TOP);
+
+            if (showUpgrade.get()) {
+                list = upgrades.get();
+                offset += listSize.x + SPACING;
+                listSize = font.getSize(list);
+                canvas.drawTextRaw(String.join("\n", list),
+                        font,
+                        Color.GREEN,
+                        Rect2i.createFromMinAndSize(new Vector2i(offset, 0), listSize),
+                        HorizontalAlign.RIGHT,
+                        VerticalAlign.TOP);
             }
-            result.append('\n');
         }
-        return result.toString();
     }
 
     @Override
     public Vector2i getPreferredContentSize(Canvas canvas, Vector2i sizeHint) {
-        Font font = canvas.getCurrentStyle().getFont();
-        List<String> lines = TextLineBuilder.getLines(font, buildText(), sizeHint.x);
-        return font.getSize(lines);
+        List<String> fieldList = fields.get();
+        if (fieldList != null) {
+            Font font = canvas.getCurrentStyle().getFont();
+
+            Vector2i fieldSize = font.getSize(fieldList);
+            Vector2i valueSize = font.getSize(values.get());
+
+            Vector2i upgradeSize = Vector2i.zero();
+            List<String> upgradeList = upgrades.get();
+            if (upgradeList != null) {
+                upgradeSize = font.getSize(upgradeList);
+            }
+
+            int width = fieldSize.x + valueSize.x + upgradeSize.x + 2 * SPACING;
+            int height = Math.max(Math.max(fieldSize.y, valueSize.y), upgradeSize.y);
+            return new Vector2i(width, height);
+        }
+        return Vector2i.zero();
     }
 
     /**
-     * Set the binding to use for the field values
-     *
-     * @param fieldBinding The binding to use
+     * @param fieldBinding The binding to use for the field names
      */
-    public void bindFields(Binding<Map<String, String>> fieldBinding) {
-        this.fields = fieldBinding;
+    public void bindFields(Binding<List<String>> fieldBinding) {
+        fields = fieldBinding;
     }
 
-    public void bindUpgrade(Binding<UpgradeInfo> upgradeBinding) {
-        upgrade = upgradeBinding;
+    /**
+     * @param valueBinding The binding to use for component values.
+     */
+    public void bindValues(Binding<List<String>> valueBinding) {
+        values = valueBinding;
     }
 
+    /**
+     * @param upgradeBinding The binding to use for upgrade values.
+     */
+    public void bindUpgrade(Binding<List<String>> upgradeBinding) {
+        upgrades = upgradeBinding;
+    }
+
+    /**
+     * @param showBinding The binding to use for if the upgrades should be displayed.
+     */
     public void bindShowUpgrade(Binding<Boolean> showBinding) {
         showUpgrade = showBinding;
     }
+
 }

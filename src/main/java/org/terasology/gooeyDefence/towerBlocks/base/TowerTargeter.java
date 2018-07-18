@@ -96,4 +96,8 @@ public abstract class TowerTargeter implements Component {
     public SelectionMethod getSelectionMethod() {
         return selectionMethod;
     }
+
+    public void setSelectionMethod(SelectionMethod selectionMethod) {
+        this.selectionMethod = selectionMethod;
+    }
 }

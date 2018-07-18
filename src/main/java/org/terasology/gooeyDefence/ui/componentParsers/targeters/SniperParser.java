@@ -13,31 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.towerBlocks;
+package org.terasology.gooeyDefence.ui.componentParsers.targeters;
 
-public enum SelectionMethod {
-    FIRST {
-        @Override
-        public String toString() {
-            return "First";
-        }
-    },
-    WEAK {
-        @Override
-        public String toString() {
-            return "Weakest";
-        }
-    },
-    STRONG {
-        @Override
-        public String toString() {
-            return "Strongest";
-        }
-    },
-    RANDOM {
-        @Override
-        public String toString() {
-            return "Random";
-        }
+import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.towerBlocks.targeters.SniperTargeterComponent;
+
+import java.util.Map;
+
+public class SniperParser extends SingleParser {
+    @Override
+    public Class<? extends Component> getComponentClass() {
+        return SniperTargeterComponent.class;
     }
+
+    @Override
+    public Map<String, String> getFields() {
+        Map<String, String> result = super.getFields();
+        result.put("minimumRange", "Minimum Range");
+        return result;
+    }
+
 }

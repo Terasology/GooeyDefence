@@ -29,9 +29,7 @@ import org.terasology.rendering.nui.databinding.Binding;
 import org.terasology.rendering.nui.databinding.DefaultBinding;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Displays the upgrades on a component and allows for application of them
@@ -53,10 +51,23 @@ public class UIUpgrader extends CoreWidget {
      * Constructor to setup all the bindings for the component widgets
      */
     public UIUpgrader() {
-        componentFields.bindFields(new ReadOnlyBinding<Map<String, String>>() {
+
+        componentFields.bindFields(new ReadOnlyBinding<List<String>>() {
             @Override
-            public Map<String, String> get() {
-                return isEnabled() ? upgradingSystem.getComponentValues(getTargetComponent()) : new HashMap<>();
+            public List<String> get() {
+                return upgradingSystem.getComponentFields(getTargetComponent());
+            }
+        });
+        componentFields.bindValues(new ReadOnlyBinding<List<String>>() {
+            @Override
+            public List<String> get() {
+                return upgradingSystem.getComponentValues(getTargetComponent());
+            }
+        });
+        componentFields.bindUpgrade(new ReadOnlyBinding<List<String>>() {
+            @Override
+            public List<String> get() {
+                return upgradingSystem.getComponentUpgrades(getTargetComponent(), currentUpgrade);
             }
         });
         componentFields.bindShowUpgrade(new ReadOnlyBinding<Boolean>() {
@@ -65,12 +76,7 @@ public class UIUpgrader extends CoreWidget {
                 return currentUpgrade != null;
             }
         });
-        componentFields.bindUpgrade(new ReadOnlyBinding<UpgradeInfo>() {
-            @Override
-            public UpgradeInfo get() {
-                return currentUpgrade;
-            }
-        });
+
         upgradePaths.bindUpgradesComponent(new ReadOnlyBinding<BlockUpgradesComponent>() {
             @Override
             public BlockUpgradesComponent get() {
@@ -88,7 +94,7 @@ public class UIUpgrader extends CoreWidget {
         Vector2i pathsSize = canvas.calculateRestrictedSize(upgradePaths, canvasSize);
         int width = Math.max(fieldsSize.x, pathsSize.x);
 
-        canvas.drawWidget(componentFields, Rect2i.createFromMinAndSize((width - fieldsSize.x) / 2, 0, canvasSize.x, fieldsSize.y));
+        canvas.drawWidget(componentFields, Rect2i.createFromMinAndSize(0, 0, canvasSize.x, fieldsSize.y));
         canvas.drawWidget(upgradePaths, Rect2i.createFromMinAndSize((width - pathsSize.x) / 2, fieldsSize.y, canvasSize.x, pathsSize.y));
     }
 
@@ -96,7 +102,7 @@ public class UIUpgrader extends CoreWidget {
     public Vector2i getPreferredContentSize(Canvas canvas, Vector2i sizeHint) {
         Vector2i fieldsSize = canvas.calculateRestrictedSize(componentFields, sizeHint);
         Vector2i pathsSize = canvas.calculateRestrictedSize(upgradePaths, sizeHint);
-        return new Vector2i(Math.max(fieldsSize.x, pathsSize.x), fieldsSize.y + pathsSize.x);
+        return new Vector2i(Math.max(fieldsSize.x, pathsSize.x), fieldsSize.y + pathsSize.y);
     }
 
     @Override
@@ -157,5 +163,12 @@ public class UIUpgrader extends CoreWidget {
      */
     public void bindUpgradesComponent(Binding<BlockUpgradesComponent> upgradesBinding) {
         upgradesComponent = upgradesBinding;
+    }
+
+    /**
+     * Clears the upgrade selected.
+     */
+    public void clearUpgrade() {
+        currentUpgrade = null;
     }
 }
