@@ -111,7 +111,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
             /* Firstly check if the enemy is on an unchanged path */
             if (enemy.hasComponent(EntrancePathComponent.class)) {
                 if (enemy.getComponent(EntrancePathComponent.class).getEntranceId() != event.getPathId()) {
-                    return;
+                    continue;
                 }
             }
 
