@@ -16,12 +16,15 @@
 package org.terasology.gooeyDefence.components.enemies;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.math.geom.Vector3i;
 
 /**
  * Stores information on how to move the enemy.
  */
 public class MovementComponent implements Component {
     private float speed;
+    private Vector3i goal = Vector3i.zero();
+    private float reachedDistance = 0.1f;
 
     public float getSpeed() {
         return speed;
@@ -29,5 +32,22 @@ public class MovementComponent implements Component {
 
     public void setSpeed(float speed) {
         this.speed = speed;
+    }
+
+
+    public Vector3i getGoal() {
+        return goal;
+    }
+
+    public void setGoal(Vector3i goal) {
+        this.goal = goal;
+    }
+
+    public float getReachedDistance() {
+        return reachedDistance;
+    }
+
+    public void setReachedDistance(float reachedDistance) {
+        this.reachedDistance = reachedDistance;
     }
 }
