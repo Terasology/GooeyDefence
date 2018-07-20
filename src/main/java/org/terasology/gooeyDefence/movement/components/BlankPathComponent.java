@@ -15,14 +15,14 @@
  */
 package org.terasology.gooeyDefence.movement.components;
 
-import org.terasology.math.geom.Vector3i;
+import org.terasology.math.geom.Vector3f;
 
 /**
  * Keeps the enemy at a specific location.
  * Used to pause it when a path is being calculated.
  */
 public class BlankPathComponent implements PathComponent {
-    private Vector3i position;
+    private Vector3f position;
 
     /**
      * Empty constructor for deserialisation.
@@ -31,7 +31,7 @@ public class BlankPathComponent implements PathComponent {
 
     }
 
-    public BlankPathComponent(Vector3i position) {
+    public BlankPathComponent(Vector3f position) {
         this.position = position;
     }
 
@@ -42,7 +42,7 @@ public class BlankPathComponent implements PathComponent {
     }
 
     @Override
-    public Vector3i getGoal() {
+    public Vector3f getGoal() {
         return position;
     }
 

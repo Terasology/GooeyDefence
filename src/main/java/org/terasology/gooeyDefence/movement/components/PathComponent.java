@@ -16,7 +16,7 @@
 package org.terasology.gooeyDefence.movement.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.math.geom.Vector3i;
+import org.terasology.math.geom.Vector3f;
 
 /**
  * A component that provides a path for the enemy to follow.
@@ -39,7 +39,7 @@ public interface PathComponent extends Component {
     /**
      * @return the current block the enemy is moving towards
      */
-    Vector3i getGoal();
+    Vector3f getGoal();
 
     /**
      * Advance internal counters to the next step.

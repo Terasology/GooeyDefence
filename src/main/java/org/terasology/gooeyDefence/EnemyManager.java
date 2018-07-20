@@ -106,7 +106,7 @@ public class EnemyManager extends BaseComponentSystem {
 
             /* Check if the goal is on the new path */
             MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
-            Vector3i goal = movementComponent.getGoal();
+            Vector3f goal = movementComponent.getGoal();
             List<Vector3i> newPath = event.getNewPath();
 
             enemy.removeComponent(DefenceField.getComponentExtending(enemy, PathComponent.class).getClass());

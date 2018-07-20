@@ -68,7 +68,7 @@ public class StunEffectorSystem extends BaseComponentSystem {
             target.removeComponent(pathComponent.getClass());
 
             Vector3f position = target.getComponent(LocationComponent.class).getWorldPosition();
-            target.addComponent(new BlankPathComponent(new Vector3i(position)));
+            target.addComponent(new BlankPathComponent(position));
             delayManager.addDelayedAction(target, REMOVE_STUN_ID, component.getStunDuration());
         }
     }
