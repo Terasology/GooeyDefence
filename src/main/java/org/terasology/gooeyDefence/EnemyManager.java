@@ -23,6 +23,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.components.enemies.BlankPathComponent;
 import org.terasology.gooeyDefence.components.enemies.EntrancePathComponent;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
 import org.terasology.gooeyDefence.components.enemies.MovementComponent;
@@ -35,7 +36,6 @@ import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -71,10 +71,11 @@ public class EnemyManager extends BaseComponentSystem {
     public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
         enemies.clear();
         entityManager.getEntitiesWith(GooeyComponent.class).forEach(enemies::add);
-        enemies.stream().filter(enemy -> enemy.hasComponent(EntrancePathComponent.class))
-                .forEach(enemy -> enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingManager));
-        
-        //delayManager.addPeriodicAction(DefenceField.getShrineEntity(), "SpawnEnemyEvent", 500, 500);
+
+        /* Reset path components to blank ones which will freeze the enemy in place until paths are calculated */
+        enemies.forEach(enemy -> enemy.removeComponent(DefenceField.getComponentExtending(enemy, PathComponent.class).getClass()));
+        enemies.forEach(enemy -> enemy.addComponent(new BlankPathComponent(enemy.getComponent(MovementComponent.class).getGoal())));
+
     }
 
     /*
@@ -84,18 +85,6 @@ public class EnemyManager extends BaseComponentSystem {
     public void onActivate(ActivateEvent event, EntityRef entity) {
         for (int i = 0; i < DefenceField.entranceCount(); i++) {
             spawnEnemy(i);
-        }
-    }
-
-    /*
-     * Test handler to allow easy enemy spawning
-     */
-    @ReceiveEvent
-    public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity) {
-        if (event.getActionId().equals("SpawnEnemyEvent")) {
-            for (int i = 0; i < DefenceField.entranceCount(); i++) {
-                spawnEnemy(i);
-            }
         }
     }
 
@@ -115,19 +104,22 @@ public class EnemyManager extends BaseComponentSystem {
             }
 
             /* Check if the goal is on the new path */
-            PathComponent pathComponent = DefenceField.getComponentExtending(enemy, PathComponent.class);
-            Vector3i goal = pathComponent.getGoal();
+            MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
+            Vector3i goal = movementComponent.getGoal();
             List<Vector3i> newPath = event.getNewPath();
+
+            enemy.removeComponent(DefenceField.getComponentExtending(enemy, PathComponent.class).getClass());
+
             if (newPath.contains(goal)) {
                 /* Add a entrance component starting at the given position */
-                enemy.removeComponent(pathComponent.getClass());
                 EntrancePathComponent entranceComponent = new EntrancePathComponent(
                         event.getPathId(),
                         pathfindingManager,
                         newPath.indexOf(goal));
                 enemy.addComponent(entranceComponent);
             } else {
-                /* It's had its path change and it isn't on the new path */
+                /* Enemy isn't on the new path, so we have to calculate it's own path. */
+                enemy.addComponent(new BlankPathComponent(goal));
                 enemy.send(new RepathEnemyRequest());
             }
         }
@@ -180,6 +172,9 @@ public class EnemyManager extends BaseComponentSystem {
         /* Setup pathfinding component */
         EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingManager);
         entity.addComponent(component);
+        /* Setup movement component */
+        MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
+        movementComponent.setGoal(component.getGoal());
 
         enemies.add(entity);
     }

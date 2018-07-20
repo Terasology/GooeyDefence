@@ -25,7 +25,6 @@ import org.terasology.flexiblepathfinding.JPSConfig;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.components.enemies.BlankPathComponent;
 import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
-import org.terasology.gooeyDefence.components.enemies.PathComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.RepathEnemyRequest;
@@ -99,11 +98,7 @@ public class PathfindingManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onRepathEnemyRequest(RepathEnemyRequest event, EntityRef entity, LocationComponent locationComponent) {
-        /* Pause the enemy */
-        entity.removeComponent(DefenceField.getComponentExtending(entity, PathComponent.class).getClass());
-        entity.addComponent(new BlankPathComponent(new Vector3i(locationComponent.getWorldPosition())));
-
-        /* Process its path */
+        /* Process the enemies path */
         calculatePath(buildJpsConfig(new Vector3i(locationComponent.getWorldPosition())),
                 path -> {
                     if (!path.isEmpty()) {
