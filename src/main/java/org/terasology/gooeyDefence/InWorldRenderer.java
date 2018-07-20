@@ -22,12 +22,14 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
-import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.components.PathBlockComponent;
 import org.terasology.gooeyDefence.components.ShrineComponent;
+import org.terasology.gooeyDefence.components.TargeterBulletComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.gooeyDefence.movement.PathfindingManager;
+import org.terasology.gooeyDefence.movement.components.MovementComponent;
+import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerTargetChangedEvent;
@@ -35,6 +37,7 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.particles.components.generators.VelocityRangeGeneratorComponent;
 import org.terasology.registry.In;
+import org.terasology.registry.Share;
 import org.terasology.rendering.world.selection.BlockSelectionRenderer;
 import org.terasology.utilities.Assets;
 
@@ -45,9 +48,11 @@ import java.util.List;
  * These involve rendering stuff in world for systems that provide functionality.
  */
 @RegisterSystem
-public class InWorldRenderer extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
+@Share(InWorldRenderer.class)
+public class InWorldRenderer extends BaseComponentSystem implements RenderSystem {
 
     private BlockSelectionRenderer shrineDamageRenderer;
+    private static final Vector3f outOfSightPos = new Vector3f(0, -3, 0);
 
     @In
     private Time time;
@@ -69,7 +74,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         sphere = entityManager.create("GooeyDefence:Sphere");
         LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
 
-        sphereLoc.setWorldPosition(Vector3f.zero());
+        sphereLoc.setWorldPosition(outOfSightPos);
         sphereLoc.setLocalScale(0.1f);
         clearPathParticles();
     }
@@ -96,18 +101,20 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         clearPathParticles();
         List<List<Vector3i>> paths = pathfindingManager.getPaths();
         for (List<Vector3i> path : paths) {
-            for (int i = path.size() - 1; i >= 2; i--) {
-                EntityRef pathBlock = entityManager.create("GooeyDefence:PathDisplay", path.get(i).toVector3f());
+            if (path != null) {
+                for (int i = path.size() - 1; i >= 2; i--) {
+                    EntityRef pathBlock = entityManager.create("GooeyDefence:PathDisplay", path.get(i).toVector3f());
 
-                VelocityRangeGeneratorComponent component = pathBlock.getComponent(VelocityRangeGeneratorComponent.class);
+                    VelocityRangeGeneratorComponent component = pathBlock.getComponent(VelocityRangeGeneratorComponent.class);
 
-                component.minVelocity = Vector3f.one().scale(-0.5f);
-                component.maxVelocity = Vector3f.one().scale(0.5f);
+                    component.minVelocity = Vector3f.one().scale(-0.5f);
+                    component.maxVelocity = Vector3f.one().scale(0.5f);
 
-                Vector3f delta = path.get(i - 1).toVector3f().sub(path.get(i).toVector3f());
-                component.minVelocity.add(delta);
-                component.maxVelocity.add(delta);
+                    Vector3f delta = path.get(i - 1).toVector3f().sub(path.get(i).toVector3f());
+                    component.minVelocity.add(delta);
+                    component.maxVelocity.add(delta);
 
+                }
             }
         }
     }
@@ -131,7 +138,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         } else {
             LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
 
-            sphereLoc.setWorldPosition(Vector3f.zero());
+            sphereLoc.setWorldPosition(outOfSightPos);
             sphereLoc.setLocalScale(0.1f);
         }
     }
@@ -146,11 +153,6 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     @Override
-    public void update(float delta) {
-
-    }
-
-    @Override
     public void renderAlphaBlend() {
         shrineDamageRenderer.beginRenderOverlay();
         if (shrineDamaged > 0) {
@@ -160,6 +162,32 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
             }
         }
         shrineDamageRenderer.endRenderOverlay();
+    }
+
+    public void shootBulletTowards(Vector3f goal, Vector3f start) {
+        EntityRef bullet = entityManager.create("GooeyDefence:Sphere");
+        MovementComponent movementComponent = new MovementComponent();
+        movementComponent.setGoal(goal);
+        movementComponent.setSpeed(30);
+        movementComponent.setReachedDistance(0.5f);
+        bullet.addOrSaveComponent(movementComponent);
+
+        LocationComponent locationComponent = bullet.getComponent(LocationComponent.class);
+        locationComponent.setLocalScale(0.2f);
+        locationComponent.setWorldPosition(start);
+
+        bullet.addOrSaveComponent(new TargeterBulletComponent());
+    }
+
+    /**
+     * Filters on {@link TargeterBulletComponent}
+     *
+     * @see ReachedGoalEvent
+     */
+    @ReceiveEvent(components = TargeterBulletComponent.class)
+    public void onReachedGoal(ReachedGoalEvent event, EntityRef entity) {
+        event.consume();
+        entity.destroy();
     }
 
     @Override
