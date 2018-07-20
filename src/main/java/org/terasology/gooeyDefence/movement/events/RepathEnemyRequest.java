@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.events;
+package org.terasology.gooeyDefence.movement.events;
 
 import org.terasology.entitySystem.event.Event;
-import org.terasology.gooeyDefence.PathfindingManager;
-import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
+import org.terasology.gooeyDefence.movement.PathfindingManager;
+import org.terasology.gooeyDefence.movement.components.CustomPathComponent;
 
 /**
  * Event is sent when an enemy is no longer on an entrance path.

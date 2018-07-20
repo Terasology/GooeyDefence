@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components.enemies;
+package org.terasology.gooeyDefence.movement.components;
 
-import org.terasology.gooeyDefence.PathfindingManager;
+import org.terasology.gooeyDefence.movement.PathfindingManager;
 import org.terasology.math.geom.Vector3i;
 
 import java.util.List;

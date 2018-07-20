@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence;
+package org.terasology.gooeyDefence.movement;
 
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
-import org.terasology.gooeyDefence.components.enemies.MovementComponent;
-import org.terasology.gooeyDefence.events.ReachedGoalEvent;
+import org.terasology.gooeyDefence.movement.components.MovementComponent;
+import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;

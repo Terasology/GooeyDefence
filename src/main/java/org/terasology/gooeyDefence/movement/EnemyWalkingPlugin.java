@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.pathfinding;
+package org.terasology.gooeyDefence.movement;
 
 import org.terasology.flexiblepathfinding.plugins.basic.WalkingPlugin;
 import org.terasology.math.Region3i;

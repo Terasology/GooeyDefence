@@ -27,6 +27,7 @@ import org.terasology.gooeyDefence.components.PathBlockComponent;
 import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
+import org.terasology.gooeyDefence.movement.PathfindingManager;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerTargetChangedEvent;

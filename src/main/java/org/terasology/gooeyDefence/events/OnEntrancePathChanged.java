@@ -16,7 +16,7 @@
 package org.terasology.gooeyDefence.events;
 
 import org.terasology.entitySystem.event.Event;
-import org.terasology.gooeyDefence.PathfindingManager;
+import org.terasology.gooeyDefence.movement.PathfindingManager;
 import org.terasology.math.geom.Vector3i;
 
 import java.util.List;

@@ -19,7 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.gooeyDefence.components.enemies.MovementComponent;
+import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
 

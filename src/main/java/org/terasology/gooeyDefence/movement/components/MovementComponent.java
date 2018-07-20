@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components.enemies;
+package org.terasology.gooeyDefence.movement.components;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.math.geom.Vector3i;
