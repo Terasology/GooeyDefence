@@ -22,7 +22,9 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
+import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.components.PathBlockComponent;
+import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
@@ -37,11 +39,14 @@ import org.terasology.utilities.Assets;
 
 import java.util.List;
 
+/**
+ * Handles misc rendering duties for the module.
+ * These involve rendering stuff in world for systems that provide functionality.
+ */
 @RegisterSystem
-public class InWorldRenderer extends BaseComponentSystem implements RenderSystem {
+public class InWorldRenderer extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
 
     private BlockSelectionRenderer shrineDamageRenderer;
-
 
     @In
     private Time time;
@@ -68,12 +73,21 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         clearPathParticles();
     }
 
-    @ReceiveEvent
+    /**
+     * Called when the shrine is damaged
+     * Filters on {@link ShrineComponent}
+     *
+     * @see DamageEntityEvent
+     */
+    @ReceiveEvent(components = ShrineComponent.class)
     public void onDamageShrine(DamageEntityEvent event, EntityRef entity) {
         shrineDamaged = 100;
     }
 
     /**
+     * Called whenever an entrance path is changed.
+     * Used to re-create the path display entities.
+     *
      * @see OnEntrancePathChanged
      */
     @ReceiveEvent
@@ -98,11 +112,13 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
+     * Called when the block or entity being targeted by the player changes.
+     * Used to render the range visuals for targeters
+     *
      * @see PlayerTargetChangedEvent
      */
     @ReceiveEvent
     public void onPlayerTargetChanged(PlayerTargetChangedEvent event, EntityRef entity) {
-
         if (DefenceField.hasComponentExtending(event.getNewTarget(), TowerTargeter.class)) {
             LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
             LocationComponent targeterLoc = event.getNewTarget().getComponent(LocationComponent.class);
@@ -112,19 +128,25 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
             sphereLoc.setLocalScale(targeter.getRange() * 2 + 1);
 
         } else {
-
             LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
 
             sphereLoc.setWorldPosition(Vector3f.zero());
             sphereLoc.setLocalScale(0.1f);
-
         }
     }
 
+    /**
+     * Removes all entities used to display the paths.
+     */
     private void clearPathParticles() {
         for (EntityRef blockEntity : entityManager.getEntitiesWith(PathBlockComponent.class)) {
             blockEntity.destroy();
         }
+    }
+
+    @Override
+    public void update(float delta) {
+
     }
 
     @Override
