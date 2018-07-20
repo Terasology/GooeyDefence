@@ -24,8 +24,8 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.JPSConfig;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.DefenceField;
-import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
 import org.terasology.gooeyDefence.movement.components.CustomPathComponent;
 import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
@@ -39,7 +39,9 @@ import org.terasology.world.block.entity.placement.PlaceBlocks;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 @Share(PathfindingManager.class)
@@ -57,6 +59,8 @@ public class PathfindingManager extends BaseComponentSystem {
     private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
     @In
     private WorldProvider worldProvider;
+
+    private Set<EntityRef> queuedEnemies = new HashSet<>();
 
 
     /**
@@ -99,12 +103,14 @@ public class PathfindingManager extends BaseComponentSystem {
     @ReceiveEvent
     public void onRepathEnemyRequest(RepathEnemyRequest event, EntityRef entity, LocationComponent locationComponent) {
         /* Process the enemies path */
+        queuedEnemies.add(entity);
         calculatePath(buildJpsConfig(new Vector3i(locationComponent.getWorldPosition())),
                 path -> {
-                    if (!path.isEmpty()) {
+                    if (!path.isEmpty() && queuedEnemies.contains(entity)) {
                         CustomPathComponent customPathComponent = new CustomPathComponent(path);
                         entity.addComponent(customPathComponent);
                         entity.removeComponent(BlankPathComponent.class);
+                        queuedEnemies.remove(entity);
                     }
                 });
     }

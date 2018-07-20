@@ -20,6 +20,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
 import org.terasology.logic.location.LocationComponent;
@@ -38,8 +39,10 @@ public class MovementSystem extends BaseComponentSystem implements UpdateSubscri
 
     @Override
     public void update(float delta) {
-        for (EntityRef entity : entityManager.getEntitiesWith(MovementComponent.class, LocationComponent.class)) {
-            moveEntity(entity, delta);
+        if (DefenceField.isFieldActivated()) {
+            for (EntityRef entity : entityManager.getEntitiesWith(MovementComponent.class, LocationComponent.class)) {
+                moveEntity(entity, delta);
+            }
         }
     }
 

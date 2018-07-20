@@ -24,8 +24,8 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
-import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.gooeyDefence.movement.PathfindingManager;
@@ -73,10 +73,10 @@ public class EnemyManager extends BaseComponentSystem {
         enemies.clear();
         entityManager.getEntitiesWith(GooeyComponent.class).forEach(enemies::add);
 
-        /* Reset path components to blank ones which will freeze the enemy in place until paths are calculated */
-        enemies.forEach(enemy -> enemy.removeComponent(DefenceField.getComponentExtending(enemy, PathComponent.class).getClass()));
-        enemies.forEach(enemy -> enemy.addComponent(new BlankPathComponent(enemy.getComponent(MovementComponent.class).getGoal())));
-
+        /* Set the pathfinding manager on the components that need id */
+        enemies.stream()
+                .filter(enemy -> enemy.hasComponent(EntrancePathComponent.class))
+                .forEach(enemy -> enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingManager));
     }
 
     /*
@@ -96,32 +96,34 @@ public class EnemyManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPathChanged(OnEntrancePathChanged event, EntityRef shrineEntity) {
-        for (EntityRef enemy : enemies) {
-            /* Firstly check if the enemy is on an unchanged path */
-            if (enemy.hasComponent(EntrancePathComponent.class)) {
-                if (enemy.getComponent(EntrancePathComponent.class).getEntranceId() != event.getPathId()) {
-                    continue;
+        if (DefenceField.isFieldActivated()) {
+            for (EntityRef enemy : enemies) {
+                /* Firstly check if the enemy is on an unchanged path */
+                if (enemy.hasComponent(EntrancePathComponent.class)) {
+                    if (enemy.getComponent(EntrancePathComponent.class).getEntranceId() != event.getPathId()) {
+                        continue;
+                    }
                 }
-            }
 
-            /* Check if the goal is on the new path */
-            MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
-            Vector3f goal = movementComponent.getGoal();
-            List<Vector3i> newPath = event.getNewPath();
+                /* Check if the goal is on the new path */
+                MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
+                Vector3i goal = new Vector3i(movementComponent.getGoal());
+                List<Vector3i> newPath = event.getNewPath();
 
-            enemy.removeComponent(DefenceField.getComponentExtending(enemy, PathComponent.class).getClass());
+                enemy.removeComponent(DefenceField.getComponentExtending(enemy, PathComponent.class).getClass());
 
-            if (newPath.contains(goal)) {
-                /* Add a entrance component starting at the given position */
-                EntrancePathComponent entranceComponent = new EntrancePathComponent(
-                        event.getPathId(),
-                        pathfindingManager,
-                        newPath.indexOf(goal));
-                enemy.addComponent(entranceComponent);
-            } else {
-                /* Enemy isn't on the new path, so we have to calculate it's own path. */
-                enemy.addComponent(new BlankPathComponent(goal));
-                enemy.send(new RepathEnemyRequest());
+                if (newPath.contains(goal)) {
+                    /* Add a entrance component starting at the given position */
+                    EntrancePathComponent entranceComponent = new EntrancePathComponent(
+                            event.getPathId(),
+                            pathfindingManager,
+                            newPath.indexOf(goal));
+                    enemy.addComponent(entranceComponent);
+                } else {
+                    /* Enemy isn't on the new path, so we have to calculate it's own path. */
+                    enemy.addComponent(new BlankPathComponent(movementComponent.getGoal()));
+                    enemy.send(new RepathEnemyRequest());
+                }
             }
         }
     }
