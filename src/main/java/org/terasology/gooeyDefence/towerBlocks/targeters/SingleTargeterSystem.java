@@ -21,6 +21,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.InWorldRenderer;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
@@ -39,6 +40,8 @@ public class SingleTargeterSystem extends BaseTargeterSystem {
 
     @In
     protected EnemyManager enemyManager;
+    @In
+    private InWorldRenderer inWorldRenderer;
 
     /**
      * Determine which enemies should be attacked.
@@ -54,8 +57,12 @@ public class SingleTargeterSystem extends BaseTargeterSystem {
 
         if (target.exists()) {
             event.addToList(target);
+            inWorldRenderer.shootBulletTowards(
+                    target.getComponent(LocationComponent.class).getWorldPosition(),
+                    locationComponent.getWorldPosition());
         }
         targeterComponent.setLastTarget(target);
+
     }
 
 
