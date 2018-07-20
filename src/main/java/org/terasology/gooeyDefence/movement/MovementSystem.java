@@ -88,8 +88,7 @@ public class MovementSystem extends BaseComponentSystem implements UpdateSubscri
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
         LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
 
-        Vector3f target = movementComponent
-                .getGoal()
+        Vector3f target = new Vector3f(movementComponent.getGoal())
                 /* Calculate required heading */
                 .sub(locationComponent.getWorldPosition())
                 .normalize()

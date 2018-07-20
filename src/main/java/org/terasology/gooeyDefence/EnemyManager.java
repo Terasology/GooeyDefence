@@ -23,18 +23,18 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
-import org.terasology.gooeyDefence.movement.components.EntrancePathComponent;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
-import org.terasology.gooeyDefence.movement.components.MovementComponent;
-import org.terasology.gooeyDefence.movement.components.PathComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
-import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
-import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.gooeyDefence.movement.PathfindingManager;
+import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
+import org.terasology.gooeyDefence.movement.components.EntrancePathComponent;
+import org.terasology.gooeyDefence.movement.components.MovementComponent;
+import org.terasology.gooeyDefence.movement.components.PathComponent;
+import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
+import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.location.LocationComponent;
@@ -150,6 +150,7 @@ public class EnemyManager extends BaseComponentSystem {
         PathComponent pathComponent = DefenceField.getComponentExtending(entity, PathComponent.class);
         if (pathComponent.atEnd()) {
             entity.send(new DamageEntityEvent(gooeyComponent.damage));
+            destroyEnemy(entity);
         } else {
             pathComponent.nextStep();
             MovementComponent component = entity.getComponent(MovementComponent.class);
