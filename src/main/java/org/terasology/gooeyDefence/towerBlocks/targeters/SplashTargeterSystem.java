@@ -20,7 +20,9 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.InWorldRenderer;
+import org.terasology.gooeyDefence.components.TargeterBulletComponent;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
+import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 
@@ -53,9 +55,20 @@ public class SplashTargeterSystem extends BaseTargeterSystem {
 
             inWorldRenderer.shootBulletTowards(
                     target.getComponent(LocationComponent.class).getWorldPosition(),
-                    locationComponent.getWorldPosition());
+                    locationComponent.getWorldPosition(),
+                    new SplashBulletComponent());
         }
 
         targeterComponent.setLastTarget(target);
+    }
+
+    /**
+     * Filters on {@link TargeterBulletComponent} and {@link SplashBulletComponent}
+     *
+     * @see ReachedGoalEvent
+     */
+    @ReceiveEvent(components = {TargeterBulletComponent.class, SplashBulletComponent.class})
+    public void onReachedGoal(ReachedGoalEvent event, EntityRef entity) {
+        inWorldRenderer.displayExpandingSphere(entity.getComponent(LocationComponent.class).getWorldPosition(), 0.5f);
     }
 }
