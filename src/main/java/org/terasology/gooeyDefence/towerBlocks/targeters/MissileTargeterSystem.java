@@ -19,6 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.InWorldRenderer;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
@@ -38,6 +39,8 @@ public class MissileTargeterSystem extends SniperTargeterSystem {
 
     @In
     private EnemyManager enemyManager;
+    @In
+    private InWorldRenderer inWorldRenderer;
 
     /**
      * Determine which enemies should be attacked.
@@ -57,6 +60,9 @@ public class MissileTargeterSystem extends SniperTargeterSystem {
             Vector3f targetPos = target.getComponent(LocationComponent.class).getWorldPosition();
             Set<EntityRef> targets = enemyManager.getEnemiesInRange(targetPos, targeterComponent.getSplashRange());
             event.addToList(targets);
+            inWorldRenderer.shootBulletTowards(
+                    target.getComponent(LocationComponent.class).getWorldPosition(),
+                    locationComponent.getWorldPosition());
         }
         targeterComponent.setLastTarget(target);
     }

@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence;
 
 import org.terasology.engine.Time;
+import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -165,6 +166,10 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     public void shootBulletTowards(Vector3f goal, Vector3f start) {
+        shootBulletTowards(goal, start, null);
+    }
+
+    public void shootBulletTowards(Vector3f goal, Vector3f start, Component component) {
         EntityRef bullet = entityManager.create("GooeyDefence:Bullet");
         MovementComponent movementComponent = new MovementComponent();
         movementComponent.setGoal(goal);
@@ -174,6 +179,10 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
         LocationComponent locationComponent = bullet.getComponent(LocationComponent.class);
         locationComponent.setWorldPosition(start);
+
+        if (component != null) {
+            bullet.addOrSaveComponent(component);
+        }
     }
 
     /**
