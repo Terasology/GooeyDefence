@@ -174,6 +174,17 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         shootBulletTowards(goal, start, null);
     }
 
+    /**
+     * Shoots a bullet towards an entity.
+     * The bullet will track the entity until either it or the entity is destroyed.
+     * If the goal is destroyed, then it will home in on the last position of it before it was destroyed.
+     * <p>
+     * When the target is reached an {@link ReachedGoalEvent} will be sent against the bullet.
+     *
+     * @param goal      The entity to target
+     * @param start     The starting position of the bullet
+     * @param component An optional component to add as a flag.
+     */
     public void shootBulletTowards(EntityRef goal, Vector3f start, Component component) {
         EntityRef bullet = entityManager.create("GooeyDefence:Bullet");
         MovementComponent movementComponent = new MovementComponent();
@@ -191,6 +202,12 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         bullets.put(bullet, goal);
     }
 
+    /**
+     * Displays a sphere which rapidly expands at the given position/
+     *
+     * @param position The centre of the sphere
+     * @param duration How long the sphere should exist for, in seconds.
+     */
     public void displayExpandingSphere(Vector3f position, float duration) {
         EntityRef sphere = entityManager.create("GooeyDefence:Sphere");
         LocationComponent locationComponent = sphere.getComponent(LocationComponent.class);
@@ -205,14 +222,16 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         updateBullets();
     }
 
-    public void updateBullets() {
-        for (EntityRef bullet : bullets.keySet()) {
-            EntityRef goal = bullets.get(bullet);
-            if (!goal.exists()) {
+    /**
+     * Update all the bullets.
+     * Sets their {@link MovementComponent}'s goal to the target's position.
+     */
+    private void updateBullets() {
+        bullets.keySet().forEach(bullet -> {
+            if (!bullets.get(bullet).exists()) {
                 bullet.destroy();
             }
-        }
-
+        });
         bullets.keySet().removeIf(entityRef ->
                 !entityRef.hasComponent(MovementComponent.class)
                         || !entityRef.exists());
@@ -225,10 +244,14 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
             EntityRef goal = bullets.get(bullet);
             component.setGoal(goal.getComponent(LocationComponent.class).getWorldPosition());
         }
-
     }
 
-    public void updateSpheres(float delta) {
+    /**
+     * Expands the spheres.
+     *
+     * @param delta The time the last frame took.
+     */
+    private void updateSpheres(float delta) {
         for (EntityRef sphere : expandingSpheres.keySet()) {
             float duration = expandingSpheres.get(sphere);
             duration -= delta;
