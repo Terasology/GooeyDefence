@@ -19,6 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.InWorldRenderer;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
@@ -34,6 +35,9 @@ public class AoeTargeterSystem extends BaseTargeterSystem {
     @In
     private EnemyManager enemyManager;
 
+    @In
+    private InWorldRenderer inWorldRenderer;
+
     /**
      * Targets enemies in an aoe around the tower.
      * <p>
@@ -45,5 +49,8 @@ public class AoeTargeterSystem extends BaseTargeterSystem {
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, AoeTargeterComponent targeterComponent) {
         Set<EntityRef> targets = enemyManager.getEnemiesInRange(locationComponent.getWorldPosition(), targeterComponent.getRange());
         event.addToList(targets);
+        if (!targets.isEmpty()) {
+            inWorldRenderer.displayExpandingSphere(locationComponent.getWorldPosition(), (float) targeterComponent.getAttackSpeed() / 1000, targeterComponent.getRange() * 2 + 1);
+        }
     }
 }
