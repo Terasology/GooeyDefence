@@ -38,6 +38,7 @@ import org.terasology.math.geom.Vector3i;
 import org.terasology.particles.components.generators.VelocityRangeGeneratorComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.rendering.logic.MeshComponent;
 import org.terasology.rendering.world.selection.BlockSelectionRenderer;
 import org.terasology.utilities.Assets;
 
@@ -51,9 +52,8 @@ import java.util.List;
 @Share(InWorldRenderer.class)
 public class InWorldRenderer extends BaseComponentSystem implements RenderSystem {
 
-    private BlockSelectionRenderer shrineDamageRenderer;
     private static final Vector3f outOfSightPos = new Vector3f(0, -3, 0);
-
+    private BlockSelectionRenderer shrineDamageRenderer;
     @In
     private Time time;
     @In
@@ -165,7 +165,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     public void shootBulletTowards(Vector3f goal, Vector3f start) {
-        EntityRef bullet = entityManager.create("GooeyDefence:Sphere");
+        EntityRef bullet = entityManager.create("GooeyDefence:Bullet");
         MovementComponent movementComponent = new MovementComponent();
         movementComponent.setGoal(goal);
         movementComponent.setSpeed(30);
@@ -173,10 +173,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         bullet.addOrSaveComponent(movementComponent);
 
         LocationComponent locationComponent = bullet.getComponent(LocationComponent.class);
-        locationComponent.setLocalScale(0.2f);
         locationComponent.setWorldPosition(start);
-
-        bullet.addOrSaveComponent(new TargeterBulletComponent());
     }
 
     /**
@@ -186,8 +183,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      */
     @ReceiveEvent(components = TargeterBulletComponent.class)
     public void onReachedGoal(ReachedGoalEvent event, EntityRef entity) {
-        event.consume();
-        entity.destroy();
+        entity.removeComponent(MeshComponent.class);
     }
 
     @Override

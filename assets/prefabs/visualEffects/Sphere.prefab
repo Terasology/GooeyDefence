@@ -6,8 +6,5 @@
     "mesh": "GooeyDefence:sphere",
     "material": "GooeyDefence:sphere",
     "translucent": true
-  },
-  "Light": {
-    "lightSpecularPower": 85
   }
 }
