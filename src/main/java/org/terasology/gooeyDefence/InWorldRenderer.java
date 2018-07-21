@@ -68,6 +68,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     private int shrineDamaged = 0;
     private EntityRef sphere;
     private Map<EntityRef, Float> expandingSpheres = new HashMap<>();
+    private Map<EntityRef, EntityRef> bullets = new HashMap<>();
 
     @Override
     public void initialise() {
@@ -169,14 +170,14 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         shrineDamageRenderer.endRenderOverlay();
     }
 
-    public void shootBulletTowards(Vector3f goal, Vector3f start) {
+    public void shootBulletTowards(EntityRef goal, Vector3f start) {
         shootBulletTowards(goal, start, null);
     }
 
-    public void shootBulletTowards(Vector3f goal, Vector3f start, Component component) {
+    public void shootBulletTowards(EntityRef goal, Vector3f start, Component component) {
         EntityRef bullet = entityManager.create("GooeyDefence:Bullet");
         MovementComponent movementComponent = new MovementComponent();
-        movementComponent.setGoal(goal);
+        movementComponent.setGoal(goal.getComponent(LocationComponent.class).getWorldPosition());
         movementComponent.setSpeed(30);
         movementComponent.setReachedDistance(0.5f);
         bullet.addOrSaveComponent(movementComponent);
@@ -187,6 +188,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         if (component != null) {
             bullet.addOrSaveComponent(component);
         }
+        bullets.put(bullet, goal);
     }
 
     public void displayExpandingSphere(Vector3f position, float duration) {
@@ -199,6 +201,34 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     @Override
     public void update(float delta) {
+        updateSpheres(delta);
+        updateBullets();
+    }
+
+    public void updateBullets() {
+        for (EntityRef bullet : bullets.keySet()) {
+            EntityRef goal = bullets.get(bullet);
+            if (!goal.exists()) {
+                bullet.destroy();
+            }
+        }
+
+        bullets.keySet().removeIf(entityRef ->
+                !entityRef.hasComponent(MovementComponent.class)
+                        || !entityRef.exists());
+        bullets.values().removeIf(entityRef ->
+                !entityRef.hasComponent(LocationComponent.class)
+                        || !entityRef.exists());
+
+        for (EntityRef bullet : bullets.keySet()) {
+            MovementComponent component = bullet.getComponent(MovementComponent.class);
+            EntityRef goal = bullets.get(bullet);
+            component.setGoal(goal.getComponent(LocationComponent.class).getWorldPosition());
+        }
+
+    }
+
+    public void updateSpheres(float delta) {
         for (EntityRef sphere : expandingSpheres.keySet()) {
             float duration = expandingSpheres.get(sphere);
             duration -= delta;

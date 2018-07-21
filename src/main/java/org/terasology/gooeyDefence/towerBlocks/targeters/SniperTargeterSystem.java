@@ -53,7 +53,7 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
         if (target.exists()) {
             event.addToList(target);
             inWorldRenderer.shootBulletTowards(
-                    target.getComponent(LocationComponent.class).getWorldPosition(),
+                    target,
                     locationComponent.getWorldPosition());
         }
         targeterComponent.setLastTarget(target);

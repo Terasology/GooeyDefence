@@ -54,7 +54,7 @@ public class SplashTargeterSystem extends BaseTargeterSystem {
             event.addToList(enemyManager.getEnemiesInRange(targetLocation.getWorldPosition(), targeterComponent.getSplashRange()));
 
             inWorldRenderer.shootBulletTowards(
-                    target.getComponent(LocationComponent.class).getWorldPosition(),
+                    target,
                     locationComponent.getWorldPosition(),
                     new SplashBulletComponent());
         }
