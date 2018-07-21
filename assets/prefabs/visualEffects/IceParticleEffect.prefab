@@ -1,0 +1,41 @@
+{
+  "Location":{},
+  "ParticleDataSprite": {
+    "texture": "GooeyDefence:IceParticle"
+  },
+  "EnergyRangeGenerator": {
+    "minEnergy": 1,
+    "maxEnergy": 1
+  },
+  "ScaleRangeGenerator": {
+    "minScale": [
+      0.2,
+      0.2,
+      0.2
+    ],
+    "maxScale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "VelocityRangeGenerator": {
+    "minVelocity": [
+      -1,
+      0,
+      -1
+    ],
+    "maxVelocity": [
+      1,
+      2,
+      1
+    ]
+  },
+  "VelocityAffector": {},
+  "ParticleEmitter": {
+    "spawnRateMax": 30,
+    "spawnRateMin": 10,
+    "maxParticles": 75,
+    "particleCollision": false
+  }
+}
