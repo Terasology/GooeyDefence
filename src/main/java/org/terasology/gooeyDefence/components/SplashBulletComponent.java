@@ -22,4 +22,19 @@ import org.terasology.entitySystem.Component;
  * This will cause them to produce an expanding sphere effect when they reach their goal
  */
 public class SplashBulletComponent implements Component {
+    private float splashRange = 1f;
+
+    public SplashBulletComponent() {
+
+    }
+
+    public SplashBulletComponent(float splashRange) {
+        this.splashRange = splashRange;
+    }
+
+
+    public float getSplashRange() {
+        return splashRange;
+    }
+
 }

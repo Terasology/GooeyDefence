@@ -64,7 +64,7 @@ public class MissileTargeterSystem extends SniperTargeterSystem {
             inWorldRenderer.shootBulletTowards(
                     target,
                     locationComponent.getWorldPosition(),
-                    new SplashBulletComponent());
+                    new SplashBulletComponent(targeterComponent.getSplashRange() * 2 + 1));
         }
         targeterComponent.setLastTarget(target);
     }
