@@ -314,16 +314,18 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         if (target.exists()) {
             ChildrenParticleComponent particleComponent = getParticleComponent(target);
             Map<String, EntityRef> particleMap = particleComponent.getParticleEntities();
-            EntityRef particleEntity = entityManager.create(particlePrefab);
-            particleMap.put(particlePrefab, particleEntity);
+            if (!particleMap.containsKey(particlePrefab)) {
+                EntityRef particleEntity = entityManager.create(particlePrefab);
+                particleMap.put(particlePrefab, particleEntity);
 
-            LocationComponent targetLoc = target.getComponent(LocationComponent.class);
-            LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
-            childLoc.setWorldPosition(targetLoc.getWorldPosition());
-            Location.attachChild(target, particleEntity);
-            particleEntity.setOwner(target);
+                LocationComponent targetLoc = target.getComponent(LocationComponent.class);
+                LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
+                childLoc.setWorldPosition(targetLoc.getWorldPosition());
+                Location.attachChild(target, particleEntity);
+                particleEntity.setOwner(target);
 
-            target.addOrSaveComponent(particleComponent);
+                target.addOrSaveComponent(particleComponent);
+            }
         }
     }
 
@@ -343,6 +345,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
             target.removeComponent(ChildrenParticleComponent.class);
         }
     }
+
     /**
      * Checks if the target has a child entity of the given prefab
      *
