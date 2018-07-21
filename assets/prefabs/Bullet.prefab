@@ -3,12 +3,12 @@
     "scale": 0.2
   },
   "Mesh": {
-    "mesh": "GooeyDefence:sphere",
-    "material": "GooeyDefence:sphere"
+    "mesh": "GooeyDefence:Sphere",
+    "material": "GooeyDefence:Sphere"
   },
   "TargeterBullet": {},
   "ParticleDataSprite": {
-    "texture": "GooeyDefence:bulletParticle"
+    "texture": "GooeyDefence:BulletParticle"
   },
   "EnergyRangeGenerator": {
     "minEnergy": 1,

@@ -23,6 +23,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
+import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.components.PathBlockComponent;
 import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.components.TargeterBulletComponent;
@@ -43,7 +44,9 @@ import org.terasology.rendering.logic.MeshComponent;
 import org.terasology.rendering.world.selection.BlockSelectionRenderer;
 import org.terasology.utilities.Assets;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Handles misc rendering duties for the module.
@@ -51,7 +54,7 @@ import java.util.List;
  */
 @RegisterSystem
 @Share(InWorldRenderer.class)
-public class InWorldRenderer extends BaseComponentSystem implements RenderSystem {
+public class InWorldRenderer extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
 
     private static final Vector3f outOfSightPos = new Vector3f(0, -3, 0);
     private BlockSelectionRenderer shrineDamageRenderer;
@@ -64,6 +67,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     private int shrineDamaged = 0;
     private EntityRef sphere;
+    private Map<EntityRef, Float> expandingSpheres = new HashMap<>();
 
     @Override
     public void initialise() {
@@ -185,6 +189,32 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         }
     }
 
+    public void displayExpandingSphere(Vector3f position, float duration) {
+        EntityRef sphere = entityManager.create("GooeyDefence:Sphere");
+        LocationComponent locationComponent = sphere.getComponent(LocationComponent.class);
+        locationComponent.setWorldPosition(position);
+        locationComponent.setLocalScale(1);
+        expandingSpheres.put(sphere, duration);
+    }
+
+    @Override
+    public void update(float delta) {
+        for (EntityRef sphere : expandingSpheres.keySet()) {
+            float duration = expandingSpheres.get(sphere);
+            duration -= delta;
+            if (duration <= 0) {
+                sphere.destroy();
+            } else {
+                expandingSpheres.replace(sphere, duration);
+                LocationComponent component = sphere.getComponent(LocationComponent.class);
+                float scale = component.getLocalScale();
+                scale += delta * 3;
+                component.setLocalScale(scale);
+            }
+        }
+        expandingSpheres.keySet().removeIf(entityRef -> !entityRef.exists());
+    }
+
     /**
      * Filters on {@link TargeterBulletComponent}
      *
@@ -201,11 +231,9 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     @Override
     public void renderOverlay() {
-
     }
 
     @Override
     public void renderShadows() {
-
     }
 }
