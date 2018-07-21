@@ -17,9 +17,7 @@ package org.terasology.gooeyDefence.ui.componentParsers.targeters;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towerBlocks.targeters.SplashTargeterComponent;
-import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class SplashParser extends SingleParser {

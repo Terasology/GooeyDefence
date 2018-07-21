@@ -13,9 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.towerBlocks.targeters;
+package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
 
-public class MissileBulletComponent implements Component {
+/**
+ * Used to flag bullets as having a splash effect on them.
+ * This will cause them to produce an expanding sphere effect when they reach their goal
+ */
+public class SplashBulletComponent implements Component {
 }

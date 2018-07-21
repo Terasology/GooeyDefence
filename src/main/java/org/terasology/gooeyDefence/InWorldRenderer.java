@@ -33,6 +33,7 @@ import org.terasology.gooeyDefence.movement.PathfindingManager;
 import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
+import org.terasology.gooeyDefence.components.SplashBulletComponent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerTargetChangedEvent;
 import org.terasology.math.geom.Vector3f;
@@ -276,6 +277,19 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     @ReceiveEvent(components = TargeterBulletComponent.class)
     public void onReachedGoal(ReachedGoalEvent event, EntityRef entity) {
         entity.removeComponent(MeshComponent.class);
+    }
+
+    /**
+     * Called when a bullet with a splash effect reaches it's goal.
+     * Places an expanding sphere on the goal.
+     * <p>
+     * Filters on {@link TargeterBulletComponent}, {@link SplashBulletComponent} and {@link MovementComponent}
+     *
+     * @see ReachedGoalEvent
+     */
+    @ReceiveEvent(components = {TargeterBulletComponent.class, SplashBulletComponent.class})
+    public void onReachedGoal(ReachedGoalEvent event, EntityRef entity, MovementComponent movementComponent) {
+        displayExpandingSphere(movementComponent.getGoal(), 0.5f);
     }
 
     @Override
