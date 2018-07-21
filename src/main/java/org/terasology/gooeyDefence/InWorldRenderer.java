@@ -26,6 +26,7 @@ import org.terasology.entitySystem.systems.RenderSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.components.PathBlockComponent;
 import org.terasology.gooeyDefence.components.ShrineComponent;
+import org.terasology.gooeyDefence.components.SplashBulletComponent;
 import org.terasology.gooeyDefence.components.TargeterBulletComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
@@ -33,7 +34,6 @@ import org.terasology.gooeyDefence.movement.PathfindingManager;
 import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
-import org.terasology.gooeyDefence.components.SplashBulletComponent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerTargetChangedEvent;
 import org.terasology.math.geom.Vector3f;
@@ -68,7 +68,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     private int shrineDamaged = 0;
     private EntityRef sphere;
-    private Map<EntityRef, Float> expandingSpheres = new HashMap<>();
+    private Map<EntityRef, SphereInfo> expandingSpheres = new HashMap<>();
     private Map<EntityRef, EntityRef> bullets = new HashMap<>();
 
     @Override
@@ -203,18 +203,27 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         bullets.put(bullet, goal);
     }
 
-    /**
-     * Displays a sphere which rapidly expands at the given position/
-     *
-     * @param position The centre of the sphere
-     * @param duration How long the sphere should exist for, in seconds.
-     */
+
     public void displayExpandingSphere(Vector3f position, float duration) {
+        displayExpandingSphere(position, duration, duration);
+    }
+
+    /**
+     * Displays a sphere which rapidly expands to a given size.
+     *
+     * @param position  The position of the sphere.
+     * @param duration  How long the sphere should expand for, in seconds
+     * @param finalSize How big the sphere should get, in blocks.
+     */
+    public void displayExpandingSphere(Vector3f position, float duration, float finalSize) {
         EntityRef sphere = entityManager.create("GooeyDefence:Sphere");
         LocationComponent locationComponent = sphere.getComponent(LocationComponent.class);
         locationComponent.setWorldPosition(position);
         locationComponent.setLocalScale(1);
-        expandingSpheres.put(sphere, duration);
+        SphereInfo info = new SphereInfo();
+        info.duration = duration;
+        info.expansion = finalSize / duration;
+        expandingSpheres.put(sphere, info);
     }
 
     @Override
@@ -254,15 +263,15 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      */
     private void updateSpheres(float delta) {
         for (EntityRef sphere : expandingSpheres.keySet()) {
-            float duration = expandingSpheres.get(sphere);
-            duration -= delta;
-            if (duration <= 0) {
+            SphereInfo info = expandingSpheres.get(sphere);
+            info.duration -= delta;
+            if (info.duration <= 0) {
                 sphere.destroy();
             } else {
-                expandingSpheres.replace(sphere, duration);
+                expandingSpheres.replace(sphere, info);
                 LocationComponent component = sphere.getComponent(LocationComponent.class);
                 float scale = component.getLocalScale();
-                scale += delta * 3;
+                scale += delta * info.expansion;
                 component.setLocalScale(scale);
             }
         }
@@ -287,9 +296,9 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      *
      * @see ReachedGoalEvent
      */
-    @ReceiveEvent(components = {TargeterBulletComponent.class, SplashBulletComponent.class})
-    public void onReachedGoal(ReachedGoalEvent event, EntityRef entity, MovementComponent movementComponent) {
-        displayExpandingSphere(movementComponent.getGoal(), 0.5f);
+    @ReceiveEvent(components = {TargeterBulletComponent.class})
+    public void onReachedGoal(ReachedGoalEvent event, EntityRef entity, MovementComponent movementComponent, SplashBulletComponent bulletComponent) {
+        displayExpandingSphere(movementComponent.getGoal(), 0.5f, bulletComponent.getSplashRange());
     }
 
     @Override
@@ -302,5 +311,19 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     @Override
     public void renderShadows() {
+    }
+
+    /**
+     * Class to provide a container for the values associated with each expanding sphere
+     */
+    private class SphereInfo {
+        /**
+         * How long the sphere should expand for, in seconds
+         */
+        float duration = 0f;
+        /**
+         * How fast the sphere should expand, in blocks per seconds.
+         */
+        float expansion = 0f;
     }
 }
