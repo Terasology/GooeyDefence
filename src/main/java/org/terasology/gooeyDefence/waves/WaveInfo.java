@@ -21,6 +21,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Contains information on how to spawn the enemies for this wave.
+ *
+ * @see EntranceInfo
+ */
 @MappedContainer
 public class WaveInfo implements Iterable<EntranceInfo> {
     private List<EntranceInfo> entranceInfos = new ArrayList<>();
@@ -29,20 +34,36 @@ public class WaveInfo implements Iterable<EntranceInfo> {
 
     }
 
+    /**
+     * Creates a new wave info from the given entrance data
+     *
+     * @param entranceData The entrance data to use.
+     */
     public WaveInfo(List<EntranceInfo> entranceData) {
         entranceInfos = entranceData;
     }
 
+    /**
+     * Clones a given wave info.
+     *
+     * @param copy The wave info to clone.
+     */
     public WaveInfo(WaveInfo copy) {
         for (EntranceInfo info : copy) {
             entranceInfos.add(new EntranceInfo(info));
         }
     }
 
+    /**
+     * @return How many entrances this WaveInfo contains data for
+     */
     public int getSize() {
         return entranceInfos.size();
     }
 
+    /**
+     * @return Iterator for easy iterating over the data
+     */
     @Override
     public Iterator<EntranceInfo> iterator() {
         return entranceInfos.iterator();

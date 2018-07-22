@@ -23,7 +23,10 @@ import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
 /**
+ * Handles spawning in each wave.
+ * Information for each wave is stored in a special ADT.
  *
+ * @see WaveInfo
  */
 @RegisterSystem
 @Share(WaveManager.class)
@@ -36,13 +39,19 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     @In
     private EnemyManager enemyManager;
 
+    /**
+     * Spawn in the wave according to the data
+     *
+     * @param wave The wave to spawn in.
+     */
     public void startAttack(WaveInfo wave) {
         isAttackUnderway = true;
         waveInfo = new WaveInfo(wave);
+
         int i = 0;
         spawnDelays = new float[waveInfo.getSize()];
         for (EntranceInfo info : waveInfo) {
-            if (!info.isFinished()) {
+            if (info.hasItems()) {
                 spawnDelays[i] = info.popDelay();
             }
             i++;
@@ -56,16 +65,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
             boolean allFinished = true;
             int entranceNum = 0;
             for (EntranceInfo info : waveInfo) {
-                if (!info.isFinished()) {
-                    allFinished = false;
-                    spawnDelays[entranceNum] -= delta;
-                    if (spawnDelays[entranceNum] <= 0) {
-                        enemyManager.spawnEnemy(entranceNum, info.popPrefab());
-                        if (!info.isFinished()) {
-                            spawnDelays[entranceNum] = info.popDelay();
-                        }
-                    }
-                }
+                allFinished &= !spawnAtEntrance(info, entranceNum, delta);
                 entranceNum++;
             }
             if (allFinished) {
@@ -74,6 +74,34 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
         }
     }
 
+    /**
+     * Spawns in the enemy for an entrance.
+     * Handles the entrance having no more enemies to spawn.
+     *
+     * @param spawnInfo   The information for that entrance
+     * @param entranceNum The id of the entrance to spawn at
+     * @param delta       The time the last frame took to execute
+     * @return True if an enemy was spawned, false otherwise
+     */
+    private boolean spawnAtEntrance(EntranceInfo spawnInfo, int entranceNum, float delta) {
+        if (spawnInfo.hasItems()) {
+            spawnDelays[entranceNum] -= delta;
+            if (spawnDelays[entranceNum] <= 0) {
+                enemyManager.spawnEnemy(entranceNum, spawnInfo.popPrefab());
+                if (spawnInfo.hasItems()) {
+                    spawnDelays[entranceNum] = spawnInfo.popDelay();
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * Stops a wave in progress.
+     */
     public void stopWave() {
         isAttackUnderway = false;
     }

@@ -124,6 +124,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * Also begins it travelling down the path.
      *
      * @param entranceNumber The entrance to spawn at
+     * @param prefab         The prefab of the enemy to spawn in.
      */
     public void spawnEnemy(int entranceNumber, String prefab) {
         if (!DefenceField.isFieldActivated()) {

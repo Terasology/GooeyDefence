@@ -20,33 +20,61 @@ import org.terasology.reflection.MappedContainer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Contains information for spawning enemies at an entrance.
+ *
+ * @see WaveInfo
+ */
 @MappedContainer
 public class EntranceInfo {
     private List<Float> delays = new ArrayList<>();
     private List<String> prefabs = new ArrayList<>();
 
+    /**
+     * Create a new entrance info from the given data
+     *
+     * @param delayData  The delay information to use
+     * @param prefabData The prefab info to use
+     */
     public EntranceInfo(List<Float> delayData, List<String> prefabData) {
         delays = delayData;
         prefabs = prefabData;
     }
 
-    public EntranceInfo() {
 
-    }
-
+    /**
+     * Copy an entrance info into a new instance
+     *
+     * @param copy The entrance info to clone
+     */
     public EntranceInfo(EntranceInfo copy) {
         delays.addAll(copy.delays);
         prefabs.addAll(copy.prefabs);
     }
 
-    public boolean isFinished() {
-        return delays.isEmpty() && prefabs.isEmpty();
+    /**
+     * @return True if the entrance info still has more enemies to spawn.
+     */
+    public boolean hasItems() {
+        return !delays.isEmpty() || !prefabs.isEmpty();
     }
 
+    /**
+     * Get the delay for spawning the next enemy.
+     * This action will remove the delay from the list.
+     *
+     * @return The next delay
+     */
     public Float popDelay() {
         return delays.remove(0);
     }
 
+    /**
+     * Get the prefab to use to spawn the next enemy
+     * This action will remove the prefab from the list.
+     *
+     * @return The prefab to spawn
+     */
     public String popPrefab() {
         return prefabs.remove(0);
     }

@@ -23,10 +23,13 @@ import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.widgets.UIButton;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Allows the player to control information about the field.
+ * This includes for instance, starting a wave.
+ */
 public class ControlScreen extends CoreScreenLayer {
 
     @In
@@ -38,12 +41,11 @@ public class ControlScreen extends CoreScreenLayer {
     public void initialise() {
         startButton = find("startButton", UIButton.class);
 
-        List<EntranceInfo> infos = new ArrayList<>();
-        for (int i = 0; i < DefenceField.entranceCount(); i++) {
-            infos.add(new EntranceInfo(
-                    Collections.nCopies(10, 0.5f),
-                    Collections.nCopies(10, "GooeyDefence:BasicEnemy")));
-        }
+        List<EntranceInfo> infos = Collections.nCopies(DefenceField.entranceCount(),
+                new EntranceInfo(
+                        Collections.nCopies(10, 0.5f),
+                        Collections.nCopies(10, "GooeyDefence:BasicEnemy")));
+
         startButton.subscribe(widget ->
                 waveManager.startAttack(new WaveInfo(infos)));
     }
