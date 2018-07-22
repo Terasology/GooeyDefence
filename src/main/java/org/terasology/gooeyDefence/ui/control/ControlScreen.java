@@ -15,10 +15,17 @@
  */
 package org.terasology.gooeyDefence.ui.control;
 
+import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.waves.EntranceInfo;
+import org.terasology.gooeyDefence.waves.WaveInfo;
 import org.terasology.gooeyDefence.waves.WaveManager;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.widgets.UIButton;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ControlScreen extends CoreScreenLayer {
 
@@ -30,8 +37,13 @@ public class ControlScreen extends CoreScreenLayer {
     @Override
     public void initialise() {
         startButton = find("startButton", UIButton.class);
+
+        List<EntranceInfo> infos = new ArrayList<>();
+        for (int i = 0; i < DefenceField.entranceCount(); i++) {
+            infos.add(new EntranceInfo(Collections.nCopies(10, 0.5f)));
+        }
         startButton.subscribe(widget ->
-                waveManager.startAttack());
+                waveManager.startAttack(new WaveInfo(infos)));
     }
 
     @Override
