@@ -40,11 +40,7 @@ public class EntranceInfo {
         return delays.isEmpty();
     }
 
-    public List<Float> getDelays() {
-        return delays;
-    }
-
-    public void setDelays(List<Float> delays) {
-        this.delays = delays;
+    public Float popDelay() {
+        return delays.remove(0);
     }
 }

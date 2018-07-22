@@ -43,7 +43,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
         spawnDelays = new float[waveInfo.getSize()];
         for (EntranceInfo info : waveInfo) {
             if (!info.isFinished()) {
-                spawnDelays[i] = info.getDelays().remove(0);
+                spawnDelays[i] = info.popDelay();
             }
             i++;
         }
@@ -60,7 +60,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
                     allFinished = false;
                     spawnDelays[entranceNum] -= delta;
                     if (spawnDelays[entranceNum] <= 0) {
-                        spawnDelays[entranceNum] = info.getDelays().remove(0);
+                        spawnDelays[entranceNum] = info.popDelay();
                         enemyManager.spawnEnemy(entranceNum);
                     }
                 }
