@@ -125,12 +125,12 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      *
      * @param entranceNumber The entrance to spawn at
      */
-    public void spawnEnemy(int entranceNumber) {
+    public void spawnEnemy(int entranceNumber, String prefab) {
         if (!DefenceField.isFieldActivated()) {
             return;
         }
 
-        EntityRef entity = entityManager.create("GooeyDefence:BasicEnemy", DefenceField.entrancePos(entranceNumber).toVector3f());
+        EntityRef entity = entityManager.create(prefab, DefenceField.entrancePos(entranceNumber).toVector3f());
 
         /* Setup pathfinding component */
         EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingManager);
