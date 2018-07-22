@@ -55,18 +55,14 @@
                   }
                 },
                 {
-                  "type": "UILabel",
-                  "id": "flagLabel2",
-                  "text": "Game Control",
-                  "family": "title",
+                  "type": "UIButton",
+                  "id": "startButton",
+                  "text": "Start Wave",
                   "layoutInfo": {
                     "use-content-height": true,
                     "use-content-width": true,
                     "position-horizontal-center": {},
-                    "position-top": {
-                      "target":"BOTTOM",
-                      "widget":"flagLabel"
-                    }
+                    "position-bottom": {}
                   }
                 }
               ]
