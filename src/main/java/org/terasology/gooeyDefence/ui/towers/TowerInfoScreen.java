@@ -133,6 +133,11 @@ public class TowerInfoScreen extends CoreScreenLayer {
     }
 
     @Override
+    public boolean isModal() {
+        return false;
+    }
+
+    @Override
     public Vector2i getPreferredContentSize(Canvas canvas, Vector2i areaHint) {
         return areaHint;
     }

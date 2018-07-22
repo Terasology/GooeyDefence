@@ -16,12 +16,15 @@
 package org.terasology.gooeyDefence.ui.towers;
 
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.components.towers.TowerMultiBlockComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
+import org.terasology.input.ButtonState;
+import org.terasology.input.binds.interaction.FrobButton;
+import org.terasology.logic.characters.CharacterComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
@@ -38,6 +41,7 @@ public class TowerInfoSystem extends BaseComponentSystem {
     private NUIManager nuiManager;
     @In
     private UpgradingSystem upgradingSystem;
+    private boolean screenJustClosed = false;
 
     /**
      * Called when a tower block is interacted with
@@ -46,11 +50,29 @@ public class TowerInfoSystem extends BaseComponentSystem {
      *
      * @see ActivateEvent
      */
-    @ReceiveEvent
+    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void onActivate(ActivateEvent event, EntityRef entity, TowerMultiBlockComponent component) {
-        TowerInfoScreen infoScreen = (TowerInfoScreen) nuiManager.pushScreen("GooeyDefence:TowerInfoScreen");
-        infoScreen.setUpgradingSystem(upgradingSystem);
-        EntityRef tower = component.getTowerEntity();
-        infoScreen.setTower(tower);
+        if (!nuiManager.isOpen("GooeyDefence:TowerInfoScreen")) {
+            TowerInfoScreen infoScreen = (TowerInfoScreen) nuiManager.pushScreen("GooeyDefence:TowerInfoScreen");
+            infoScreen.setUpgradingSystem(upgradingSystem);
+            EntityRef tower = component.getTowerEntity();
+            infoScreen.setTower(tower);
+            screenJustClosed = true;
+        }
+    }
+
+    /**
+     * @see FrobButton
+     */
+    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW, components = CharacterComponent.class)
+    public void onFrobButton(FrobButton event, EntityRef entity) {
+        if (event.getState() == ButtonState.UP
+                && nuiManager.isOpen("GooeyDefence:TowerInfoScreen")) {
+            if (screenJustClosed) {
+                screenJustClosed = false;
+            } else {
+                nuiManager.closeScreen("GooeyDefence:TowerInfoScreen");
+            }
+        }
     }
 }
