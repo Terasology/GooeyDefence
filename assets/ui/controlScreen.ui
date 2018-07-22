@@ -1,0 +1,87 @@
+{
+  "type": "ControlScreen",
+  "skin": "defenseDefault",
+  "contents": {
+    "type": "ColumnLayout",
+    "id": "outerLayout",
+    "columns": 3,
+    "column-widths": [
+      0.3,
+      0.4,
+      0.3
+    ],
+    "contents": [
+      {
+        "type": "UISpace",
+        "id": "leftColumnSpace",
+        "size": [
+          0,
+          0
+        ]
+      },
+      {
+        "type": "RelativeLayout",
+        "id": "boxLayout",
+        "contents": [
+          {
+            "type": "UIBox",
+            "id": "outerBox",
+            "layoutInfo": {
+              "use-content-height": false,
+              "use-content-width": false,
+              "position-top": {
+                "offset": 64
+              },
+              "position-left": {},
+              "position-right": {},
+              "position-bottom": {
+                "offset": 64
+              }
+            },
+            "content": {
+              "type": "RelativeLayout",
+              "id": "innerLayout",
+              "contents": [
+                {
+                  "type": "UILabel",
+                  "id": "flagLabel",
+                  "text": "Game Control",
+                  "family": "title",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-horizontal-center": {},
+                    "position-top": {}
+                  }
+                },
+                {
+                  "type": "UILabel",
+                  "id": "flagLabel2",
+                  "text": "Game Control",
+                  "family": "title",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-horizontal-center": {},
+                    "position-top": {
+                      "target":"BOTTOM",
+                      "widget":"flagLabel"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "UISpace",
+        "id": "rightColumnSpace",
+        "size": [
+          0,
+          0
+        ]
+      }
+    ]
+  }
+}

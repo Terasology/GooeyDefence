@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.towers;
+package org.terasology.gooeyDefence.ui.control;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.gooeyDefence.components.towers.TowerMultiBlockComponent;
-import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
+import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.input.ButtonState;
 import org.terasology.input.binds.interaction.FrobButton;
 import org.terasology.logic.characters.CharacterComponent;
@@ -30,33 +29,29 @@ import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 
 /**
- * Handles setting up and showing the tower screen when a tower is interacted with
  *
- * @see TowerInfoScreen
  */
 @RegisterSystem
-public class TowerInfoSystem extends BaseComponentSystem {
+public class ControlScreenSystem extends BaseComponentSystem {
 
     @In
     private NUIManager nuiManager;
-    @In
-    private UpgradingSystem upgradingSystem;
     private boolean screenJustOpened = false;
 
     /**
-     * Called when a tower block is interacted with
+     * Called when the shrine is interacted with, in order to display the control screen
      * <p>
-     * Filters on {@link TowerMultiBlockComponent}
+     * Filters on {@link ShrineComponent}
      *
      * @see ActivateEvent
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
-    public void onActivate(ActivateEvent event, EntityRef entity, TowerMultiBlockComponent component) {
-        if (!nuiManager.isOpen("GooeyDefence:TowerInfoScreen")) {
-            TowerInfoScreen infoScreen = (TowerInfoScreen) nuiManager.pushScreen("GooeyDefence:TowerInfoScreen");
-            infoScreen.setUpgradingSystem(upgradingSystem);
-            EntityRef tower = component.getTowerEntity();
-            infoScreen.setTower(tower);
+    @ReceiveEvent(components = ShrineComponent.class)
+    public void onActivate(ActivateEvent event, EntityRef entity) {
+        if (nuiManager.isOpen("GooeyDefence:ControlScreen")) {
+            nuiManager.closeScreen("GooeyDefence:ControlScreen");
+
+        } else {
+            nuiManager.pushScreen("GooeyDefence:ControlScreen");
             screenJustOpened = true;
         }
     }
@@ -80,4 +75,5 @@ public class TowerInfoSystem extends BaseComponentSystem {
             }
         }
     }
+
 }

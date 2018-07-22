@@ -6,6 +6,9 @@
     },
     "whiteText": {
       "text-color": "FFFFFFFF"
+    },
+    "title":{
+      "font":"NotoSans-Regular-Large"
     }
   }
 }
