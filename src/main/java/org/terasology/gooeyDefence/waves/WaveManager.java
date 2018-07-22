@@ -40,8 +40,8 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
         isAttackUnderway = true;
         waveInfo = new WaveInfo(wave);
         int i = 0;
-        spawnDelays = new float[waveInfo.getEntranceInfos().size()];
-        for (EntranceInfo info : waveInfo.getEntranceInfos()) {
+        spawnDelays = new float[waveInfo.getSize()];
+        for (EntranceInfo info : waveInfo) {
             if (!info.isFinished()) {
                 spawnDelays[i] = info.getDelays().remove(0);
             }
@@ -54,8 +54,8 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     public void update(float delta) {
         if (isAttackUnderway) {
             boolean allFinished = true;
-            for (int entranceNum = 0; entranceNum < spawnDelays.length; entranceNum++) {
-                EntranceInfo info = waveInfo.getEntranceInfos().get(entranceNum);
+            int entranceNum = 0;
+            for (EntranceInfo info : waveInfo) {
                 if (!info.isFinished()) {
                     allFinished = false;
                     spawnDelays[entranceNum] -= delta;
@@ -64,6 +64,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
                         enemyManager.spawnEnemy(entranceNum);
                     }
                 }
+                entranceNum++;
             }
             if (allFinished) {
                 stopWave();

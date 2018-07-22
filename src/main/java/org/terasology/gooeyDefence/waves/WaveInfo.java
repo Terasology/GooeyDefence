@@ -18,10 +18,11 @@ package org.terasology.gooeyDefence.waves;
 import org.terasology.reflection.MappedContainer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @MappedContainer
-public class WaveInfo {
+public class WaveInfo implements Iterable<EntranceInfo> {
     private List<EntranceInfo> entranceInfos = new ArrayList<>();
 
     public WaveInfo() {
@@ -33,16 +34,17 @@ public class WaveInfo {
     }
 
     public WaveInfo(WaveInfo copy) {
-        for (EntranceInfo info : copy.getEntranceInfos()) {
+        for (EntranceInfo info : copy) {
             entranceInfos.add(new EntranceInfo(info));
         }
     }
 
-    public List<EntranceInfo> getEntranceInfos() {
-        return entranceInfos;
+    public int getSize() {
+        return entranceInfos.size();
     }
 
-    public void setEntranceInfos(List<EntranceInfo> entranceInfos) {
-        this.entranceInfos = entranceInfos;
+    @Override
+    public Iterator<EntranceInfo> iterator() {
+        return entranceInfos.iterator();
     }
 }
