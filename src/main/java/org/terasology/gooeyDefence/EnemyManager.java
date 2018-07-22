@@ -33,9 +33,7 @@ import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.RepathEnemyRequest;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
-import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -74,30 +72,6 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
         entityManager.getEntitiesWith(GooeyComponent.class).forEach(enemies::add);
         enemies.stream().filter(enemy -> enemy.hasComponent(EntrancePathComponent.class))
                 .forEach(enemy -> enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingManager));
-
-        //delayManager.addPeriodicAction(DefenceField.getShrineEntity(), "SpawnEnemyEvent", 500, 500);
-    }
-
-    /*
-     * Test handler to allow easy enemy spawning
-     */
-    @ReceiveEvent
-    public void onActivate(ActivateEvent event, EntityRef entity) {
-        for (int i = 0; i < DefenceField.entranceCount(); i++) {
-            spawnEnemy(i);
-        }
-    }
-
-    /*
-     * Test handler to allow easy enemy spawning
-     */
-    @ReceiveEvent
-    public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity) {
-        if (event.getActionId().equals("SpawnEnemyEvent")) {
-            for (int i = 0; i < DefenceField.entranceCount(); i++) {
-                spawnEnemy(i);
-            }
-        }
     }
 
     /**
