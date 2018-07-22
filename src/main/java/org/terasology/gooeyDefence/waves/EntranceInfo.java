@@ -23,9 +23,11 @@ import java.util.List;
 @MappedContainer
 public class EntranceInfo {
     private List<Float> delays = new ArrayList<>();
+    private List<String> prefabs = new ArrayList<>();
 
-    public EntranceInfo(List<Float> delayData) {
+    public EntranceInfo(List<Float> delayData, List<String> prefabData) {
         delays = delayData;
+        prefabs = prefabData;
     }
 
     public EntranceInfo() {
@@ -34,13 +36,18 @@ public class EntranceInfo {
 
     public EntranceInfo(EntranceInfo copy) {
         delays.addAll(copy.delays);
+        prefabs.addAll(copy.prefabs);
     }
 
     public boolean isFinished() {
-        return delays.isEmpty();
+        return delays.isEmpty() && prefabs.isEmpty();
     }
 
     public Float popDelay() {
         return delays.remove(0);
+    }
+
+    public String popPrefab() {
+        return prefabs.remove(0);
     }
 }

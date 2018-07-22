@@ -60,8 +60,10 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
                     allFinished = false;
                     spawnDelays[entranceNum] -= delta;
                     if (spawnDelays[entranceNum] <= 0) {
-                        spawnDelays[entranceNum] = info.popDelay();
-                        enemyManager.spawnEnemy(entranceNum);
+                        enemyManager.spawnEnemy(entranceNum, info.popPrefab());
+                        if (!info.isFinished()) {
+                            spawnDelays[entranceNum] = info.popDelay();
+                        }
                     }
                 }
                 entranceNum++;

@@ -40,7 +40,9 @@ public class ControlScreen extends CoreScreenLayer {
 
         List<EntranceInfo> infos = new ArrayList<>();
         for (int i = 0; i < DefenceField.entranceCount(); i++) {
-            infos.add(new EntranceInfo(Collections.nCopies(10, 0.5f)));
+            infos.add(new EntranceInfo(
+                    Collections.nCopies(10, 0.5f),
+                    Collections.nCopies(10, "GooeyDefence:BasicEnemy")));
         }
         startButton.subscribe(widget ->
                 waveManager.startAttack(new WaveInfo(infos)));
