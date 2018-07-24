@@ -37,7 +37,7 @@ public class WaveInfo implements Iterable<EntranceInfo> {
     /**
      * The wave range this info should be used in.
      */
-    private Range<Integer> waveRange = null;
+    private Range<Integer> waveRange = Range.all();
 
     public WaveInfo() {
     }
@@ -81,13 +81,6 @@ public class WaveInfo implements Iterable<EntranceInfo> {
     }
 
     /**
-     * @return True if the wave info has an associated range.
-     */
-    public boolean hasRange() {
-        return waveRange != null;
-    }
-
-    /**
      * @return The range the wave info should be used in. Null if there is no range.
      */
     public Range<Integer> getWaveRange() {
@@ -101,4 +94,5 @@ public class WaveInfo implements Iterable<EntranceInfo> {
     public Iterator<EntranceInfo> iterator() {
         return entranceInfos.iterator();
     }
+
 }
