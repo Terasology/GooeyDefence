@@ -1,0 +1,90 @@
+{
+  "WaveDefinition": {
+    "waves": [
+      {
+        "entranceInfos": [
+          {
+            "prefab": "GooeyDefence:BasicEnemy",
+            "prefabCount": 10,
+            "delay": 0.5,
+            "delayCount": 10
+          }
+        ],
+        "lowerBound": 0,
+        "upperBound": 1
+      },
+      {
+        "entranceInfos": [
+          {
+            "prefab": "GooeyDefence:BasicEnemy",
+            "prefabCount": 10,
+            "delays": [
+              0.5,
+              0.5,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.5,
+              0.5
+            ]
+          }
+        ],
+        "lowerBound": 0
+      },
+      {
+        "entranceInfos": [
+          {
+            "prefabs": [
+              "GooeyDefence:StrongEnemy",
+              "GooeyDefence:StrongEnemy",
+              "GooeyDefence:StrongEnemy",
+              "GooeyDefence:FastEnemy",
+              "GooeyDefence:FastEnemy",
+              "GooeyDefence:FastEnemy",
+              "GooeyDefence:BasicEnemy",
+              "GooeyDefence:BasicEnemy",
+              "GooeyDefence:BasicEnemy",
+              "GooeyDefence:BasicEnemy"
+            ],
+            "delay": 0.5,
+            "delayCount": 10
+          }
+        ],
+        "upperBound": 2
+      },
+      {
+        "entranceInfos": [
+          {
+            "prefabs": [
+              "GooeyDefence:StrongEnemy",
+              "GooeyDefence:StrongEnemy",
+              "GooeyDefence:StrongEnemy",
+              "GooeyDefence:FastEnemy",
+              "GooeyDefence:FastEnemy",
+              "GooeyDefence:FastEnemy",
+              "GooeyDefence:BasicEnemy",
+              "GooeyDefence:BasicEnemy",
+              "GooeyDefence:BasicEnemy",
+              "GooeyDefence:BasicEnemy"
+            ],
+            "delays": [
+              0.5,
+              0.5,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.5,
+              0.5
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

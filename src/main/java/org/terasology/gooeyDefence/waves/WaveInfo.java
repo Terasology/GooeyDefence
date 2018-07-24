@@ -35,11 +35,23 @@ public class WaveInfo implements Iterable<EntranceInfo> {
      */
     private List<EntranceInfo> entranceInfos = new ArrayList<>();
     /**
+     * The first wave this info should be valid at.
+     * Used only in configuration in prefabs
+     */
+    private int lowerBound = -1;
+    /**
+     * The last wave for which this info will be valid
+     * Used only in configuration in prefabs
+     */
+    private int upperBound = -1;
+
+    /**
      * The wave range this info should be used in.
      */
-    private Range<Integer> waveRange = Range.all();
+    private Range<Integer> waveRange;
 
     public WaveInfo() {
+        convertToRange();
     }
 
     /**
@@ -58,6 +70,7 @@ public class WaveInfo implements Iterable<EntranceInfo> {
      * @param entranceData The entrance data to use.
      */
     public WaveInfo(Range<Integer> range, List<EntranceInfo> entranceData) {
+        this();
         waveRange = range;
         entranceInfos = entranceData;
     }
@@ -95,4 +108,25 @@ public class WaveInfo implements Iterable<EntranceInfo> {
         return entranceInfos.iterator();
     }
 
+    private void convertToRange() {
+        if (waveRange == null) {
+            if (lowerBound >= 0) {
+                if (upperBound >= 0) {
+                    /* Lower and upper */
+                    waveRange = Range.closed(lowerBound, upperBound);
+                } else {
+                    /* Just lower */
+                    waveRange = Range.atLeast(lowerBound);
+                }
+            } else {
+                if (upperBound >= 0) {
+                    /* Just upper */
+                    waveRange = Range.atMost(upperBound);
+                } else {
+                    /* Neither */
+                    waveRange = Range.all();
+                }
+            }
+        }
+    }
 }

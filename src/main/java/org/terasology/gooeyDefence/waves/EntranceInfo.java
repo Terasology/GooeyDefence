@@ -18,6 +18,7 @@ package org.terasology.gooeyDefence.waves;
 import org.terasology.reflection.MappedContainer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,6 +31,16 @@ public class EntranceInfo {
     private List<Float> delays = new ArrayList<>();
     private List<String> prefabs = new ArrayList<>();
 
+    private int delayCount = 0;
+    private float delay = 0f;
+
+    private int prefabCount = 0;
+    private String prefab = "";
+
+    public EntranceInfo() {
+        buildLists();
+    }
+
     /**
      * Create a new entrance info from the given data
      *
@@ -37,6 +48,7 @@ public class EntranceInfo {
      * @param prefabData The prefab info to use
      */
     public EntranceInfo(List<Float> delayData, List<String> prefabData) {
+        this();
         delays = delayData;
         prefabs = prefabData;
     }
@@ -48,6 +60,7 @@ public class EntranceInfo {
      * @param copy The entrance info to clone
      */
     public EntranceInfo(EntranceInfo copy) {
+        this();
         delays.addAll(copy.delays);
         prefabs.addAll(copy.prefabs);
     }
@@ -77,5 +90,14 @@ public class EntranceInfo {
      */
     public String popPrefab() {
         return prefabs.remove(0);
+    }
+
+    private void buildLists() {
+        if (prefabCount > 0 && prefabs.isEmpty()) {
+            prefabs = Collections.nCopies(prefabCount, prefab);
+        }
+        if (delayCount > 0 && delays.isEmpty()) {
+            delays = Collections.nCopies(delayCount, delay);
+        }
     }
 }
