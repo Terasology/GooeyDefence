@@ -19,6 +19,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
@@ -38,6 +39,8 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
 
     @In
     private EnemyManager enemyManager;
+    @In
+    private StatSystem statSystem;
 
     /**
      * Spawn in the wave according to the data
@@ -47,6 +50,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     public void startAttack(WaveInfo wave) {
         isAttackUnderway = true;
         waveInfo = new WaveInfo(wave);
+        statSystem.incrementWave();
 
         int i = 0;
         spawnDelays = new float[waveInfo.getSize()];
