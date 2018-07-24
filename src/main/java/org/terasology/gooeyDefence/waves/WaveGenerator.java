@@ -15,16 +15,17 @@
  */
 package org.terasology.gooeyDefence.waves;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
-import com.google.common.collect.Sets;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.registry.Share;
+import org.terasology.utilities.Assets;
 import org.terasology.utilities.random.FastRandom;
 import org.terasology.utilities.random.Random;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
@@ -54,22 +55,9 @@ public class WaveGenerator extends BaseComponentSystem {
 
     @Override
     public void postBegin() {
-        List<EntranceInfo> entranceList = Lists.newArrayList();
-        waveInfos.put(0, Sets.newHashSet(
-                new WaveInfo(Range.closed(0, 0), entranceList),
-                new WaveInfo(Range.closed(0, 1), entranceList),
-                new WaveInfo(Range.closed(0, 3), entranceList),
-                new WaveInfo(Range.atLeast(0), entranceList)));
-        waveInfos.put(1, Sets.newHashSet(
-                new WaveInfo(Range.closed(1, 1), entranceList),
-                new WaveInfo(Range.closed(1, 2), entranceList),
-                new WaveInfo(Range.closed(1, 3), entranceList),
-                new WaveInfo(Range.atLeast(1), entranceList)));
-        waveInfos.put(3, Sets.newHashSet(
-                new WaveInfo(Range.closed(3, 3), entranceList),
-                new WaveInfo(Range.closed(3, 4), entranceList),
-                new WaveInfo(Range.closed(3, 5), entranceList),
-                new WaveInfo(Range.atLeast(3), entranceList)));
+        Prefab config = Assets.getPrefab("GooeyDefence:Waves").get();
+        stripFromComponent(config.getComponent(WaveDefinitionComponent.class));
+
         buildValidInfos(0);
     }
 
@@ -112,6 +100,33 @@ public class WaveGenerator extends BaseComponentSystem {
                             waveInfo -> !waveInfo.getWaveRange().contains(waveNum));
                     validInfos.addAll(infoSet);
                 });
+    }
+
+    /**
+     * Collects all the wave ranges from the config component.
+     * Handles unbounded options correctly.
+     *
+     * @param component The component to scrape data from
+     */
+    private void stripFromComponent(WaveDefinitionComponent component) {
+        List<WaveInfo> waves = component.getWaves();
+        for (WaveInfo wave : waves) {
+            Range<Integer> waveRange = wave.getWaveRange();
+            putInfoAt(waveRange.hasLowerBound() ? waveRange.lowerEndpoint() : -1, wave);
+        }
+    }
+
+    /**
+     * Places the wave info at the given point.
+     * Handles there being no prior infos at that point correctly.
+     *
+     * @param pos  The position to place the info into
+     * @param info The info to insert
+     */
+    private void putInfoAt(Integer pos, WaveInfo info) {
+        Set<WaveInfo> waves = waveInfos.getOrDefault(pos, new HashSet<>());
+        waves.add(info);
+        waveInfos.put(pos, waves);
     }
 
     /**
