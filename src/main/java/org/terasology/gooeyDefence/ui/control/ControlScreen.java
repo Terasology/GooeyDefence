@@ -15,16 +15,11 @@
  */
 package org.terasology.gooeyDefence.ui.control;
 
-import org.terasology.gooeyDefence.DefenceField;
-import org.terasology.gooeyDefence.waves.EntranceInfo;
-import org.terasology.gooeyDefence.waves.WaveInfo;
+import org.terasology.gooeyDefence.waves.WaveGenerator;
 import org.terasology.gooeyDefence.waves.WaveManager;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.widgets.UIButton;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Allows the player to control information about the field.
@@ -34,6 +29,8 @@ public class ControlScreen extends CoreScreenLayer {
 
     @In
     private WaveManager waveManager;
+    @In
+    private WaveGenerator waveGenerator;
 
     private UIButton startButton;
 
@@ -41,13 +38,9 @@ public class ControlScreen extends CoreScreenLayer {
     public void initialise() {
         startButton = find("startButton", UIButton.class);
 
-        List<EntranceInfo> infos = Collections.nCopies(DefenceField.entranceCount(),
-                new EntranceInfo(
-                        Collections.nCopies(10, 0.5f),
-                        Collections.nCopies(10, "GooeyDefence:BasicEnemy")));
 
         startButton.subscribe(widget ->
-                waveManager.startAttack(new WaveInfo(infos)));
+                waveManager.startAttack(waveGenerator.generateWave()));
     }
 
     @Override
