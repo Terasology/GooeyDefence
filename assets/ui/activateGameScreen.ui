@@ -1,0 +1,133 @@
+{
+  "type": "ActivateGameScreen",
+  "skin": "activateScreenSkin",
+  "contents": {
+    "type": "RelativeLayout",
+    "id": "outerLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "id": "outerBox",
+        "layoutInfo": {
+          "use-content-height": false,
+          "use-content-width": false,
+          "position-top": {
+            "offset": 64
+          },
+          "position-left": {
+            "offset": 128
+          },
+          "position-right": {
+            "offset": 128
+          },
+          "position-bottom": {
+            "offset": 64
+          }
+        },
+        "content": {
+          "type": "RelativeLayout",
+          "id": "innerLayout",
+          "contents": [
+            {
+              "type": "UILabel",
+              "id": "titleLabel",
+              "family": "title",
+              "text": "Welcome to Gooey's Defence",
+              "layoutInfo": {
+                "use-content-height": true,
+                "use-content-width": true,
+                "position-top": {},
+                "position-horizontal-center": {}
+              }
+            },
+            {
+              "type": "RelativeLayout",
+              "id": "newGameLayout",
+              "layoutInfo": {
+                "use-content-height": false,
+                "use-content-width": false,
+                "position-top": {
+                  "offset": 16,
+                  "target": "BOTTOM",
+                  "widget": "titleLabel"
+                },
+                "position-left": {
+                  "offset": 32
+                },
+                "position-right": {
+                  "offset": 32
+                },
+                "position-bottom": {
+                  "offset": 16,
+                  "target": "TOP",
+                  "widget": "beginButton"
+                }
+              },
+              "contents": [
+                {
+                  "type": "UILabel",
+                  "id": "newGameInformationLabel",
+                  "text": "Gooey's Defence is a tower defence module where you have to defend a central shrine from multiple waves of enemies. It is currently under development so play at your own risk.\n For detailed instructions on how to play, please see the readme on the github repo.",
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-top": {},
+                    "position-horizontal-centre": {}
+                  }
+                }
+              ]
+            },
+            {
+              "type": "RelativeLayout",
+              "id": "resumeGameLayout",
+              "layoutInfo": {
+                "use-content-height": false,
+                "use-content-width": false,
+                "position-top": {
+                  "offset": 16,
+                  "target": "BOTTOM",
+                  "widget": "titleLabel"
+                },
+                "position-left": {
+                  "offset": 32
+                },
+                "position-right": {
+                  "offset": 32
+                },
+                "position-bottom": {
+                  "offset": 16,
+                  "target": "TOP",
+                  "widget": "beginButton"
+                }
+              },
+              "contents":[
+                {
+                  "type": "UILabel",
+                  "id": "newGameInformationLabel",
+                  "text": "To resume your game, exit this screen or press the begin button.\nBe warned, the game will resume from exactly where you left it. This may include being in the middle of a wave",
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-top": {},
+                    "position-horizontal-centre": {}
+                  }
+                }
+              ]
+            },
+            {
+              "type": "UIButton",
+              "id": "beginButton",
+              "text": "Begin",
+              "layoutInfo": {
+                "use-content-height": true,
+                "use-content-width": true,
+                "position-bottom": {},
+                "position-horizontal-center": {}
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

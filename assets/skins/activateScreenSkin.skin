@@ -1,0 +1,9 @@
+{
+  "inherit": "default",
+  "families": {
+    "title": {
+      "font": "NotoSans-Regular-Large",
+      "text-color": "F0F0F0FF"
+    }
+  }
+}
