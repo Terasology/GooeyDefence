@@ -16,13 +16,18 @@
 package org.terasology.gooeyDefence;
 
 import org.terasology.engine.Time;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
+import org.terasology.gooeyDefence.components.PathBlockComponent;
+import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
+import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.particles.components.generators.VelocityRangeGeneratorComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.world.selection.BlockSelectionRenderer;
 import org.terasology.utilities.Assets;
@@ -32,7 +37,6 @@ import java.util.List;
 @RegisterSystem
 public class InWorldRenderer extends BaseComponentSystem implements RenderSystem {
 
-    private BlockSelectionRenderer pathBlockRenderer;
     private BlockSelectionRenderer shrineDamageRenderer;
 
 
@@ -40,13 +44,19 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     private Time time;
     @In
     private PathfindingManager pathfindingManager;
+    @In
+    private EntityManager entityManager;
 
     private int shrineDamaged = 0;
 
     @Override
     public void initialise() {
-        pathBlockRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:PathBlock").get());
         shrineDamageRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:ShrineDamaged").get());
+    }
+
+    @Override
+    public void postBegin() {
+        clearPathParticles();
     }
 
     @ReceiveEvent
@@ -54,19 +64,38 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         shrineDamaged = 100;
     }
 
-    @Override
-    public void renderAlphaBlend() {
-        pathBlockRenderer.beginRenderOverlay();
+    /**
+     * @see OnEntrancePathChanged
+     */
+    @ReceiveEvent
+    public void onEntrancePathChanged(OnEntrancePathChanged event, EntityRef entity) {
+        clearPathParticles();
         List<List<Vector3i>> paths = pathfindingManager.getPaths();
         for (List<Vector3i> path : paths) {
-            if (path != null) {
-                for (Vector3i pos : path) {
-                    pathBlockRenderer.renderMark2(pos);
-                    pathBlockRenderer.renderMark2(Vector3i.up().add(pos));
-                }
+            for (int i = path.size() - 1; i >= 2; i--) {
+                EntityRef pathBlock = entityManager.create("GooeyDefence:PathDisplay", path.get(i).toVector3f());
+
+                VelocityRangeGeneratorComponent component = pathBlock.getComponent(VelocityRangeGeneratorComponent.class);
+
+                component.minVelocity = Vector3f.one().scale(-0.5f);
+                component.maxVelocity = Vector3f.one().scale(0.5f);
+
+                Vector3f delta = path.get(i - 1).toVector3f().sub(path.get(i).toVector3f());
+                component.minVelocity.add(delta);
+                component.maxVelocity.add(delta);
+
             }
         }
-        pathBlockRenderer.endRenderOverlay();
+    }
+
+    private void clearPathParticles() {
+        for (EntityRef blockEntity : entityManager.getEntitiesWith(PathBlockComponent.class)) {
+            blockEntity.destroy();
+        }
+    }
+
+    @Override
+    public void renderAlphaBlend() {
         shrineDamageRenderer.beginRenderOverlay();
         if (shrineDamaged > 0) {
             shrineDamaged -= time.getGameDeltaInMs();
