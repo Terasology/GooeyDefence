@@ -1,0 +1,13 @@
+{
+  "parent": "engine:iconItem",
+  "DisplayName": {
+    "name": "Money"
+  },
+  "Item": {
+    "icon": "Money",
+    "stackId": "GooeyDefence:Money"
+  },
+  "Value": {
+    "value": 5
+  }
+}

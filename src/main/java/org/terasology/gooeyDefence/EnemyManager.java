@@ -28,6 +28,7 @@ import org.terasology.gooeyDefence.components.enemies.EntrancePathComponent;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
 import org.terasology.gooeyDefence.components.enemies.MovementComponent;
 import org.terasology.gooeyDefence.components.enemies.PathComponent;
+import org.terasology.gooeyDefence.economy.ValueComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.RepathEnemyRequest;
@@ -36,6 +37,7 @@ import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
+import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -171,8 +173,36 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
      * @param enemy The enemy to destroy
      */
     public void destroyEnemy(EntityRef enemy) {
+        dropMoney(enemy);
         enemies.remove(enemy);
         enemy.destroy();
+    }
+
+    /**
+     * Drops the amount of money an enemy had.
+     * Drops money in 5 unit increments. If the enemy has no value, then nothing is dropped
+     *
+     * @param enemy The enemy to drop money for
+     */
+    private void dropMoney(EntityRef enemy) {
+        if (enemy.hasComponent(ValueComponent.class)) {
+            Vector3f location = enemy.getComponent(LocationComponent.class).getWorldPosition();
+            int value = enemy.getComponent(ValueComponent.class).getValue();
+
+            /* Drop the money in instances of 5 */
+            while (value >= 5) {
+                EntityRef money = entityManager.create("GooeyDefence:Money");
+                money.getComponent(ValueComponent.class).setValue(5);
+                money.send(new DropItemEvent(location));
+                value -= 5;
+            }
+            /* Drop whatever is left, if any */
+            if (value > 0) {
+                EntityRef money = entityManager.create("GooeyDefence:Money");
+                money.getComponent(ValueComponent.class).setValue(value);
+                money.send(new DropItemEvent(location));
+            }
+        }
     }
 
     /**
