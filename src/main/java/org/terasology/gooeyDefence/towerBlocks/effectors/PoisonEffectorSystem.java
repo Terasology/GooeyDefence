@@ -21,6 +21,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.InWorldRenderer;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
@@ -57,6 +58,8 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
     private DelayManager delayManager;
     @In
     private EntityManager entityManager;
+    @In
+    private InWorldRenderer inWorldRenderer;
 
     /**
      * Applies the effect to the target
@@ -78,6 +81,7 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
             delayManager.cancelDelayedAction(target, endId);
             delayManager.addDelayedAction(target, endId, effectorComponent.getPoisonDuration());
         } else {
+            inWorldRenderer.addParticleEffect(target, "GooeyDefence:PoisonParticleEffect");
             delayManager.addPeriodicAction(target, applyId, POISON_RATE, POISON_RATE);
             delayManager.addDelayedAction(target, endId, effectorComponent.getPoisonDuration());
         }
@@ -94,6 +98,7 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, GooeyComponent enemyComponent) {
         if (DefenceField.isFieldActivated() && isApplyEvent(event)) {
+
             EntityRef effector = getEffectorEntity(event.getActionId());
             PoisonEffectorComponent effectorComponent = effector.getComponent(PoisonEffectorComponent.class);
             entity.send(new DamageEntityEvent(effectorComponent.getPoisonDamage()));
@@ -113,6 +118,7 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
         if (isEndEvent(event)) {
             EntityRef effector = getEffectorEntity(event.getActionId());
             delayManager.cancelPeriodicAction(entity, buildEventID(APPLY_POISON_ID, effector));
+            inWorldRenderer.removeParticleEffect(entity, "GooeyDefence:PoisonParticleEffect");
         }
     }
 

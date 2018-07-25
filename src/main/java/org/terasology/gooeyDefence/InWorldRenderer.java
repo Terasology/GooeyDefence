@@ -24,16 +24,19 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.gooeyDefence.components.ChildrenParticleComponent;
 import org.terasology.gooeyDefence.components.PathBlockComponent;
 import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.components.SplashBulletComponent;
 import org.terasology.gooeyDefence.components.TargeterBulletComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
+import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.gooeyDefence.movement.PathfindingManager;
 import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
+import org.terasology.logic.location.Location;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerTargetChangedEvent;
 import org.terasology.math.geom.Vector3f;
@@ -299,6 +302,84 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     @ReceiveEvent(components = {TargeterBulletComponent.class})
     public void onReachedGoal(ReachedGoalEvent event, EntityRef entity, MovementComponent movementComponent, SplashBulletComponent bulletComponent) {
         displayExpandingSphere(movementComponent.getGoal(), 0.5f, bulletComponent.getSplashRange());
+    }
+
+    /**
+     * Adds a child particle effect to the entity
+     *
+     * @param target         The entity to add the effect to
+     * @param particlePrefab The name of the particle prefab to add
+     */
+    public void addParticleEffect(EntityRef target, String particlePrefab) {
+        if (target.exists()) {
+            ChildrenParticleComponent particleComponent = getParticleComponent(target);
+            Map<String, EntityRef> particleMap = particleComponent.getParticleEntities();
+            if (!particleMap.containsKey(particlePrefab)) {
+                EntityRef particleEntity = entityManager.create(particlePrefab);
+                particleMap.put(particlePrefab, particleEntity);
+
+                LocationComponent targetLoc = target.getComponent(LocationComponent.class);
+                LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
+                childLoc.setWorldPosition(targetLoc.getWorldPosition());
+                Location.attachChild(target, particleEntity);
+                particleEntity.setOwner(target);
+
+                target.addOrSaveComponent(particleComponent);
+            }
+        }
+    }
+
+    /**
+     * Removes a particle child from the target.
+     *
+     * @param target         The entity to remove the child from
+     * @param particlePrefab The name of the prefab to remove.
+     */
+    public void removeParticleEffect(EntityRef target, String particlePrefab) {
+        Map<String, EntityRef> particleMap = getParticleComponent(target).getParticleEntities();
+        EntityRef child = particleMap.remove(particlePrefab);
+        if (child != null) {
+            child.destroy();
+        }
+        if (particleMap.isEmpty()) {
+            target.removeComponent(ChildrenParticleComponent.class);
+        }
+    }
+
+    /**
+     * Checks if the target has a child entity of the given prefab
+     *
+     * @param target         The entity to check for children on
+     * @param particlePrefab The name of the prefab to check for
+     * @return True if the entity has a child with that prefab.
+     */
+    public boolean hasParticleEffect(EntityRef target, String particlePrefab) {
+        Map<String, EntityRef> particleMap = getParticleComponent(target).getParticleEntities();
+        return particleMap.containsKey(particlePrefab);
+    }
+
+    /**
+     * Called when an entity dies
+     * Handles destroying any child particle components it may have had.
+     * <p>
+     * Filters on {@link ChildrenParticleComponent}
+     * Sent against the dying entity
+     *
+     * @see EntityDeathEvent
+     */
+    @ReceiveEvent
+    public void onEntityDeath(EntityDeathEvent event, EntityRef entity, ChildrenParticleComponent component) {
+        component.getParticleEntities().values().forEach(EntityRef::destroy);
+    }
+
+    private ChildrenParticleComponent getParticleComponent(EntityRef target) {
+        ChildrenParticleComponent particleComponent;
+        if (target.hasComponent(ChildrenParticleComponent.class)) {
+            particleComponent = target.getComponent(ChildrenParticleComponent.class);
+        } else {
+            particleComponent = new ChildrenParticleComponent();
+        }
+        return particleComponent;
     }
 
     @Override

@@ -19,9 +19,11 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.InWorldRenderer;
 import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
+import org.terasology.registry.In;
 
 /**
  * Slows the target enemy by the given amount.
@@ -31,6 +33,9 @@ import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
 @RegisterSystem
 public class IceEffectorSystem extends BaseComponentSystem {
 
+
+    @In
+    private InWorldRenderer inWorldRenderer;
     /**
      * Applies the slow effect to the target
      * <p>
@@ -44,6 +49,7 @@ public class IceEffectorSystem extends BaseComponentSystem {
         MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
         double reducedSpeed = movementComponent.getSpeed() * component.getSlow();
         movementComponent.setSpeed((float) reducedSpeed);
+        inWorldRenderer.addParticleEffect(enemy, "GooeyDefence:IceParticleEffect");
     }
 
     /**
@@ -58,5 +64,6 @@ public class IceEffectorSystem extends BaseComponentSystem {
         EntityRef enemy = event.getTarget();
         MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
         movementComponent.setSpeed(movementComponent.getSpeed() / component.getSlow());
+        inWorldRenderer.removeParticleEffect(enemy, "GooeyDefence:IceParticleEffect");
     }
 }

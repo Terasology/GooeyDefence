@@ -1,0 +1,43 @@
+{
+  "Location": {},
+  "ParticleDataSprite": {
+    "texture": "GooeyDefence:StunParticle"
+  },
+  "EnergyRangeGenerator": {
+    "minEnergy": 2,
+    "maxEnergy": 2
+  },
+  "ScaleRangeGenerator": {
+    "minScale": [
+      0.2,
+      0.2,
+      0.2
+    ],
+    "maxScale": [
+      0.3,
+      0.3,
+      0.3
+    ]
+  },
+  "VelocityRangeGenerator": {
+    "minVelocity": [
+      -2,
+      -2,
+      -2
+    ],
+    "maxVelocity": [
+      2,
+      2,
+      2
+    ]
+  },
+  "VelocityAffector": {},
+  "ParticleEmitter": {
+    "spawnRateMax": 50,
+    "spawnRateMin": 50,
+    "maxParticles": 75,
+    "particleSpawnsLeft": 10,
+    "destroyEntityWhenDead": true,
+    "particleCollision": false
+  }
+}

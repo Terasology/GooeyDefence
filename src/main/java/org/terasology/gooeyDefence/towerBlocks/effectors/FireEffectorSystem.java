@@ -20,6 +20,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.InWorldRenderer;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
@@ -55,6 +56,8 @@ public class FireEffectorSystem extends BaseComponentSystem {
     private EnemyManager enemyManager;
     @In
     private DelayManager delayManager;
+    @In
+    private InWorldRenderer inWorldRenderer;
     private Random random = new FastRandom();
 
     /**
@@ -71,6 +74,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
         if (!delayManager.hasPeriodicAction(entity, APPLY_BURN_ID)) {
             delayManager.addPeriodicAction(entity, APPLY_BURN_ID, BURN_RATE, BURN_RATE);
         }
+        inWorldRenderer.addParticleEffect(event.getTarget(), "GooeyDefence:FireParticleEffect");
         delayManager.addDelayedAction(event.getTarget(), END_BURN_ID, effectorComponent.getFireDuration());
     }
 
@@ -99,6 +103,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
 
         for (EntityRef newEnemy : newEnemies) {
             delayManager.addDelayedAction(newEnemy, END_BURN_ID, effectorComponent.getFireDuration());
+            inWorldRenderer.addParticleEffect(newEnemy, "GooeyDefence:FireParticleEffect");
         }
 
         if (burningEnemies.isEmpty()) {
@@ -119,8 +124,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
     public void onDelayedActionTriggered(DelayedActionTriggeredEvent event, EntityRef entity) {
         if (event.getActionId().equals(END_BURN_ID)) {
             burningEnemies.remove(entity);
-            SkeletalMeshComponent meshComponent = entity.getComponent(SkeletalMeshComponent.class);
-            meshComponent.heightOffset = -2f;
+            inWorldRenderer.removeParticleEffect(entity, "GooeyDefence:FireParticleEffect");
         }
     }
 
