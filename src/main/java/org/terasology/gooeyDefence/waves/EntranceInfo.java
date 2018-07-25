@@ -100,4 +100,8 @@ public class EntranceInfo {
             delays = Collections.nCopies(delayCount, delay);
         }
     }
+
+    public List<String> getPrefabs() {
+        return prefabs;
+    }
 }
