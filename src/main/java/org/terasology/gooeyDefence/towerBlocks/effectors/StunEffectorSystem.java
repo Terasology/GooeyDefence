@@ -20,9 +20,9 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceField;
-import org.terasology.gooeyDefence.components.enemies.BlankPathComponent;
+import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
 import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
-import org.terasology.gooeyDefence.components.enemies.PathComponent;
+import org.terasology.gooeyDefence.movement.components.PathComponent;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.DelayedActionTriggeredEvent;
@@ -68,7 +68,7 @@ public class StunEffectorSystem extends BaseComponentSystem {
             target.removeComponent(pathComponent.getClass());
 
             Vector3f position = target.getComponent(LocationComponent.class).getWorldPosition();
-            target.addComponent(new BlankPathComponent(new Vector3i(position)));
+            target.addComponent(new BlankPathComponent(position));
             delayManager.addDelayedAction(target, REMOVE_STUN_ID, component.getStunDuration());
         }
     }

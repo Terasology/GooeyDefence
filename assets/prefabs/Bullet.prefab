@@ -1,0 +1,49 @@
+{
+  "Location": {
+    "scale": 0.2
+  },
+  "Mesh": {
+    "mesh": "GooeyDefence:Sphere",
+    "material": "GooeyDefence:Sphere"
+  },
+  "TargeterBullet": {},
+  "ParticleDataSprite": {
+    "texture": "GooeyDefence:BulletParticle"
+  },
+  "EnergyRangeGenerator": {
+    "minEnergy": 1,
+    "maxEnergy": 1
+  },
+  "ScaleRangeGenerator": {
+    "minScale": [
+      0.2,
+      0.2,
+      0.2
+    ],
+    "maxScale": [
+      0.2,
+      0.2,
+      0.2
+    ]
+  },
+  "VelocityRangeGenerator": {
+    "minVelocity": [
+      -5,
+      -5,
+      -5
+    ],
+    "maxVelocity": [
+      5,
+      5,
+      5
+    ]
+  },
+  "VelocityAffector": {},
+  "ParticleEmitter": {
+    "spawnRateMax": 100,
+    "spawnRateMin": 100,
+    "lifetime": 0.2,
+    "particleCollision": false,
+    "destroyEntityWhenDead": true
+  }
+}

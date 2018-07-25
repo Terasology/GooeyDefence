@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components.enemies;
+package org.terasology.gooeyDefence.movement.events;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.event.ConsumableEvent;
 
-/**
- * Stores information on how to move the enemy.
- */
-public class MovementComponent implements Component {
-    private float speed;
+public class ReachedGoalEvent implements ConsumableEvent {
+    private boolean isConsumed = false;
 
-    public float getSpeed() {
-        return speed;
+    @Override
+    public boolean isConsumed() {
+        return isConsumed;
     }
 
-    public void setSpeed(float speed) {
-        this.speed = speed;
+    @Override
+    public void consume() {
+        isConsumed = true;
     }
 }

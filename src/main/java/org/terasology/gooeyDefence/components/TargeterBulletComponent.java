@@ -13,24 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.targeters.SplashTargeterComponent;
 
-import java.util.Map;
-
-public class SplashParser extends SingleParser {
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return SplashTargeterComponent.class;
-    }
-
-    @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("splashRange", "Splash Radius");
-        return result;
-    }
-
+public class TargeterBulletComponent implements Component {
 }

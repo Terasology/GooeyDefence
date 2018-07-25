@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence;
+package org.terasology.gooeyDefence.movement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,13 +23,12 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.JPSConfig;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
-import org.terasology.gooeyDefence.components.enemies.BlankPathComponent;
-import org.terasology.gooeyDefence.components.enemies.CustomPathComponent;
-import org.terasology.gooeyDefence.components.enemies.PathComponent;
-import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
-import org.terasology.gooeyDefence.events.RepathEnemyRequest;
-import org.terasology.gooeyDefence.pathfinding.EnemyWalkingPlugin;
+import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
+import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
+import org.terasology.gooeyDefence.movement.components.CustomPathComponent;
+import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
@@ -40,7 +39,9 @@ import org.terasology.world.block.entity.placement.PlaceBlocks;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 @Share(PathfindingManager.class)
@@ -58,6 +59,8 @@ public class PathfindingManager extends BaseComponentSystem {
     private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
     @In
     private WorldProvider worldProvider;
+
+    private Set<EntityRef> queuedEnemies = new HashSet<>();
 
 
     /**
@@ -99,17 +102,15 @@ public class PathfindingManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onRepathEnemyRequest(RepathEnemyRequest event, EntityRef entity, LocationComponent locationComponent) {
-        /* Pause the enemy */
-        entity.removeComponent(DefenceField.getComponentExtending(entity, PathComponent.class).getClass());
-        entity.addComponent(new BlankPathComponent(new Vector3i(locationComponent.getWorldPosition())));
-
-        /* Process its path */
+        /* Process the enemies path */
+        queuedEnemies.add(entity);
         calculatePath(buildJpsConfig(new Vector3i(locationComponent.getWorldPosition())),
                 path -> {
-                    if (!path.isEmpty()) {
+                    if (!path.isEmpty() && queuedEnemies.contains(entity)) {
                         CustomPathComponent customPathComponent = new CustomPathComponent(path);
                         entity.addComponent(customPathComponent);
                         entity.removeComponent(BlankPathComponent.class);
+                        queuedEnemies.remove(entity);
                     }
                 });
     }

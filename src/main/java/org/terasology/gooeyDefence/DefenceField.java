@@ -234,4 +234,24 @@ public final class DefenceField {
         }
         throw new IllegalArgumentException("Entity didn't have any component extending " + superClass.getSimpleName());
     }
+
+    /**
+     * Checks if the entity has a component extending a given type.
+     *
+     * @param entity     The entity to check on
+     * @param superClass The class that should be extended
+     * @param <Y>        The type of the superclass
+     * @return True, if a component on the entity extends the given class
+     */
+    public static <Y> boolean hasComponentExtending(EntityRef entity, Class<Y> superClass) {
+        if (!entity.exists()) {
+            return false;
+        }
+        for (Component component : entity.iterateComponents()) {
+            if (superClass.isInstance(component)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

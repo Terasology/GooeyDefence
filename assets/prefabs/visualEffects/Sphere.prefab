@@ -1,0 +1,10 @@
+{
+  "Location": {
+    "scale": 1
+  },
+  "Mesh": {
+    "mesh": "GooeyDefence:Sphere",
+    "material": "GooeyDefence:Sphere",
+    "translucent": true
+  }
+}

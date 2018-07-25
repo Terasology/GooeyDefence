@@ -19,6 +19,8 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.InWorldRenderer;
+import org.terasology.gooeyDefence.components.SplashBulletComponent;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
@@ -31,6 +33,8 @@ public class SplashTargeterSystem extends BaseTargeterSystem {
 
     @In
     private EnemyManager enemyManager;
+    @In
+    private InWorldRenderer inWorldRenderer;
 
     /**
      * Determine which enemies should be attacked.
@@ -47,7 +51,13 @@ public class SplashTargeterSystem extends BaseTargeterSystem {
         if (target.exists()) {
             LocationComponent targetLocation = target.getComponent(LocationComponent.class);
             event.addToList(enemyManager.getEnemiesInRange(targetLocation.getWorldPosition(), targeterComponent.getSplashRange()));
+
+            inWorldRenderer.shootBulletTowards(
+                    target,
+                    locationComponent.getWorldPosition(),
+                    new SplashBulletComponent(targeterComponent.getSplashRange()));
         }
+
         targeterComponent.setLastTarget(target);
     }
 }

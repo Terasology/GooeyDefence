@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components.enemies;
+package org.terasology.gooeyDefence.movement.components;
 
-import org.terasology.gooeyDefence.PathfindingManager;
+import org.terasology.gooeyDefence.movement.PathfindingManager;
+import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 
 import java.util.List;
@@ -33,7 +34,7 @@ import java.util.List;
 public class EntrancePathComponent implements PathComponent {
     private int step;
     private int entranceId;
-    private Vector3i goal;
+    private Vector3f goal;
     private PathfindingManager pathManager;
 
     /**
@@ -57,14 +58,14 @@ public class EntrancePathComponent implements PathComponent {
             throw new IllegalArgumentException();
         }
         step = startStep;
-        goal = pathManager.getPath(entranceId).get(step);
+        goal = pathManager.getPath(entranceId).get(step).toVector3f();
     }
 
     public EntrancePathComponent(int entranceId, PathfindingManager pathManager) {
         this.entranceId = entranceId;
         this.pathManager = pathManager;
         step = pathManager.getPath(entranceId).size() - 1;
-        goal = pathManager.getPath(entranceId).get(step);
+        goal = pathManager.getPath(entranceId).get(step).toVector3f();
     }
 
     /**
@@ -83,7 +84,7 @@ public class EntrancePathComponent implements PathComponent {
     }
 
     @Override
-    public Vector3i getGoal() {
+    public Vector3f getGoal() {
         return goal;
     }
 
@@ -92,7 +93,7 @@ public class EntrancePathComponent implements PathComponent {
         List<Vector3i> path = pathManager.getPath(entranceId);
         step--;
         step = Math.min(Math.max(0, step), path.size() - 1);
-        goal = path.get(step);
+        goal = path.get(step).toVector3f();
 
     }
 

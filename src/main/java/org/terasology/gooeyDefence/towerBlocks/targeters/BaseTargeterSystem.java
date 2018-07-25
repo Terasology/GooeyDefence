@@ -19,7 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.EnemyManager;
-import org.terasology.gooeyDefence.components.enemies.PathComponent;
+import org.terasology.gooeyDefence.movement.components.PathComponent;
 import org.terasology.gooeyDefence.health.HealthComponent;
 import org.terasology.gooeyDefence.towerBlocks.SelectionMethod;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
