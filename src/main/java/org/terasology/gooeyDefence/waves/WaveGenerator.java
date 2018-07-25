@@ -59,6 +59,7 @@ public class WaveGenerator extends BaseComponentSystem {
         stripFromComponent(config.getComponent(WaveDefinitionComponent.class));
 
         buildValidInfos(0);
+        generateWave();
     }
 
     /**

@@ -15,10 +15,13 @@
  */
 package org.terasology.gooeyDefence.ui.control;
 
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
 import org.terasology.gooeyDefence.waves.WaveGenerator;
 import org.terasology.gooeyDefence.waves.WaveManager;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.rendering.nui.UIWidget;
 import org.terasology.rendering.nui.widgets.UIButton;
 
 /**
@@ -33,14 +36,22 @@ public class ControlScreen extends CoreScreenLayer {
     private WaveGenerator waveGenerator;
 
     private UIButton startButton;
+    private UIWaveInfo waveInfo;
 
     @Override
+
     public void initialise() {
         startButton = find("startButton", UIButton.class);
+        waveInfo = find("waveInfo", UIWaveInfo.class);
 
 
-        startButton.subscribe(widget ->
-                waveManager.startAttack(waveGenerator.generateWave()));
+        startButton.subscribe(this::startButtonPressed);
+        waveInfo.setWaveInfo(waveGenerator.getCurrentWave());
+    }
+
+    private void startButtonPressed(UIWidget ignored) {
+        waveManager.startAttack(waveGenerator.getCurrentWave());
+        waveInfo.setWaveInfo(waveGenerator.generateWave());
     }
 
     @Override
