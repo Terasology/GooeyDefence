@@ -192,14 +192,14 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
             /* Drop the money in instances of 5 */
             while (value >= 5) {
                 EntityRef money = entityManager.create("GooeyDefence:Money");
+                money.getComponent(ValueComponent.class).setValue(5);
                 money.send(new DropItemEvent(location));
                 value -= 5;
             }
             /* Drop whatever is left, if any */
             if (value > 0) {
                 EntityRef money = entityManager.create("GooeyDefence:Money");
-                ValueComponent component = money.getComponent(ValueComponent.class);
-                component.setValue(value);
+                money.getComponent(ValueComponent.class).setValue(value);
                 money.send(new DropItemEvent(location));
             }
         }
