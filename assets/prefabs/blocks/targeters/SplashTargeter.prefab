@@ -7,8 +7,13 @@
   "SplashTargeter": {
     "drain": 5,
     "range": 2,
-    "attackSpeed":500,
-	"splashRange": 1
+    "attackSpeed": 500,
+    "splashRange": 1
+  },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 12
   },
   "BlockUpgrades": {
     "componentName": "SplashTargeter",

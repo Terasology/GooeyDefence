@@ -7,7 +7,12 @@
   "SingleTargeter": {
     "drain": 5,
     "range": 2,
-    "attackSpeed":500
+    "attackSpeed": 500
+  },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 5
   },
   "BlockUpgrades": {
     "componentName": "SingleTargeter",

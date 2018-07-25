@@ -8,6 +8,11 @@
     "drain": 5,
     "stunDuration": 300
   },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 10
+  },
   "BlockUpgrades": {
     "componentName": "StunEffector",
     "upgrades": [

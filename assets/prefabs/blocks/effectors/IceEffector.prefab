@@ -8,6 +8,11 @@
     "drain": 5,
     "slow": 0.9
   },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 3
+  },
   "BlockUpgrades": {
     "componentName": "IceEffector",
     "upgrades": [

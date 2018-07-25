@@ -11,6 +11,11 @@
     "chainLength": 2,
     "chainRange": 2
   },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 15
+  },
   "BlockUpgrades": {
     "componentName": "ChainTargeter",
     "upgrades": [
