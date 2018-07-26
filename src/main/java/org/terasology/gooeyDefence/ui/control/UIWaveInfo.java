@@ -32,7 +32,7 @@ public class UIWaveInfo extends CoreWidget {
     private Map<String, Integer> prefabs = new HashMap<>();
 
     public UIWaveInfo() {
-        collatePrefabs(waveInfo);
+        collatePrefabs();
     }
 
     @Override
@@ -40,7 +40,8 @@ public class UIWaveInfo extends CoreWidget {
         String text = prefabs.keySet()
                 .stream()
                 .map(prefab -> "\n" + prefab + " x " + prefabs.get(prefab))
-                .reduce("", String::concat);
+                .reduce("", String::concat)
+                .trim();
 
         canvas.drawText(text);
     }
@@ -61,10 +62,14 @@ public class UIWaveInfo extends CoreWidget {
 
     public void setWaveInfo(WaveInfo waveInfo) {
         this.waveInfo = waveInfo;
-        collatePrefabs(waveInfo);
+        collatePrefabs();
     }
 
-    private void collatePrefabs(WaveInfo waveInfo) {
+    /**
+     * Counts up the number of each type of prefab in the wave info.
+     * Stores this as a map between the prefab name (string) and the count (int).
+     */
+    private void collatePrefabs() {
         prefabs.clear();
         for (EntranceInfo entranceInfo : waveInfo) {
             for (String prefab : entranceInfo.getPrefabs()) {
