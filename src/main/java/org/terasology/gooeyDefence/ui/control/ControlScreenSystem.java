@@ -21,6 +21,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.ShrineComponent;
+import org.terasology.gooeyDefence.waves.OnWaveEnd;
 import org.terasology.input.ButtonState;
 import org.terasology.input.binds.interaction.FrobButton;
 import org.terasology.logic.characters.CharacterComponent;
@@ -37,6 +38,7 @@ public class ControlScreenSystem extends BaseComponentSystem {
     @In
     private NUIManager nuiManager;
     private boolean screenJustOpened = false;
+    private ControlScreen screen;
 
     /**
      * Called when the shrine is interacted with, in order to display the control screen
@@ -49,9 +51,9 @@ public class ControlScreenSystem extends BaseComponentSystem {
     public void onActivate(ActivateEvent event, EntityRef entity) {
         if (nuiManager.isOpen("GooeyDefence:ControlScreen")) {
             nuiManager.closeScreen("GooeyDefence:ControlScreen");
-
+            screen = null;
         } else {
-            nuiManager.pushScreen("GooeyDefence:ControlScreen");
+            screen = nuiManager.pushScreen("GooeyDefence:ControlScreen", ControlScreen.class);
             screenJustOpened = true;
         }
     }
@@ -67,11 +69,12 @@ public class ControlScreenSystem extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_LOW, components = CharacterComponent.class)
     public void onFrobButton(FrobButton event, EntityRef entity) {
         if (event.getState() == ButtonState.UP
-                && nuiManager.isOpen("GooeyDefence:TowerInfoScreen")) {
+                && nuiManager.isOpen("GooeyDefence:ControlScreen")) {
             if (screenJustOpened) {
                 screenJustOpened = false;
             } else {
-                nuiManager.closeScreen("GooeyDefence:TowerInfoScreen");
+                screen = null;
+                nuiManager.closeScreen("GooeyDefence:ControlScreen");
             }
         }
     }
