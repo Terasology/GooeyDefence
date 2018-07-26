@@ -60,6 +60,11 @@ public class UIWaveInfo extends CoreWidget {
         return size;
     }
 
+    /**
+     * Updates the wave info in the widget.
+     *
+     * @param waveInfo THe new wave info to set.
+     */
     public void setWaveInfo(WaveInfo waveInfo) {
         this.waveInfo = waveInfo;
         collatePrefabs();

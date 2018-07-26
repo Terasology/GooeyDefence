@@ -34,14 +34,22 @@ public class ControlScreen extends CoreScreenLayer {
     private UIWaveInfo waveInfo;
 
     @Override
-
     public void initialise() {
         startButton = find("startButton", UIButton.class);
         waveInfo = find("waveInfo", UIWaveInfo.class);
 
-
         startButton.subscribe(this::startButtonPressed);
         waveInfo.setWaveInfo(waveManager.getCurrentWave());
+    }
+
+    @Override
+    public void onOpened() {
+        reloadWaveInfo();
+    }
+
+    @Override
+    public boolean isModal() {
+        return false;
     }
 
     /**
@@ -51,8 +59,10 @@ public class ControlScreen extends CoreScreenLayer {
         waveManager.startAttack();
     }
 
-    @Override
-    public boolean isModal() {
-        return false;
+    /**
+     * Reloads the WaveInfo from the WaveManager.
+     */
+    public void reloadWaveInfo() {
+        this.waveInfo.setWaveInfo(waveManager.getCurrentWave());
     }
 }

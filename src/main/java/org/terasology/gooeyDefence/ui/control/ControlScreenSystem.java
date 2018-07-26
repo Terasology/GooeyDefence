@@ -30,7 +30,10 @@ import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 
 /**
+ * Manages the display, closing of the ControlScreen.
+ * Also updates the screen where needed with specific values.
  *
+ * @see ControlScreen
  */
 @RegisterSystem
 public class ControlScreenSystem extends BaseComponentSystem {
@@ -56,6 +59,17 @@ public class ControlScreenSystem extends BaseComponentSystem {
             screen = nuiManager.pushScreen("GooeyDefence:ControlScreen", ControlScreen.class);
             screenJustOpened = true;
         }
+    }
+
+    /**
+     * Sent when a wave ends.
+     * Used to update the WaveInfo shown in the ui screen
+     *
+     * @see OnWaveEnd
+     */
+    @ReceiveEvent
+    public void onWaveEnd(OnWaveEnd event, EntityRef entity) {
+        screen.reloadWaveInfo();
     }
 
     /**
