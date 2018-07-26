@@ -20,6 +20,7 @@ import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.registry.In;
@@ -118,11 +119,15 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
 
     /**
      * Stops a wave in progress and generates a new wave.
+     * Sends out an event when the wave has fully ended
+     *
+     * @see OnWaveEnd
      */
     private void stopWave() {
         isAttackUnderway = false;
         statSystem.incrementWave();
         generateWave(statSystem.getWaveNumber());
+        DefenceField.getShrineEntity().send(new OnWaveEnd());
     }
 
     /**
