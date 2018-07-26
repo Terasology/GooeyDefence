@@ -15,6 +15,8 @@
  */
 package org.terasology.gooeyDefence.waves;
 
+import com.google.common.collect.Range;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
@@ -22,6 +24,16 @@ import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.utilities.Assets;
+import org.terasology.utilities.random.FastRandom;
+import org.terasology.utilities.random.Random;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Handles spawning in each wave.
@@ -32,43 +44,52 @@ import org.terasology.registry.Share;
 @RegisterSystem
 @Share(WaveManager.class)
 public class WaveManager extends BaseComponentSystem implements UpdateSubscriberSystem {
+    /**
+     * Flag used to indicate that an attack is underway
+     */
     private boolean isAttackUnderway = false;
 
+    /**
+     * A list of the time until another enemy will be spawned at each entrance
+     */
     private float[] spawnDelays = {};
-    private WaveInfo waveInfo = new WaveInfo();
+
+    /**
+     * All the valid Wave Info's, according to the most recent calculation
+     */
+    private List<WaveInfo> validInfos = new ArrayList<>();
+
+    /**
+     * All possible wave info's that could be valid.
+     * Arranged by lower bound, using -1 if they have none.
+     */
+    private SortedMap<Integer, Set<WaveInfo>> waveInfos = new TreeMap<>(Integer::compareTo);
+
+    /**
+     * The current wave that is being spawned, or is about to be spawned.
+     */
+    private WaveInfo currentWave;
 
     @In
     private EnemyManager enemyManager;
     @In
     private StatSystem statSystem;
+    private Random random = new FastRandom();
 
-    /**
-     * Spawn in the wave according to the data
-     *
-     * @param wave The wave to spawn in.
-     */
-    public void startAttack(WaveInfo wave) {
-        isAttackUnderway = true;
-        waveInfo = new WaveInfo(wave);
-        statSystem.incrementWave();
+    @Override
+    public void postBegin() {
+        Prefab config = Assets.getPrefab("GooeyDefence:Waves").get();
+        stripFromComponent(config.getComponent(WaveDefinitionComponent.class));
 
-        int i = 0;
-        spawnDelays = new float[waveInfo.getSize()];
-        for (EntranceInfo info : waveInfo) {
-            if (info.hasItems()) {
-                spawnDelays[i] = info.popDelay();
-            }
-            i++;
-        }
+        generateWave(statSystem.getWaveNumber());
     }
-
 
     @Override
     public void update(float delta) {
         if (isAttackUnderway) {
             boolean allFinished = true;
             int entranceNum = 0;
-            for (EntranceInfo info : waveInfo) {
+            for (EntranceInfo info : currentWave) {
                 allFinished &= !spawnAtEntrance(info, entranceNum, delta);
                 entranceNum++;
             }
@@ -76,6 +97,56 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
                 stopWave();
             }
         }
+    }
+
+    /**
+     * Begin spawning in the current wave.
+     * Once the wave ends, a new wave will be generated.
+     */
+    public void startAttack() {
+        isAttackUnderway = true;
+
+        int i = 0;
+        spawnDelays = new float[currentWave.getSize()];
+        for (EntranceInfo info : currentWave) {
+            if (info.hasItems()) {
+                spawnDelays[i] = info.popDelay();
+            }
+            i++;
+        }
+    }
+
+    /**
+     * Stops a wave in progress and generates a new wave.
+     */
+    private void stopWave() {
+        isAttackUnderway = false;
+        statSystem.incrementWave();
+        generateWave(statSystem.getWaveNumber());
+    }
+
+    /**
+     * Updates the system to the selected wave number, then generates a new wave
+     *
+     * @param waveNum The wave number to update to.
+     */
+    private void generateWave(int waveNum) {
+        buildValidInfos(waveNum);
+        generateWave();
+    }
+
+    /**
+     * Generates a new wave.
+     */
+    private void generateWave() {
+        currentWave = new WaveInfo(random.nextItem(validInfos));
+    }
+
+    /**
+     * @return The wave currently being spawned, or about to be spawned.
+     */
+    public WaveInfo getCurrentWave() {
+        return currentWave;
     }
 
     /**
@@ -102,11 +173,52 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
         }
     }
 
+    /**
+     * Collates a list of all the valid WaveInfos for the current wave number
+     * This is based on the ranges specified in the WaveInfo
+     * <p>
+     * Note, this is a destructive action.
+     * All wave values that are too low to be valid for the wave number will be removed from the master map.
+     *
+     * @param waveNum The wave to build for
+     */
+    private void buildValidInfos(int waveNum) {
+        validInfos = new ArrayList<>();
+        waveInfos.headMap(waveNum + 1)
+                .values()
+                .forEach(infoSet -> {
+                    infoSet.removeIf(
+                            waveInfo -> !waveInfo.getWaveRange().contains(waveNum));
+                    validInfos.addAll(infoSet);
+                });
+    }
 
     /**
-     * Stops a wave in progress.
+     * Collects all the wave ranges from the config component.
+     * Handles unbounded options correctly.
+     *
+     * @param component The component to scrape data from
      */
-    public void stopWave() {
-        isAttackUnderway = false;
+    private void stripFromComponent(WaveDefinitionComponent component) {
+        List<WaveInfo> waves = component.getWaves();
+        for (WaveInfo wave : waves) {
+            Range<Integer> waveRange = wave.getWaveRange();
+            putInfoAt(waveRange.hasLowerBound() ? waveRange.lowerEndpoint() : -1, wave);
+        }
     }
+
+    /**
+     * Places the wave info at the given point.
+     * Handles there being no prior infos at that point correctly.
+     *
+     * @param pos  The position to place the info into
+     * @param info The info to insert
+     */
+    private void putInfoAt(Integer pos, WaveInfo info) {
+        Set<WaveInfo> waves = waveInfos.getOrDefault(pos, new HashSet<>());
+        waves.add(info);
+        waveInfos.put(pos, waves);
+    }
+
+
 }
