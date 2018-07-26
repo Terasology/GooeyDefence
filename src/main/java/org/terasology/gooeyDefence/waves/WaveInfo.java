@@ -50,8 +50,9 @@ public class WaveInfo implements Iterable<EntranceInfo> {
      */
     private Range<Integer> waveRange;
 
+    private boolean shouldBuildRange = false;
+
     public WaveInfo() {
-        convertToRange();
     }
 
     /**
@@ -70,7 +71,6 @@ public class WaveInfo implements Iterable<EntranceInfo> {
      * @param entranceData The entrance data to use.
      */
     public WaveInfo(Range<Integer> range, List<EntranceInfo> entranceData) {
-        this();
         waveRange = range;
         entranceInfos = entranceData;
     }
@@ -84,6 +84,9 @@ public class WaveInfo implements Iterable<EntranceInfo> {
         for (EntranceInfo info : copy) {
             entranceInfos.add(new EntranceInfo(info));
         }
+        waveRange = copy.waveRange;
+        lowerBound = copy.lowerBound;
+        upperBound = copy.upperBound;
     }
 
     /**
@@ -94,10 +97,40 @@ public class WaveInfo implements Iterable<EntranceInfo> {
     }
 
     /**
-     * @return The range the wave info should be used in. Null if there is no range.
+     * Gets the range this info applies over.
+     * Generates this based on the `upperBound` and `lowerBound` info, caching the value after the first call.
+     *
+     * @return The range the wave info should be used in.
+     * @see Range
      */
     public Range<Integer> getWaveRange() {
+        if (waveRange == null) {
+            convertToRange();
+        }
         return waveRange;
+    }
+
+    /**
+     * Converts the `upperBound` and `lowerBound` fields into a {@link Range}
+     */
+    private void convertToRange() {
+        if (lowerBound >= 0) {
+            if (upperBound >= 0) {
+                /* Lower and upper */
+                waveRange = Range.closed(lowerBound, upperBound);
+            } else {
+                /* Just lower */
+                waveRange = Range.atLeast(lowerBound);
+            }
+        } else {
+            if (upperBound >= 0) {
+                /* Just upper */
+                waveRange = Range.atMost(upperBound);
+            } else {
+                /* Neither */
+                waveRange = Range.all();
+            }
+        }
     }
 
     /**
@@ -106,27 +139,5 @@ public class WaveInfo implements Iterable<EntranceInfo> {
     @Override
     public Iterator<EntranceInfo> iterator() {
         return entranceInfos.iterator();
-    }
-
-    private void convertToRange() {
-        if (waveRange == null) {
-            if (lowerBound >= 0) {
-                if (upperBound >= 0) {
-                    /* Lower and upper */
-                    waveRange = Range.closed(lowerBound, upperBound);
-                } else {
-                    /* Just lower */
-                    waveRange = Range.atLeast(lowerBound);
-                }
-            } else {
-                if (upperBound >= 0) {
-                    /* Just upper */
-                    waveRange = Range.atMost(upperBound);
-                } else {
-                    /* Neither */
-                    waveRange = Range.all();
-                }
-            }
-        }
     }
 }
