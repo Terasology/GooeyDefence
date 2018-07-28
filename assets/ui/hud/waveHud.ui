@@ -1,0 +1,7 @@
+{
+  "type": "WaveHud",
+  "contents": {
+    "type": "UILabel",
+    "text": "Wave Hud"
+  }
+}
