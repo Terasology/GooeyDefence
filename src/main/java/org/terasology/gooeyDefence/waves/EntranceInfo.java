@@ -61,6 +61,7 @@ public class EntranceInfo {
      */
     public EntranceInfo(EntranceInfo copy) {
         this();
+        copy.buildLists();
         delays.addAll(copy.delays);
         prefabs.addAll(copy.prefabs);
     }
@@ -103,5 +104,9 @@ public class EntranceInfo {
 
     public List<String> getPrefabs() {
         return prefabs;
+    }
+
+    public List<Float> getDelays() {
+        return delays;
     }
 }

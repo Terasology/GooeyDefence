@@ -79,6 +79,25 @@
                   }
                 },
                 {
+                  "type": "UILabel",
+                  "id": "waveDuration",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": false,
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "waveInfo"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
                   "type": "UIButton",
                   "id": "startButton",
                   "text": "Start Wave",

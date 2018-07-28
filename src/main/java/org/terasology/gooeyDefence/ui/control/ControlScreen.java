@@ -19,7 +19,9 @@ import org.terasology.gooeyDefence.waves.WaveManager;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.UIWidget;
+import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.widgets.UIButton;
+import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
  * Allows the player to control information about the field.
@@ -32,14 +34,29 @@ public class ControlScreen extends CoreScreenLayer {
 
     private UIButton startButton;
     private UIWaveInfo waveInfo;
+    private UILabel waveDuration;
 
     @Override
     public void initialise() {
         startButton = find("startButton", UIButton.class);
         waveInfo = find("waveInfo", UIWaveInfo.class);
+        waveDuration = find("waveDuration", UILabel.class);
 
         startButton.subscribe(this::startButtonPressed);
         waveInfo.setWaveInfo(waveManager.getCurrentWave());
+        waveDuration.bindText(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return String.format("%.1fs", Math.max(0f, waveManager.getRemainingDuration()));
+
+            }
+        });
+        waveDuration.bindVisible(new ReadOnlyBinding<Boolean>() {
+            @Override
+            public Boolean get() {
+                return waveManager.isAttackUnderway();
+            }
+        });
     }
 
     @Override

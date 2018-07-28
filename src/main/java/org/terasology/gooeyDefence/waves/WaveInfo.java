@@ -50,8 +50,6 @@ public class WaveInfo implements Iterable<EntranceInfo> {
      */
     private Range<Integer> waveRange;
 
-    private boolean shouldBuildRange = false;
-
     public WaveInfo() {
     }
 

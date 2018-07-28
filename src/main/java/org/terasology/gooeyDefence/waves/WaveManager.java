@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.waves;
 
 import com.google.common.collect.Range;
+import com.google.common.collect.Streams;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -71,6 +72,8 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
      */
     private WaveInfo currentWave;
 
+    private float remainingDuration = 0f;
+
     @In
     private EnemyManager enemyManager;
     @In
@@ -97,6 +100,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
             if (allFinished) {
                 stopWave();
             }
+            remainingDuration -= delta;
         }
     }
 
@@ -105,16 +109,41 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
      * Once the wave ends, a new wave will be generated.
      */
     public void startAttack() {
-        isAttackUnderway = true;
+        if (!isAttackUnderway) {
+            isAttackUnderway = true;
 
-        int i = 0;
-        spawnDelays = new float[currentWave.getSize()];
-        for (EntranceInfo info : currentWave) {
-            if (info.hasItems()) {
-                spawnDelays[i] = info.popDelay();
+            remainingDuration = Streams.stream(currentWave)
+                    .map(entranceInfo -> entranceInfo.getDelays()
+                            .stream()
+                            .reduce(0f, Float::sum))
+                    .max(Float::compareTo)
+                    .orElse(0f);
+
+            int i = 0;
+            spawnDelays = new float[currentWave.getSize()];
+            for (EntranceInfo info : currentWave) {
+                if (info.hasItems()) {
+                    spawnDelays[i] = info.popDelay();
+                }
+                i++;
             }
-            i++;
+
+
         }
+    }
+
+    /**
+     * @return How much longer the wave is expected to run for.
+     */
+    public float getRemainingDuration() {
+        return remainingDuration;
+    }
+
+    /**
+     * @return True if an attack is currently happening. False otherwise
+     */
+    public boolean isAttackUnderway() {
+        return isAttackUnderway;
     }
 
     /**
