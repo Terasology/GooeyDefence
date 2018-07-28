@@ -81,7 +81,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     private Random random = new FastRandom();
 
     @Override
-    public void postBegin() {
+    public void preBegin() {
         Prefab config = Assets.getPrefab("GooeyDefence:Waves").get();
         stripFromComponent(config.getComponent(WaveDefinitionComponent.class));
 

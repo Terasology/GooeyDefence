@@ -1,7 +1,51 @@
 {
   "type": "WaveHud",
   "contents": {
-    "type": "UILabel",
-    "text": "Wave Hud"
+    "type": "RelativeLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "layoutInfo": {
+          "use-content-height": true,
+          "use-content-width": true,
+          "position-left": {
+            "offset": 16
+          },
+          "position-top": {
+            "offset": 16
+          }
+        },
+        "content": {
+          "type": "ColumnLayout",
+
+          "contents": [
+            {
+              "type": "UIWaveInfo",
+              "id": "waveInfo",
+              "layoutInfo": {
+                "use-content-width": true,
+                "use-content-height": true,
+                "position-top": {},
+                "position-horizontal-centre": {}
+              }
+            },
+            {
+              "type": "UILabel",
+              "id": "waveDuration",
+              "layoutInfo": {
+                "use-content-width": true,
+                "use-content-height": true,
+                "position-top": {
+                  "offset": 8,
+                  "target": "BOTTOM",
+                  "widget": "waveInfo"
+                },
+                "position-horizontal-centre": {}
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }

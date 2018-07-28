@@ -15,10 +15,17 @@
  */
 package org.terasology.gooeyDefence.ui.hud;
 
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.ui.hud.waveDisplay.WaveHud;
+import org.terasology.gooeyDefence.waves.OnWaveEnd;
+import org.terasology.math.geom.Rect2f;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
+import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
  * Mangaes displaying all the hud elements.
@@ -28,8 +35,24 @@ public class DefenceHudManager extends BaseComponentSystem {
     @In
     private NUIManager nuiManager;
 
+    private WaveHud waveHud;
+
     @Override
     public void initialise() {
-        nuiManager.getHUD().addHUDElement("waveHud");
+        waveHud = nuiManager.getHUD().addHUDElement("waveHud", WaveHud.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
+
+    }
+
+    @Override
+    public void postBegin() {
+        waveHud.updateCurrentWave();
+    }
+
+    /**
+     * @see OnWaveEnd
+     */
+    @ReceiveEvent
+    public void onWaveEnd(OnWaveEnd event, EntityRef entity) {
+        waveHud.updateCurrentWave();
     }
 }
