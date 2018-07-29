@@ -17,7 +17,6 @@
         },
         "content": {
           "type": "ColumnLayout",
-
           "contents": [
             {
               "type": "UIWaveInfo",
@@ -44,6 +43,20 @@
               }
             }
           ]
+        }
+      },
+      {
+        "type": "UILabel",
+        "id": "moneyLabel",
+        "layoutInfo": {
+          "use-content-height": true,
+          "use-content-width": true,
+          "position-right": {
+            "offset": 16
+          },
+          "position-top": {
+            "offset": 16
+          }
         }
       }
     ]

@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.ui.hud;
 
+import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.gooeyDefence.ui.control.UIWaveInfo;
 import org.terasology.gooeyDefence.waves.WaveManager;
 import org.terasology.registry.In;
@@ -23,19 +24,26 @@ import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
 import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
- * A HUD element that displays the current wave, as well as the duration remaining.
+ * A HUD layer that displays various different hud elements.
+ * This includes the next/current wave and the amount of money
  */
 public class DefenceHud extends CoreHudWidget {
     @In
     private WaveManager waveManager;
+    @In
+    private StatSystem statSystem;
 
     private UIWaveInfo waveInfo;
     private UILabel waveDuration;
+    private UILabel moneyLabel;
+
 
     @Override
     public void initialise() {
         waveInfo = find("waveInfo", UIWaveInfo.class);
         waveDuration = find("waveDuration", UILabel.class);
+        moneyLabel = find("moneyLabel", UILabel.class);
+
 
         waveDuration.bindText(new ReadOnlyBinding<String>() {
             @Override
@@ -50,6 +58,13 @@ public class DefenceHud extends CoreHudWidget {
                 return waveManager.isAttackUnderway();
             }
         });
+        moneyLabel.bindText(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return "Money: " + statSystem.getPlayerMoney();
+            }
+        });
+
     }
 
     /**

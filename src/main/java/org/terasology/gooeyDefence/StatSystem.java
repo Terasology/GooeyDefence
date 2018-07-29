@@ -16,10 +16,15 @@
 package org.terasology.gooeyDefence;
 
 import org.terasology.assets.management.AssetManager;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.economy.EconomyManager;
+import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.health.HealthComponent;
+import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
@@ -36,6 +41,9 @@ public class StatSystem extends BaseComponentSystem {
 
     @In
     private AssetManager assetManager;
+    @In
+    private LocalPlayer localPlayer;
+    private EntityRef player = EntityRef.NULL;
 
     @Override
     public void postBegin() {
@@ -43,6 +51,17 @@ public class StatSystem extends BaseComponentSystem {
         maxHealth = optional.map(prefab -> prefab.getComponent(HealthComponent.class))
                 .map(HealthComponent::getHealth)
                 .orElse(0);
+    }
+
+    /**
+     * Used to get the local player's character
+     * Sent when the field is activated.
+     *
+     * @see OnFieldActivated
+     */
+    @ReceiveEvent
+    public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
+        player = localPlayer.getCharacterEntity();
     }
 
     public void incrementWave() {
@@ -69,5 +88,12 @@ public class StatSystem extends BaseComponentSystem {
      */
     public int getMaxHealth() {
         return maxHealth;
+    }
+
+    /**
+     * @return How much money the player has.
+     */
+    public int getPlayerMoney() {
+        return EconomyManager.getBalance(player);
     }
 }
