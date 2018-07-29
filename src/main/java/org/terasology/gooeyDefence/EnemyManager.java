@@ -207,7 +207,7 @@ public class EnemyManager extends BaseComponentSystem implements UpdateSubscribe
     private void updateToNextStep(EntityRef entity, PathComponent pathComponent) {
         if (pathComponent.atEnd()) {
             GooeyComponent gooeyComponent = entity.getComponent(GooeyComponent.class);
-            entity.send(new DamageEntityEvent(gooeyComponent.damage));
+            DefenceField.getShrineEntity().send(new DamageEntityEvent(gooeyComponent.damage));
             enemiesToRemove.add(entity);
         } else {
             pathComponent.nextStep();

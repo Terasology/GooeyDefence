@@ -21,6 +21,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
+import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
@@ -49,7 +50,15 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         shrineDamageRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:ShrineDamaged").get());
     }
 
-    @ReceiveEvent
+    /**
+     * Used to display the damage effect on the shrine
+     * <p>
+     * Sent when an entity is damaged
+     * Filters on {@link ShrineComponent}
+     *
+     * @see DamageEntityEvent
+     */
+    @ReceiveEvent(components = ShrineComponent.class)
     public void onDamageShrine(DamageEntityEvent event, EntityRef entity) {
         shrineDamaged = 100;
     }

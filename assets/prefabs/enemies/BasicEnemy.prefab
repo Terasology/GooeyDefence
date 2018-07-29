@@ -28,6 +28,7 @@
     ]
   },
   "Gooey": {
+    "damage": 3
   },
   "Movement": {
     "speed": 3

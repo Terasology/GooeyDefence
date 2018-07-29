@@ -19,11 +19,15 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.gooeyDefence.ui.hud.waveDisplay.WaveHud;
 import org.terasology.gooeyDefence.waves.OnWaveEnd;
 import org.terasology.math.geom.Rect2f;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
+import org.terasology.rendering.nui.layers.hud.HealthHud;
+import org.terasology.rendering.nui.widgets.UIIconBar;
 
 /**
  * Manages displaying all the hud elements.
@@ -33,7 +37,11 @@ public class DefenceHudManager extends BaseComponentSystem {
     @In
     private NUIManager nuiManager;
 
+    @In
+    private StatSystem statSystem;
+
     private WaveHud waveHud;
+    private HealthHud healthHud;
 
     @Override
     public void initialise() {
@@ -43,7 +51,23 @@ public class DefenceHudManager extends BaseComponentSystem {
 
     @Override
     public void postBegin() {
+        healthHud = nuiManager.getHUD().getHUDElement("Core:HealthHud", HealthHud.class);
+        UIIconBar healthBar = healthHud.find("healthBar", UIIconBar.class);
+
         waveHud.updateCurrentWave();
+
+        healthBar.bindMaxValue(new ReadOnlyBinding<Float>() {
+            @Override
+            public Float get() {
+                return (float) statSystem.getMaxHealth();
+            }
+        });
+        healthBar.bindValue(new ReadOnlyBinding<Float>() {
+            @Override
+            public Float get() {
+                return (float) statSystem.getShrineHealth();
+            }
+        });
     }
 
     /**
