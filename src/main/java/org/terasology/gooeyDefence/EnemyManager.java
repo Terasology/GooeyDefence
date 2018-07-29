@@ -154,7 +154,7 @@ public class EnemyManager extends BaseComponentSystem {
         event.consume();
         PathComponent pathComponent = DefenceField.getComponentExtending(entity, PathComponent.class);
         if (pathComponent.atEnd()) {
-            entity.send(new DamageEntityEvent(gooeyComponent.damage));
+            DefenceField.getShrineEntity().send(new DamageEntityEvent(gooeyComponent.damage));
             destroyEnemy(entity);
         } else {
             pathComponent.nextStep();
