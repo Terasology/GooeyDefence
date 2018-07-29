@@ -24,11 +24,9 @@ import org.terasology.gooeyDefence.waves.OnWaveEnd;
 import org.terasology.math.geom.Rect2f;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
-import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
- * Mangaes displaying all the hud elements.
+ * Manages displaying all the hud elements.
  */
 @RegisterSystem
 public class DefenceHudManager extends BaseComponentSystem {
@@ -49,6 +47,10 @@ public class DefenceHudManager extends BaseComponentSystem {
     }
 
     /**
+     * Updates the wave displayed in the HUD
+     * <p>
+     * Called when a wave is ended
+     *
      * @see OnWaveEnd
      */
     @ReceiveEvent

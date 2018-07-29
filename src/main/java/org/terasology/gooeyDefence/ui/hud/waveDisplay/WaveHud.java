@@ -22,6 +22,9 @@ import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
 import org.terasology.rendering.nui.widgets.UILabel;
 
+/**
+ * A HUD element that displays the current wave, as well as the duration remaining.
+ */
 public class WaveHud extends CoreHudWidget {
     @In
     private WaveManager waveManager;
@@ -49,6 +52,9 @@ public class WaveHud extends CoreHudWidget {
         });
     }
 
+    /**
+     * Gets the screen to update the displayed wave to whatever the current wave is.
+     */
     public void updateCurrentWave() {
         waveInfo.setWaveInfo(waveManager.getCurrentWave());
     }
