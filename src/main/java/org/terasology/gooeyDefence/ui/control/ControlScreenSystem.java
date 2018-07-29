@@ -62,8 +62,9 @@ public class ControlScreenSystem extends BaseComponentSystem {
     }
 
     /**
-     * Sent when a wave ends.
      * Used to update the WaveInfo shown in the ui screen
+     * <p>
+     * Called when a wave ends.
      *
      * @see OnWaveEnd
      */
@@ -73,10 +74,11 @@ public class ControlScreenSystem extends BaseComponentSystem {
     }
 
     /**
-     * Called when the Frob button is pressed.
      * Used to close the tower screen if it is open.
      * <p>
+     * Called when the Frob button is pressed.
      * Filters on {@link CharacterComponent}
+     * Has an {@link EventPriority#PRIORITY_LOW}
      *
      * @see FrobButton
      */

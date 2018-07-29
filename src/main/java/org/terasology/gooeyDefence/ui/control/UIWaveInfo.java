@@ -27,6 +27,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Displays a wave.
+ * <p>
+ * Only shows the enemies that will be spawned, and how many.
+ * Does not show which entrance nor spawning delays/order
+ *
+ * @see WaveInfo
+ */
 public class UIWaveInfo extends CoreWidget {
     private WaveInfo waveInfo = new WaveInfo();
     private Map<String, Integer> prefabs = new HashMap<>();

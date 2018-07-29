@@ -64,6 +64,13 @@ public class ControlScreen extends CoreScreenLayer {
         reloadWaveInfo();
     }
 
+    /**
+     * Used to ensure that `E` will still close the screen.
+     * Does allow for movement when screen is open.
+     * TODO: Replace this method of closing with another
+     *
+     * @return True if keypresses are allowed
+     */
     @Override
     public boolean isModal() {
         return false;
