@@ -1,5 +1,5 @@
 {
-  "type": "WaveHud",
+  "type": "DefenceHud",
   "contents": {
     "type": "RelativeLayout",
     "contents": [

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.hud.waveDisplay;
+package org.terasology.gooeyDefence.ui.hud;
 
 import org.terasology.gooeyDefence.ui.control.UIWaveInfo;
 import org.terasology.gooeyDefence.waves.WaveManager;
@@ -25,7 +25,7 @@ import org.terasology.rendering.nui.widgets.UILabel;
 /**
  * A HUD element that displays the current wave, as well as the duration remaining.
  */
-public class WaveHud extends CoreHudWidget {
+public class DefenceHud extends CoreHudWidget {
     @In
     private WaveManager waveManager;
 

@@ -20,7 +20,6 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.StatSystem;
-import org.terasology.gooeyDefence.ui.hud.waveDisplay.WaveHud;
 import org.terasology.gooeyDefence.waves.OnWaveEnd;
 import org.terasology.math.geom.Rect2f;
 import org.terasology.registry.In;
@@ -40,12 +39,12 @@ public class DefenceHudManager extends BaseComponentSystem {
     @In
     private StatSystem statSystem;
 
-    private WaveHud waveHud;
+    private DefenceHud defenceHud;
     private HealthHud healthHud;
 
     @Override
     public void initialise() {
-        waveHud = nuiManager.getHUD().addHUDElement("waveHud", WaveHud.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
+        defenceHud = nuiManager.getHUD().addHUDElement("defenceHud", DefenceHud.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
 
     }
 
@@ -54,7 +53,7 @@ public class DefenceHudManager extends BaseComponentSystem {
         healthHud = nuiManager.getHUD().getHUDElement("Core:HealthHud", HealthHud.class);
         UIIconBar healthBar = healthHud.find("healthBar", UIIconBar.class);
 
-        waveHud.updateCurrentWave();
+        defenceHud.updateCurrentWave();
 
         healthBar.bindMaxValue(new ReadOnlyBinding<Float>() {
             @Override
@@ -79,6 +78,6 @@ public class DefenceHudManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onWaveEnd(OnWaveEnd event, EntityRef entity) {
-        waveHud.updateCurrentWave();
+        defenceHud.updateCurrentWave();
     }
 }
