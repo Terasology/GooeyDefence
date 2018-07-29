@@ -15,9 +15,15 @@
  */
 package org.terasology.gooeyDefence;
 
+import org.terasology.assets.management.AssetManager;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.health.HealthComponent;
+import org.terasology.registry.In;
 import org.terasology.registry.Share;
+
+import java.util.Optional;
 
 /**
  * Keeps track of various stats within the game at a global level.
@@ -26,13 +32,42 @@ import org.terasology.registry.Share;
 @Share(StatSystem.class)
 public class StatSystem extends BaseComponentSystem {
     private int waveNumber = 0;
+    private int maxHealth = 0;
 
+    @In
+    private AssetManager assetManager;
 
-    public void incrementWave(){
+    @Override
+    public void postBegin() {
+        Optional<Prefab> optional = assetManager.getAsset("GooeyDefence:Shrine", Prefab.class);
+        maxHealth = optional.map(prefab -> prefab.getComponent(HealthComponent.class))
+                .map(HealthComponent::getHealth)
+                .orElse(0);
+    }
+
+    public void incrementWave() {
         waveNumber++;
     }
 
     public int getWaveNumber() {
         return waveNumber;
+    }
+
+    /**
+     * @return The current amount of health the shrine has
+     */
+    public int getShrineHealth() {
+        if (DefenceField.isFieldActivated()) {
+            return DefenceField.getShrineEntity().getComponent(HealthComponent.class).getHealth();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * @return The maximum amount of health the shrine had
+     */
+    public int getMaxHealth() {
+        return maxHealth;
     }
 }
