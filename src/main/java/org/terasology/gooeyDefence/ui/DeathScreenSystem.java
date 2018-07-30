@@ -25,8 +25,6 @@ import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.WidgetUtil;
 import org.terasology.rendering.nui.layers.ingame.DeathScreen;
-import org.terasology.rendering.nui.widgets.UIButton;
-import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
  * Handles overwriting the death screen to allow
@@ -48,7 +46,16 @@ public class DeathScreenSystem extends BaseComponentSystem {
      */
     @ReceiveEvent(components = ShrineComponent.class)
     public void onEntityDeath(EntityDeathEvent event, EntityRef entity) {
-        DeathScreen deathScreen = nuiManager.pushScreen("Engine:DeathScreen", DeathScreen.class);
+        if (!nuiManager.isOpen("Engine:DeathScreen")) {
+            DeathScreen deathScreen = nuiManager.pushScreen("Engine:DeathScreen", DeathScreen.class);
+            WidgetUtil.trySubscribe(deathScreen, "retry", widget -> {
+                triggerReset();
+            });
+        }
+    }
+
+    private void triggerReset() {
+        nuiManager.closeScreen("Engine:DeathScreen");
     }
 
 }
