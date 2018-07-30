@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.ui;
 
+import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -35,6 +36,8 @@ import org.terasology.rendering.nui.layers.ingame.DeathScreen;
 public class DeathScreenSystem extends BaseComponentSystem {
     @In
     private NUIManager nuiManager;
+    @In
+    private Time time;
 
     /**
      * Used to display the death screen, and apply modifications to it.
@@ -47,6 +50,7 @@ public class DeathScreenSystem extends BaseComponentSystem {
     @ReceiveEvent(components = ShrineComponent.class)
     public void onEntityDeath(EntityDeathEvent event, EntityRef entity) {
         if (!nuiManager.isOpen("Engine:DeathScreen")) {
+            time.setPaused(true);
             DeathScreen deathScreen = nuiManager.pushScreen("Engine:DeathScreen", DeathScreen.class);
             WidgetUtil.trySubscribe(deathScreen, "retry", widget -> triggerReset());
         }
@@ -56,6 +60,7 @@ public class DeathScreenSystem extends BaseComponentSystem {
      * Triggers the resetting of the field.
      */
     private void triggerReset() {
+        time.setPaused(false);
         nuiManager.closeScreen("Engine:DeathScreen");
         DefenceField.getShrineEntity().send(new OnFieldReset());
     }
