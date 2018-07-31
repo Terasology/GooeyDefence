@@ -60,9 +60,19 @@ public class DeathScreenSystem extends BaseComponentSystem {
      * Triggers the resetting of the field.
      */
     private void triggerReset() {
+        OnFieldReset event = new OnFieldReset(this::finishReset);
+        event.beginTask();
+        DefenceField.getShrineEntity().send(event);
+        event.finishTask();
+    }
+
+    /**
+     * Called when the systems have finished resetting.
+     * Un-pauses the game and closes the screen
+     */
+    private void finishReset() {
         time.setPaused(false);
         nuiManager.closeScreen("Engine:DeathScreen");
-        DefenceField.getShrineEntity().send(new OnFieldReset());
     }
 
 }

@@ -15,7 +15,17 @@
  */
 package org.terasology.gooeyDefence.events;
 
-import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.ui.DeathScreenSystem;
 
-public class OnFieldReset implements Event {
+/**
+ * Event sent when the reset option is chosen.
+ * Calls on systems to reset their state to new.
+ *
+ * @see DeathScreenSystem
+ * @see OnFieldActivated
+ */
+public class OnFieldReset extends OnFieldActivated {
+    public OnFieldReset(Runnable callback) {
+        super(callback);
+    }
 }

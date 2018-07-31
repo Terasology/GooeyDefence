@@ -18,14 +18,16 @@ package org.terasology.gooeyDefence.movement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.JPSConfig;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.DefenceField;
-import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
+import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
 import org.terasology.gooeyDefence.movement.components.CustomPathComponent;
 import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
@@ -64,10 +66,30 @@ public class PathfindingManager extends BaseComponentSystem {
 
 
     /**
-     * Called to initialise the field.
+     * Begins the pathfinding calculations.
+     * <p>
+     * Called when the field is activated
+     *
+     * @see OnFieldActivated
      */
     @ReceiveEvent
     public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
+        for (int id = 0; id < DefenceField.entranceCount(); id++) {
+            event.beginTask();
+            calculatePath(id, event::finishTask);
+        }
+    }
+
+    /**
+     * Begins the pathfinding calculations for the new world.
+     * <p>
+     * Called when the field is reset
+     * Has priority {@link EventPriority#PRIORITY_LOW}
+     *
+     * @see OnFieldReset
+     */
+    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
+    public void onFieldReset(OnFieldReset event, EntityRef entity) {
         for (int id = 0; id < DefenceField.entranceCount(); id++) {
             event.beginTask();
             calculatePath(id, event::finishTask);
