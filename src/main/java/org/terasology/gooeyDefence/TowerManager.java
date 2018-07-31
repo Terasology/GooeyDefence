@@ -24,6 +24,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
+import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
@@ -35,10 +36,20 @@ import org.terasology.gooeyDefence.towerBlocks.EffectDuration;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
+import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
+import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.geom.Vector2i;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
+import org.terasology.utilities.procedural.Noise;
+import org.terasology.utilities.procedural.WhiteNoise;
+import org.terasology.world.WorldProvider;
+import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockManager;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,6 +61,16 @@ public class TowerManager extends BaseComponentSystem {
     private DelayManager delayManager;
     @In
     private EntityManager entityManager;
+    @In
+    private WorldProvider worldProvider;
+    @In
+    private BlockManager blockManager;
+
+    private Block air;
+    private Block fieldBlock;
+    private Block shrineBlock;
+    private Block worldBlock;
+    private Block altWorldBlock;
     private Set<EntityRef> towerEntities = new HashSet<>();
 
     /**
@@ -136,6 +157,15 @@ public class TowerManager extends BaseComponentSystem {
         return getTotalCorePower(towerComponent) >= getTargeterDrain(towerComponent) + getEffectorDrain(towerComponent);
     }
 
+    @Override
+    public void initialise() {
+        air = blockManager.getBlock(BlockManager.AIR_ID);
+        fieldBlock = blockManager.getBlock("GooeyDefence:PlainWorldGen");
+        worldBlock = blockManager.getBlock("GooeyDefence:WorldBlock");
+        altWorldBlock = blockManager.getBlock("GooeyDefence:AltWorldBlock");
+        shrineBlock = blockManager.getBlock("GooeyDefence:Shrine");
+    }
+
     /**
      * Remove all scheduled delays before the game is shutdown.
      */
@@ -147,6 +177,106 @@ public class TowerManager extends BaseComponentSystem {
                 delayManager.cancelPeriodicAction(tower, buildEventId(tower, targeter));
             }
             tower.destroy();
+        }
+    }
+
+    /**
+     * Destroys all the tower blocks
+     * <p>
+     * Sent when the field should be reset
+     *
+     * @see OnFieldReset
+     */
+    @ReceiveEvent
+    public void onFieldReset(OnFieldReset event, EntityRef entity) {
+        for (EntityRef towerEntity : towerEntities) {
+            TowerComponent component = towerEntity.getComponent(TowerComponent.class);
+            clearBlocks(component.cores);
+            clearBlocks(component.effector);
+            clearBlocks(component.targeter);
+            clearBlocks(component.plains);
+        }
+        regenRandomField();
+    }
+
+    /**
+     * Replaces block entities with air, and destroys the entity
+     *
+     * @param blocks The blocks to replace
+     */
+    private void clearBlocks(Collection<EntityRef> blocks) {
+        blocks.stream()
+                .map(entityRef -> entityRef.getComponent(LocationComponent.class))
+                .map(LocationComponent::getWorldPosition)
+                .map(Vector3i::new)
+                .forEach(pos -> worldProvider.setBlock(pos, air));
+        blocks.forEach(EntityRef::destroy);
+    }
+
+
+    /**
+     * Clears and regenerates the random field produced at the start of the game.
+     * <p>
+     * This field is not guaranteed to be the same configuration as the initial field,
+     * as it does not share the same random seed.
+     */
+    private void regenRandomField() {
+        clearField(DefenceField.outerRingSize());
+        createRandomFill(DefenceField.outerRingSize());
+    }
+
+    /**
+     * Clears all non world gen block from the field.
+     * <p>
+     * These are:
+     * - "GooeyDefence:ShrineBlock"
+     * - "GooeyDefence:WorldBlock"
+     * - "GooeyDefence:AltWorldBlock"
+     * - "Engine:Air"
+     *
+     * @param size The size of the field to clear.
+     */
+    private void clearField(int size) {
+        Vector3i pos = Vector3i.zero();
+        Block block;
+
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                for (int z = 0; z < size; z++) {
+                    pos.set(x, y, z);
+                    block = worldProvider.getBlock(pos);
+                    if (block != air
+                            && block != shrineBlock
+                            && block != worldBlock
+                            && block != altWorldBlock) {
+                        worldProvider.setBlock(pos, air);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Randomly fills in an area, according to the same rules as the world gen
+     *
+     * @param size The size of the area to fill
+     * @see RandomFillingProvider
+     */
+    private void createRandomFill(int size) {
+        Noise noise = new WhiteNoise(System.currentTimeMillis());
+        Vector2i pos2i = Vector2i.zero();
+        Vector3i pos3i = Vector3i.zero();
+
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                pos2i.setX(x);
+                pos2i.setY(y);
+                if (RandomFillingProvider.shouldSpawnBlock(pos2i, noise)) {
+                    pos3i.setX(pos2i.x);
+                    pos3i.setZ(pos2i.y);
+                    worldProvider.setBlock(pos3i, fieldBlock);
+                }
+            }
         }
     }
 
