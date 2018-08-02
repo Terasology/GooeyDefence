@@ -69,8 +69,6 @@ public class TowerManager extends BaseComponentSystem {
     private Block air;
     private Block fieldBlock;
     private Block shrineBlock;
-    private Block worldBlock;
-    private Block altWorldBlock;
     private Set<EntityRef> towerEntities = new HashSet<>();
 
     /**
@@ -161,8 +159,6 @@ public class TowerManager extends BaseComponentSystem {
     public void initialise() {
         air = blockManager.getBlock(BlockManager.AIR_ID);
         fieldBlock = blockManager.getBlock("GooeyDefence:PlainWorldGen");
-        worldBlock = blockManager.getBlock("GooeyDefence:WorldBlock");
-        altWorldBlock = blockManager.getBlock("GooeyDefence:AltWorldBlock");
         shrineBlock = blockManager.getBlock("GooeyDefence:Shrine");
     }
 
@@ -195,8 +191,12 @@ public class TowerManager extends BaseComponentSystem {
             clearBlocks(component.effector);
             clearBlocks(component.targeter);
             clearBlocks(component.plains);
+            towerEntity.destroy();
         }
-        regenRandomField();
+        towerEntities.clear();
+
+        clearField(DefenceField.outerRingSize());
+        createRandomFill(DefenceField.outerRingSize());
     }
 
     /**
@@ -205,24 +205,8 @@ public class TowerManager extends BaseComponentSystem {
      * @param blocks The blocks to replace
      */
     private void clearBlocks(Collection<EntityRef> blocks) {
-        blocks.stream()
-                .map(entityRef -> entityRef.getComponent(LocationComponent.class))
-                .map(LocationComponent::getWorldPosition)
-                .map(Vector3i::new)
-                .forEach(pos -> worldProvider.setBlock(pos, air));
         blocks.forEach(EntityRef::destroy);
-    }
-
-
-    /**
-     * Clears and regenerates the random field produced at the start of the game.
-     * <p>
-     * This field is not guaranteed to be the same configuration as the initial field,
-     * as it does not share the same random seed.
-     */
-    private void regenRandomField() {
-        clearField(DefenceField.outerRingSize());
-        createRandomFill(DefenceField.outerRingSize());
+        blocks.clear();
     }
 
     /**
@@ -230,8 +214,6 @@ public class TowerManager extends BaseComponentSystem {
      * <p>
      * These are:
      * - "GooeyDefence:ShrineBlock"
-     * - "GooeyDefence:WorldBlock"
-     * - "GooeyDefence:AltWorldBlock"
      * - "Engine:Air"
      *
      * @param size The size of the field to clear.
@@ -239,16 +221,16 @@ public class TowerManager extends BaseComponentSystem {
     private void clearField(int size) {
         Vector3i pos = Vector3i.zero();
         Block block;
-
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                for (int z = 0; z < size; z++) {
+        for (int x = -size; x <= size; x++) {
+            /* We use circle eq "x^2 + y^2 = r^2" to work out where we need to start */
+            int width = (int) Math.floor(Math.sqrt(size * size - x * x));
+            for (int z = -width; z <= width; z++) {
+                /* We use sphere eq "x^2 + y^2 + z^2 = r^2" to work out how high we need to go */
+                int height = (int) Math.floor(Math.sqrt(size * size - z * z - x * x) - 0.001f);
+                for (int y = 0; y <= height; y++) {
                     pos.set(x, y, z);
                     block = worldProvider.getBlock(pos);
-                    if (block != air
-                            && block != shrineBlock
-                            && block != worldBlock
-                            && block != altWorldBlock) {
+                    if (block != air && block != shrineBlock) {
                         worldProvider.setBlock(pos, air);
                     }
                 }
@@ -267,8 +249,9 @@ public class TowerManager extends BaseComponentSystem {
         Vector2i pos2i = Vector2i.zero();
         Vector3i pos3i = Vector3i.zero();
 
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
+        for (int x = -size; x <= size; x++) {
+            int width = (int) Math.floor(Math.sqrt(size * size - x * x));
+            for (int y = -width; y <= width; y++) {
                 pos2i.setX(x);
                 pos2i.setY(y);
                 if (RandomFillingProvider.shouldSpawnBlock(pos2i, noise)) {
