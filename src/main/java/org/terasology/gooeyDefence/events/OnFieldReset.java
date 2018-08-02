@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.events;
 
+import org.terasology.entitySystem.event.Event;
 import org.terasology.gooeyDefence.ui.DeathScreenSystem;
 
 /**
@@ -22,10 +23,10 @@ import org.terasology.gooeyDefence.ui.DeathScreenSystem;
  * Calls on systems to reset their state to new.
  *
  * @see DeathScreenSystem
- * @see OnFieldActivated
+ * @see CallbackEvent
  */
-public class OnFieldReset extends OnFieldActivated {
-    public OnFieldReset(Runnable callback) {
-        super(callback);
+public class OnFieldReset extends CallbackEvent implements Event {
+    public OnFieldReset(Runnable runnable) {
+        super(runnable);
     }
 }

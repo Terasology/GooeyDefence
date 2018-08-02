@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,32 @@
  */
 package org.terasology.gooeyDefence.events;
 
-import org.terasology.entitySystem.event.Event;
+public abstract class CallbackEvent {
+    private Runnable callback;
+    private int tasks;
 
-/**
- * Event sent to initialise the field after a new game or a save has been loaded.
- *
- * @see CallbackEvent
- */
-public class OnFieldActivated extends CallbackEvent implements Event {
-    public OnFieldActivated(Runnable runnable) {
-        super(runnable);
+    public CallbackEvent() {
+
+    }
+
+    public CallbackEvent(Runnable callback) {
+        this.callback = callback;
+    }
+
+    /**
+     * Record that a new task is underway
+     */
+    public void beginTask() {
+        tasks++;
+    }
+
+    /**
+     * Record that a task has finished. If all tasks are over then run the callback.
+     */
+    public void finishTask() {
+        tasks--;
+        if (tasks <= 0) {
+            callback.run();
+        }
     }
 }
