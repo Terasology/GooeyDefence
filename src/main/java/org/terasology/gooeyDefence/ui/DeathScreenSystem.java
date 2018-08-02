@@ -22,6 +22,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.components.ShrineComponent;
+import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.registry.In;
@@ -60,14 +61,24 @@ public class DeathScreenSystem extends BaseComponentSystem {
      * Triggers the resetting of the field.
      */
     private void triggerReset() {
-        OnFieldReset event = new OnFieldReset(this::finishReset);
+        OnFieldReset event = new OnFieldReset(this::doActivation);
         event.beginTask();
         DefenceField.getShrineEntity().send(event);
         event.finishTask();
     }
 
     /**
-     * Called when the systems have finished resetting.
+     * Triggers the activation of the required game systems.
+     */
+    private void doActivation() {
+        OnFieldActivated activateEvent = new OnFieldActivated(this::finishReset);
+        activateEvent.beginTask();
+        DefenceField.getShrineEntity().send(activateEvent);
+        activateEvent.finishTask();
+    }
+
+    /**
+     * Called when the systems have finished resetting & activating.
      * Un-pauses the game and closes the screen
      */
     private void finishReset() {
