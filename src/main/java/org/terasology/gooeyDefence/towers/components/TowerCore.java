@@ -29,12 +29,6 @@ public abstract class TowerCore implements Component {
     /**
      * The power this core provides
      */
-    private int power;
+    public int power;
 
-    /**
-     * @return How much power this core provides
-     */
-    public int getPower() {
-        return power;
-    }
 }

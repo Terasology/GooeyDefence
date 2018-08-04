@@ -25,11 +25,7 @@ import org.terasology.gooeyDefence.towers.components.TowerEffector;
  * @see DamageEffectorSystem
  */
 public class DamageEffectorComponent extends TowerEffector {
-    private int damage;
-
-    public int getDamage() {
-        return damage;
-    }
+    public int damage;
 
     @Override
     public EffectCount getEffectCount() {

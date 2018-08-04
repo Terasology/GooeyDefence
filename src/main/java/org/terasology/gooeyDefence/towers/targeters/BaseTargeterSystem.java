@@ -56,7 +56,7 @@ public class BaseTargeterSystem extends BaseComponentSystem {
                 comparator = (first, second) -> {
                     HealthComponent firstComponent = first.getComponent(HealthComponent.class);
                     HealthComponent secondComponent = second.getComponent(HealthComponent.class);
-                    return firstComponent.getHealth() - secondComponent.getHealth();
+                    return firstComponent.health - secondComponent.health;
                 };
                 break;
             case FIRST:
@@ -70,7 +70,7 @@ public class BaseTargeterSystem extends BaseComponentSystem {
                 comparator = (first, second) -> {
                     HealthComponent firstComponent = first.getComponent(HealthComponent.class);
                     HealthComponent secondComponent = second.getComponent(HealthComponent.class);
-                    return secondComponent.getHealth() - firstComponent.getHealth();
+                    return secondComponent.health - firstComponent.health;
                 };
                 break;
             default:
@@ -91,7 +91,7 @@ public class BaseTargeterSystem extends BaseComponentSystem {
         return target.exists() &&
                 target.getComponent(LocationComponent.class)
                         .getWorldPosition()
-                        .distance(targeterPos) < targeterComponent.getRange();
+                        .distance(targeterPos) < targeterComponent.range;
     }
 
     /**
@@ -105,14 +105,14 @@ public class BaseTargeterSystem extends BaseComponentSystem {
      * @param enemyManager      The enemy manager to use if a new enemy needs to be picked
      * @return A suitable enemy in range, or the null entity if none was found
      */
-    protected EntityRef getTarget(Vector3f targeterPos, TowerTargeter targeterComponent, EnemyManager enemyManager) {
-        EntityRef target = targeterComponent.getLastTarget();
+    protected EntityRef getTarget(Vector3f targeterPos, SingleTargeterComponent targeterComponent, EnemyManager enemyManager) {
+        EntityRef target = targeterComponent.lastTarget;
 
         if (!canUseTarget(target, targeterPos, targeterComponent)) {
             Set<EntityRef> enemiesInRange = enemyManager.getEnemiesInRange(
                     targeterPos,
-                    targeterComponent.getRange());
-            target = getSingleTarget(enemiesInRange, targeterComponent.getSelectionMethod());
+                    targeterComponent.range);
+            target = getSingleTarget(enemiesInRange, targeterComponent.selectionMethod);
         }
         return target;
     }

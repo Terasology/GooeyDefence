@@ -15,24 +15,19 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
-import org.terasology.gooeyDefence.towers.components.TowerTargeter;
-
 /**
  * Only targets enemies that are far away.
  * Does higher damage but cannot target those nearby
  */
-public class SniperTargeterComponent extends TowerTargeter {
+public class SniperTargeterComponent extends SingleTargeterComponent {
     /**
      * How far away enemies have to be before they can be selected.
      */
-    private float minimumRange;
+    public float minimumRange;
 
     @Override
     public float getMultiplier() {
         return 2;
     }
 
-    public float getMinimumRange() {
-        return minimumRange;
-    }
 }

@@ -50,14 +50,14 @@ public class SplashTargeterSystem extends BaseTargeterSystem {
 
         if (target.exists()) {
             LocationComponent targetLocation = target.getComponent(LocationComponent.class);
-            event.addToList(enemyManager.getEnemiesInRange(targetLocation.getWorldPosition(), targeterComponent.getSplashRange()));
+            event.addToList(enemyManager.getEnemiesInRange(targetLocation.getWorldPosition(), targeterComponent.splashRange));
 
             inWorldRenderer.shootBulletTowards(
                     target,
                     locationComponent.getWorldPosition(),
-                    new SplashBulletComponent(targeterComponent.getSplashRange()));
+                    new SplashBulletComponent(targeterComponent.splashRange));
         }
 
-        targeterComponent.setLastTarget(target);
+        targeterComponent.lastTarget = target;
     }
 }

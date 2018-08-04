@@ -17,7 +17,6 @@ package org.terasology.gooeyDefence.towers.components;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.gooeyDefence.towers.SelectionMethod;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,67 +36,22 @@ public abstract class TowerTargeter implements Component {
     /**
      * How much energy this targeter will use
      */
-    private int drain;
+    public int drain;
     /**
      * The range of this targeter
      * given in blocks
      */
-    private int range;
+    public int range;
     /**
      * The time between attacks for this targeter
      * given in ms
      */
-    private int attackSpeed;
-    /**
-     * The method used to determine which enemy to select within range.
-     * Not always applicable
-     */
-    private SelectionMethod selectionMethod = SelectionMethod.FIRST;
+    public int attackSpeed;
     /**
      * All enemies hit by an effect last attack
      */
-    private Set<EntityRef> affectedEnemies = new HashSet<>();
-    /**
-     * The enemy attacked last attack
-     * Not always applicable
-     */
-    private EntityRef lastTarget = EntityRef.NULL;
-
-    public EntityRef getLastTarget() {
-        return lastTarget;
-    }
-
-    public void setLastTarget(EntityRef lastTarget) {
-        this.lastTarget = lastTarget;
-    }
-
-    public int getDrain() {
-        return drain;
-    }
-
-    public int getRange() {
-        return range;
-    }
-
-    public int getAttackSpeed() {
-        return attackSpeed;
-    }
-
-    public Set<EntityRef> getAffectedEnemies() {
-        return affectedEnemies;
-    }
-
-    public void setAffectedEnemies(Set<EntityRef> affectedEnemies) {
-        this.affectedEnemies = affectedEnemies;
-    }
+    public Set<EntityRef> affectedEnemies = new HashSet<>();
 
     public abstract float getMultiplier();
 
-    public SelectionMethod getSelectionMethod() {
-        return selectionMethod;
-    }
-
-    public void setSelectionMethod(SelectionMethod selectionMethod) {
-        this.selectionMethod = selectionMethod;
-    }
 }

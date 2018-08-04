@@ -72,7 +72,7 @@ public class StunEffectorSystem extends BaseComponentSystem {
 
             Vector3f position = target.getComponent(LocationComponent.class).getWorldPosition();
             target.addComponent(new BlankPathComponent(position));
-            delayManager.addDelayedAction(target, REMOVE_STUN_ID, component.getStunDuration());
+            delayManager.addDelayedAction(target, REMOVE_STUN_ID, component.stunDuration);
             inWorldRenderer.addParticleEffect(target, "GooeyDefence:StunParticleEffect");
         }
     }

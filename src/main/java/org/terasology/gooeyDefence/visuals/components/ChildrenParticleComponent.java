@@ -22,9 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChildrenParticleComponent implements Component {
-    private Map<String, EntityRef> particleEntities = new HashMap<>();
+    public Map<String, EntityRef> particleEntities = new HashMap<>();
 
-    public Map<String, EntityRef> getParticleEntities() {
-        return particleEntities;
-    }
 }

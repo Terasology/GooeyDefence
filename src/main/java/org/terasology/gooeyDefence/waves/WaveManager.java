@@ -93,7 +93,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
         if (isAttackUnderway) {
             boolean allFinished = true;
             int entranceNum = 0;
-            for (EntranceInfo info : currentWave) {
+            for (EntranceInfo info : currentWave.entranceInfos) {
                 allFinished &= !spawnAtEntrance(info, entranceNum, delta);
                 entranceNum++;
             }
@@ -112,18 +112,18 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
         if (!isAttackUnderway) {
             isAttackUnderway = true;
 
-            remainingDuration = Streams.stream(currentWave)
-                    .map(entranceInfo -> entranceInfo.getDelays()
+            remainingDuration = Streams.stream(currentWave.entranceInfos)
+                    .map(entranceInfo -> entranceInfo.delays
                             .stream()
                             .reduce(0f, Float::sum))
                     .max(Float::compareTo)
                     .orElse(0f);
 
             int i = 0;
-            spawnDelays = new float[currentWave.getSize()];
-            for (EntranceInfo info : currentWave) {
-                if (info.hasItems()) {
-                    spawnDelays[i] = info.popDelay();
+            spawnDelays = new float[currentWave.entranceInfos.size()];
+            for (EntranceInfo info : currentWave.entranceInfos) {
+                if (!info.delays.isEmpty() || !info.prefabs.isEmpty()) {
+                    spawnDelays[i] = info.delays.remove(0);
                 }
                 i++;
             }
@@ -193,12 +193,12 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
      * @return True if an enemy was spawned, false otherwise
      */
     private boolean spawnAtEntrance(EntranceInfo spawnInfo, int entranceNum, float delta) {
-        if (spawnInfo.hasItems()) {
+        if (!spawnInfo.delays.isEmpty() || !spawnInfo.prefabs.isEmpty()) {
             spawnDelays[entranceNum] -= delta;
             if (spawnDelays[entranceNum] <= 0) {
-                enemyManager.spawnEnemy(entranceNum, spawnInfo.popPrefab());
-                if (spawnInfo.hasItems()) {
-                    spawnDelays[entranceNum] = spawnInfo.popDelay();
+                enemyManager.spawnEnemy(entranceNum, spawnInfo.prefabs.remove(0));
+                if (!spawnInfo.delays.isEmpty() || !spawnInfo.prefabs.isEmpty()) {
+                    spawnDelays[entranceNum] = spawnInfo.delays.remove(0);
                 }
             }
             return true;
@@ -222,7 +222,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
                 .values()
                 .forEach(infoSet -> {
                     infoSet.removeIf(
-                            waveInfo -> !waveInfo.getWaveRange().contains(waveNum));
+                            waveInfo -> !getWaveRange(waveInfo).contains(waveNum));
                     validInfos.addAll(infoSet);
                 });
     }
@@ -234,9 +234,9 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
      * @param component The component to scrape data from
      */
     private void stripFromComponent(WaveDefinitionComponent component) {
-        List<WaveInfo> waves = component.getWaves();
+        List<WaveInfo> waves = component.waves;
         for (WaveInfo wave : waves) {
-            Range<Integer> waveRange = wave.getWaveRange();
+            Range<Integer> waveRange = getWaveRange(wave);
             putInfoAt(waveRange.hasLowerBound() ? waveRange.lowerEndpoint() : -1, wave);
         }
     }
@@ -252,6 +252,33 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
         Set<WaveInfo> waves = waveInfos.getOrDefault(pos, new HashSet<>());
         waves.add(info);
         waveInfos.put(pos, waves);
+    }
+
+    private Range<Integer> getWaveRange(WaveInfo info) {
+        if (info.waveRange == null) {
+            convertToRange(info);
+        }
+        return info.waveRange;
+    }
+
+    private void convertToRange(WaveInfo info) {
+        if (info.lowerBound >= 0) {
+            if (info.upperBound >= 0) {
+                /* Lower and upper */
+                info.waveRange = Range.closed(info.lowerBound, info.upperBound);
+            } else {
+                /* Just lower */
+                info.waveRange = Range.atLeast(info.lowerBound);
+            }
+        } else {
+            if (info.upperBound >= 0) {
+                /* Just upper */
+                info.waveRange = Range.atMost(info.upperBound);
+            } else {
+                /* Neither */
+                info.waveRange = Range.all();
+            }
+        }
     }
 
 

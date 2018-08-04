@@ -43,8 +43,8 @@ public class HealthSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onDamageEntity(DamageEntityEvent event, EntityRef entity, HealthComponent component) {
-        component.dealDamage(event.getDamage());
-        if (component.getHealth() == 0) {
+        component.health = Math.max(component.health - event.getDamage(), 0);
+        if (component.health == 0) {
             entity.send(new EntityDeathEvent());
         }
     }
@@ -61,7 +61,7 @@ public class HealthSystem extends BaseComponentSystem {
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
     public void onFieldActivated(OnFieldActivated event, EntityRef entity, HealthComponent component) {
-        if (component.getHealth() <= 0) {
+        if (component.health <= 0) {
             entity.send(new EntityDeathEvent());
         }
     }

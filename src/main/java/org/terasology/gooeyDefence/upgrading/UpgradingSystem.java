@@ -85,7 +85,7 @@ public class UpgradingSystem extends BaseComponentSystem {
         ComponentMetadata<? extends Component> componentMeta = componentLibrary.getMetadata(component);
 
         /* Apply upgrade for each field */
-        for (Map.Entry<String, Number> entry : upgrade.getValues().entrySet()) {
+        for (Map.Entry<String, Number> entry : upgrade.values.entrySet()) {
             ComponentFieldMetadata<?, ?> fieldMeta = componentMeta.getField(entry.getKey());
             setField(fieldMeta, component, entry.getValue());
         }
@@ -103,16 +103,16 @@ public class UpgradingSystem extends BaseComponentSystem {
             return null;
         }
         /* Get needed data */
-        ComponentMetadata<?> componentMeta = componentLibrary.resolve(upgradesComponent.getComponentName());
+        ComponentMetadata<?> componentMeta = componentLibrary.resolve(upgradesComponent.componentName);
         if (componentMeta == null) {
             throw new IllegalArgumentException("Cannot upgrade entity as "
-                    + upgradesComponent.getComponentName()
+                    + upgradesComponent.componentName
                     + " is not a valid component.");
         }
         Component component = entity.getComponent(componentMeta.getType());
         if (component == null) {
             throw new IllegalArgumentException("Cannot upgrade entity as it lacks any "
-                    + upgradesComponent.getComponentName()
+                    + upgradesComponent.componentName
                     + " to upgrade");
         }
         return component;
@@ -241,7 +241,7 @@ public class UpgradingSystem extends BaseComponentSystem {
         BaseParser parser = parserMap.getOrDefault(component.getClass(), new DefaultParser());
         for (String field : fields) {
             ComponentFieldMetadata<T, ?> fieldMetadata = metadata.getField(field);
-            Number upgradeValue = upgradeInfo.getValues().getOrDefault(field, null);
+            Number upgradeValue = upgradeInfo.values.getOrDefault(field, null);
             if (upgradeValue == null) {
                 upgrades.add("");
             } else {

@@ -39,7 +39,7 @@ public class UIUpgradePaths extends CoreWidget {
     @Override
     public void onDraw(Canvas canvas) {
         if (upgradesComponent.get() != null) {
-            List<UpgradeList> newUpgrades = upgradesComponent.get().getUpgrades();
+            List<UpgradeList> newUpgrades = upgradesComponent.get().upgrades;
             if (upgradeLists != newUpgrades) {
                 upgradeLists = newUpgrades;
                 rebuildUpgradeButtons();
@@ -55,12 +55,12 @@ public class UIUpgradePaths extends CoreWidget {
         upgrades.removeAllWidgets();
         for (UpgradeList upgradeList : upgradeLists) {
             UIButton upgradeButton = new UIButton();
-            upgradeButton.setText(upgradeList.getUpgradeName());
+            upgradeButton.setText(upgradeList.upgradeName);
             upgradeButton.subscribe(widget -> upgradeButtonPressed(upgradeList));
             upgradeButton.bindEnabled(new ReadOnlyBinding<Boolean>() {
                 @Override
                 public Boolean get() {
-                    return !upgradeList.getStages().isEmpty();
+                    return !upgradeList.stages.isEmpty();
                 }
             });
             upgrades.addWidget(upgradeButton, null);

@@ -84,8 +84,8 @@ public class UIWaveInfo extends CoreWidget {
      */
     private void collatePrefabs() {
         prefabs.clear();
-        for (EntranceInfo entranceInfo : waveInfo) {
-            for (String prefab : entranceInfo.getPrefabs()) {
+        for (EntranceInfo entranceInfo : waveInfo.entranceInfos) {
+            for (String prefab : entranceInfo.prefabs) {
                 prefabs.merge(prefab, 1, Integer::sum);
             }
         }

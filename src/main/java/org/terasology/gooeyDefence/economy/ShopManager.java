@@ -72,10 +72,10 @@ public class ShopManager extends BaseComponentSystem {
      * @return The price of the ware.
      */
     public static int getWareCost(ComponentContainer ware) {
-        int cost = ware.getComponent(PurchasableComponent.class).getCost();
+        int cost = ware.getComponent(PurchasableComponent.class).cost;
         if (cost < 0) {
             if (ware.hasComponent(ValueComponent.class)) {
-                return ware.getComponent(ValueComponent.class).getValue();
+                return ware.getComponent(ValueComponent.class).value;
             } else {
                 return 0;
             }

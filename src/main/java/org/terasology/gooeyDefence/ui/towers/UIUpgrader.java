@@ -117,7 +117,7 @@ public class UIUpgrader extends CoreWidget {
      * @param upgrade The upgrade path selected
      */
     private void upgradePressed(UpgradeList upgrade) {
-        List<UpgradeInfo> stages = upgrade.getStages();
+        List<UpgradeInfo> stages = upgrade.stages;
         /* Stages can never be empty because button is disabled if it is */
         UpgradeInfo upgradeInfo = stages.get(0);
 

@@ -39,6 +39,6 @@ public class DamageEffectorSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, DamageEffectorComponent component) {
-        event.getTarget().send(new DamageEntityEvent(component.getDamage()));
+        event.getTarget().send(new DamageEntityEvent(component.damage));
     }
 }

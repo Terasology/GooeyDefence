@@ -31,17 +31,10 @@ public class BlockUpgradesComponent implements Component {
      * Should be the name without the <code>Component</code> ending.
      * Eg, <code>"SingleTargeterComponent"</code> should be <code>"SingleTargeter</code>
      */
-    private String componentName;
+    public String componentName;
     /**
      * All of the upgrade paths applicable
      */
-    private List<UpgradeList> upgrades;
+    public List<UpgradeList> upgrades;
 
-    public String getComponentName() {
-        return componentName;
-    }
-
-    public List<UpgradeList> getUpgrades() {
-        return upgrades;
-    }
 }

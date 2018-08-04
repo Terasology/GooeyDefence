@@ -15,24 +15,19 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
-import org.terasology.gooeyDefence.towers.components.TowerTargeter;
-
 /**
  * Selects a base enemy and then splashes to nearby enemies in a small radius.
  */
-public class SplashTargeterComponent extends TowerTargeter {
+public class SplashTargeterComponent extends SingleTargeterComponent {
     /**
      * The range of the splash around the chosen target
      * given in blocks.
      */
-    private float splashRange;
+    public float splashRange;
 
     @Override
     public float getMultiplier() {
         return 0.8f;
     }
 
-    public float getSplashRange() {
-        return splashRange;
-    }
 }

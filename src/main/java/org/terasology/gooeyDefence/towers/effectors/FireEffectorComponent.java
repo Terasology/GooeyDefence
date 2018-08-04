@@ -26,7 +26,7 @@ public class FireEffectorComponent extends DamageEffectorComponent {
      * How long the enemy is on fire for.
      * given in milliseconds
      */
-    private int fireDuration;
+    public int fireDuration;
 
     @Override
     public EffectCount getEffectCount() {
@@ -38,7 +38,4 @@ public class FireEffectorComponent extends DamageEffectorComponent {
         return EffectDuration.PERMANENT;
     }
 
-    public int getFireDuration() {
-        return fireDuration;
-    }
 }

@@ -27,9 +27,6 @@ public class WaveDefinitionComponent implements Component {
     /**
      * The waves to load into the wave generator
      */
-    private List<WaveInfo> waves = new ArrayList<>();
+    public List<WaveInfo> waves = new ArrayList<>();
 
-    public List<WaveInfo> getWaves() {
-        return waves;
-    }
 }

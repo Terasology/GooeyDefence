@@ -72,18 +72,18 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, PoisonEffectorComponent effectorComponent) {
         EntityRef target = event.getTarget();
-        target.send(new DamageEntityEvent(effectorComponent.getDamage()));
+        target.send(new DamageEntityEvent(effectorComponent.damage));
 
         String endId = buildEventID(END_POISON_ID, entity);
         String applyId = buildEventID(APPLY_POISON_ID, entity);
 
         if (delayManager.hasDelayedAction(target, endId)) {
             delayManager.cancelDelayedAction(target, endId);
-            delayManager.addDelayedAction(target, endId, effectorComponent.getPoisonDuration());
+            delayManager.addDelayedAction(target, endId, effectorComponent.poisonDuration);
         } else {
             inWorldRenderer.addParticleEffect(target, "GooeyDefence:PoisonParticleEffect");
             delayManager.addPeriodicAction(target, applyId, POISON_RATE, POISON_RATE);
-            delayManager.addDelayedAction(target, endId, effectorComponent.getPoisonDuration());
+            delayManager.addDelayedAction(target, endId, effectorComponent.poisonDuration);
         }
     }
 
@@ -101,7 +101,7 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
 
             EntityRef effector = getEffectorEntity(event.getActionId());
             PoisonEffectorComponent effectorComponent = effector.getComponent(PoisonEffectorComponent.class);
-            entity.send(new DamageEntityEvent(effectorComponent.getPoisonDamage()));
+            entity.send(new DamageEntityEvent(effectorComponent.poisonDamage));
         }
     }
 

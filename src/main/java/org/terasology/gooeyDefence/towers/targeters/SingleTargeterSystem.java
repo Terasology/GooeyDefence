@@ -61,7 +61,7 @@ public class SingleTargeterSystem extends BaseTargeterSystem {
                     target,
                     locationComponent.getWorldPosition());
         }
-        targeterComponent.setLastTarget(target);
+        targeterComponent.lastTarget = target;
 
     }
 

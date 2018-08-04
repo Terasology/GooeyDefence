@@ -146,7 +146,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
             TowerTargeter targeter = DefenceField.getComponentExtending(event.getNewTarget(), TowerTargeter.class);
 
             sphereLoc.setWorldPosition(targeterLoc.getWorldPosition());
-            sphereLoc.setLocalScale(targeter.getRange() * 2 + 1);
+            sphereLoc.setLocalScale(targeter.range * 2 + 1);
 
         } else {
             LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
@@ -195,9 +195,9 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     public void shootBulletTowards(EntityRef goal, Vector3f start, Component component) {
         EntityRef bullet = entityManager.create("GooeyDefence:Bullet");
         MovementComponent movementComponent = new MovementComponent();
-        movementComponent.setGoal(goal.getComponent(LocationComponent.class).getWorldPosition());
-        movementComponent.setSpeed(30);
-        movementComponent.setReachedDistance(0.5f);
+        movementComponent.goal = goal.getComponent(LocationComponent.class).getWorldPosition();
+        movementComponent.speed = (float) 30;
+        movementComponent.reachedDistance = 0.5f;
         bullet.addOrSaveComponent(movementComponent);
 
         LocationComponent locationComponent = bullet.getComponent(LocationComponent.class);
@@ -258,7 +258,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         for (EntityRef bullet : bullets.keySet()) {
             MovementComponent component = bullet.getComponent(MovementComponent.class);
             EntityRef goal = bullets.get(bullet);
-            component.setGoal(goal.getComponent(LocationComponent.class).getWorldPosition());
+            component.goal = goal.getComponent(LocationComponent.class).getWorldPosition();
         }
     }
 
@@ -304,7 +304,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      */
     @ReceiveEvent(components = {TargeterBulletComponent.class})
     public void onReachedGoal(ReachedGoalEvent event, EntityRef entity, MovementComponent movementComponent, SplashBulletComponent bulletComponent) {
-        displayExpandingSphere(movementComponent.getGoal(), 0.5f, bulletComponent.getSplashRange());
+        displayExpandingSphere(movementComponent.goal, 0.5f, bulletComponent.splashRange);
     }
 
     /**
@@ -316,7 +316,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     public void addParticleEffect(EntityRef target, String particlePrefab) {
         if (target.exists()) {
             ChildrenParticleComponent particleComponent = getParticleComponent(target);
-            Map<String, EntityRef> particleMap = particleComponent.getParticleEntities();
+            Map<String, EntityRef> particleMap = particleComponent.particleEntities;
             if (!particleMap.containsKey(particlePrefab)) {
                 EntityRef particleEntity = entityManager.create(particlePrefab);
                 particleMap.put(particlePrefab, particleEntity);
@@ -339,7 +339,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      * @param particlePrefab The name of the prefab to remove.
      */
     public void removeParticleEffect(EntityRef target, String particlePrefab) {
-        Map<String, EntityRef> particleMap = getParticleComponent(target).getParticleEntities();
+        Map<String, EntityRef> particleMap = getParticleComponent(target).particleEntities;
         EntityRef child = particleMap.remove(particlePrefab);
         if (child != null) {
             child.destroy();
@@ -357,7 +357,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      * @return True if the entity has a child with that prefab.
      */
     public boolean hasParticleEffect(EntityRef target, String particlePrefab) {
-        Map<String, EntityRef> particleMap = getParticleComponent(target).getParticleEntities();
+        Map<String, EntityRef> particleMap = getParticleComponent(target).particleEntities;
         return particleMap.containsKey(particlePrefab);
     }
 
@@ -372,7 +372,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      */
     @ReceiveEvent
     public void onEntityDeath(EntityDeathEvent event, EntityRef entity, ChildrenParticleComponent component) {
-        component.getParticleEntities().values().forEach(EntityRef::destroy);
+        component.particleEntities.values().forEach(EntityRef::destroy);
     }
 
     private ChildrenParticleComponent getParticleComponent(EntityRef target) {

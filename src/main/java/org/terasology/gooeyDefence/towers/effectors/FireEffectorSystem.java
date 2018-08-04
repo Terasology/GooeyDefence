@@ -74,7 +74,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
             delayManager.addPeriodicAction(entity, APPLY_BURN_ID, BURN_RATE, BURN_RATE);
         }
         inWorldRenderer.addParticleEffect(event.getTarget(), "GooeyDefence:FireParticleEffect");
-        delayManager.addDelayedAction(event.getTarget(), END_BURN_ID, effectorComponent.getFireDuration());
+        delayManager.addDelayedAction(event.getTarget(), END_BURN_ID, effectorComponent.fireDuration);
     }
 
     /**
@@ -89,7 +89,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, FireEffectorComponent effectorComponent) {
         Set<EntityRef> newEnemies = new HashSet<>();
         for (EntityRef enemy : burningEnemies) {
-            enemy.send(new DamageEntityEvent(effectorComponent.getDamage()));
+            enemy.send(new DamageEntityEvent(effectorComponent.damage));
             if (enemy.exists()) {
                 newEnemies.addAll(spreadFire(enemy));
             }
@@ -101,7 +101,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
                 .collect(Collectors.toSet());
 
         for (EntityRef newEnemy : newEnemies) {
-            delayManager.addDelayedAction(newEnemy, END_BURN_ID, effectorComponent.getFireDuration());
+            delayManager.addDelayedAction(newEnemy, END_BURN_ID, effectorComponent.fireDuration);
             inWorldRenderer.addParticleEffect(newEnemy, "GooeyDefence:FireParticleEffect");
         }
 
