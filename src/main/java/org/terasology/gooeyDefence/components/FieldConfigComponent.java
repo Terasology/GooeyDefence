@@ -17,10 +17,13 @@ package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FieldConfigComponent implements Component {
     public int entranceCount;
     public int shrineRingSize;
     public int outerRingSize;
     public int entranceRingSize;
-    public int[][][] shrineData = {};
+    public List<List<List<Integer>>> shrineData = new ArrayList<>();
 }

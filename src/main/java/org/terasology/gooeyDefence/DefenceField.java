@@ -17,6 +17,7 @@ package org.terasology.gooeyDefence;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.gooeyDefence.components.FieldConfigComponent;
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
@@ -25,6 +26,7 @@ import org.terasology.world.BlockEntityRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -55,36 +57,14 @@ public final class DefenceField {
     private DefenceField() {
     }
 
-    public static void loadFieldValues() {
-        entranceCount = 3;
-        shrineRingSize = 5;
-        outerRingSize = 60;
-        entranceRingSize = 4;
+    public static void loadFieldValues(FieldConfigComponent config) {
+        entranceCount = config.entranceCount;
+        shrineRingSize = config.shrineRingSize;
+        outerRingSize = config.outerRingSize;
+        entranceRingSize = config.entranceRingSize;
+
         entrances = calculateEntrances(entranceCount);
-        shrineData = convertToVectors(new int[][][]{
-                {{0, 0, 0},
-                        {0, 1, 0},
-                        {0, 0, 0}},
-
-                {{0, 0, 0},
-                        {0, 1, 0},
-                        {0, 0, 0}},
-
-                {{0, 1, 0},
-                        {1, 1, 1},
-                        {0, 1, 0}},
-
-                {{1, 1, 1},
-                        {1, 1, 1},
-                        {1, 1, 1}},
-
-                {{0, 1, 0},
-                        {1, 1, 1},
-                        {0, 1, 0}},
-
-                {{0, 0, 0},
-                        {0, 1, 0},
-                        {0, 0, 0}}});
+        shrineData = convertToVectors(config.shrineData);
     }
 
     /**
@@ -94,17 +74,19 @@ public final class DefenceField {
      * @param rawData The human readable version of the data.
      * @return An array of Vector3i containing the location of each one.
      */
-    private static Vector3i[] convertToVectors(int[][][] rawData) {
+    private static Vector3i[] convertToVectors(List<List<List<Integer>>> rawData) {
         List<Vector3i> positions = new ArrayList<>();
-        for (int y = 0; y < rawData.length; y++) {
-            for (int x = 0; x < rawData[y].length; x++) {
-                for (int z = 0; z < rawData[y][x].length; z++) {
-                    if (rawData[y][x][z] == 1) {
+
+        for (int y = 0; y < rawData.size(); y++) {
+            for (int x = 0; x < rawData.get(y).size(); x++) {
+                for (int z = 0; z < rawData.get(y).get(x).size(); z++) {
+                    if (rawData.get(y).get(x).get(z) == 1) {
                         positions.add(new Vector3i(x, y, z));
                     }
                 }
             }
         }
+
         return positions.toArray(new Vector3i[0]);
     }
 

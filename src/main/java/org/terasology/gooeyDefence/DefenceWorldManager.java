@@ -22,9 +22,11 @@ import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.DestructibleBlockComponent;
+import org.terasology.gooeyDefence.components.FieldConfigComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
@@ -45,6 +47,8 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.entity.CreateBlockDropsEvent;
 import org.terasology.world.block.items.BlockItemFactory;
 import org.terasology.world.sun.CelestialSystem;
+
+import java.util.Optional;
 
 /**
  * A class that provides dynamic information about the Defence Field.
@@ -90,7 +94,9 @@ public class DefenceWorldManager extends BaseComponentSystem {
 
     @Override
     public void initialise() {
-        DefenceField.loadFieldValues();
+        Optional<Prefab> prefab = assetManager.getAsset("GooeyDefence:FieldConfig", Prefab.class);
+        Prefab configPrefab = prefab.orElseThrow(() -> new IllegalStateException("No field config found!"));
+        DefenceField.loadFieldValues(configPrefab.getComponent(FieldConfigComponent.class));
     }
 
     @Override
