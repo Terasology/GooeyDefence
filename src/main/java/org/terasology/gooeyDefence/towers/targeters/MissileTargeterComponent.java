@@ -21,14 +21,11 @@ package org.terasology.gooeyDefence.towers.targeters;
  * @see SniperTargeterComponent
  */
 public class MissileTargeterComponent extends SniperTargeterComponent {
-    private float splashRange;
+    public float splashRange;
 
     @Override
     public float getMultiplier() {
         return 1.5f;
     }
 
-    public float getSplashRange() {
-        return splashRange;
-    }
 }

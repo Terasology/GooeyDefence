@@ -72,7 +72,7 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
             Vector3f enemyLocation = target.getComponent(LocationComponent.class).getWorldPosition();
             float enemyDistance = targeterPos.distanceSquared(enemyLocation);
             return enemyDistance < targeterComponent.range * targeterComponent.range
-                    && enemyDistance > targeterComponent.getMinimumRange() * targeterComponent.getMinimumRange();
+                    && enemyDistance > targeterComponent.minimumRange * targeterComponent.minimumRange;
         } else {
             return false;
         }
@@ -94,7 +94,7 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
         if (!canUseTarget(target, targeterPos, targeterComponent)) {
 
             Set<EntityRef> outerEnemies = enemyManager.getEnemiesInRange(targeterPos, targeterComponent.range);
-            Set<EntityRef> innerEnemies = enemyManager.getEnemiesInRange(targeterPos, targeterComponent.getMinimumRange());
+            Set<EntityRef> innerEnemies = enemyManager.getEnemiesInRange(targeterPos, targeterComponent.minimumRange);
             Set<EntityRef> inRangeEnemies = Sets.difference(outerEnemies, innerEnemies);
 
             target = getSingleTarget(inRangeEnemies, targeterComponent.selectionMethod);

@@ -25,14 +25,11 @@ public class SniperTargeterComponent extends TowerTargeter {
     /**
      * How far away enemies have to be before they can be selected.
      */
-    private float minimumRange;
+    public float minimumRange;
 
     @Override
     public float getMultiplier() {
         return 2;
     }
 
-    public float getMinimumRange() {
-        return minimumRange;
-    }
 }

@@ -49,7 +49,7 @@ public class ChainTargeterSystem extends BaseTargeterSystem {
         EntityRef target = getTarget(locationComponent.getWorldPosition(), targeterComponent, enemyManager);
 
         if (target.exists()) {
-            event.addToList(chainToNearby(target, targeterComponent.getChainLength(), targeterComponent.getChainRange()));
+            event.addToList(chainToNearby(target, targeterComponent.chainLength, targeterComponent.chainRange));
         }
         targeterComponent.lastTarget = target;
     }

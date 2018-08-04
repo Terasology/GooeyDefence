@@ -59,12 +59,12 @@ public class MissileTargeterSystem extends SniperTargeterSystem {
 
         if (target.exists()) {
             Vector3f targetPos = target.getComponent(LocationComponent.class).getWorldPosition();
-            Set<EntityRef> targets = enemyManager.getEnemiesInRange(targetPos, targeterComponent.getSplashRange());
+            Set<EntityRef> targets = enemyManager.getEnemiesInRange(targetPos, targeterComponent.splashRange);
             event.addToList(targets);
             inWorldRenderer.shootBulletTowards(
                     target,
                     locationComponent.getWorldPosition(),
-                    new SplashBulletComponent(targeterComponent.getSplashRange()));
+                    new SplashBulletComponent(targeterComponent.splashRange));
         }
         targeterComponent.lastTarget = target;
     }

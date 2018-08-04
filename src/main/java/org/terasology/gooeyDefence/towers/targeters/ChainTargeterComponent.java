@@ -26,23 +26,16 @@ public class ChainTargeterComponent extends TowerTargeter {
      * How many chains will be made
      * given in number of enemies
      */
-    private int chainLength;
+    public int chainLength;
     /**
      * The maximum distance that the chain can jump.
      * given in blocks.
      */
-    private int chainRange;
+    public int chainRange;
 
     @Override
     public float getMultiplier() {
         return 0.4f;
     }
 
-    public int getChainLength() {
-        return chainLength;
-    }
-
-    public int getChainRange() {
-        return chainRange;
-    }
 }

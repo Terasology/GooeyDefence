@@ -25,14 +25,11 @@ public class SplashTargeterComponent extends TowerTargeter {
      * The range of the splash around the chosen target
      * given in blocks.
      */
-    private float splashRange;
+    public float splashRange;
 
     @Override
     public float getMultiplier() {
         return 0.8f;
     }
 
-    public float getSplashRange() {
-        return splashRange;
-    }
 }
