@@ -1,7 +1,7 @@
 {
   "alwaysRelevant": true,
   "Shrine": {},
-  "Health": {
+  "GooeyDefence:Health": {
     "health": 100
   }
 }

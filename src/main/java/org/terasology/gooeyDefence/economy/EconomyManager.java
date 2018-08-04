@@ -73,11 +73,22 @@ public class EconomyManager extends BaseComponentSystem {
      * @return True if the entity has enough money
      */
     public static boolean checkBalance(EntityRef source, int threshold) {
+        return getBalance(source) >= threshold;
+    }
+
+    /**
+     * Get the balance of an entities walled
+     *
+     * @param source The entity to get the balance on
+     * @return How much money the enemy has.
+     */
+    public static int getBalance(EntityRef source) {
         WalletComponent component = source.getComponent(WalletComponent.class);
         if (component != null) {
-            return component.getFunds() >= threshold;
+            return component.getFunds();
+        } else {
+            return -1;
         }
-        return false;
     }
 
     /**

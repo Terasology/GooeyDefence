@@ -90,7 +90,9 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
-     * Called when the shrine is damaged
+     * Used to display the damage effect on the shrine
+     * <p>
+     * Sent when an entity is damaged
      * Filters on {@link ShrineComponent}
      *
      * @see DamageEntityEvent

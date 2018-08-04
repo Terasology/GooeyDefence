@@ -37,10 +37,8 @@ import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.movement.components.PathComponent;
 import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
 import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
-import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.inventory.events.DropItemEvent;
-import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -231,5 +229,4 @@ public class EnemyManager extends BaseComponentSystem {
         }
         return result;
     }
-
 }
