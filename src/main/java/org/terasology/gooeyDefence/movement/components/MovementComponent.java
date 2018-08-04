@@ -22,32 +22,9 @@ import org.terasology.math.geom.Vector3f;
  * Stores information on how to move the enemy.
  */
 public class MovementComponent implements Component {
-    private float speed;
-    private Vector3f goal = Vector3f.zero();
-    private float reachedDistance = 0.1f;
-
-    public float getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
-    }
+    public float speed;
+    public Vector3f goal = Vector3f.zero();
+    public float reachedDistance = 0.1f;
 
 
-    public Vector3f getGoal() {
-        return goal;
-    }
-
-    public void setGoal(Vector3f goal) {
-        this.goal = goal;
-    }
-
-    public float getReachedDistance() {
-        return reachedDistance;
-    }
-
-    public void setReachedDistance(float reachedDistance) {
-        this.reachedDistance = reachedDistance;
-    }
 }

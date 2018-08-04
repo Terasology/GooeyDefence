@@ -110,7 +110,7 @@ public class EnemyManager extends BaseComponentSystem {
 
                 /* Check if the goal is on the new path */
                 MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
-                Vector3i goal = new Vector3i(movementComponent.getGoal());
+                Vector3i goal = new Vector3i(movementComponent.goal);
                 List<Vector3i> newPath = event.getNewPath();
 
                 enemy.removeComponent(DefenceField.getComponentExtending(enemy, PathComponent.class).getClass());
@@ -124,7 +124,7 @@ public class EnemyManager extends BaseComponentSystem {
                     enemy.addComponent(entranceComponent);
                 } else {
                     /* Enemy isn't on the new path, so we have to calculate it's own path. */
-                    enemy.addComponent(new BlankPathComponent(movementComponent.getGoal()));
+                    enemy.addComponent(new BlankPathComponent(movementComponent.goal));
                     enemy.send(new RepathEnemyRequest());
                 }
             }
@@ -159,7 +159,7 @@ public class EnemyManager extends BaseComponentSystem {
         } else {
             pathComponent.nextStep();
             MovementComponent component = entity.getComponent(MovementComponent.class);
-            component.setGoal(pathComponent.getGoal());
+            component.goal = pathComponent.getGoal();
         }
     }
 
@@ -182,7 +182,7 @@ public class EnemyManager extends BaseComponentSystem {
         entity.addComponent(component);
         /* Setup movement component */
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
-        movementComponent.setGoal(component.getGoal());
+        movementComponent.goal = component.getGoal();
 
         enemies.add(entity);
     }

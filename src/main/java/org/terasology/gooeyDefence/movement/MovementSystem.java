@@ -57,8 +57,8 @@ public class MovementSystem extends BaseComponentSystem implements UpdateSubscri
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
         LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
 
-        float distSqr = locationComponent.getWorldPosition().distanceSquared(movementComponent.getGoal());
-        if (distSqr < movementComponent.getReachedDistance()) {
+        float distSqr = locationComponent.getWorldPosition().distanceSquared(movementComponent.goal);
+        if (distSqr < movementComponent.reachedDistance) {
             entityReachedGoal(entity);
         } else {
             moveEntityTowardsGoal(entity, delta);
@@ -91,12 +91,12 @@ public class MovementSystem extends BaseComponentSystem implements UpdateSubscri
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
         LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
 
-        Vector3f target = new Vector3f(movementComponent.getGoal())
+        Vector3f target = new Vector3f(movementComponent.goal)
                 /* Calculate required heading */
                 .sub(locationComponent.getWorldPosition())
                 .normalize()
                 /* Scale to the speed */
-                .scale(movementComponent.getSpeed() * delta);
+                .scale(movementComponent.speed * delta);
         /* Move the entity */
         locationComponent.setWorldPosition(locationComponent.getWorldPosition().add(target));
         entity.saveComponent(locationComponent);

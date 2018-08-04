@@ -195,9 +195,9 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     public void shootBulletTowards(EntityRef goal, Vector3f start, Component component) {
         EntityRef bullet = entityManager.create("GooeyDefence:Bullet");
         MovementComponent movementComponent = new MovementComponent();
-        movementComponent.setGoal(goal.getComponent(LocationComponent.class).getWorldPosition());
-        movementComponent.setSpeed(30);
-        movementComponent.setReachedDistance(0.5f);
+        movementComponent.goal = goal.getComponent(LocationComponent.class).getWorldPosition();
+        movementComponent.speed = (float) 30;
+        movementComponent.reachedDistance = 0.5f;
         bullet.addOrSaveComponent(movementComponent);
 
         LocationComponent locationComponent = bullet.getComponent(LocationComponent.class);
@@ -258,7 +258,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         for (EntityRef bullet : bullets.keySet()) {
             MovementComponent component = bullet.getComponent(MovementComponent.class);
             EntityRef goal = bullets.get(bullet);
-            component.setGoal(goal.getComponent(LocationComponent.class).getWorldPosition());
+            component.goal = goal.getComponent(LocationComponent.class).getWorldPosition();
         }
     }
 
@@ -304,7 +304,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      */
     @ReceiveEvent(components = {TargeterBulletComponent.class})
     public void onReachedGoal(ReachedGoalEvent event, EntityRef entity, MovementComponent movementComponent, SplashBulletComponent bulletComponent) {
-        displayExpandingSphere(movementComponent.getGoal(), 0.5f, bulletComponent.splashRange);
+        displayExpandingSphere(movementComponent.goal, 0.5f, bulletComponent.splashRange);
     }
 
     /**
