@@ -31,19 +31,11 @@ public class UpgradeList {
     /**
      * The name of this sequence of upgrades
      */
-    private String upgradeName = "";
+    public String upgradeName = "";
     /**
      * The list of upgrade stages.
      * Order is important, and should be ordered such that 0 is first.
      */
-    private List<UpgradeInfo> stages = new ArrayList<>();
-
-    public List<UpgradeInfo> getStages() {
-        return stages;
-    }
-
-    public String getUpgradeName() {
-        return upgradeName;
-    }
+    public List<UpgradeInfo> stages = new ArrayList<>();
 
 }
