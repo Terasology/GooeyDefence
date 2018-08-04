@@ -13,9 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components;
+package org.terasology.gooeyDefence.visuals.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.entity.EntityRef;
 
-public class TargeterBulletComponent implements Component {
+import java.util.HashMap;
+import java.util.Map;
+
+public class ChildrenParticleComponent implements Component {
+    private Map<String, EntityRef> particleEntities = new HashMap<>();
+
+    public Map<String, EntityRef> getParticleEntities() {
+        return particleEntities;
+    }
 }

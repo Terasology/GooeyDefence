@@ -13,28 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components;
+package org.terasology.gooeyDefence.visuals.components;
 
 import org.terasology.entitySystem.Component;
 
-/**
- * Used to flag bullets as having a splash effect on them.
- * This will cause them to produce an expanding sphere effect when they reach their goal
- */
-public class SplashBulletComponent implements Component {
-    private float splashRange = 1f;
-
-    public SplashBulletComponent() {
-
-    }
-
-    public SplashBulletComponent(float splashRange) {
-        this.splashRange = splashRange;
-    }
-
-
-    public float getSplashRange() {
-        return splashRange;
-    }
-
+public class PathBlockComponent implements Component {
 }

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.components;
+package org.terasology.gooeyDefence.visuals.components;
 
 import org.terasology.entitySystem.Component;
 
-public class PathBlockComponent implements Component {
+public class TargeterBulletComponent implements Component {
 }

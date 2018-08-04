@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence;
+package org.terasology.gooeyDefence.visuals;
 
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.Component;
@@ -24,11 +24,12 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
-import org.terasology.gooeyDefence.components.ChildrenParticleComponent;
-import org.terasology.gooeyDefence.components.PathBlockComponent;
+import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.visuals.components.ChildrenParticleComponent;
+import org.terasology.gooeyDefence.visuals.components.PathBlockComponent;
 import org.terasology.gooeyDefence.components.ShrineComponent;
-import org.terasology.gooeyDefence.components.SplashBulletComponent;
-import org.terasology.gooeyDefence.components.TargeterBulletComponent;
+import org.terasology.gooeyDefence.visuals.components.SplashBulletComponent;
+import org.terasology.gooeyDefence.visuals.components.TargeterBulletComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
 import org.terasology.gooeyDefence.health.events.EntityDeathEvent;
