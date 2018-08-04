@@ -40,6 +40,7 @@ import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.inventory.events.DropItemEvent;
+import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -75,21 +76,8 @@ public class EnemyManager extends BaseComponentSystem {
     public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
         enemies.clear();
         entityManager.getEntitiesWith(GooeyComponent.class).forEach(enemies::add);
-
-        /* Set the pathfinding manager on the components that need id */
-        enemies.stream()
-                .filter(enemy -> enemy.hasComponent(EntrancePathComponent.class))
+        enemies.stream().filter(enemy -> enemy.hasComponent(EntrancePathComponent.class))
                 .forEach(enemy -> enemy.getComponent(EntrancePathComponent.class).setPathManager(pathfindingManager));
-    }
-
-    /*
-     * Test handler to allow easy enemy spawning
-     */
-    @ReceiveEvent
-    public void onActivate(ActivateEvent event, EntityRef entity) {
-        for (int i = 0; i < DefenceField.entranceCount(); i++) {
-            spawnEnemy(i);
-        }
     }
 
     /**
@@ -168,13 +156,14 @@ public class EnemyManager extends BaseComponentSystem {
      * Also begins it travelling down the path.
      *
      * @param entranceNumber The entrance to spawn at
+     * @param prefab         The prefab of the enemy to spawn in.
      */
-    public void spawnEnemy(int entranceNumber) {
+    public void spawnEnemy(int entranceNumber, String prefab) {
         if (!DefenceField.isFieldActivated()) {
             return;
         }
 
-        EntityRef entity = entityManager.create("GooeyDefence:BasicEnemy", DefenceField.entrancePos(entranceNumber).toVector3f());
+        EntityRef entity = entityManager.create(prefab, DefenceField.entrancePos(entranceNumber).toVector3f());
 
         /* Setup pathfinding component */
         EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingManager);

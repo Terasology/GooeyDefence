@@ -1,0 +1,126 @@
+{
+  "type": "ControlScreen",
+  "skin": "defenseDefault",
+  "contents": {
+    "type": "ColumnLayout",
+    "id": "outerLayout",
+    "columns": 3,
+    "column-widths": [
+      0.3,
+      0.4,
+      0.3
+    ],
+    "contents": [
+      {
+        "type": "UISpace",
+        "id": "leftColumnSpace",
+        "size": [
+          0,
+          0
+        ]
+      },
+      {
+        "type": "RelativeLayout",
+        "id": "boxLayout",
+        "contents": [
+          {
+            "type": "UIBox",
+            "id": "outerBox",
+            "layoutInfo": {
+              "use-content-height": false,
+              "use-content-width": false,
+              "position-top": {
+                "offset": 64
+              },
+              "position-left": {},
+              "position-right": {},
+              "position-bottom": {
+                "offset": 64
+              }
+            },
+            "content": {
+              "type": "RelativeLayout",
+              "id": "innerLayout",
+              "contents": [
+                {
+                  "type": "UILabel",
+                  "id": "titleLabel",
+                  "text": "Game Control",
+                  "family": "title",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": false,
+                    "position-top": {},
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "UIWaveInfo",
+                  "id": "waveInfo",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": false,
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "titleLabel"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "UILabel",
+                  "id": "waveDuration",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": false,
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "waveInfo"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "UIButton",
+                  "id": "startButton",
+                  "text": "Start Wave",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-horizontal-center": {},
+                    "position-bottom": {}
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "UISpace",
+        "id": "rightColumnSpace",
+        "size": [
+          0,
+          0
+        ]
+      }
+    ]
+  }
+}
