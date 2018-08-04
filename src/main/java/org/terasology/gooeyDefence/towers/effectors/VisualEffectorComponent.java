@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.towers.effectors;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.targeters.SniperTargeterComponent;
+import org.terasology.gooeyDefence.towers.EffectCount;
+import org.terasology.gooeyDefence.towers.EffectDuration;
+import org.terasology.gooeyDefence.towers.components.TowerEffector;
 
-import java.util.Map;
-
-public class SniperParser extends SingleParser {
+/**
+ * Test effector.
+ * Simply displays a coloured box above the targets for debugging.
+ */
+public class VisualEffectorComponent extends TowerEffector {
     @Override
-    public Class<? extends Component> getComponentClass() {
-        return SniperTargeterComponent.class;
+    public EffectCount getEffectCount() {
+        return EffectCount.CONTINUOUS;
     }
 
     @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("minimumRange", "Minimum Range");
-        return result;
+    public EffectDuration getEffectDuration() {
+        return EffectDuration.LASTING;
     }
-
 }

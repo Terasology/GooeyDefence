@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.towers.targeters;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.targeters.SniperTargeterComponent;
+import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 
-import java.util.Map;
+/**
+ * Only targets enemies that are far away.
+ * Does higher damage but cannot target those nearby
+ */
+public class SniperTargeterComponent extends TowerTargeter {
+    /**
+     * How far away enemies have to be before they can be selected.
+     */
+    private float minimumRange;
 
-public class SniperParser extends SingleParser {
     @Override
-    public Class<? extends Component> getComponentClass() {
-        return SniperTargeterComponent.class;
+    public float getMultiplier() {
+        return 2;
     }
 
-    @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("minimumRange", "Minimum Range");
-        return result;
+    public float getMinimumRange() {
+        return minimumRange;
     }
-
 }

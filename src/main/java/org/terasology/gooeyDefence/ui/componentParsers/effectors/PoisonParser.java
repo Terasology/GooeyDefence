@@ -16,7 +16,7 @@
 package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.effectors.PoisonEffectorComponent;
+import org.terasology.gooeyDefence.towers.effectors.PoisonEffectorComponent;
 
 import java.util.HashMap;
 import java.util.Map;

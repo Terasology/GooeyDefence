@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.towers.targeters;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.targeters.SniperTargeterComponent;
+import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 
-import java.util.Map;
+/**
+ * Selects a base enemy and then splashes to nearby enemies in a small radius.
+ */
+public class SplashTargeterComponent extends TowerTargeter {
+    /**
+     * The range of the splash around the chosen target
+     * given in blocks.
+     */
+    private float splashRange;
 
-public class SniperParser extends SingleParser {
     @Override
-    public Class<? extends Component> getComponentClass() {
-        return SniperTargeterComponent.class;
+    public float getMultiplier() {
+        return 0.8f;
     }
 
-    @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("minimumRange", "Minimum Range");
-        return result;
+    public float getSplashRange() {
+        return splashRange;
     }
-
 }

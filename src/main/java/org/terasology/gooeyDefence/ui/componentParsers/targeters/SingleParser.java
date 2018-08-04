@@ -16,7 +16,7 @@
 package org.terasology.gooeyDefence.ui.componentParsers.targeters;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.targeters.SingleTargeterComponent;
+import org.terasology.gooeyDefence.towers.targeters.SingleTargeterComponent;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
 
 import java.util.Map;

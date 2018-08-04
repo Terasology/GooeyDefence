@@ -16,10 +16,9 @@
 package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.effectors.StunEffectorComponent;
+import org.terasology.gooeyDefence.towers.effectors.StunEffectorComponent;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 

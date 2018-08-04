@@ -13,24 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.towers.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.targeters.SniperTargeterComponent;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.world.block.ForceBlockActive;
 
-import java.util.Map;
+/**
+ * Used to mark the block as being used in towers.
+ * <p>
+ * Stores a reference to the tower entity this block belongs to.
+ *
+ * @see TowerComponent
+ */
+@ForceBlockActive
+public class TowerMultiBlockComponent implements Component {
+    private EntityRef towerEntity = EntityRef.NULL;
 
-public class SniperParser extends SingleParser {
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return SniperTargeterComponent.class;
+    public EntityRef getTowerEntity() {
+        return towerEntity;
     }
 
-    @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("minimumRange", "Minimum Range");
-        return result;
+    public void setTowerEntity(EntityRef towerEntity) {
+        this.towerEntity = towerEntity;
     }
-
 }

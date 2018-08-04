@@ -13,24 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.towers.targeters;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.targeters.SniperTargeterComponent;
-
-import java.util.Map;
-
-public class SniperParser extends SingleParser {
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return SniperTargeterComponent.class;
-    }
+/**
+ * Targets in a small aoe around a distant target.
+ *
+ * @see SniperTargeterComponent
+ */
+public class MissileTargeterComponent extends SniperTargeterComponent {
+    private float splashRange;
 
     @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("minimumRange", "Minimum Range");
-        return result;
+    public float getMultiplier() {
+        return 1.5f;
     }
 
+    public float getSplashRange() {
+        return splashRange;
+    }
 }

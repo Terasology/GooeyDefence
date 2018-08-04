@@ -16,7 +16,7 @@
 package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.effectors.FireEffectorComponent;
+import org.terasology.gooeyDefence.towers.effectors.FireEffectorComponent;
 
 import java.util.Map;
 

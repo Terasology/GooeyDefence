@@ -13,24 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.towers.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.targeters.SniperTargeterComponent;
+import org.terasology.entitySystem.entity.EntityRef;
 
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
-public class SniperParser extends SingleParser {
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return SniperTargeterComponent.class;
-    }
-
-    @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("minimumRange", "Minimum Range");
-        return result;
-    }
-
+/**
+ * Component for the abstract tower entity.
+ * Stores the IDs of all the blocks that make up the tower.
+ */
+public class TowerComponent implements Component {
+    public Set<EntityRef> cores = new HashSet<>();
+    public Set<EntityRef> effector = new HashSet<>();
+    public Set<EntityRef> targeter = new HashSet<>();
+    public Set<EntityRef> plains = new HashSet<>();
+    public int attackCount;
+    public Set<EntityRef> lastTargets = new HashSet<>();
 }

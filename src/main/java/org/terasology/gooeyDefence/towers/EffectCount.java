@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.towers;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.targeters.SniperTargeterComponent;
-
-import java.util.Map;
-
-public class SniperParser extends SingleParser {
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return SniperTargeterComponent.class;
-    }
-
-    @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("minimumRange", "Minimum Range");
-        return result;
-    }
-
+/**
+ * Represents how many times an effect should be applied to a given target
+ */
+public enum EffectCount {
+    /**
+     * Effect should be applied on every single shot.
+     * The effector will be called for every shot whilst the enemy is within range
+     */
+    PER_SHOT,
+    /**
+     * The effect should only be applied once to the target.
+     * The effector will only be called each time an enemy is targeted.
+     */
+    CONTINUOUS
 }

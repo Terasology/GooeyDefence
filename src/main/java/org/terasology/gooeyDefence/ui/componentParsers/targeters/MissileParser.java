@@ -16,10 +16,8 @@
 package org.terasology.gooeyDefence.ui.componentParsers.targeters;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.targeters.MissileTargeterComponent;
-import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
+import org.terasology.gooeyDefence.towers.targeters.MissileTargeterComponent;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class MissileParser extends SniperParser {

@@ -16,10 +16,9 @@
 package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.effectors.DamageEffectorComponent;
+import org.terasology.gooeyDefence.towers.effectors.DamageEffectorComponent;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class DamageParser extends BaseParser {

@@ -20,7 +20,7 @@ import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.gooeyDefence.components.towers.TowerMultiBlockComponent;
+import org.terasology.gooeyDefence.towers.components.TowerMultiBlockComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.input.ButtonState;
 import org.terasology.input.binds.interaction.FrobButton;

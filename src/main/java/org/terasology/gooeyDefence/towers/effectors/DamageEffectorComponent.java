@@ -13,24 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.towers.effectors;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.targeters.SniperTargeterComponent;
+import org.terasology.gooeyDefence.towers.EffectCount;
+import org.terasology.gooeyDefence.towers.EffectDuration;
+import org.terasology.gooeyDefence.towers.components.TowerEffector;
 
-import java.util.Map;
+/**
+ * Effector that only deals damage to the enemies.
+ *
+ * @see DamageEffectorSystem
+ */
+public class DamageEffectorComponent extends TowerEffector {
+    private int damage;
 
-public class SniperParser extends SingleParser {
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return SniperTargeterComponent.class;
+    public int getDamage() {
+        return damage;
     }
 
     @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("minimumRange", "Minimum Range");
-        return result;
+    public EffectCount getEffectCount() {
+        return EffectCount.PER_SHOT;
     }
 
+    @Override
+    public EffectDuration getEffectDuration() {
+        return EffectDuration.INSTANT;
+    }
 }

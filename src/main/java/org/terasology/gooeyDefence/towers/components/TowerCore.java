@@ -13,24 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.towers.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.targeters.SniperTargeterComponent;
 
-import java.util.Map;
+/**
+ * Base class for all the Core blocks
+ * <p>
+ * Tower Cores provide power to the other blocks in the tower.
+ *
+ * @see TowerEffector
+ * @see TowerTargeter
+ */
+public abstract class TowerCore implements Component {
+    /**
+     * The power this core provides
+     */
+    private int power;
 
-public class SniperParser extends SingleParser {
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return SniperTargeterComponent.class;
+    /**
+     * @return How much power this core provides
+     */
+    public int getPower() {
+        return power;
     }
-
-    @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("minimumRange", "Minimum Range");
-        return result;
-    }
-
 }

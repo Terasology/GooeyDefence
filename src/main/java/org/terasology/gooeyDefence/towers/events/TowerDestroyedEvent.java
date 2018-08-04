@@ -13,24 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.ui.componentParsers.targeters;
+package org.terasology.gooeyDefence.towers.events;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.targeters.SniperTargeterComponent;
+import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.towers.components.TowerComponent;
 
-import java.util.Map;
-
-public class SniperParser extends SingleParser {
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return SniperTargeterComponent.class;
-    }
-
-    @Override
-    public Map<String, String> getFields() {
-        Map<String, String> result = super.getFields();
-        result.put("minimumRange", "Minimum Range");
-        return result;
-    }
-
+/**
+ * Event sent when a tower is destroyed.
+ * Sent against the destroyed tower.
+ *
+ * @see TowerComponent
+ */
+public class TowerDestroyedEvent implements Event {
 }

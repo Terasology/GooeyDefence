@@ -16,7 +16,7 @@
 package org.terasology.gooeyDefence.ui.componentParsers.targeters;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towerBlocks.targeters.SplashTargeterComponent;
+import org.terasology.gooeyDefence.towers.targeters.SplashTargeterComponent;
 
 import java.util.Map;
 

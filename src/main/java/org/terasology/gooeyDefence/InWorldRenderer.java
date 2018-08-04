@@ -35,7 +35,7 @@ import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.gooeyDefence.movement.PathfindingManager;
 import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
-import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
+import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 import org.terasology.logic.location.Location;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerTargetChangedEvent;
