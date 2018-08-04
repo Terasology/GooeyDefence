@@ -19,9 +19,9 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.gooeyDefence.visuals.components.SplashBulletComponent;
-import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 

@@ -18,8 +18,6 @@ package org.terasology.gooeyDefence.towers.components;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.gooeyDefence.towers.SelectionMethod;
-import org.terasology.gooeyDefence.towers.components.TowerCore;
-import org.terasology.gooeyDefence.towers.components.TowerEffector;
 
 import java.util.HashSet;
 import java.util.Set;

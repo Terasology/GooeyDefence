@@ -16,7 +16,6 @@
 package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.math.geom.Vector3f;
 
 /**
  * General purpose catch all component.

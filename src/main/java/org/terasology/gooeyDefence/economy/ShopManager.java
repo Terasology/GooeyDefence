@@ -99,7 +99,7 @@ public class ShopManager extends BaseComponentSystem {
         blocks.addAll(blockManager.listRegisteredBlockUris());
         blocks.addAll(blockExplorer.getAvailableBlockFamilies());
         blocks.addAll(blockExplorer.getFreeformBlockFamilies());
-        
+
         purchasableBlocks = blocks.stream()
                 .map(blockManager::getBlockFamily)
                 .map(BlockFamily::getArchetypeBlock)

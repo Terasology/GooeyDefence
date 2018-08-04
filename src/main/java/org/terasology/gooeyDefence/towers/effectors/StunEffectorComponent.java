@@ -21,6 +21,7 @@ import org.terasology.gooeyDefence.towers.components.TowerEffector;
 
 public class StunEffectorComponent extends TowerEffector {
     private int stunDuration;
+
     @Override
     public EffectCount getEffectCount() {
         return EffectCount.PER_SHOT;

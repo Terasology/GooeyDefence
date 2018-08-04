@@ -16,8 +16,8 @@
 package org.terasology.gooeyDefence.towers.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.gooeyDefence.towers.EffectDuration;
 import org.terasology.gooeyDefence.towers.EffectCount;
+import org.terasology.gooeyDefence.towers.EffectDuration;
 
 /**
  * Base class for all the Effector blocks.
@@ -32,6 +32,7 @@ public abstract class TowerEffector implements Component {
     private int drain;
 
     public abstract EffectCount getEffectCount();
+
     public abstract EffectDuration getEffectDuration();
 
     /**
