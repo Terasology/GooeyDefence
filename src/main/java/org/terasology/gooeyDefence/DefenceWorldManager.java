@@ -17,6 +17,7 @@ package org.terasology.gooeyDefence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -65,6 +66,9 @@ public class DefenceWorldManager extends BaseComponentSystem {
     private BlockManager blockManager;
     @In
     private WorldProvider worldProvider;
+    @In
+    private AssetManager assetManager;
+
     private Block air;
     private Block shrineBlock;
     private Block fieldBlock;
@@ -86,6 +90,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
 
     @Override
     public void initialise() {
+        DefenceField.loadFieldValues();
     }
 
     @Override

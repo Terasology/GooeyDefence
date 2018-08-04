@@ -34,40 +34,17 @@ import java.util.List;
  * @see DefenceWorldManager
  */
 public final class DefenceField {
-    public static int entranceCount = 3;
-    public static int shrineRingSize = 5;
-    public static int outerRingSize = 60;
-    public static int entranceRingSize = 4;
+    public static int entranceCount;
+    public static int shrineRingSize;
+    public static int outerRingSize;
+    public static int entranceRingSize;
     /**
      * The data for the shrine's shape.
      * A 1 indicates a block should be placed, and a 0 indicates an empty space
      */
-    public static Vector3i[] shrineData = convertToVectors(new int[][][]{
-            {{0, 0, 0},
-             {0, 1, 0},
-             {0, 0, 0}},
-
-            {{0, 0, 0},
-             {0, 1, 0},
-             {0, 0, 0}},
-
-            {{0, 1, 0},
-             {1, 1, 1},
-             {0, 1, 0}},
-
-            {{1, 1, 1},
-             {1, 1, 1},
-             {1, 1, 1}},
-
-            {{0, 1, 0},
-             {1, 1, 1},
-             {0, 1, 0}},
-
-            {{0, 0, 0},
-             {0, 1, 0},
-             {0, 0, 0}}});
+    public static Vector3i[] shrineData;
     public static Vector3i fieldCentre = new Vector3i(0, 0, 0);
-    private static Vector3i[] entrances = calculateEntrances(entranceCount);
+    private static Vector3i[] entrances;
 
     private static EntityRef shrineEntity = EntityRef.NULL;
     private static boolean fieldActivated;
@@ -76,6 +53,38 @@ public final class DefenceField {
      * Private constructor as class is a utility class and should not be instantiated.
      */
     private DefenceField() {
+    }
+
+    public static void loadFieldValues() {
+        entranceCount = 3;
+        shrineRingSize = 5;
+        outerRingSize = 60;
+        entranceRingSize = 4;
+        entrances = calculateEntrances(entranceCount);
+        shrineData = convertToVectors(new int[][][]{
+                {{0, 0, 0},
+                        {0, 1, 0},
+                        {0, 0, 0}},
+
+                {{0, 0, 0},
+                        {0, 1, 0},
+                        {0, 0, 0}},
+
+                {{0, 1, 0},
+                        {1, 1, 1},
+                        {0, 1, 0}},
+
+                {{1, 1, 1},
+                        {1, 1, 1},
+                        {1, 1, 1}},
+
+                {{0, 1, 0},
+                        {1, 1, 1},
+                        {0, 1, 0}},
+
+                {{0, 0, 0},
+                        {0, 1, 0},
+                        {0, 0, 0}}});
     }
 
     /**
