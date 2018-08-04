@@ -20,7 +20,7 @@ import org.terasology.gooeyDefence.towers.EffectDuration;
 import org.terasology.gooeyDefence.towers.components.TowerEffector;
 
 public class StunEffectorComponent extends TowerEffector {
-    private int stunDuration;
+    public int stunDuration;
 
     @Override
     public EffectCount getEffectCount() {
@@ -32,7 +32,4 @@ public class StunEffectorComponent extends TowerEffector {
         return EffectDuration.LASTING;
     }
 
-    public int getStunDuration() {
-        return stunDuration;
-    }
 }

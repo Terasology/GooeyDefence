@@ -25,12 +25,12 @@ public class PoisonEffectorComponent extends DamageEffectorComponent {
     /**
      * The damage dealt by each iteration of the poisoning
      */
-    private int poisonDamage;
+    public int poisonDamage;
     /**
      * How long the poison will last for
      * given in milliseconds
      */
-    private int poisonDuration;
+    public int poisonDuration;
 
     @Override
     public EffectCount getEffectCount() {
@@ -42,11 +42,4 @@ public class PoisonEffectorComponent extends DamageEffectorComponent {
         return EffectDuration.PERMANENT;
     }
 
-    public int getPoisonDamage() {
-        return poisonDamage;
-    }
-
-    public int getPoisonDuration() {
-        return poisonDuration;
-    }
 }

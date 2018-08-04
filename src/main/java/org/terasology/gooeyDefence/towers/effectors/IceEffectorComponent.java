@@ -30,11 +30,7 @@ public class IceEffectorComponent extends TowerEffector {
      * A multiplier for the enemies speed.
      * 0.9 will make them 10% slower, or 90% of their full speed;
      */
-    private float slow;
-
-    public float getSlow() {
-        return slow;
-    }
+    public float slow;
 
     @Override
     public EffectCount getEffectCount() {

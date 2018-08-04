@@ -48,7 +48,7 @@ public class IceEffectorSystem extends BaseComponentSystem {
     public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, IceEffectorComponent component) {
         EntityRef enemy = event.getTarget();
         MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
-        double reducedSpeed = movementComponent.getSpeed() * component.getSlow();
+        double reducedSpeed = movementComponent.getSpeed() * component.slow;
         movementComponent.setSpeed((float) reducedSpeed);
         inWorldRenderer.addParticleEffect(enemy, "GooeyDefence:IceParticleEffect");
     }
@@ -64,7 +64,7 @@ public class IceEffectorSystem extends BaseComponentSystem {
     public void onRemoveEffect(RemoveEffectEvent event, EntityRef entity, IceEffectorComponent component) {
         EntityRef enemy = event.getTarget();
         MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
-        movementComponent.setSpeed(movementComponent.getSpeed() / component.getSlow());
+        movementComponent.setSpeed(movementComponent.getSpeed() / component.slow);
         inWorldRenderer.removeParticleEffect(enemy, "GooeyDefence:IceParticleEffect");
     }
 }
