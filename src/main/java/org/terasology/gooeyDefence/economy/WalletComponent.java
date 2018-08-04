@@ -24,13 +24,6 @@ public class WalletComponent implements Component {
     /**
      * How much money the entity has.
      */
-    private int funds = 0;
+    public int funds = 0;
 
-    public int getFunds() {
-        return funds;
-    }
-
-    public void setFunds(int funds) {
-        this.funds = funds;
-    }
 }

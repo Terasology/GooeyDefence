@@ -207,19 +207,19 @@ public class EnemyManager extends BaseComponentSystem {
     private void dropMoney(EntityRef enemy) {
         if (enemy.hasComponent(ValueComponent.class)) {
             Vector3f location = enemy.getComponent(LocationComponent.class).getWorldPosition();
-            int value = enemy.getComponent(ValueComponent.class).getValue();
+            int value = enemy.getComponent(ValueComponent.class).value;
 
             /* Drop the money in instances of 5 */
             while (value >= 5) {
                 EntityRef money = entityManager.create("GooeyDefence:Money");
-                money.getComponent(ValueComponent.class).setValue(5);
+                money.getComponent(ValueComponent.class).value = 5;
                 money.send(new DropItemEvent(location));
                 value -= 5;
             }
             /* Drop whatever is left, if any */
             if (value > 0) {
                 EntityRef money = entityManager.create("GooeyDefence:Money");
-                money.getComponent(ValueComponent.class).setValue(value);
+                money.getComponent(ValueComponent.class).value = value;
                 money.send(new DropItemEvent(location));
             }
         }

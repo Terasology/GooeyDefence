@@ -28,13 +28,5 @@ public class ValueComponent implements Component {
     /**
      * How much money one instance of this entity is worth
      */
-    private int value;
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
+    public int value;
 }

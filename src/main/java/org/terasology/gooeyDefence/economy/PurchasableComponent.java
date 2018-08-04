@@ -27,10 +27,5 @@ public class PurchasableComponent implements Component {
      * The cost of buying the item.
      * If left blank on the prefab, the value component will be used (if it exists)
      */
-    private int cost = -1;
-
-    public int getCost() {
-        return cost;
-    }
-
+    public int cost = -1;
 }

@@ -41,7 +41,7 @@ public class EconomyManager extends BaseComponentSystem {
     public static boolean tryAddMoney(EntityRef destination, int amount) {
         WalletComponent component = destination.getComponent(WalletComponent.class);
         if (component != null) {
-            component.setFunds(component.getFunds() + amount);
+            component.funds = component.funds + amount;
             return true;
         }
         return false;
@@ -59,7 +59,7 @@ public class EconomyManager extends BaseComponentSystem {
     public static boolean tryRemoveMoney(EntityRef source, int amount) {
         WalletComponent component = source.getComponent(WalletComponent.class);
         if (component != null && checkBalance(source, amount)) {
-            component.setFunds(component.getFunds() - amount);
+            component.funds = component.funds - amount;
             return true;
         }
         return false;
@@ -85,7 +85,7 @@ public class EconomyManager extends BaseComponentSystem {
     public static int getBalance(EntityRef source) {
         WalletComponent component = source.getComponent(WalletComponent.class);
         if (component != null) {
-            return component.getFunds();
+            return component.funds;
         } else {
             return -1;
         }
@@ -103,7 +103,7 @@ public class EconomyManager extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void onGiveItem(GiveItemEvent event, EntityRef entity, ValueComponent valueComponent) {
         if (entity.getParentPrefab().getName().equals("GooeyDefence:Money")) {
-            boolean success = tryAddMoney(event.getTargetEntity(), valueComponent.getValue());
+            boolean success = tryAddMoney(event.getTargetEntity(), valueComponent.value);
             event.setHandled(success);
             entity.destroy();
         }
