@@ -77,11 +77,11 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     @Override
     public void initialise() {
-        shrineDamageRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:ShrineDamaged").get());
     }
 
     @Override
     public void postBegin() {
+        shrineDamageRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:ShrineDamaged").get());
         sphere = entityManager.create("GooeyDefence:Sphere");
         LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
 

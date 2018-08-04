@@ -86,6 +86,10 @@ public class DefenceWorldManager extends BaseComponentSystem {
 
     @Override
     public void initialise() {
+    }
+
+    @Override
+    public void preBegin() {
         if (!celestialSystem.isSunHalted()) {
             celestialSystem.toggleSunHalting(0.5f);
         }
