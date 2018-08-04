@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence;
+package org.terasology.gooeyDefence.towerBlocks;
 
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
@@ -33,7 +33,6 @@ import org.terasology.gooeyDefence.events.tower.TowerDestroyedEvent;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
-import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.health.DoDestroyEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.Side;
@@ -57,16 +56,6 @@ public class TowerBuildSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
-    /**
-     * Test Event Handler
-     *
-     * @param event  The activate event
-     * @param entity The entity
-     */
-    @ReceiveEvent
-    public void onActivate(ActivateEvent event, EntityRef entity, TowerMultiBlockComponent component) {
-        logger.info("Tower Entity: " + component.getTowerEntity());
-    }
 
     /**
      * Called when the field is activated, either from a new game or loaded save.
@@ -97,6 +86,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
             handleTowerBlock(event.getPosition(), event.getPlacedBlock());
         }
     }
+
 
     /**
      * Wrapper to allow easy iteration over a collection of entities.

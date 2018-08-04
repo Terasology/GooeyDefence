@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.gooeyDefence.DefenceField;
-import org.terasology.gooeyDefence.TowerManager;
+import org.terasology.gooeyDefence.towerBlocks.TowerManager;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.towerBlocks.SelectionMethod;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;

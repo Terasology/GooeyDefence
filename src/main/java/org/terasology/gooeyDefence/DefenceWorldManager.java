@@ -25,13 +25,21 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.DestructibleBlockComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.gooeyDefence.events.OnFieldReset;
+import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
 import org.terasology.logic.characters.events.AttackEvent;
 import org.terasology.logic.health.DestroyEvent;
 import org.terasology.logic.health.EngineDamageTypes;
 import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.geom.Vector2i;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.utilities.procedural.Noise;
+import org.terasology.utilities.procedural.WhiteNoise;
+import org.terasology.world.WorldProvider;
+import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.entity.CreateBlockDropsEvent;
 import org.terasology.world.block.items.BlockItemFactory;
@@ -55,6 +63,11 @@ public class DefenceWorldManager extends BaseComponentSystem {
     private EntityManager entityManager;
     @In
     private BlockManager blockManager;
+    @In
+    private WorldProvider worldProvider;
+    private Block air;
+    private Block shrineBlock;
+    private Block fieldBlock;
     private BlockItemFactory factory;
 
     /**
@@ -77,6 +90,9 @@ public class DefenceWorldManager extends BaseComponentSystem {
             celestialSystem.toggleSunHalting(0.5f);
         }
         factory = new BlockItemFactory(entityManager);
+        air = blockManager.getBlock(BlockManager.AIR_ID);
+        shrineBlock = blockManager.getBlock("GooeyDefence:Shrine");
+        fieldBlock = blockManager.getBlock("GooeyDefence:PlainWorldGen");
     }
 
     /**
@@ -98,6 +114,69 @@ public class DefenceWorldManager extends BaseComponentSystem {
         if (entity.getParentPrefab().getName().equals("GooeyDefence:PlainWorldGen")) {
             event.consume();
             factory.newInstance(blockManager.getBlockFamily("GooeyDefence:Plain")).send(new DropItemEvent(component.getWorldPosition()));
+        }
+    }
+
+    /**
+     * @see OnFieldReset
+     */
+    @ReceiveEvent
+    public void onFieldReset(OnFieldReset event, EntityRef entity) {
+        clearField(DefenceField.outerRingSize());
+        createRandomFill(DefenceField.outerRingSize());
+    }
+
+    /**
+     * Clears all non world gen block from the field.
+     * <p>
+     * The only allowed blocks will be
+     * - "GooeyDefence:ShrineBlock"
+     * - "Engine:Air"
+     *
+     * @param size The size of the field to clear.
+     */
+    private void clearField(int size) {
+        Vector3i pos = Vector3i.zero();
+        Block block;
+        for (int x = -size; x <= size; x++) {
+            /* We use circle eq "x^2 + y^2 = r^2" to work out where we need to start */
+            int width = (int) Math.floor(Math.sqrt(size * size - x * x));
+            for (int z = -width; z <= width; z++) {
+                /* We use sphere eq "x^2 + y^2 + z^2 = r^2" to work out how high we need to go */
+                int height = (int) Math.floor(Math.sqrt(size * size - z * z - x * x) - 0.001f);
+                for (int y = 0; y <= height; y++) {
+                    pos.set(x, y, z);
+                    block = worldProvider.getBlock(pos);
+                    if (block != air && block != shrineBlock) {
+                        worldProvider.setBlock(pos, air);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Randomly fills in an area, according to the same rules as the world gen
+     *
+     * @param size The size of the area to fill
+     * @see RandomFillingProvider
+     */
+    private void createRandomFill(int size) {
+        Noise noise = new WhiteNoise(System.currentTimeMillis());
+        Vector2i pos2i = Vector2i.zero();
+        Vector3i pos3i = Vector3i.zero();
+
+        for (int x = -size; x <= size; x++) {
+            int width = (int) Math.floor(Math.sqrt(size * size - x * x));
+            for (int y = -width; y <= width; y++) {
+                pos2i.setX(x);
+                pos2i.setY(y);
+                if (RandomFillingProvider.shouldSpawnBlock(pos2i, noise)) {
+                    pos3i.setX(pos2i.x);
+                    pos3i.setZ(pos2i.y);
+                    worldProvider.setBlock(pos3i, fieldBlock);
+                }
+            }
         }
     }
 

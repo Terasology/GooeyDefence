@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence;
+package org.terasology.gooeyDefence.towerBlocks;
 
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
@@ -23,6 +23,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
 import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
@@ -31,23 +32,12 @@ import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.events.tower.TowerChangedEvent;
 import org.terasology.gooeyDefence.events.tower.TowerCreatedEvent;
 import org.terasology.gooeyDefence.events.tower.TowerDestroyedEvent;
-import org.terasology.gooeyDefence.towerBlocks.EffectCount;
-import org.terasology.gooeyDefence.towerBlocks.EffectDuration;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
-import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector2i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
-import org.terasology.utilities.procedural.Noise;
-import org.terasology.utilities.procedural.WhiteNoise;
-import org.terasology.world.WorldProvider;
-import org.terasology.world.block.Block;
-import org.terasology.world.block.BlockManager;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -61,50 +51,9 @@ public class TowerManager extends BaseComponentSystem {
     private DelayManager delayManager;
     @In
     private EntityManager entityManager;
-    @In
-    private WorldProvider worldProvider;
-    @In
-    private BlockManager blockManager;
 
-    private Block air;
-    private Block fieldBlock;
-    private Block shrineBlock;
     private Set<EntityRef> towerEntities = new HashSet<>();
 
-    /**
-     * Creates the periodic event id for the targeter on a tower
-     *
-     * @param tower    The tower the targeter is on
-     * @param targeter The targeter the event is sending for
-     * @return The id for that periodic action event.
-     * @see PeriodicActionTriggeredEvent
-     */
-    private static String buildEventId(EntityRef tower, EntityRef targeter) {
-        return "towerDefence|" + targeter.getId();
-    }
-
-    /**
-     * Checks that the periodic event is intended for the given tower.
-     *
-     * @param tower   The tower to check for
-     * @param eventId The id of the periodic event
-     * @return True if the event belongs to the tower
-     * @see PeriodicActionTriggeredEvent
-     */
-    private static boolean isEventIdCorrect(EntityRef tower, String eventId) {
-        return eventId.startsWith("towerDefence");
-    }
-
-    /**
-     * Gets the ID of the targeter from the periodic event id.
-     *
-     * @param eventId The id of the periodic event
-     * @return The ID of the targeter entity ref
-     */
-    private static long getTargeterId(String eventId) {
-        String id = eventId.substring(eventId.indexOf('|') + 1);
-        return Long.parseLong(id);
-    }
 
     /**
      * Get the drain caused by all the targeters on a tower
@@ -155,13 +104,6 @@ public class TowerManager extends BaseComponentSystem {
         return getTotalCorePower(towerComponent) >= getTargeterDrain(towerComponent) + getEffectorDrain(towerComponent);
     }
 
-    @Override
-    public void initialise() {
-        air = blockManager.getBlock(BlockManager.AIR_ID);
-        fieldBlock = blockManager.getBlock("GooeyDefence:PlainWorldGen");
-        shrineBlock = blockManager.getBlock("GooeyDefence:Shrine");
-    }
-
     /**
      * Remove all scheduled delays before the game is shutdown.
      */
@@ -194,9 +136,6 @@ public class TowerManager extends BaseComponentSystem {
             towerEntity.destroy();
         }
         towerEntities.clear();
-
-        clearField(DefenceField.outerRingSize());
-        createRandomFill(DefenceField.outerRingSize());
     }
 
     /**
@@ -209,59 +148,6 @@ public class TowerManager extends BaseComponentSystem {
         blocks.clear();
     }
 
-    /**
-     * Clears all non world gen block from the field.
-     * <p>
-     * These are:
-     * - "GooeyDefence:ShrineBlock"
-     * - "Engine:Air"
-     *
-     * @param size The size of the field to clear.
-     */
-    private void clearField(int size) {
-        Vector3i pos = Vector3i.zero();
-        Block block;
-        for (int x = -size; x <= size; x++) {
-            /* We use circle eq "x^2 + y^2 = r^2" to work out where we need to start */
-            int width = (int) Math.floor(Math.sqrt(size * size - x * x));
-            for (int z = -width; z <= width; z++) {
-                /* We use sphere eq "x^2 + y^2 + z^2 = r^2" to work out how high we need to go */
-                int height = (int) Math.floor(Math.sqrt(size * size - z * z - x * x) - 0.001f);
-                for (int y = 0; y <= height; y++) {
-                    pos.set(x, y, z);
-                    block = worldProvider.getBlock(pos);
-                    if (block != air && block != shrineBlock) {
-                        worldProvider.setBlock(pos, air);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Randomly fills in an area, according to the same rules as the world gen
-     *
-     * @param size The size of the area to fill
-     * @see RandomFillingProvider
-     */
-    private void createRandomFill(int size) {
-        Noise noise = new WhiteNoise(System.currentTimeMillis());
-        Vector2i pos2i = Vector2i.zero();
-        Vector3i pos3i = Vector3i.zero();
-
-        for (int x = -size; x <= size; x++) {
-            int width = (int) Math.floor(Math.sqrt(size * size - x * x));
-            for (int y = -width; y <= width; y++) {
-                pos2i.setX(x);
-                pos2i.setY(y);
-                if (RandomFillingProvider.shouldSpawnBlock(pos2i, noise)) {
-                    pos3i.setX(pos2i.x);
-                    pos3i.setZ(pos2i.y);
-                    worldProvider.setBlock(pos3i, fieldBlock);
-                }
-            }
-        }
-    }
 
     /**
      * Called when a tower is created.
@@ -456,5 +342,40 @@ public class TowerManager extends BaseComponentSystem {
                     throw new EnumConstantNotPresentException(EffectDuration.class, effectorComponent.getEffectCount().toString());
             }
         }
+    }
+
+    /**
+     * Checks that the periodic event is intended for the given tower.
+     *
+     * @param tower   The tower to check for
+     * @param eventId The id of the periodic event
+     * @return True if the event belongs to the tower
+     * @see PeriodicActionTriggeredEvent
+     */
+    private boolean isEventIdCorrect(EntityRef tower, String eventId) {
+        return eventId.startsWith("towerDefence");
+    }
+
+    /**
+     * Gets the ID of the targeter from the periodic event id.
+     *
+     * @param eventId The id of the periodic event
+     * @return The ID of the targeter entity ref
+     */
+    private long getTargeterId(String eventId) {
+        String id = eventId.substring(eventId.indexOf('|') + 1);
+        return Long.parseLong(id);
+    }
+
+    /**
+     * Creates the periodic event id for the targeter on a tower
+     *
+     * @param tower    The tower the targeter is on
+     * @param targeter The targeter the event is sending for
+     * @return The id for that periodic action event.
+     * @see PeriodicActionTriggeredEvent
+     */
+    private String buildEventId(EntityRef tower, EntityRef targeter) {
+        return "towerDefence|" + targeter.getId();
     }
 }
