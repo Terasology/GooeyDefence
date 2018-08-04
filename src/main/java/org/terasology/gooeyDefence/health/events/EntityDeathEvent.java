@@ -13,28 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.gooeyDefence.events.health;
+package org.terasology.gooeyDefence.health.events;
 
 import org.terasology.entitySystem.event.Event;
-import org.terasology.gooeyDefence.health.HealthComponent;
 
 /**
- * Event to deal damage to the shrine.
- * Sent against the entity doing the damage.
- *
- * @see HealthComponent
+ * Event sent when an entity reaches zero health.
+ * Sent against the dead entity.
  */
-public class DamageEntityEvent implements Event {
-    private int damage;
-
-    public DamageEntityEvent(int damage) {
-        this.damage = damage;
-    }
-
-    /**
-     * @return the damage being dealt by this attack.
-     */
-    public int getDamage() {
-        return damage;
-    }
+public class EntityDeathEvent implements Event {
 }

@@ -21,8 +21,8 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
-import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
-import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
+import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
+import org.terasology.gooeyDefence.health.events.EntityDeathEvent;
 
 /**
  * Handles operations involving health on entities.
