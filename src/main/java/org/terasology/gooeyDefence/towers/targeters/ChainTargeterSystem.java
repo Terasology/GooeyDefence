@@ -51,7 +51,7 @@ public class ChainTargeterSystem extends BaseTargeterSystem {
         if (target.exists()) {
             event.addToList(chainToNearby(target, targeterComponent.getChainLength(), targeterComponent.getChainRange()));
         }
-        targeterComponent.setLastTarget(target);
+        targeterComponent.lastTarget = target;
     }
 
     /**

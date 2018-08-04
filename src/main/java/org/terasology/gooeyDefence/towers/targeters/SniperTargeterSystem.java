@@ -56,7 +56,7 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
                     target,
                     locationComponent.getWorldPosition());
         }
-        targeterComponent.setLastTarget(target);
+        targeterComponent.lastTarget = target;
     }
 
     /**
@@ -71,7 +71,7 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
         if (target.exists()) {
             Vector3f enemyLocation = target.getComponent(LocationComponent.class).getWorldPosition();
             float enemyDistance = targeterPos.distanceSquared(enemyLocation);
-            return enemyDistance < targeterComponent.getRange() * targeterComponent.getRange()
+            return enemyDistance < targeterComponent.range * targeterComponent.range
                     && enemyDistance > targeterComponent.getMinimumRange() * targeterComponent.getMinimumRange();
         } else {
             return false;
@@ -90,14 +90,14 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
      * @return A suitable enemy in range, or the null entity if none was found
      */
     protected EntityRef getTarget(Vector3f targeterPos, SniperTargeterComponent targeterComponent, EnemyManager enemyManager) {
-        EntityRef target = targeterComponent.getLastTarget();
+        EntityRef target = targeterComponent.lastTarget;
         if (!canUseTarget(target, targeterPos, targeterComponent)) {
 
-            Set<EntityRef> outerEnemies = enemyManager.getEnemiesInRange(targeterPos, targeterComponent.getRange());
+            Set<EntityRef> outerEnemies = enemyManager.getEnemiesInRange(targeterPos, targeterComponent.range);
             Set<EntityRef> innerEnemies = enemyManager.getEnemiesInRange(targeterPos, targeterComponent.getMinimumRange());
             Set<EntityRef> inRangeEnemies = Sets.difference(outerEnemies, innerEnemies);
 
-            target = getSingleTarget(inRangeEnemies, targeterComponent.getSelectionMethod());
+            target = getSingleTarget(inRangeEnemies, targeterComponent.selectionMethod);
         }
         return target;
     }

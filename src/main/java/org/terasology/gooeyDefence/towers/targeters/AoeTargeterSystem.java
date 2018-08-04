@@ -47,10 +47,10 @@ public class AoeTargeterSystem extends BaseTargeterSystem {
      */
     @ReceiveEvent
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, AoeTargeterComponent targeterComponent) {
-        Set<EntityRef> targets = enemyManager.getEnemiesInRange(locationComponent.getWorldPosition(), targeterComponent.getRange());
+        Set<EntityRef> targets = enemyManager.getEnemiesInRange(locationComponent.getWorldPosition(), targeterComponent.range);
         event.addToList(targets);
         if (!targets.isEmpty()) {
-            inWorldRenderer.displayExpandingSphere(locationComponent.getWorldPosition(), (float) targeterComponent.getAttackSpeed() / 1000, targeterComponent.getRange() * 2 + 1);
+            inWorldRenderer.displayExpandingSphere(locationComponent.getWorldPosition(), (float) targeterComponent.attackSpeed / 1000, targeterComponent.range * 2 + 1);
         }
     }
 }

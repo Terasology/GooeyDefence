@@ -29,16 +29,10 @@ import org.terasology.gooeyDefence.towers.EffectDuration;
  * @see TowerTargeter
  */
 public abstract class TowerEffector implements Component {
-    private int drain;
+    public int drain;
 
     public abstract EffectCount getEffectCount();
 
     public abstract EffectDuration getEffectDuration();
 
-    /**
-     * @return The amount of power required by this Effector
-     */
-    public int getDrain() {
-        return drain;
-    }
 }

@@ -91,7 +91,7 @@ public class BaseTargeterSystem extends BaseComponentSystem {
         return target.exists() &&
                 target.getComponent(LocationComponent.class)
                         .getWorldPosition()
-                        .distance(targeterPos) < targeterComponent.getRange();
+                        .distance(targeterPos) < targeterComponent.range;
     }
 
     /**
@@ -106,13 +106,13 @@ public class BaseTargeterSystem extends BaseComponentSystem {
      * @return A suitable enemy in range, or the null entity if none was found
      */
     protected EntityRef getTarget(Vector3f targeterPos, TowerTargeter targeterComponent, EnemyManager enemyManager) {
-        EntityRef target = targeterComponent.getLastTarget();
+        EntityRef target = targeterComponent.lastTarget;
 
         if (!canUseTarget(target, targeterPos, targeterComponent)) {
             Set<EntityRef> enemiesInRange = enemyManager.getEnemiesInRange(
                     targeterPos,
-                    targeterComponent.getRange());
-            target = getSingleTarget(enemiesInRange, targeterComponent.getSelectionMethod());
+                    targeterComponent.range);
+            target = getSingleTarget(enemiesInRange, targeterComponent.selectionMethod);
         }
         return target;
     }

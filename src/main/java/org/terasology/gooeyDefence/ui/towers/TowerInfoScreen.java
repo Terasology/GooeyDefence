@@ -321,7 +321,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      */
     private void targetingOptionSelected(SelectionMethod selectionMethod) {
         TowerTargeter targeter = DefenceField.getComponentExtending(blockEntity, TowerTargeter.class);
-        targeter.setSelectionMethod(selectionMethod);
+        targeter.selectionMethod = selectionMethod;
     }
 
 

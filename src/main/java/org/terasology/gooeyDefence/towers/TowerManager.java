@@ -64,7 +64,7 @@ public class TowerManager extends BaseComponentSystem {
     public static int getTargeterDrain(TowerComponent towerComponent) {
         return towerComponent.targeter.
                 stream()
-                .mapToInt(entity -> DefenceField.getComponentExtending(entity, TowerTargeter.class).getDrain())
+                .mapToInt(entity -> DefenceField.getComponentExtending(entity, TowerTargeter.class).drain)
                 .sum();
     }
 
@@ -77,7 +77,7 @@ public class TowerManager extends BaseComponentSystem {
     public static int getEffectorDrain(TowerComponent towerComponent) {
         return towerComponent.effector.
                 stream()
-                .mapToInt(entity -> DefenceField.getComponentExtending(entity, TowerEffector.class).getDrain())
+                .mapToInt(entity -> DefenceField.getComponentExtending(entity, TowerEffector.class).drain)
                 .sum();
     }
 
@@ -90,7 +90,7 @@ public class TowerManager extends BaseComponentSystem {
     public static int getTotalCorePower(TowerComponent towerComponent) {
         return towerComponent.cores.
                 stream()
-                .mapToInt(entity -> DefenceField.getComponentExtending(entity, TowerCore.class).getPower())
+                .mapToInt(entity -> DefenceField.getComponentExtending(entity, TowerCore.class).power)
                 .sum();
     }
 
@@ -164,8 +164,8 @@ public class TowerManager extends BaseComponentSystem {
             TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
             delayManager.addPeriodicAction(towerEntity,
                     buildEventId(towerEntity, targeter),
-                    targeterComponent.getAttackSpeed(),
-                    targeterComponent.getAttackSpeed());
+                    targeterComponent.attackSpeed,
+                    targeterComponent.attackSpeed);
         }
     }
 
@@ -184,8 +184,8 @@ public class TowerManager extends BaseComponentSystem {
                 TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
                 delayManager.addPeriodicAction(towerEntity,
                         buildEventId(towerEntity, targeter),
-                        targeterComponent.getAttackSpeed(),
-                        targeterComponent.getAttackSpeed());
+                        targeterComponent.attackSpeed,
+                        targeterComponent.attackSpeed);
             }
         }
     }
@@ -235,7 +235,7 @@ public class TowerManager extends BaseComponentSystem {
 
         TowerComponent towerComponent = tower.getComponent(TowerComponent.class);
         TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
-        for (EntityRef enemy : targeterComponent.getAffectedEnemies()) {
+        for (EntityRef enemy : targeterComponent.affectedEnemies) {
             endEffects(towerComponent.effector, enemy, targeterComponent.getMultiplier());
         }
     }
@@ -252,7 +252,7 @@ public class TowerManager extends BaseComponentSystem {
 
         applyEffectsToTargets(towerComponent.effector, currentTargets, towerTargeter);
 
-        towerTargeter.setAffectedEnemies(currentTargets);
+        towerTargeter.affectedEnemies = currentTargets;
     }
 
     /**
@@ -277,14 +277,13 @@ public class TowerManager extends BaseComponentSystem {
      * @see TowerEffector
      */
     private void applyEffectsToTargets(Set<EntityRef> effectors, Set<EntityRef> currentTargets, TowerTargeter towerTargeter) {
-        Set<EntityRef> exTargets = Sets.difference(towerTargeter.getAffectedEnemies(), currentTargets);
+        Set<EntityRef> exTargets = Sets.difference(towerTargeter.affectedEnemies, currentTargets);
 
         /* Apply effects to targeted enemies */
-        currentTargets.forEach(target ->
-                applyEffects(effectors,
-                        target,
-                        towerTargeter.getMultiplier(),
-                        !towerTargeter.getAffectedEnemies().contains(target)));
+        currentTargets.forEach(target -> applyEffects(effectors,
+                target,
+                towerTargeter.getMultiplier(),
+                !towerTargeter.affectedEnemies.contains(target)));
 
         /* Process all the enemies that are no longer targeted */
         for (EntityRef exTarget : exTargets) {

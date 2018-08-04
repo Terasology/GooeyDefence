@@ -58,6 +58,6 @@ public class SplashTargeterSystem extends BaseTargeterSystem {
                     new SplashBulletComponent(targeterComponent.getSplashRange()));
         }
 
-        targeterComponent.setLastTarget(target);
+        targeterComponent.lastTarget = target;
     }
 }
