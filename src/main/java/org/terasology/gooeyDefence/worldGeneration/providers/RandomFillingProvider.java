@@ -51,8 +51,8 @@ public class RandomFillingProvider implements FacetProvider {
      */
     public static boolean shouldSpawnBlock(BaseVector2i pos, Noise noise) {
         double distance = pos.distance(BaseVector2i.ZERO);
-        return distance > DefenceField.shrineRingSize()
-                && distance < DefenceField.outerRingSize()
+        return distance > DefenceField.shrineRingSize
+                && distance < DefenceField.outerRingSize
 
                 && !DefenceField.inRangeOfEntrance(new Vector3i(pos.x(), 0, pos.y()))
 

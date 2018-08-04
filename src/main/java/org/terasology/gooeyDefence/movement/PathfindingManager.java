@@ -56,7 +56,7 @@ public class PathfindingManager extends BaseComponentSystem {
 
     @In
     private PathfinderSystem pathfinderSystem;
-    private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount(), null));
+    private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount, null));
     @In
     private WorldProvider worldProvider;
 
@@ -72,7 +72,7 @@ public class PathfindingManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
-        for (int id = 0; id < DefenceField.entranceCount(); id++) {
+        for (int id = 0; id < DefenceField.entranceCount; id++) {
             event.beginTask();
             calculatePath(id, event::finishTask);
         }
@@ -164,8 +164,8 @@ public class PathfindingManager extends BaseComponentSystem {
     private JPSConfig buildJpsConfig(Vector3i start) {
         JPSConfig result = new JPSConfig();
         result.start = start;
-        result.stop = DefenceField.fieldCentre();
-        result.maxDepth = DefenceField.outerRingSize() * 2;
+        result.stop = DefenceField.fieldCentre;
+        result.maxDepth = DefenceField.outerRingSize * 2;
         //TODO: Replace width and height with values from enemy.
         result.plugin = new EnemyWalkingPlugin(worldProvider, 0.5f, 0.5f);
         result.maxTime = PATHFINDING_TIMEOUT;
@@ -176,7 +176,7 @@ public class PathfindingManager extends BaseComponentSystem {
      * Calculate paths from all the entrances to the centre.
      */
     private void calculatePaths() {
-        for (int id = 0; id < DefenceField.entranceCount(); id++) {
+        for (int id = 0; id < DefenceField.entranceCount; id++) {
             calculatePath(id, null);
         }
     }

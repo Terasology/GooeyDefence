@@ -170,7 +170,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         shrineDamageRenderer.beginRenderOverlay();
         if (shrineDamaged > 0) {
             shrineDamaged -= time.getGameDeltaInMs();
-            for (Vector3i pos : DefenceField.getShrine()) {
+            for (Vector3i pos : DefenceField.shrineData) {
                 shrineDamageRenderer.renderMark2(pos);
             }
         }

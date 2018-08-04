@@ -34,15 +34,15 @@ import java.util.List;
  * @see DefenceWorldManager
  */
 public final class DefenceField {
-    private static EntityRef shrineEntity = EntityRef.NULL;
-    private static boolean fieldActivated;
-    private static int entranceCount = 3;
-    private static Vector3i[] entrances = calculateEntrances(entranceCount);
+    public static int entranceCount = 3;
+    public static int shrineRingSize = 5;
+    public static int outerRingSize = 60;
+    public static int entranceRingSize = 4;
     /**
      * The data for the shrine's shape.
      * A 1 indicates a block should be placed, and a 0 indicates an empty space
      */
-    private static Vector3i[] shrineData = convertToVectors(new int[][][]{
+    public static Vector3i[] shrineData = convertToVectors(new int[][][]{
             {{0, 0, 0},
              {0, 1, 0},
              {0, 0, 0}},
@@ -66,6 +66,11 @@ public final class DefenceField {
             {{0, 0, 0},
              {0, 1, 0},
              {0, 0, 0}}});
+    public static Vector3i fieldCentre = new Vector3i(0, 0, 0);
+    private static Vector3i[] entrances = calculateEntrances(entranceCount);
+
+    private static EntityRef shrineEntity = EntityRef.NULL;
+    private static boolean fieldActivated;
 
     /**
      * Private constructor as class is a utility class and should not be instantiated.
@@ -106,61 +111,12 @@ public final class DefenceField {
         double stepSize = (2 * Math.PI) / count;
         for (int i = 0; i < count; i++) {
             result[i] = new Vector3i(
-                    (int) (Math.cos(stepSize * i) * outerRingSize()),
+                    (int) (Math.cos(stepSize * i) * outerRingSize),
                     0,
-                    (int) (Math.sin(stepSize * i) * outerRingSize())
+                    (int) (Math.sin(stepSize * i) * outerRingSize)
             );
         }
         return result;
-    }
-
-    /**
-     * Returns the location of a block in the shrine.
-     * This block will always be the same one given the same shrine arrangement.
-     *
-     * @return The position of a block in the shrine
-     */
-    public static Vector3i getShrineBlock() {
-        return shrineData.length > 0 ? shrineData[0] : null;
-    }
-
-    public static Vector3i[] getShrine() {
-        return shrineData;
-    }
-
-    /**
-     * @return The number of entrances in the field
-     */
-    public static int entranceCount() {
-        return entranceCount;
-    }
-
-    /**
-     * @return The centre of the field.
-     */
-    public static Vector3i fieldCentre() {
-        return new Vector3i(0, 0, 0);
-    }
-
-    /**
-     * @return The size, in blocks, of the clear zone around the shrine
-     */
-    public static int shrineRingSize() {
-        return 5;
-    }
-
-    /**
-     * @return The size, in blocks, of the outer wall of the defence field
-     */
-    public static int outerRingSize() {
-        return 60;
-    }
-
-    /**
-     * @return The size, in blocks, of the clear zone around each entrance
-     */
-    public static int entranceRingSize() {
-        return 4;
     }
 
     /**
@@ -172,22 +128,6 @@ public final class DefenceField {
     }
 
     /**
-     * @param pos The position to check
-     * @return True, if the position is inside a clear zone around any entrance. False otherwise
-     */
-    public static boolean inRangeOfEntrance(BaseVector3i pos) {
-        return distanceToNearestEntrance(pos) < entranceRingSize();
-    }
-
-    /**
-     * @param pos The position to check
-     * @return The distance between the position and the nearest entrance.
-     */
-    public static double distanceToNearestEntrance(BaseVector3i pos) {
-        return Arrays.stream(entrances).mapToDouble(pos::distance).min().orElse(-1);
-    }
-
-    /**
      * Get the shrine entity from the shrine.
      * Caches the result, recollecting it when it's not existing
      *
@@ -195,7 +135,8 @@ public final class DefenceField {
      */
     public static EntityRef getShrineEntity() {
         if (!shrineEntity.exists()) {
-            shrineEntity = CoreRegistry.get(BlockEntityRegistry.class).getBlockEntityAt(getShrineBlock());
+            shrineEntity = CoreRegistry.get(BlockEntityRegistry.class).getBlockEntityAt(
+                    shrineData.length > 0 ? shrineData[0] : null);
         }
         return shrineEntity;
     }
@@ -213,6 +154,22 @@ public final class DefenceField {
      */
     public static void setFieldActivated() {
         DefenceField.fieldActivated = true;
+    }
+
+    /**
+     * @param pos The position to check
+     * @return True, if the position is inside a clear zone around any entrance. False otherwise
+     */
+    public static boolean inRangeOfEntrance(BaseVector3i pos) {
+        return distanceToNearestEntrance(pos) < entranceRingSize;
+    }
+
+    /**
+     * @param pos The position to check
+     * @return The distance between the position and the nearest entrance.
+     */
+    public static double distanceToNearestEntrance(BaseVector3i pos) {
+        return Arrays.stream(entrances).mapToDouble(pos::distance).min().orElse(-1);
     }
 
     /**

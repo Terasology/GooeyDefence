@@ -122,8 +122,8 @@ public class DefenceWorldManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onFieldReset(OnFieldReset event, EntityRef entity) {
-        clearField(DefenceField.outerRingSize());
-        createRandomFill(DefenceField.outerRingSize());
+        clearField(DefenceField.outerRingSize);
+        createRandomFill(DefenceField.outerRingSize);
     }
 
     /**

@@ -42,11 +42,11 @@ public class DefenceFieldProvider implements FacetProvider {
              */
             int centreDistance = (int) pos.distance(BaseVector3i.ZERO);
             int entranceDistance = (int) DefenceField.distanceToNearestEntrance(pos);
-            if (centreDistance == DefenceField.outerRingSize()
-                    && entranceDistance >= DefenceField.entranceRingSize()) {
+            if (centreDistance == DefenceField.outerRingSize
+                    && entranceDistance >= DefenceField.entranceRingSize) {
                 facet.setWorld(pos, true);
-            } else if (centreDistance >= DefenceField.outerRingSize()
-                    && entranceDistance == DefenceField.entranceRingSize()) {
+            } else if (centreDistance >= DefenceField.outerRingSize
+                    && entranceDistance == DefenceField.entranceRingSize) {
                 facet.setWorld(pos, true);
             }
         }

@@ -48,7 +48,7 @@ public class DefenceFieldRasterizer implements WorldRasterizer {
         for (Map.Entry<Vector3i, Boolean> entry : fieldFacet.getWorldEntries().entrySet()) {
             if (entry.getValue()) {
                 Vector3i pos = entry.getKey();
-                if ((int) DefenceField.distanceToNearestEntrance(pos) < DefenceField.entranceRingSize() + 2) {
+                if ((int) DefenceField.distanceToNearestEntrance(pos) < DefenceField.entranceRingSize + 2) {
                     chunk.setBlock(ChunkMath.calcBlockPos(pos), altBlock);
                 } else {
                     chunk.setBlock(ChunkMath.calcBlockPos(pos), block);
