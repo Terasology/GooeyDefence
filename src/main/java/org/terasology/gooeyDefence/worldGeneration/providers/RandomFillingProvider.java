@@ -33,7 +33,31 @@ import org.terasology.world.generation.Produces;
  */
 @Produces({RandomFillingFacet.class})
 public class RandomFillingProvider implements FacetProvider {
+    private static float SPAWN_CHANCE = 0.3f;
     private Noise noise;
+
+    /**
+     * Checks weather a random block can be spawned based on three rules:
+     * <p>
+     * 1. Inside the main dome
+     * 2. Outside the inner shrine
+     * 3. Outside an entrance area
+     * <p>
+     * Each valid position has a {@link #SPAWN_CHANCE} chance to spawn
+     *
+     * @param pos   The position to query
+     * @param noise The noise generator to use
+     * @return true if a block should be spawned there. False otherwise
+     */
+    public static boolean shouldSpawnBlock(BaseVector2i pos, Noise noise) {
+        double distance = pos.distance(BaseVector2i.ZERO);
+        return distance > DefenceField.shrineRingSize()
+                && distance < DefenceField.outerRingSize()
+
+                && !DefenceField.inRangeOfEntrance(new Vector3i(pos.x(), 0, pos.y()))
+
+                && (noise.noise(pos.x(), pos.y()) + 1) / 2 < SPAWN_CHANCE;
+    }
 
     @Override
     public void setSeed(long seed) {
@@ -47,18 +71,8 @@ public class RandomFillingProvider implements FacetProvider {
 
         Rect2i processRegion = facet.getWorldRegion();
         for (BaseVector2i pos : processRegion.contents()) {
-            double distance = pos.distance(BaseVector2i.ZERO);
-            /* Generate random  blocks if the position is
-             * 1. Inside the main dome
-             * 2. Outside the inner shrine
-             * 3. Outside an entrance area
-             *  */
-            if (distance > DefenceField.shrineRingSize()
-                    && distance < DefenceField.outerRingSize()
-                    && !DefenceField.inRangeOfEntrance(new Vector3i(pos.x(), 0, pos.y()))) {
-                if ((noise.noise(pos.x(), pos.y()) + 1) / 2 < 0.3) {
-                    facet.setWorld(pos.x(), pos.y(), true);
-                }
+            if (shouldSpawnBlock(pos, noise)) {
+                facet.setWorld(pos.x(), pos.y(), true);
             }
             region.setRegionFacet(RandomFillingFacet.class, facet);
         }

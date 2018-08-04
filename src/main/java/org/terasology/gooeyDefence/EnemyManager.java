@@ -28,6 +28,7 @@ import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
 import org.terasology.gooeyDefence.economy.ValueComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 import org.terasology.gooeyDefence.movement.PathfindingManager;
@@ -65,6 +66,19 @@ public class EnemyManager extends BaseComponentSystem {
     private PathfindingManager pathfindingManager;
     @In
     private DelayManager delayManager;
+
+    /**
+     * Removes all the existing enemies.
+     * <p>
+     * Sent when the field is to be reset
+     *
+     * @see OnFieldReset
+     */
+    @ReceiveEvent
+    public void onFieldReset(OnFieldReset event, EntityRef entity) {
+        enemies.forEach(EntityRef::destroy);
+        enemies.clear();
+    }
 
     /**
      * Called when the field is activated.
@@ -140,7 +154,7 @@ public class EnemyManager extends BaseComponentSystem {
         event.consume();
         PathComponent pathComponent = DefenceField.getComponentExtending(entity, PathComponent.class);
         if (pathComponent.atEnd()) {
-            entity.send(new DamageEntityEvent(gooeyComponent.damage));
+            DefenceField.getShrineEntity().send(new DamageEntityEvent(gooeyComponent.damage));
             destroyEnemy(entity);
         } else {
             pathComponent.nextStep();

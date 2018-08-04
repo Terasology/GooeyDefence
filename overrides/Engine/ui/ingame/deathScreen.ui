@@ -1,0 +1,82 @@
+{
+  "type": "deathScreen",
+  "skin": "deathScreen",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "ColumnLayout",
+        "verticalSpacing": 8,
+        "autoSizeColumns": false,
+        "fillVerticalSpace": false,
+        "layoutInfo": {
+          "use-content-width": true,
+          "use-content-height": true,
+          "position-horizontal-center": {},
+          "position-vertical-center": {}
+        },
+        "contents": [
+          {
+            "type": "UILabel",
+            "text": "Game Over"
+          },
+          {
+            "type": "UILabel",
+            "text": "Unfortunately the shrine was eventually overrun and destroyed."
+          },
+          {
+            "type": "UISpace",
+            "size": [
+              1,
+              16
+            ]
+          },
+          {
+            "type": "UIButton",
+            "text": "Retry",
+            "id": "retry"
+          },
+          {
+            "type": "UIButton",
+            "text": "${engine:menu#game-settings}",
+            "id": "settings"
+          },
+          {
+            "type": "UIButton",
+            "text": "${engine:menu#return-main-menu}",
+            "id": "mainMenu"
+          },
+          {
+            "type": "UIButton",
+            "text": "${engine:menu#exit-game}",
+            "id": "exitGame"
+          }
+        ]
+      },
+      {
+        "type": "UILabel",
+        "id": "deathDetails",
+        "visible": false,
+        "layoutInfo": {
+          "use-content-height": false,
+          "use-content-width": false,
+          "position-top": {},
+          "position-left": {}
+        }
+      },
+      {
+        "type": "UIButton",
+        "text": "${engine:menu#respawn}",
+        "id": "respawn",
+        "enabled": false,
+        "visible": false,
+        "layoutInfo": {
+          "use-content-height": false,
+          "use-content-width": false,
+          "position-top": {},
+          "position-left": {}
+        }
+      }
+    ]
+  }
+}

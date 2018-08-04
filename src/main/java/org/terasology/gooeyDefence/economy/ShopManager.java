@@ -19,9 +19,11 @@ import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.ComponentContainer;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.players.LocalPlayer;
@@ -35,6 +37,7 @@ import org.terasology.world.block.family.BlockFamily;
 import org.terasology.world.block.items.BlockItemFactory;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,7 +55,6 @@ public class ShopManager extends BaseComponentSystem {
     private AssetManager assetManager;
     @In
     private BlockManager blockManager;
-    private BlockExplorer blockExplorer;
     @In
     private InventoryManager inventoryManager;
     @In
@@ -85,7 +87,7 @@ public class ShopManager extends BaseComponentSystem {
     @Override
     public void postBegin() {
         blockItemFactory = new BlockItemFactory(entityManager);
-        blockExplorer = new BlockExplorer(assetManager);
+        BlockExplorer blockExplorer = new BlockExplorer(assetManager);
 
         purchasableItems = assetManager.getLoadedAssets(Prefab.class)
                 .stream()
@@ -97,13 +99,38 @@ public class ShopManager extends BaseComponentSystem {
         blocks.addAll(blockManager.listRegisteredBlockUris());
         blocks.addAll(blockExplorer.getAvailableBlockFamilies());
         blocks.addAll(blockExplorer.getFreeformBlockFamilies());
+        
         purchasableBlocks = blocks.stream()
                 .map(blockManager::getBlockFamily)
                 .map(BlockFamily::getArchetypeBlock)
                 .filter(block -> block.getPrefab().isPresent())
                 .filter(block -> block.getPrefab().get().hasComponent(PurchasableComponent.class))
                 .collect(Collectors.toSet());
+    }
 
+    /**
+     * Deletes any dropped money, and resets the players money.
+     * <p>
+     * Called when the field is reset.
+     *
+     * @see OnFieldReset
+     */
+    @ReceiveEvent
+    public void onFieldReset(OnFieldReset event, EntityRef entity) {
+        WalletComponent component = assetManager.getAsset("Engine:Player", Prefab.class)
+                .map(prefab -> prefab.getComponent(WalletComponent.class))
+                .orElse(new WalletComponent());
+        localPlayer.getCharacterEntity().addOrSaveComponent(component);
+
+        Optional<Prefab> optionalPrefab = assetManager.getAsset("GooeyDefence:Money", Prefab.class);
+        if (optionalPrefab.isPresent()) {
+            Prefab moneyPrefab = optionalPrefab.get();
+            for (EntityRef entityRef : entityManager.getAllEntities()) {
+                if (moneyPrefab.equals(entityRef.getParentPrefab())) {
+                    entityRef.destroy();
+                }
+            }
+        }
     }
 
     /**

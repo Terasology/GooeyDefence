@@ -16,9 +16,11 @@
 package org.terasology.gooeyDefence.health;
 
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.health.DamageEntityEvent;
 import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 
@@ -30,9 +32,12 @@ import org.terasology.gooeyDefence.events.health.EntityDeathEvent;
 @RegisterSystem
 public class HealthSystem extends BaseComponentSystem {
 
+
     /**
      * Deals damage to an entity.
      * If the entity's health reaches zero it sends a destruction event to be handled
+     * <p>
+     * Filters on {@link HealthComponent}
      *
      * @see DamageEntityEvent
      */
@@ -40,6 +45,23 @@ public class HealthSystem extends BaseComponentSystem {
     public void onDamageEntity(DamageEntityEvent event, EntityRef entity, HealthComponent component) {
         component.dealDamage(event.getDamage());
         if (component.getHealth() == 0) {
+            entity.send(new EntityDeathEvent());
+        }
+    }
+
+
+    /**
+     * Handles the case where a game is loaded from a save where the shrine has been killed.
+     * <p>
+     * Sent when the field is activated.
+     * Filters on {@link HealthComponent}
+     * Has priority {@link EventPriority#PRIORITY_LOW}
+     *
+     * @see OnFieldActivated
+     */
+    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
+    public void onFieldActivated(OnFieldActivated event, EntityRef entity, HealthComponent component) {
+        if (component.getHealth() <= 0) {
             entity.send(new EntityDeathEvent());
         }
     }

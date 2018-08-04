@@ -24,8 +24,8 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.JPSConfig;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.DefenceField;
-import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
+import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
 import org.terasology.gooeyDefence.movement.components.CustomPathComponent;
 import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
@@ -64,7 +64,11 @@ public class PathfindingManager extends BaseComponentSystem {
 
 
     /**
-     * Called to initialise the field.
+     * Begins the pathfinding calculations.
+     * <p>
+     * Called when the field is activated
+     *
+     * @see OnFieldActivated
      */
     @ReceiveEvent
     public void onFieldActivated(OnFieldActivated event, EntityRef entity) {

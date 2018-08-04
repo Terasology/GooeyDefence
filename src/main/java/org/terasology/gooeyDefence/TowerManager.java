@@ -24,6 +24,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.towers.TowerComponent;
+import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.events.combat.ApplyEffectEvent;
 import org.terasology.gooeyDefence.events.combat.RemoveEffectEvent;
 import org.terasology.gooeyDefence.events.combat.SelectEnemiesEvent;
@@ -35,10 +36,20 @@ import org.terasology.gooeyDefence.towerBlocks.EffectDuration;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerCore;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerEffector;
 import org.terasology.gooeyDefence.towerBlocks.base.TowerTargeter;
+import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
+import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.geom.Vector2i;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
+import org.terasology.utilities.procedural.Noise;
+import org.terasology.utilities.procedural.WhiteNoise;
+import org.terasology.world.WorldProvider;
+import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockManager;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,6 +61,14 @@ public class TowerManager extends BaseComponentSystem {
     private DelayManager delayManager;
     @In
     private EntityManager entityManager;
+    @In
+    private WorldProvider worldProvider;
+    @In
+    private BlockManager blockManager;
+
+    private Block air;
+    private Block fieldBlock;
+    private Block shrineBlock;
     private Set<EntityRef> towerEntities = new HashSet<>();
 
     /**
@@ -136,6 +155,13 @@ public class TowerManager extends BaseComponentSystem {
         return getTotalCorePower(towerComponent) >= getTargeterDrain(towerComponent) + getEffectorDrain(towerComponent);
     }
 
+    @Override
+    public void initialise() {
+        air = blockManager.getBlock(BlockManager.AIR_ID);
+        fieldBlock = blockManager.getBlock("GooeyDefence:PlainWorldGen");
+        shrineBlock = blockManager.getBlock("GooeyDefence:Shrine");
+    }
+
     /**
      * Remove all scheduled delays before the game is shutdown.
      */
@@ -147,6 +173,93 @@ public class TowerManager extends BaseComponentSystem {
                 delayManager.cancelPeriodicAction(tower, buildEventId(tower, targeter));
             }
             tower.destroy();
+        }
+    }
+
+    /**
+     * Destroys all the tower blocks
+     * <p>
+     * Sent when the field should be reset
+     *
+     * @see OnFieldReset
+     */
+    @ReceiveEvent
+    public void onFieldReset(OnFieldReset event, EntityRef entity) {
+        for (EntityRef towerEntity : towerEntities) {
+            TowerComponent component = towerEntity.getComponent(TowerComponent.class);
+            clearBlocks(component.cores);
+            clearBlocks(component.effector);
+            clearBlocks(component.targeter);
+            clearBlocks(component.plains);
+            towerEntity.destroy();
+        }
+        towerEntities.clear();
+
+        clearField(DefenceField.outerRingSize());
+        createRandomFill(DefenceField.outerRingSize());
+    }
+
+    /**
+     * Replaces block entities with air, and destroys the entity
+     *
+     * @param blocks The blocks to replace
+     */
+    private void clearBlocks(Collection<EntityRef> blocks) {
+        blocks.forEach(EntityRef::destroy);
+        blocks.clear();
+    }
+
+    /**
+     * Clears all non world gen block from the field.
+     * <p>
+     * These are:
+     * - "GooeyDefence:ShrineBlock"
+     * - "Engine:Air"
+     *
+     * @param size The size of the field to clear.
+     */
+    private void clearField(int size) {
+        Vector3i pos = Vector3i.zero();
+        Block block;
+        for (int x = -size; x <= size; x++) {
+            /* We use circle eq "x^2 + y^2 = r^2" to work out where we need to start */
+            int width = (int) Math.floor(Math.sqrt(size * size - x * x));
+            for (int z = -width; z <= width; z++) {
+                /* We use sphere eq "x^2 + y^2 + z^2 = r^2" to work out how high we need to go */
+                int height = (int) Math.floor(Math.sqrt(size * size - z * z - x * x) - 0.001f);
+                for (int y = 0; y <= height; y++) {
+                    pos.set(x, y, z);
+                    block = worldProvider.getBlock(pos);
+                    if (block != air && block != shrineBlock) {
+                        worldProvider.setBlock(pos, air);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Randomly fills in an area, according to the same rules as the world gen
+     *
+     * @param size The size of the area to fill
+     * @see RandomFillingProvider
+     */
+    private void createRandomFill(int size) {
+        Noise noise = new WhiteNoise(System.currentTimeMillis());
+        Vector2i pos2i = Vector2i.zero();
+        Vector3i pos3i = Vector3i.zero();
+
+        for (int x = -size; x <= size; x++) {
+            int width = (int) Math.floor(Math.sqrt(size * size - x * x));
+            for (int y = -width; y <= width; y++) {
+                pos2i.setX(x);
+                pos2i.setY(y);
+                if (RandomFillingProvider.shouldSpawnBlock(pos2i, noise)) {
+                    pos3i.setX(pos2i.x);
+                    pos3i.setZ(pos2i.y);
+                    worldProvider.setBlock(pos3i, fieldBlock);
+                }
+            }
         }
     }
 

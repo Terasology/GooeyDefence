@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,17 @@
 package org.terasology.gooeyDefence.events;
 
 import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.ui.DeathScreenSystem;
 
 /**
- * Event sent to initialise the field after a new game or a save has been loaded.
+ * Event sent when the reset option is chosen.
+ * Calls on systems to reset their state to new.
  *
+ * @see DeathScreenSystem
  * @see CallbackEvent
  */
-public class OnFieldActivated extends CallbackEvent implements Event {
-    public OnFieldActivated(Runnable runnable) {
+public class OnFieldReset extends CallbackEvent implements Event {
+    public OnFieldReset(Runnable runnable) {
         super(runnable);
     }
 }
