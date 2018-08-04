@@ -17,13 +17,16 @@ package org.terasology.gooeyDefence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.DestructibleBlockComponent;
+import org.terasology.gooeyDefence.components.FieldConfigComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
@@ -45,6 +48,8 @@ import org.terasology.world.block.entity.CreateBlockDropsEvent;
 import org.terasology.world.block.items.BlockItemFactory;
 import org.terasology.world.sun.CelestialSystem;
 
+import java.util.Optional;
+
 /**
  * A class that provides dynamic information about the Defence Field.
  * Also performs all high level actions, delegating specifics to other systems.
@@ -65,6 +70,9 @@ public class DefenceWorldManager extends BaseComponentSystem {
     private BlockManager blockManager;
     @In
     private WorldProvider worldProvider;
+    @In
+    private AssetManager assetManager;
+
     private Block air;
     private Block shrineBlock;
     private Block fieldBlock;
@@ -86,6 +94,13 @@ public class DefenceWorldManager extends BaseComponentSystem {
 
     @Override
     public void initialise() {
+        Optional<Prefab> prefab = assetManager.getAsset("GooeyDefence:FieldConfig", Prefab.class);
+        Prefab configPrefab = prefab.orElseThrow(() -> new IllegalStateException("No field config found!"));
+        DefenceField.loadFieldValues(configPrefab.getComponent(FieldConfigComponent.class));
+    }
+
+    @Override
+    public void preBegin() {
         if (!celestialSystem.isSunHalted()) {
             celestialSystem.toggleSunHalting(0.5f);
         }

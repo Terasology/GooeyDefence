@@ -40,17 +40,16 @@ public class DefenceHudManager extends BaseComponentSystem {
     private StatSystem statSystem;
 
     private DefenceHud defenceHud;
-    private HealthHud healthHud;
 
     @Override
     public void initialise() {
-        defenceHud = nuiManager.getHUD().addHUDElement("defenceHud", DefenceHud.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
 
     }
 
     @Override
     public void postBegin() {
-        healthHud = nuiManager.getHUD().getHUDElement("Core:HealthHud", HealthHud.class);
+        defenceHud = nuiManager.getHUD().addHUDElement("defenceHud", DefenceHud.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
+        HealthHud healthHud = nuiManager.getHUD().getHUDElement("Core:HealthHud", HealthHud.class);
         UIIconBar healthBar = healthHud.find("healthBar", UIIconBar.class);
 
         defenceHud.updateCurrentWave();

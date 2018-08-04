@@ -17,6 +17,7 @@ package org.terasology.gooeyDefence;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.gooeyDefence.components.FieldConfigComponent;
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
@@ -25,6 +26,7 @@ import org.terasology.world.BlockEntityRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -34,40 +36,17 @@ import java.util.List;
  * @see DefenceWorldManager
  */
 public final class DefenceField {
-    public static int entranceCount = 3;
-    public static int shrineRingSize = 5;
-    public static int outerRingSize = 60;
-    public static int entranceRingSize = 4;
+    public static int entranceCount;
+    public static int shrineRingSize;
+    public static int outerRingSize;
+    public static int entranceRingSize;
     /**
      * The data for the shrine's shape.
      * A 1 indicates a block should be placed, and a 0 indicates an empty space
      */
-    public static Vector3i[] shrineData = convertToVectors(new int[][][]{
-            {{0, 0, 0},
-             {0, 1, 0},
-             {0, 0, 0}},
-
-            {{0, 0, 0},
-             {0, 1, 0},
-             {0, 0, 0}},
-
-            {{0, 1, 0},
-             {1, 1, 1},
-             {0, 1, 0}},
-
-            {{1, 1, 1},
-             {1, 1, 1},
-             {1, 1, 1}},
-
-            {{0, 1, 0},
-             {1, 1, 1},
-             {0, 1, 0}},
-
-            {{0, 0, 0},
-             {0, 1, 0},
-             {0, 0, 0}}});
+    public static Vector3i[] shrineData;
     public static Vector3i fieldCentre = new Vector3i(0, 0, 0);
-    private static Vector3i[] entrances = calculateEntrances(entranceCount);
+    private static Vector3i[] entrances;
 
     private static EntityRef shrineEntity = EntityRef.NULL;
     private static boolean fieldActivated;
@@ -78,6 +57,16 @@ public final class DefenceField {
     private DefenceField() {
     }
 
+    public static void loadFieldValues(FieldConfigComponent config) {
+        entranceCount = config.entranceCount;
+        shrineRingSize = config.shrineRingSize;
+        outerRingSize = config.outerRingSize;
+        entranceRingSize = config.entranceRingSize;
+
+        entrances = calculateEntrances(entranceCount);
+        shrineData = convertToVectors(config.shrineData);
+    }
+
     /**
      * Converts the human readable shrine data to a list of positions.
      * Only intended to be used once to initialise a field.
@@ -85,17 +74,19 @@ public final class DefenceField {
      * @param rawData The human readable version of the data.
      * @return An array of Vector3i containing the location of each one.
      */
-    private static Vector3i[] convertToVectors(int[][][] rawData) {
+    private static Vector3i[] convertToVectors(List<List<List<Integer>>> rawData) {
         List<Vector3i> positions = new ArrayList<>();
-        for (int y = 0; y < rawData.length; y++) {
-            for (int x = 0; x < rawData[y].length; x++) {
-                for (int z = 0; z < rawData[y][x].length; z++) {
-                    if (rawData[y][x][z] == 1) {
+
+        for (int y = 0; y < rawData.size(); y++) {
+            for (int x = 0; x < rawData.get(y).size(); x++) {
+                for (int z = 0; z < rawData.get(y).get(x).size(); z++) {
+                    if (rawData.get(y).get(x).get(z) == 1) {
                         positions.add(new Vector3i(x, y, z));
                     }
                 }
             }
         }
+
         return positions.toArray(new Vector3i[0]);
     }
 
