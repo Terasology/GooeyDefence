@@ -49,7 +49,7 @@ public class StatSystem extends BaseComponentSystem {
     public void postBegin() {
         Optional<Prefab> optional = assetManager.getAsset("GooeyDefence:Shrine", Prefab.class);
         maxHealth = optional.map(prefab -> prefab.getComponent(HealthComponent.class))
-                .map(HealthComponent::getHealth)
+                .map(component -> component.health)
                 .orElse(0);
     }
 
@@ -77,7 +77,7 @@ public class StatSystem extends BaseComponentSystem {
      */
     public int getShrineHealth() {
         if (DefenceField.isFieldActivated()) {
-            return DefenceField.getShrineEntity().getComponent(HealthComponent.class).getHealth();
+            return DefenceField.getShrineEntity().getComponent(HealthComponent.class).health;
         } else {
             return 0;
         }

@@ -21,21 +21,6 @@ import org.terasology.entitySystem.Component;
  * Adds health functionality to an entity.
  */
 public class HealthComponent implements Component {
-    private int health;
+    public int health;
 
-    /**
-     * Reduce the health by a given amount.
-     *
-     * @param damage The amount to reduce the health by.
-     */
-    public void dealDamage(int damage) {
-        health = Math.max(health - damage, 0);
-    }
-
-    /**
-     * @return How much health the entity has
-     */
-    public int getHealth() {
-        return health;
-    }
 }

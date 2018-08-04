@@ -56,7 +56,7 @@ public class BaseTargeterSystem extends BaseComponentSystem {
                 comparator = (first, second) -> {
                     HealthComponent firstComponent = first.getComponent(HealthComponent.class);
                     HealthComponent secondComponent = second.getComponent(HealthComponent.class);
-                    return firstComponent.getHealth() - secondComponent.getHealth();
+                    return firstComponent.health - secondComponent.health;
                 };
                 break;
             case FIRST:
@@ -70,7 +70,7 @@ public class BaseTargeterSystem extends BaseComponentSystem {
                 comparator = (first, second) -> {
                     HealthComponent firstComponent = first.getComponent(HealthComponent.class);
                     HealthComponent secondComponent = second.getComponent(HealthComponent.class);
-                    return secondComponent.getHealth() - firstComponent.getHealth();
+                    return secondComponent.health - firstComponent.health;
                 };
                 break;
             default:
