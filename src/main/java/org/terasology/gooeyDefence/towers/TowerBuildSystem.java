@@ -18,12 +18,12 @@ package org.terasology.gooeyDefence.towers;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.towers.components.TowerComponent;
 import org.terasology.gooeyDefence.towers.components.TowerCore;
@@ -186,18 +186,16 @@ public class TowerBuildSystem extends BaseComponentSystem {
         TowerComponent towerComponent = towerEntity.getComponent(TowerComponent.class);
 
         /* Add it to the relevant list of blocks */
-        for (Component component : blockEntity.iterateComponents()) {
-            if (component instanceof TowerCore) {
-                towerComponent.cores.add(blockEntity);
-                return towerEntity;
-            } else if (component instanceof TowerEffector) {
-                towerComponent.effector.add(blockEntity);
-                return towerEntity;
-            } else if (component instanceof TowerTargeter) {
-                towerComponent.targeter.add(blockEntity);
-                return towerEntity;
-            }
+        if (DefenceField.hasComponentExtending(blockEntity, TowerCore.class)) {
+            towerComponent.cores.add(blockEntity);
         }
+        if (DefenceField.hasComponentExtending(blockEntity, TowerEffector.class)) {
+            towerComponent.effector.add(blockEntity);
+        }
+        if (DefenceField.hasComponentExtending(blockEntity, TowerTargeter.class)) {
+            towerComponent.targeter.add(blockEntity);
+        }
+
         towerComponent.plains.add(blockEntity);
         return towerEntity;
     }
