@@ -22,7 +22,7 @@ import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.towers.SelectionMethod;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.components.TowerComponent;
-import org.terasology.gooeyDefence.towers.components.TowerTargeter;
+import org.terasology.gooeyDefence.towers.targeters.SingleTargeterComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.math.geom.Vector2i;
@@ -320,7 +320,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * @param selectionMethod The selection method chosen
      */
     private void targetingOptionSelected(SelectionMethod selectionMethod) {
-        TowerTargeter targeter = DefenceField.getComponentExtending(blockEntity, TowerTargeter.class);
+        SingleTargeterComponent targeter = DefenceField.getComponentExtending(blockEntity, SingleTargeterComponent.class);
         targeter.selectionMethod = selectionMethod;
     }
 

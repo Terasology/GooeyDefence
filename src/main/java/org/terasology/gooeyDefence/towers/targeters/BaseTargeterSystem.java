@@ -105,7 +105,7 @@ public class BaseTargeterSystem extends BaseComponentSystem {
      * @param enemyManager      The enemy manager to use if a new enemy needs to be picked
      * @return A suitable enemy in range, or the null entity if none was found
      */
-    protected EntityRef getTarget(Vector3f targeterPos, TowerTargeter targeterComponent, EnemyManager enemyManager) {
+    protected EntityRef getTarget(Vector3f targeterPos, SingleTargeterComponent targeterComponent, EnemyManager enemyManager) {
         EntityRef target = targeterComponent.lastTarget;
 
         if (!canUseTarget(target, targeterPos, targeterComponent)) {

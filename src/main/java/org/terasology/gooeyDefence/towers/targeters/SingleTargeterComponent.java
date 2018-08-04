@@ -15,6 +15,8 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.gooeyDefence.towers.SelectionMethod;
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 
 /**
@@ -23,6 +25,16 @@ import org.terasology.gooeyDefence.towers.components.TowerTargeter;
  * @see SingleTargeterSystem
  */
 public class SingleTargeterComponent extends TowerTargeter {
+    /**
+     * The method used to determine which enemy to select within range.
+     * Not always applicable
+     */
+    public SelectionMethod selectionMethod = SelectionMethod.FIRST;
+    /**
+     * The enemy attacked last attack
+     * Not always applicable
+     */
+    public EntityRef lastTarget = EntityRef.NULL;
 
     @Override
     public float getMultiplier() {

@@ -17,7 +17,6 @@ package org.terasology.gooeyDefence.towers.components;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.gooeyDefence.towers.SelectionMethod;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,19 +48,9 @@ public abstract class TowerTargeter implements Component {
      */
     public int attackSpeed;
     /**
-     * The method used to determine which enemy to select within range.
-     * Not always applicable
-     */
-    public SelectionMethod selectionMethod = SelectionMethod.FIRST;
-    /**
      * All enemies hit by an effect last attack
      */
     public Set<EntityRef> affectedEnemies = new HashSet<>();
-    /**
-     * The enemy attacked last attack
-     * Not always applicable
-     */
-    public EntityRef lastTarget = EntityRef.NULL;
 
     public abstract float getMultiplier();
 
