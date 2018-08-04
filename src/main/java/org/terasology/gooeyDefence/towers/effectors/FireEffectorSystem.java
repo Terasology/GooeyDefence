@@ -21,7 +21,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
-import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
+import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
 import org.terasology.logic.delay.DelayManager;

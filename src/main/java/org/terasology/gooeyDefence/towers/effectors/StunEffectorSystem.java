@@ -22,7 +22,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
-import org.terasology.gooeyDefence.components.enemies.GooeyComponent;
+import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.movement.components.PathComponent;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.logic.delay.DelayManager;
