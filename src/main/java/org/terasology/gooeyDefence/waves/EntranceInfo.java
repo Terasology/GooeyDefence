@@ -37,7 +37,7 @@ public class EntranceInfo {
     private int prefabCount = 0;
     private String prefab = "";
 
-    private EntranceInfo() {
+    public EntranceInfo() {
         buildLists();
     }
 
