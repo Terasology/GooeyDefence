@@ -56,12 +56,17 @@ public class PathfindingManager extends BaseComponentSystem {
 
     @In
     private PathfinderSystem pathfinderSystem;
-    private List<List<Vector3i>> paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount, null));
+    private List<List<Vector3i>> paths;
     @In
     private WorldProvider worldProvider;
 
     private Set<EntityRef> queuedEnemies = new HashSet<>();
 
+
+    @Override
+    public void preBegin() {
+        paths = new ArrayList<>(Collections.nCopies(DefenceField.entranceCount, null));
+    }
 
     /**
      * Begins the pathfinding calculations.
