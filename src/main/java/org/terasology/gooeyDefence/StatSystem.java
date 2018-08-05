@@ -76,7 +76,7 @@ public class StatSystem extends BaseComponentSystem {
      * @return The current amount of health the shrine has
      */
     public int getShrineHealth() {
-        if (DefenceField.isFieldActivated()) {
+        if (DefenceField.fieldActivated) {
             return DefenceField.getShrineEntity().getComponent(HealthComponent.class).health;
         } else {
             return 0;

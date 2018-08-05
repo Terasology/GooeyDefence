@@ -97,7 +97,7 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, GooeyComponent enemyComponent) {
-        if (DefenceField.isFieldActivated() && isApplyEvent(event)) {
+        if (DefenceField.fieldActivated && isApplyEvent(event)) {
 
             EntityRef effector = getEffectorEntity(event.getActionId());
             PoisonEffectorComponent effectorComponent = effector.getComponent(PoisonEffectorComponent.class);

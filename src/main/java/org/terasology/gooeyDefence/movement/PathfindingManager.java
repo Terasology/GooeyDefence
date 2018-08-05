@@ -89,7 +89,7 @@ public class PathfindingManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPlaceBlocks(PlaceBlocks event, EntityRef entity) {
-        if (DefenceField.isFieldActivated()) {
+        if (DefenceField.fieldActivated) {
             calculatePaths();
         }
     }
@@ -99,7 +99,7 @@ public class PathfindingManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onChangedBlock(OnChangedBlock event, EntityRef entity) {
-        if (DefenceField.isFieldActivated()) {
+        if (DefenceField.fieldActivated) {
             calculatePaths();
         }
     }
@@ -138,6 +138,7 @@ public class PathfindingManager extends BaseComponentSystem {
                     if (!path.equals(oldPath)) {
                         DefenceField.getShrineEntity().send(new OnEntrancePathChanged(id, path));
                     }
+                    logger.info("Finished pathfinding for " + id);
                     if (callback != null) {
                         callback.run();
                     }

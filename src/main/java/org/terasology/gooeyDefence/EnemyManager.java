@@ -99,7 +99,7 @@ public class EnemyManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPathChanged(OnEntrancePathChanged event, EntityRef shrineEntity) {
-        if (DefenceField.isFieldActivated()) {
+        if (DefenceField.fieldActivated) {
             for (EntityRef enemy : enemies) {
                 /* Firstly check if the enemy is on an unchanged path */
                 if (enemy.hasComponent(EntrancePathComponent.class)) {
@@ -171,7 +171,7 @@ public class EnemyManager extends BaseComponentSystem {
      * @param prefab         The prefab of the enemy to spawn in.
      */
     public void spawnEnemy(int entranceNumber, String prefab) {
-        if (!DefenceField.isFieldActivated()) {
+        if (!DefenceField.fieldActivated) {
             return;
         }
 

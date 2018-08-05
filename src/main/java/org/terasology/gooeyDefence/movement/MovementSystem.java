@@ -39,7 +39,7 @@ public class MovementSystem extends BaseComponentSystem implements UpdateSubscri
 
     @Override
     public void update(float delta) {
-        if (DefenceField.isFieldActivated()) {
+        if (DefenceField.fieldActivated) {
             for (EntityRef entity : entityManager.getEntitiesWith(MovementComponent.class, LocationComponent.class)) {
                 moveEntity(entity, delta);
             }

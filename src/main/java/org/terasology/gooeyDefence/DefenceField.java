@@ -48,7 +48,7 @@ public final class DefenceField {
     private static Vector3i[] entrances;
 
     private static EntityRef shrineEntity = EntityRef.NULL;
-    private static boolean fieldActivated;
+    public static boolean fieldActivated;
 
     /**
      * Private constructor as class is a utility class and should not be instantiated.
@@ -129,21 +129,6 @@ public final class DefenceField {
                     shrineData.length > 0 ? shrineData[0] : null);
         }
         return shrineEntity;
-    }
-
-    /**
-     * @return A boolean indicating if the field is activated or not.
-     */
-    public static boolean isFieldActivated() {
-        return fieldActivated;
-    }
-
-    /**
-     * Activate the field.
-     * There is no mechanism for setting the value to false because this shouldn't be possible or needed.
-     */
-    public static void setFieldActivated() {
-        DefenceField.fieldActivated = true;
     }
 
     /**

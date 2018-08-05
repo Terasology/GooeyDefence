@@ -85,7 +85,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
         if (!settingUpField) {
             settingUpField = true;
             logger.info("Setting up the world.");
-            OnFieldActivated activateEvent = new OnFieldActivated(DefenceField::setFieldActivated);
+            OnFieldActivated activateEvent = new OnFieldActivated(() -> DefenceField.fieldActivated = true);
             activateEvent.beginTask();
             DefenceField.getShrineEntity().send(activateEvent);
             activateEvent.finishTask();

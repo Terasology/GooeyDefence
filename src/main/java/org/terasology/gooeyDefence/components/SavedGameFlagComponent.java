@@ -17,5 +17,5 @@ package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
 
-public class NewGameFlagComponent implements Component {
+public class SavedGameFlagComponent implements Component {
 }

@@ -18,11 +18,15 @@ package org.terasology.gooeyDefence.health;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
+import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
 import org.terasology.gooeyDefence.health.events.EntityDeathEvent;
+import org.terasology.logic.players.LocalPlayer;
+import org.terasology.registry.In;
 
 /**
  * Handles operations involving health on entities.
@@ -31,7 +35,6 @@ import org.terasology.gooeyDefence.health.events.EntityDeathEvent;
  */
 @RegisterSystem
 public class HealthSystem extends BaseComponentSystem {
-
 
     /**
      * Deals damage to an entity.
@@ -64,5 +67,14 @@ public class HealthSystem extends BaseComponentSystem {
         if (component.health <= 0) {
             entity.send(new EntityDeathEvent());
         }
+    }
+
+    /**
+     * @see OnFieldReset
+     */
+    @ReceiveEvent
+    public void onFieldReset(OnFieldReset event, EntityRef entity) {
+        HealthComponent healthComponent = entity.getParentPrefab().getComponent(HealthComponent.class);
+        entity.addOrSaveComponent(healthComponent);
     }
 }

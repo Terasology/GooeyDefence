@@ -214,7 +214,7 @@ public class TowerManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, TowerComponent component) {
-        if (DefenceField.isFieldActivated() && isEventIdCorrect(entity, event.getActionId())) {
+        if (DefenceField.fieldActivated && isEventIdCorrect(entity, event.getActionId())) {
             if (hasEnoughPower(component)) {
                 EntityRef targeter = entityManager.getEntity(getTargeterId(event.getActionId()));
                 handleTowerShooting(component, targeter);
