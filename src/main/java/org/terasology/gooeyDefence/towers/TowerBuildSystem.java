@@ -24,6 +24,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.towers.components.TowerComponent;
 import org.terasology.gooeyDefence.towers.components.TowerCore;
@@ -206,7 +207,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * @return The new tower entity
      */
     private EntityRef createNewTower() {
-        return entityManager.create("GooeyDefence:TowerEntity");
+        return entityManager.create(DefenceUris.TOWER_ENTITY);
     }
 
     /**

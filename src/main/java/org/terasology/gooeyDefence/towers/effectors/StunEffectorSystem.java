@@ -20,6 +20,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
 import org.terasology.gooeyDefence.movement.components.PathComponent;
@@ -73,7 +74,7 @@ public class StunEffectorSystem extends BaseComponentSystem {
             Vector3f position = target.getComponent(LocationComponent.class).getWorldPosition();
             target.addComponent(new BlankPathComponent(position));
             delayManager.addDelayedAction(target, REMOVE_STUN_ID, component.stunDuration);
-            inWorldRenderer.addParticleEffect(target, "GooeyDefence:StunParticleEffect");
+            inWorldRenderer.addParticleEffect(target, DefenceUris.STUN_PARTICLES);
         }
     }
 
@@ -96,7 +97,7 @@ public class StunEffectorSystem extends BaseComponentSystem {
             PathComponent pathComponent = pathStorage.remove(entity);
             entity.removeComponent(DefenceField.getComponentExtending(entity, PathComponent.class).getClass());
             entity.addComponent(pathComponent);
-            inWorldRenderer.removeParticleEffect(entity, "GooeyDefence:StunParticleEffect");
+            inWorldRenderer.removeParticleEffect(entity, DefenceUris.STUN_PARTICLES);
         }
     }
 }

@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
@@ -38,8 +39,8 @@ public class DefenceFieldRasterizer implements WorldRasterizer {
 
     @Override
     public void initialize() {
-        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:WorldBlock");
-        altBlock = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:AltWorldBlock");
+        block = CoreRegistry.get(BlockManager.class).getBlock(DefenceUris.WORLD_BLOCK);
+        altBlock = CoreRegistry.get(BlockManager.class).getBlock(DefenceUris.ALT_WORLD_BLOCK);
     }
 
     @Override

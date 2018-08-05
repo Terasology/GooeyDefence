@@ -25,6 +25,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.RenderSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
@@ -81,8 +82,8 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     @Override
     public void postBegin() {
-        shrineDamageRenderer = new BlockSelectionRenderer(Assets.getTexture("GooeyDefence:ShrineDamaged").get());
-        sphere = entityManager.create("GooeyDefence:Sphere");
+        shrineDamageRenderer = new BlockSelectionRenderer(Assets.getTexture(DefenceUris.SHRINE_DAMAGED).get());
+        sphere = entityManager.create(DefenceUris.SPHERE);
         LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
 
         sphereLoc.setWorldPosition(outOfSightPos);
@@ -116,7 +117,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         for (List<Vector3i> path : paths) {
             if (path != null) {
                 for (int i = path.size() - 1; i >= 2; i--) {
-                    EntityRef pathBlock = entityManager.create("GooeyDefence:PathDisplay", path.get(i).toVector3f());
+                    EntityRef pathBlock = entityManager.create(DefenceUris.PATH_EFFECT, path.get(i).toVector3f());
 
                     VelocityRangeGeneratorComponent component = pathBlock.getComponent(VelocityRangeGeneratorComponent.class);
 
@@ -193,7 +194,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      * @param component An optional component to add as a flag.
      */
     public void shootBulletTowards(EntityRef goal, Vector3f start, Component component) {
-        EntityRef bullet = entityManager.create("GooeyDefence:Bullet");
+        EntityRef bullet = entityManager.create(DefenceUris.BULLET);
         MovementComponent movementComponent = new MovementComponent();
         movementComponent.goal = goal.getComponent(LocationComponent.class).getWorldPosition();
         movementComponent.speed = (float) 30;
@@ -222,7 +223,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      * @param finalSize How big the sphere should get, in blocks.
      */
     public void displayExpandingSphere(Vector3f position, float duration, float finalSize) {
-        EntityRef sphere = entityManager.create("GooeyDefence:Sphere");
+        EntityRef sphere = entityManager.create(DefenceUris.SPHERE);
         LocationComponent locationComponent = sphere.getComponent(LocationComponent.class);
         locationComponent.setWorldPosition(position);
         locationComponent.setLocalScale(1);

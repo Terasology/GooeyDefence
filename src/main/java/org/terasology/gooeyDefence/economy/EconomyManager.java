@@ -20,6 +20,7 @@ import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.logic.inventory.events.GiveItemEvent;
 import org.terasology.registry.Share;
 
@@ -102,7 +103,7 @@ public class EconomyManager extends BaseComponentSystem {
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void onGiveItem(GiveItemEvent event, EntityRef entity, ValueComponent valueComponent) {
-        if (entity.getParentPrefab().getName().equals("GooeyDefence:Money")) {
+        if (entity.getParentPrefab().getName().equals(DefenceUris.MONEY_ITEM)) {
             boolean success = tryAddMoney(event.getTargetEntity(), valueComponent.value);
             event.setHandled(success);
             entity.destroy();

@@ -22,6 +22,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.registry.In;
@@ -82,7 +83,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
 
     @Override
     public void preBegin() {
-        Prefab config = Assets.getPrefab("GooeyDefence:Waves").get();
+        Prefab config = Assets.getPrefab(DefenceUris.WAVES_CONFIG).get();
         stripFromComponent(config.getComponent(WaveDefinitionComponent.class));
 
         generateWave(statSystem.getWaveNumber());

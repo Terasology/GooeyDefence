@@ -20,6 +20,7 @@ import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.waves.OnWaveEnd;
 import org.terasology.input.ButtonState;
@@ -52,11 +53,11 @@ public class ControlScreenSystem extends BaseComponentSystem {
      */
     @ReceiveEvent(components = ShrineComponent.class)
     public void onActivate(ActivateEvent event, EntityRef entity) {
-        if (nuiManager.isOpen("GooeyDefence:ControlScreen")) {
-            nuiManager.closeScreen("GooeyDefence:ControlScreen");
+        if (nuiManager.isOpen(DefenceUris.CONTROL_SCREEN)) {
+            nuiManager.closeScreen(DefenceUris.CONTROL_SCREEN);
             screen = null;
         } else {
-            screen = nuiManager.pushScreen("GooeyDefence:ControlScreen", ControlScreen.class);
+            screen = nuiManager.pushScreen(DefenceUris.CONTROL_SCREEN, ControlScreen.class);
             screenJustOpened = true;
         }
     }
@@ -85,12 +86,12 @@ public class ControlScreenSystem extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_LOW, components = CharacterComponent.class)
     public void onFrobButton(FrobButton event, EntityRef entity) {
         if (event.getState() == ButtonState.UP
-                && nuiManager.isOpen("GooeyDefence:ControlScreen")) {
+                && nuiManager.isOpen(DefenceUris.CONTROL_SCREEN)) {
             if (screenJustOpened) {
                 screenJustOpened = false;
             } else {
                 screen = null;
-                nuiManager.closeScreen("GooeyDefence:ControlScreen");
+                nuiManager.closeScreen(DefenceUris.CONTROL_SCREEN);
             }
         }
     }

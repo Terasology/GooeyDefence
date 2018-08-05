@@ -19,6 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.towers.events.RemoveEffectEvent;
@@ -50,7 +51,7 @@ public class IceEffectorSystem extends BaseComponentSystem {
         MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
         double reducedSpeed = movementComponent.speed * component.slow;
         movementComponent.speed = (float) reducedSpeed;
-        inWorldRenderer.addParticleEffect(enemy, "GooeyDefence:IceParticleEffect");
+        inWorldRenderer.addParticleEffect(enemy, DefenceUris.ICE_PARTICLES);
     }
 
     /**
@@ -65,6 +66,6 @@ public class IceEffectorSystem extends BaseComponentSystem {
         EntityRef enemy = event.getTarget();
         MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
         movementComponent.speed = movementComponent.speed / component.slow;
-        inWorldRenderer.removeParticleEffect(enemy, "GooeyDefence:IceParticleEffect");
+        inWorldRenderer.removeParticleEffect(enemy, DefenceUris.ICE_PARTICLES);
     }
 }

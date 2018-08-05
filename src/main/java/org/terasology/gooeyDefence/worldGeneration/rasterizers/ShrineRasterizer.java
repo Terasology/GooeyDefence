@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
@@ -34,7 +35,7 @@ public class ShrineRasterizer implements WorldRasterizer {
 
     @Override
     public void initialize() {
-        block = CoreRegistry.get(BlockManager.class).getBlock("GooeyDefence:Shrine");
+        block = CoreRegistry.get(BlockManager.class).getBlock(DefenceUris.SHRINE);
     }
 
     @Override

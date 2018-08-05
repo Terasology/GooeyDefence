@@ -94,7 +94,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
 
     @Override
     public void initialise() {
-        Optional<Prefab> prefab = assetManager.getAsset("GooeyDefence:FieldConfig", Prefab.class);
+        Optional<Prefab> prefab = assetManager.getAsset(DefenceUris.FIELD_CONFIG, Prefab.class);
         Prefab configPrefab = prefab.orElseThrow(() -> new IllegalStateException("No field config found!"));
         DefenceField.loadFieldValues(configPrefab.getComponent(FieldConfigComponent.class));
     }
@@ -106,8 +106,8 @@ public class DefenceWorldManager extends BaseComponentSystem {
         }
         factory = new BlockItemFactory(entityManager);
         air = blockManager.getBlock(BlockManager.AIR_ID);
-        shrineBlock = blockManager.getBlock("GooeyDefence:Shrine");
-        fieldBlock = blockManager.getBlock("GooeyDefence:PlainWorldGen");
+        shrineBlock = blockManager.getBlock(DefenceUris.SHRINE);
+        fieldBlock = blockManager.getBlock(DefenceUris.PLAIN_WORLD_BLOCK);
     }
 
     /**
@@ -126,9 +126,9 @@ public class DefenceWorldManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onCreateBlockDrops(CreateBlockDropsEvent event, EntityRef entity, LocationComponent component) {
-        if (entity.getParentPrefab().getName().equals("GooeyDefence:PlainWorldGen")) {
+        if (entity.getParentPrefab().getName().equals(DefenceUris.PLAIN_WORLD_BLOCK)) {
             event.consume();
-            factory.newInstance(blockManager.getBlockFamily("GooeyDefence:Plain")).send(new DropItemEvent(component.getWorldPosition()));
+            factory.newInstance(blockManager.getBlockFamily(DefenceUris.PLAIN_BLOCK)).send(new DropItemEvent(component.getWorldPosition()));
         }
     }
 
@@ -145,8 +145,8 @@ public class DefenceWorldManager extends BaseComponentSystem {
      * Clears all non world gen block from the field.
      * <p>
      * The only allowed blocks will be
-     * - "GooeyDefence:ShrineBlock"
-     * - "Engine:Air"
+     * - {@link DefenceUris#SHRINE}
+     * - {@link BlockManager#AIR_ID}
      *
      * @param size The size of the field to clear.
      */

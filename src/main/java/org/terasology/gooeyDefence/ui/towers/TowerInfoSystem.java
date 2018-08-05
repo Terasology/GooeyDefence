@@ -20,6 +20,7 @@ import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.towers.components.TowerMultiBlockComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.input.ButtonState;
@@ -52,8 +53,8 @@ public class TowerInfoSystem extends BaseComponentSystem {
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void onActivate(ActivateEvent event, EntityRef entity, TowerMultiBlockComponent component) {
-        if (!nuiManager.isOpen("GooeyDefence:TowerInfoScreen")) {
-            TowerInfoScreen infoScreen = (TowerInfoScreen) nuiManager.pushScreen("GooeyDefence:TowerInfoScreen");
+        if (!nuiManager.isOpen(DefenceUris.TOWER_SCREEN)) {
+            TowerInfoScreen infoScreen = (TowerInfoScreen) nuiManager.pushScreen(DefenceUris.TOWER_SCREEN);
             infoScreen.setUpgradingSystem(upgradingSystem);
             EntityRef tower = component.getTowerEntity();
             infoScreen.setTower(tower);
@@ -72,11 +73,11 @@ public class TowerInfoSystem extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_LOW, components = CharacterComponent.class)
     public void onFrobButton(FrobButton event, EntityRef entity) {
         if (event.getState() == ButtonState.UP
-                && nuiManager.isOpen("GooeyDefence:TowerInfoScreen")) {
+                && nuiManager.isOpen(DefenceUris.TOWER_SCREEN)) {
             if (screenJustOpened) {
                 screenJustOpened = false;
             } else {
-                nuiManager.closeScreen("GooeyDefence:TowerInfoScreen");
+                nuiManager.closeScreen(DefenceUris.TOWER_SCREEN);
             }
         }
     }

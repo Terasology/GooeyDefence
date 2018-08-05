@@ -23,6 +23,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.ItemComponent;
@@ -117,12 +118,12 @@ public class ShopManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onFieldReset(OnFieldReset event, EntityRef entity) {
-        WalletComponent component = assetManager.getAsset("Engine:Player", Prefab.class)
+        WalletComponent component = assetManager.getAsset(DefenceUris.PLAYER, Prefab.class)
                 .map(prefab -> prefab.getComponent(WalletComponent.class))
                 .orElse(new WalletComponent());
         localPlayer.getCharacterEntity().addOrSaveComponent(component);
 
-        Optional<Prefab> optionalPrefab = assetManager.getAsset("GooeyDefence:Money", Prefab.class);
+        Optional<Prefab> optionalPrefab = assetManager.getAsset(DefenceUris.MONEY_ITEM, Prefab.class);
         if (optionalPrefab.isPresent()) {
             Prefab moneyPrefab = optionalPrefab.get();
             for (EntityRef entityRef : entityManager.getAllEntities()) {

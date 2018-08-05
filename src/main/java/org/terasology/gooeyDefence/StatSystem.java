@@ -47,7 +47,7 @@ public class StatSystem extends BaseComponentSystem {
 
     @Override
     public void postBegin() {
-        Optional<Prefab> optional = assetManager.getAsset("GooeyDefence:Shrine", Prefab.class);
+        Optional<Prefab> optional = assetManager.getAsset(DefenceUris.SHRINE, Prefab.class);
         maxHealth = optional.map(prefab -> prefab.getComponent(HealthComponent.class))
                 .map(component -> component.health)
                 .orElse(0);

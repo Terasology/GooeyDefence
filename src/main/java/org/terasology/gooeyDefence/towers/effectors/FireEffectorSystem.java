@@ -19,6 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
@@ -73,7 +74,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
         if (!delayManager.hasPeriodicAction(entity, APPLY_BURN_ID)) {
             delayManager.addPeriodicAction(entity, APPLY_BURN_ID, BURN_RATE, BURN_RATE);
         }
-        inWorldRenderer.addParticleEffect(event.getTarget(), "GooeyDefence:FireParticleEffect");
+        inWorldRenderer.addParticleEffect(event.getTarget(), DefenceUris.FIRE_PARTICLES);
         delayManager.addDelayedAction(event.getTarget(), END_BURN_ID, effectorComponent.fireDuration);
     }
 
@@ -102,7 +103,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
 
         for (EntityRef newEnemy : newEnemies) {
             delayManager.addDelayedAction(newEnemy, END_BURN_ID, effectorComponent.fireDuration);
-            inWorldRenderer.addParticleEffect(newEnemy, "GooeyDefence:FireParticleEffect");
+            inWorldRenderer.addParticleEffect(newEnemy, DefenceUris.FIRE_PARTICLES);
         }
 
         if (burningEnemies.isEmpty()) {
@@ -123,7 +124,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
     public void onDelayedActionTriggered(DelayedActionTriggeredEvent event, EntityRef entity) {
         if (event.getActionId().equals(END_BURN_ID)) {
             burningEnemies.remove(entity);
-            inWorldRenderer.removeParticleEffect(entity, "GooeyDefence:FireParticleEffect");
+            inWorldRenderer.removeParticleEffect(entity, DefenceUris.FIRE_PARTICLES);
         }
     }
 

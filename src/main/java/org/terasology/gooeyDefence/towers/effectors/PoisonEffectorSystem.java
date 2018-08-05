@@ -21,6 +21,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
@@ -81,7 +82,7 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
             delayManager.cancelDelayedAction(target, endId);
             delayManager.addDelayedAction(target, endId, effectorComponent.poisonDuration);
         } else {
-            inWorldRenderer.addParticleEffect(target, "GooeyDefence:PoisonParticleEffect");
+            inWorldRenderer.addParticleEffect(target, DefenceUris.POISON_PARTICLES);
             delayManager.addPeriodicAction(target, applyId, POISON_RATE, POISON_RATE);
             delayManager.addDelayedAction(target, endId, effectorComponent.poisonDuration);
         }
@@ -118,7 +119,7 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
         if (isEndEvent(event)) {
             EntityRef effector = getEffectorEntity(event.getActionId());
             delayManager.cancelPeriodicAction(entity, buildEventID(APPLY_POISON_ID, effector));
-            inWorldRenderer.removeParticleEffect(entity, "GooeyDefence:PoisonParticleEffect");
+            inWorldRenderer.removeParticleEffect(entity, DefenceUris.POISON_PARTICLES);
         }
     }
 
