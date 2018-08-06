@@ -26,7 +26,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.economy.ValueComponent;
-import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
+import org.terasology.gooeyDefence.events.OnEntrancePathCalculated;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
@@ -95,10 +95,10 @@ public class EnemyManager extends BaseComponentSystem {
     /**
      * Called when the a path is changed.
      *
-     * @see OnEntrancePathChanged
+     * @see OnEntrancePathCalculated
      */
     @ReceiveEvent
-    public void onPathChanged(OnEntrancePathChanged event, EntityRef shrineEntity) {
+    public void onPathChanged(OnEntrancePathCalculated event, EntityRef shrineEntity) {
         if (DefenceField.fieldActivated) {
             for (EntityRef enemy : enemies) {
                 /* Firstly check if the enemy is on an unchanged path */

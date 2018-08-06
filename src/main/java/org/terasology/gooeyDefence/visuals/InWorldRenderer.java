@@ -27,7 +27,7 @@ import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.ShrineComponent;
-import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
+import org.terasology.gooeyDefence.events.OnEntrancePathCalculated;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
 import org.terasology.gooeyDefence.health.events.EntityDeathEvent;
 import org.terasology.gooeyDefence.movement.PathfindingManager;
@@ -108,10 +108,10 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      * Called whenever an entrance path is changed.
      * Used to re-create the path display entities.
      *
-     * @see OnEntrancePathChanged
+     * @see OnEntrancePathCalculated
      */
     @ReceiveEvent
-    public void onEntrancePathChanged(OnEntrancePathChanged event, EntityRef entity) {
+    public void onEntrancePathChanged(OnEntrancePathCalculated event, EntityRef entity) {
         clearPathParticles();
         List<List<Vector3i>> paths = pathfindingManager.getPaths();
         for (List<Vector3i> path : paths) {

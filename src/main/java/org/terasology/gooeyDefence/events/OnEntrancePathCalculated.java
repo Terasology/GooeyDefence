@@ -22,17 +22,18 @@ import org.terasology.math.geom.Vector3i;
 import java.util.List;
 
 /**
- * Event sent when an entrance path is changed.
+ * Event sent when an entrance path is calculated.
+ * This includes the initial calculation upon activating a world.
  * <p>
  * This event is not sent when other non-entrance paths are changed.
  *
  * @see PathfindingManager
  */
-public class OnEntrancePathChanged implements Event {
+public class OnEntrancePathCalculated implements Event {
     private int pathId;
     private List<Vector3i> newPath;
 
-    public OnEntrancePathChanged(int pathId, List<Vector3i> newPath) {
+    public OnEntrancePathCalculated(int pathId, List<Vector3i> newPath) {
         this.pathId = pathId;
         this.newPath = newPath;
     }

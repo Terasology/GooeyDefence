@@ -24,7 +24,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.JPSConfig;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.DefenceField;
-import org.terasology.gooeyDefence.events.OnEntrancePathChanged;
+import org.terasology.gooeyDefence.events.OnEntrancePathCalculated;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
 import org.terasology.gooeyDefence.movement.components.CustomPathComponent;
@@ -136,7 +136,7 @@ public class PathfindingManager extends BaseComponentSystem {
                     List<Vector3i> oldPath = paths.get(id);
                     paths.set(id, path);
                     if (!path.equals(oldPath)) {
-                        DefenceField.getShrineEntity().send(new OnEntrancePathChanged(id, path));
+                        DefenceField.getShrineEntity().send(new OnEntrancePathCalculated(id, path));
                     }
                     logger.info("Finished pathfinding for " + id);
                     if (callback != null) {
