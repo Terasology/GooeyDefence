@@ -49,7 +49,7 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
     @ReceiveEvent
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SniperTargeterComponent targeterComponent) {
         Vector3f worldPos = locationComponent.getWorldPosition();
-        EntityRef target = getTarget(worldPos, targeterComponent, enemyManager);
+        EntityRef target = getTarget(worldPos, targeterComponent);
         if (target.exists()) {
             event.addToList(target);
             inWorldRenderer.shootBulletTowards(
@@ -86,10 +86,9 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
      *
      * @param targeterPos       The position of the targeter block
      * @param targeterComponent The targeter component on the targeter
-     * @param enemyManager      The enemy manager to use if a new enemy needs to be picked
      * @return A suitable enemy in range, or the null entity if none was found
      */
-    protected EntityRef getTarget(Vector3f targeterPos, SniperTargeterComponent targeterComponent, EnemyManager enemyManager) {
+    protected EntityRef getTarget(Vector3f targeterPos, SniperTargeterComponent targeterComponent) {
         EntityRef target = targeterComponent.lastTarget;
         if (!canUseTarget(target, targeterPos, targeterComponent)) {
 

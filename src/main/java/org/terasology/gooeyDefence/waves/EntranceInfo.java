@@ -31,11 +31,11 @@ public class EntranceInfo {
     public List<Float> delays = new ArrayList<>();
     public List<String> prefabs = new ArrayList<>();
 
-    private int delayCount = 0;
-    private float delay = 0f;
+    private int delayCount;
+    private float delay;
 
-    private int prefabCount = 0;
-    private String prefab = "";
+    private int prefabCount;
+    private String prefab;
 
     public EntranceInfo() {
         buildLists();

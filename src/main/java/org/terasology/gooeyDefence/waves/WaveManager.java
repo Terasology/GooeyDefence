@@ -50,7 +50,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     /**
      * Flag used to indicate that an attack is underway
      */
-    private boolean isAttackUnderway = false;
+    private boolean isAttackUnderway;
 
     /**
      * A list of the time until another enemy will be spawned at each entrance
@@ -73,7 +73,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
      */
     private WaveInfo currentWave;
 
-    private float remainingDuration = 0f;
+    private float remainingDuration;
 
     @In
     private EnemyManager enemyManager;

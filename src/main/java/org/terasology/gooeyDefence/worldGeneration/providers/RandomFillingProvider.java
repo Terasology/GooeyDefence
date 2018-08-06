@@ -31,9 +31,9 @@ import org.terasology.world.generation.Produces;
  * Fills the {@link RandomFillingFacet} with random blocks inside the dome.
  * Leaves a free space around the central shrine and entrances, as dictated by {@link DefenceField}
  */
-@Produces({RandomFillingFacet.class})
+@Produces(RandomFillingFacet.class)
 public class RandomFillingProvider implements FacetProvider {
-    private static float SPAWN_CHANCE = 0.3f;
+    private static final float SPAWN_CHANCE = 0.3f;
     private Noise noise;
 
     /**

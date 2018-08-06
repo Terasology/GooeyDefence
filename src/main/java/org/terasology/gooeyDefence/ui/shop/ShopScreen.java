@@ -228,11 +228,11 @@ public class ShopScreen extends CoreScreenLayer {
      */
     private String getBlockName(Block block) {
         String displayName = block.getDisplayName();
-        return !displayName.equals("Untitled Block") ?
-                displayName :
-                block.getURI()
-                        .getBlockFamilyDefinitionUrn()
-                        .getResourceName()
-                        .toString();
+        return !displayName.equals("Untitled Block")
+                ? displayName
+                : block.getURI()
+                .getBlockFamilyDefinitionUrn()
+                .getResourceName()
+                .toString();
     }
 }

@@ -80,7 +80,7 @@ public class UIUpgradePaths extends CoreWidget {
         return upgrades.getPreferredContentSize(canvas, sizeHint);
     }
 
-    public void bindUpgradesComponent(Binding<BlockUpgradesComponent> upgradesComponent) {
-        this.upgradesComponent = upgradesComponent;
+    public void bindUpgradesComponent(Binding<BlockUpgradesComponent> newComponent) {
+        this.upgradesComponent = newComponent;
     }
 }

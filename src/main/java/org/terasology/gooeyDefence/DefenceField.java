@@ -39,6 +39,9 @@ public final class DefenceField {
     public static int shrineRingSize;
     public static int outerRingSize;
     public static int entranceRingSize;
+
+    public static boolean fieldActivated;
+
     /**
      * The data for the shrine's shape.
      * A 1 indicates a block should be placed, and a 0 indicates an empty space
@@ -46,9 +49,7 @@ public final class DefenceField {
     public static Vector3i[] shrineData;
     public static Vector3i fieldCentre = new Vector3i(0, 0, 0);
     private static Vector3i[] entrances;
-
     private static EntityRef shrineEntity = EntityRef.NULL;
-    public static boolean fieldActivated;
 
     /**
      * Private constructor as class is a utility class and should not be instantiated.

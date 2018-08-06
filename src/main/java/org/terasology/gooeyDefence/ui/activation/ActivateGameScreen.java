@@ -21,8 +21,6 @@ import org.terasology.rendering.nui.widgets.ActivateEventListener;
 import org.terasology.rendering.nui.widgets.UIButton;
 
 public class ActivateGameScreen extends CoreScreenLayer {
-    private ActivateEventListener listener;
-
     private UIButton beginButton;
     private RelativeLayout newGameLayout;
     private RelativeLayout resumeGameLayout;

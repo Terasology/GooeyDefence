@@ -36,7 +36,7 @@ public class UIComponentFields extends CoreWidget {
     /**
      * The spacing between the columns of values.
      */
-    private static int SPACING = 10;
+    private static final int SPACING = 10;
     private Binding<List<String>> fields = new DefaultBinding<>(new ArrayList<>());
     private Binding<List<String>> values = new DefaultBinding<>(new ArrayList<>());
     private Binding<List<String>> upgrades = new DefaultBinding<>(new ArrayList<>());

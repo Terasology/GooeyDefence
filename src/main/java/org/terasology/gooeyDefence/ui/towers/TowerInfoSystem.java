@@ -42,7 +42,7 @@ public class TowerInfoSystem extends BaseComponentSystem {
     private NUIManager nuiManager;
     @In
     private UpgradingSystem upgradingSystem;
-    private boolean screenJustOpened = false;
+    private boolean screenJustOpened;
 
     /**
      * Called when a tower block is interacted with

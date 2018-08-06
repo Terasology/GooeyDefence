@@ -88,10 +88,10 @@ public class BaseTargeterSystem extends BaseComponentSystem {
      * @return True if the targeter can attack the enemy
      */
     protected boolean canUseTarget(EntityRef target, Vector3f targeterPos, TowerTargeter targeterComponent) {
-        return target.exists() &&
-                target.getComponent(LocationComponent.class)
-                        .getWorldPosition()
-                        .distance(targeterPos) < targeterComponent.range;
+        return target.exists()
+                && target.getComponent(LocationComponent.class)
+                .getWorldPosition()
+                .distance(targeterPos) < targeterComponent.range;
     }
 
     /**

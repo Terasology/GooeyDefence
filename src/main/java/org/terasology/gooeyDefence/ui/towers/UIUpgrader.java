@@ -38,7 +38,7 @@ public class UIUpgrader extends CoreWidget {
     private UIComponentFields componentFields = new UIComponentFields();
     private UIUpgradePaths upgradePaths = new UIUpgradePaths();
     private Binding<EntityRef> entity = new DefaultBinding<>(EntityRef.NULL);
-    private UpgradeInfo currentUpgrade = null;
+    private UpgradeInfo currentUpgrade;
     private UpgradingSystem upgradingSystem;
     private Binding<BlockUpgradesComponent> upgradesComponent = new ReadOnlyBinding<BlockUpgradesComponent>() {
         @Override

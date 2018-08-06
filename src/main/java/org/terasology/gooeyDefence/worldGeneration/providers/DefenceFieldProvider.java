@@ -27,7 +27,7 @@ import org.terasology.world.generation.Produces;
 /**
  * Fills the {@link DefenceFieldFacet} class with data on the dome.
  */
-@Produces({DefenceFieldFacet.class})
+@Produces(DefenceFieldFacet.class)
 public class DefenceFieldProvider implements FacetProvider {
 
     @Override

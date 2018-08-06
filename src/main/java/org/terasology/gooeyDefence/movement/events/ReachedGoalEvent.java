@@ -18,7 +18,7 @@ package org.terasology.gooeyDefence.movement.events;
 import org.terasology.entitySystem.event.ConsumableEvent;
 
 public class ReachedGoalEvent implements ConsumableEvent {
-    private boolean isConsumed = false;
+    private boolean isConsumed;
 
     @Override
     public boolean isConsumed() {

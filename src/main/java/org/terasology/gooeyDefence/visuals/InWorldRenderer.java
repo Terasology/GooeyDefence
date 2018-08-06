@@ -62,7 +62,7 @@ import java.util.Map;
 @Share(InWorldRenderer.class)
 public class InWorldRenderer extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
 
-    private static final Vector3f outOfSightPos = new Vector3f(0, -3, 0);
+    private static final Vector3f OUT_OF_SIGHT = new Vector3f(0, -3, 0);
     private BlockSelectionRenderer shrineDamageRenderer;
     @In
     private Time time;
@@ -71,8 +71,8 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     @In
     private EntityManager entityManager;
 
-    private int shrineDamaged = 0;
-    private EntityRef sphere;
+    private int shrineDamaged;
+    private EntityRef rangeSphere;
     private Map<EntityRef, SphereInfo> expandingSpheres = new HashMap<>();
     private Map<EntityRef, EntityRef> bullets = new HashMap<>();
 
@@ -83,10 +83,10 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     @Override
     public void postBegin() {
         shrineDamageRenderer = new BlockSelectionRenderer(Assets.getTexture(DefenceUris.SHRINE_DAMAGED).get());
-        sphere = entityManager.create(DefenceUris.SPHERE);
-        LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
+        rangeSphere = entityManager.create(DefenceUris.SPHERE);
+        LocationComponent sphereLoc = rangeSphere.getComponent(LocationComponent.class);
 
-        sphereLoc.setWorldPosition(outOfSightPos);
+        sphereLoc.setWorldPosition(OUT_OF_SIGHT);
         sphereLoc.setLocalScale(0.1f);
         clearPathParticles();
     }
@@ -142,7 +142,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     @ReceiveEvent
     public void onPlayerTargetChanged(PlayerTargetChangedEvent event, EntityRef entity) {
         if (DefenceField.hasComponentExtending(event.getNewTarget(), TowerTargeter.class)) {
-            LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
+            LocationComponent sphereLoc = rangeSphere.getComponent(LocationComponent.class);
             LocationComponent targeterLoc = event.getNewTarget().getComponent(LocationComponent.class);
             TowerTargeter targeter = DefenceField.getComponentExtending(event.getNewTarget(), TowerTargeter.class);
 
@@ -150,9 +150,9 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
             sphereLoc.setLocalScale(targeter.range * 2 + 1);
 
         } else {
-            LocationComponent sphereLoc = sphere.getComponent(LocationComponent.class);
+            LocationComponent sphereLoc = rangeSphere.getComponent(LocationComponent.class);
 
-            sphereLoc.setWorldPosition(outOfSightPos);
+            sphereLoc.setWorldPosition(OUT_OF_SIGHT);
             sphereLoc.setLocalScale(0.1f);
         }
     }
@@ -216,11 +216,11 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
-     * Displays a sphere which rapidly expands to a given size.
+     * Displays a rangeSphere which rapidly expands to a given size.
      *
-     * @param position  The position of the sphere.
-     * @param duration  How long the sphere should expand for, in seconds
-     * @param finalSize How big the sphere should get, in blocks.
+     * @param position  The position of the rangeSphere.
+     * @param duration  How long the rangeSphere should expand for, in seconds
+     * @param finalSize How big the rangeSphere should get, in blocks.
      */
     public void displayExpandingSphere(Vector3f position, float duration, float finalSize) {
         EntityRef sphere = entityManager.create(DefenceUris.SPHERE);
@@ -297,7 +297,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     /**
      * Called when a bullet with a splash effect reaches it's goal.
-     * Places an expanding sphere on the goal.
+     * Places an expanding rangeSphere on the goal.
      * <p>
      * Filters on {@link TargeterBulletComponent}, {@link SplashBulletComponent} and {@link MovementComponent}
      *
@@ -399,16 +399,16 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
-     * Class to provide a container for the values associated with each expanding sphere
+     * Class to provide a container for the values associated with each expanding rangeSphere
      */
     private class SphereInfo {
         /**
-         * How long the sphere should expand for, in seconds
+         * How long the rangeSphere should expand for, in seconds
          */
-        float duration = 0f;
+        float duration;
         /**
-         * How fast the sphere should expand, in blocks per seconds.
+         * How fast the rangeSphere should expand, in blocks per seconds.
          */
-        float expansion = 0f;
+        float expansion;
     }
 }

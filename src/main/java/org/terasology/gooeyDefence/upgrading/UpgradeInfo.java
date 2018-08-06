@@ -31,7 +31,7 @@ public class UpgradeInfo {
     /**
      * How much the upgrade will cost
      */
-    public int cost = 0;
+    public int cost;
     /**
      * A mapping between the fields to set, and how much to change them by.
      * Eg, <code>"power": 5</code> will try to increase the field <code>power</code> by 5

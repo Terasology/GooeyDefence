@@ -36,8 +36,8 @@ import java.util.Optional;
 @RegisterSystem
 @Share(StatSystem.class)
 public class StatSystem extends BaseComponentSystem {
-    private int waveNumber = 0;
-    private int maxHealth = 0;
+    private int waveNumber;
+    private int maxHealth;
 
     @In
     private AssetManager assetManager;

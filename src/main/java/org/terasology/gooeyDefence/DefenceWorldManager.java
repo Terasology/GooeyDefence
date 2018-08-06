@@ -61,7 +61,7 @@ import java.util.Optional;
 @RegisterSystem
 public class DefenceWorldManager extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(DefenceWorldManager.class);
-    private static boolean settingUpField = false;
+    private static boolean settingUpField;
     @In
     private CelestialSystem celestialSystem;
     @In

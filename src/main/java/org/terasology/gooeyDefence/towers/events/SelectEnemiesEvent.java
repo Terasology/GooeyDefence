@@ -42,10 +42,10 @@ public class SelectEnemiesEvent implements Event {
     }
 
     /**
-     * @param targets A collection of all the enemies to add to the target list
+     * @param newTargets A collection of all the enemies to add to the target list
      */
-    public void addToList(Collection<EntityRef> targets) {
-        this.targets.addAll(targets);
+    public void addToList(Collection<EntityRef> newTargets) {
+        this.targets.addAll(newTargets);
     }
 
     /**

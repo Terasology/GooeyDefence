@@ -55,7 +55,7 @@ public class MissileTargeterSystem extends SniperTargeterSystem {
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, MissileTargeterComponent targeterComponent) {
 
         Vector3f worldPos = locationComponent.getWorldPosition();
-        EntityRef target = getTarget(worldPos, targeterComponent, enemyManager);
+        EntityRef target = getTarget(worldPos, targeterComponent);
 
         if (target.exists()) {
             Vector3f targetPos = target.getComponent(LocationComponent.class).getWorldPosition();

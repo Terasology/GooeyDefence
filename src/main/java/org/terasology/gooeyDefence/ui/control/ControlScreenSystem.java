@@ -41,7 +41,7 @@ public class ControlScreenSystem extends BaseComponentSystem {
 
     @In
     private NUIManager nuiManager;
-    private boolean screenJustOpened = false;
+    private boolean screenJustOpened;
     private ControlScreen screen;
 
     /**

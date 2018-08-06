@@ -26,7 +26,7 @@ import org.terasology.world.generation.facets.SurfaceHeightFacet;
 /**
  * Fills the{@link SurfaceHeightFacet} with a surface height of 0 globally.
  */
-@Produces({SurfaceHeightFacet.class})
+@Produces(SurfaceHeightFacet.class)
 public class SurfaceHeightProvider implements FacetProvider {
     @Override
     public void setSeed(long seed) {

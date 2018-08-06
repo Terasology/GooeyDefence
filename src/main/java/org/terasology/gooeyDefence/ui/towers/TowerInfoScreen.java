@@ -88,9 +88,9 @@ public class TowerInfoScreen extends CoreScreenLayer {
     private UIList<EntityRef> targeterList;
 
     /* Elements of the tower and block selected */
-    private TowerComponent towerComponent = null;
+    private TowerComponent towerComponent;
     private EntityRef blockEntity = EntityRef.NULL;
-    private String blockType = null;
+    private String blockType;
 
     /* Bindings and other reused anonymous classes */
     private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {

@@ -43,7 +43,7 @@ import java.util.Map;
  */
 @RegisterSystem
 public class StunEffectorSystem extends BaseComponentSystem {
-    private final static String REMOVE_STUN_ID = "removeStun";
+    private static final String REMOVE_STUN_ID = "removeStun";
     private Map<EntityRef, PathComponent> pathStorage = new HashMap<>();
 
     @In

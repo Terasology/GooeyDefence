@@ -24,6 +24,6 @@ public class WalletComponent implements Component {
     /**
      * How much money the entity has.
      */
-    public int funds = 0;
+    public int funds;
 
 }
