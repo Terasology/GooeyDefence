@@ -19,6 +19,8 @@ import org.terasology.entitySystem.Component;
 
 /**
  * Stores the entities current funds.
+ * Note, this is distinct from the value of an entity
+ * @see ValueComponent
  */
 public class WalletComponent implements Component {
     /**

@@ -81,7 +81,7 @@ public class EconomyManager extends BaseComponentSystem {
      * Get the balance of an entities walled
      *
      * @param source The entity to get the balance on
-     * @return How much money the enemy has.
+     * @return How much money the enemy has. -1 if the enemy has no wallet
      */
     public static int getBalance(EntityRef source) {
         WalletComponent component = source.getComponent(WalletComponent.class);

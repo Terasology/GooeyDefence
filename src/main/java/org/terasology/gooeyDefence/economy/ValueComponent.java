@@ -20,7 +20,7 @@ import org.terasology.world.block.items.AddToBlockBasedItem;
 
 /**
  * Indicates that the given entity has a value.
- * This is used if the entity is turned into money.
+ * Used when an entity is being turned into money, or as backup for {@link PurchasableComponent}
  */
 @AddToBlockBasedItem
 public class ValueComponent implements Component {

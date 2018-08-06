@@ -25,7 +25,7 @@ import org.terasology.world.block.items.AddToBlockBasedItem;
 public class PurchasableComponent implements Component {
     /**
      * The cost of buying the item.
-     * If left blank on the prefab, the value component will be used (if it exists)
+     * If left blank on the prefab, the value component will be used (if it exists).
      */
     public int cost = -1;
 }
