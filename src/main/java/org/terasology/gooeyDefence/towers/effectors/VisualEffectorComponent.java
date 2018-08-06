@@ -21,7 +21,10 @@ import org.terasology.gooeyDefence.towers.components.TowerEffector;
 
 /**
  * Test effector.
- * Simply displays a coloured box above the targets for debugging.
+ * Simply increases the size of the enemy in order to help identify it for debugging.
+ *
+ * @see VisualEffectorSystem
+ * @see TowerEffector
  */
 public class VisualEffectorComponent extends TowerEffector {
     @Override

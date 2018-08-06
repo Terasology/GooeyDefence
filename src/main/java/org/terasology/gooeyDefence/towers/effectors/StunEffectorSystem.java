@@ -24,6 +24,8 @@ import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
 import org.terasology.gooeyDefence.movement.components.PathComponent;
+import org.terasology.gooeyDefence.towers.TowerManager;
+import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.logic.delay.DelayManager;
@@ -40,10 +42,20 @@ import java.util.Map;
 /**
  * Briefly pauses an enemy.
  * Does this by swapping the path component for the blank one.
+ *
+ * @see StunEffectorComponent
+ * @see BlankPathComponent
+ * @see TowerManager
  */
 @RegisterSystem
 public class StunEffectorSystem extends BaseComponentSystem {
+    /**
+     * The id to use for the removal of the stun.
+     */
     private static final String REMOVE_STUN_ID = "removeStun";
+    /**
+     * A list of the path components to re-apply to the enemy once the stun wears off.
+     */
     private Map<EntityRef, PathComponent> pathStorage = new HashMap<>();
 
     @In
@@ -78,6 +90,14 @@ public class StunEffectorSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Runs a check to see if the stun should be applied
+     * This is checked against the stun chance and the damage multiplier
+     *
+     * @param damageMultiplier The multiplier to use
+     * @return True if the enemy should be stunned, false otherwise.
+     * @see TowerTargeter#getMultiplier()
+     */
     private boolean canStun(float damageMultiplier) {
         float stunResult = random.nextFloat();
         return stunResult <= 0.4 * damageMultiplier;

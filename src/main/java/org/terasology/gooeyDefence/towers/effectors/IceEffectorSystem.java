@@ -21,6 +21,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.movement.components.MovementComponent;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.towers.events.RemoveEffectEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
@@ -30,11 +31,10 @@ import org.terasology.registry.In;
  * Slows the target enemy by the given amount.
  *
  * @see IceEffectorComponent
+ * @see TowerManager
  */
 @RegisterSystem
 public class IceEffectorSystem extends BaseComponentSystem {
-
-
     @In
     private InWorldRenderer inWorldRenderer;
 

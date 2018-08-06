@@ -24,6 +24,7 @@ import org.terasology.gooeyDefence.towers.components.TowerEffector;
  * It does not deal any damage to the enemy.
  *
  * @see IceEffectorSystem
+ * @see TowerEffector
  */
 public class IceEffectorComponent extends TowerEffector {
     /**

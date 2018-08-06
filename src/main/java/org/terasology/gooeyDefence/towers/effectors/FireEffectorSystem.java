@@ -23,6 +23,7 @@ import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.logic.delay.DelayManager;
@@ -39,17 +40,42 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * Applies the fire effect to the targeted enemies.
+ * <p>
+ * Fire applies a damage over time, with a chance to have the effect spread to nearby enemies.
+ * After a short duration, the burning ends but the enemy can be re-ignited by other enemies.
  *
+ * @see FireEffectorComponent
+ * @see TowerManager
  */
 @RegisterSystem
 public class FireEffectorSystem extends BaseComponentSystem {
-
+    /**
+     * The id of the event to initiate the burn
+     */
     private static final String APPLY_BURN_ID = "applyBurn";
+    /**
+     * The id of the event to end the burn
+     */
     private static final String END_BURN_ID = "endBurn";
+    /**
+     * How often the fire should have a chance to spread.
+     * Given in milliseconds.
+     */
     private static final int BURN_RATE = 500;
+    /**
+     * How close an enemy has to be before it can be ignited.
+     * Given in blocks
+     */
     private static final float BURN_RANGE = 1;
+    /**
+     * The chance an enemy has of being ignited by a nearby burning enemy.
+     */
     private static final float BURN_SPREAD_CHANCE = 0.4f;
 
+    /**
+     * All enemies currently on fire.
+     */
     private Set<EntityRef> burningEnemies = new HashSet<>();
 
     @In
@@ -143,6 +169,11 @@ public class FireEffectorSystem extends BaseComponentSystem {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Uses the burn chance to check if an enemy should be ignited or not.
+     *
+     * @return True if the enemy should be ignited, false otherwise
+     */
     private boolean canBurn() {
         return random.nextFloat() <= BURN_SPREAD_CHANCE;
     }

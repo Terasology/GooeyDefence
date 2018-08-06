@@ -19,19 +19,23 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.towers.events.RemoveEffectEvent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.rendering.logic.SkeletalMeshComponent;
 
 /**
+ * Enlarges an enemy
+ * Used to help identify the enemy.
  *
+ * @see VisualEffectorComponent
+ * @see TowerManager
  */
 @RegisterSystem
 public class VisualEffectorSystem extends BaseComponentSystem {
 
     /**
-     * Draws a visual cue above the targeted enemy
+     * Applies the increased scale to the enemy.
      * <p>
      * Filters on {@link VisualEffectorComponent}
      *
@@ -40,13 +44,13 @@ public class VisualEffectorSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, VisualEffectorComponent component) {
         SkeletalMeshComponent targetMesh = event.getTarget().getComponent(SkeletalMeshComponent.class);
-        targetMesh.scale = Vector3f.one().scale(0.4f);
+        targetMesh.scale.scale(2f);
 
         event.getTarget().saveComponent(targetMesh);
     }
 
     /**
-     * Removes an enemy from being drawn
+     * Reverts the size change of the enemy back to original.
      * <p>
      * Filters on {@link VisualEffectorComponent}
      *
@@ -55,7 +59,7 @@ public class VisualEffectorSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onRemoveEffect(RemoveEffectEvent event, EntityRef entity, VisualEffectorComponent component) {
         SkeletalMeshComponent targetMesh = event.getTarget().getComponent(SkeletalMeshComponent.class);
-        targetMesh.scale = Vector3f.one().scale(0.25f);
+        targetMesh.scale.scale(0.5f);
         event.getTarget().saveComponent(targetMesh);
     }
 }

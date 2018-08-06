@@ -20,12 +20,14 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 
 /**
  * Deals plain damage to the target
  *
  * @see DamageEffectorComponent
+ * @see TowerManager
  */
 @RegisterSystem
 public class DamageEffectorSystem extends BaseComponentSystem {

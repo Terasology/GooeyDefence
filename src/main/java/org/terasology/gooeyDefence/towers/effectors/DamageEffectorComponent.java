@@ -23,8 +23,12 @@ import org.terasology.gooeyDefence.towers.components.TowerEffector;
  * Effector that only deals damage to the enemies.
  *
  * @see DamageEffectorSystem
+ * @see TowerEffector
  */
 public class DamageEffectorComponent extends TowerEffector {
+    /**
+     * The damage to apply to the targets.
+     */
     public int damage;
 
     @Override

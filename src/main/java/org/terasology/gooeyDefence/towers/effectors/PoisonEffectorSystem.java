@@ -24,6 +24,7 @@ import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.logic.delay.DelayManager;
@@ -32,12 +33,13 @@ import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.registry.In;
 
 /**
- * Deals an initial damage, then damage over time to a target\
+ * Deals an initial damage, then damage over time to a target.
  * <p>
- * Multiple poison effects cannot be stacked from the same effector.
- * However effects from different poison effectors can stack
+ * Multiple poison effects cannot be stacked from the same effector,
+ * however effects from different poison effectors can stack
  *
  * @see PoisonEffectorComponent
+ * @see TowerManager
  */
 @RegisterSystem
 public class PoisonEffectorSystem extends BaseComponentSystem {

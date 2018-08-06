@@ -17,9 +17,13 @@ package org.terasology.gooeyDefence.towers.effectors;
 
 import org.terasology.gooeyDefence.towers.EffectCount;
 import org.terasology.gooeyDefence.towers.EffectDuration;
+import org.terasology.gooeyDefence.towers.components.TowerEffector;
 
 /**
  * Deals an initial damage and then a smaller damage over time.
+ *
+ * @see PoisonEffectorSystem
+ * @see TowerEffector
  */
 public class PoisonEffectorComponent extends DamageEffectorComponent {
     /**
