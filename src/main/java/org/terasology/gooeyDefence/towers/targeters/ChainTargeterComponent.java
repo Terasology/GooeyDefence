@@ -15,9 +15,14 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
+import org.terasology.gooeyDefence.towers.components.TowerTargeter;
+
 /**
  * Targeter selects a base enemy and then chains to nearby enemies.
  * The enemies chained to do not have to all be within range, however it is a linear chain.
+ *
+ * @see TowerTargeter
+ * @see ChainTargeterSystem
  */
 public class ChainTargeterComponent extends SingleTargeterComponent {
     /**

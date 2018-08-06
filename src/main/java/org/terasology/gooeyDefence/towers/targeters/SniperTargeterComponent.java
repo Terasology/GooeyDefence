@@ -15,9 +15,14 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
+import org.terasology.gooeyDefence.towers.components.TowerTargeter;
+
 /**
  * Only targets enemies that are far away.
  * Does higher damage but cannot target those nearby
+ *
+ * @see SniperTargeterSystem
+ * @see TowerTargeter
  */
 public class SniperTargeterComponent extends SingleTargeterComponent {
     /**

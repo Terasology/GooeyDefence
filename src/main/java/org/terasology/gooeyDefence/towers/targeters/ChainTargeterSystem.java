@@ -20,6 +20,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
@@ -29,6 +30,9 @@ import java.util.Set;
 
 /**
  * Targets a base enemy and then chains off to nearby enemies as well.
+ *
+ * @see ChainTargeterComponent
+ * @see TowerManager
  */
 @RegisterSystem
 public class ChainTargeterSystem extends BaseTargeterSystem {

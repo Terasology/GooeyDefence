@@ -20,6 +20,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.logic.location.LocationComponent;
@@ -29,7 +30,10 @@ import org.terasology.registry.In;
 import java.util.Set;
 
 /**
- * Selects a single target from far away, ignoring those close.
+ * Selects a single target from far away. The targeter cannot select nearby enemies.
+ *
+ * @see SniperTargeterComponent
+ * @see TowerManager
  */
 @RegisterSystem
 public class SniperTargeterSystem extends BaseTargeterSystem {

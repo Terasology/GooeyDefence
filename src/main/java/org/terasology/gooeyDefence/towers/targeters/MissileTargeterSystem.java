@@ -19,6 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.gooeyDefence.visuals.components.SplashBulletComponent;
@@ -29,10 +30,11 @@ import org.terasology.registry.In;
 import java.util.Set;
 
 /**
- * Uses the same base target selection as the SniperTargeter
- * <p>
  * Targets in an AOE around a distant enemy.
+ * This tower cannot target nearby enemies, same as {@link SniperTargeterComponent}.
  *
+ * @see MissileTargeterComponent
+ * @see TowerManager
  * @see SniperTargeterSystem
  */
 @RegisterSystem

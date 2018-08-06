@@ -22,6 +22,7 @@ import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.health.HealthComponent;
 import org.terasology.gooeyDefence.movement.components.PathComponent;
 import org.terasology.gooeyDefence.towers.SelectionMethod;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
@@ -35,6 +36,10 @@ import java.util.Set;
 
 /**
  * A base system for tower targeters that provides common methods.
+ * This system is not required to be extended by tower systems.
+ *
+ * @see TowerTargeter
+ * @see TowerManager
  */
 public class BaseTargeterSystem extends BaseComponentSystem {
 

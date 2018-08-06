@@ -15,12 +15,21 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
+import org.terasology.gooeyDefence.towers.components.TowerTargeter;
+
 /**
  * Targets in a small aoe around a distant target.
+ * <p>
+ * This tower cannot target enemies nearby.
  *
+ * @see MissileTargeterSystem
  * @see SniperTargeterComponent
+ * @see TowerTargeter
  */
 public class MissileTargeterComponent extends SniperTargeterComponent {
+    /**
+     * The radius around the targeted enemy to also select within.
+     */
     public float splashRange;
 
     @Override

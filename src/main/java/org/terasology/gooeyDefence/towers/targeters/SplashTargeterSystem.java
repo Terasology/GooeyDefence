@@ -19,6 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.gooeyDefence.visuals.components.SplashBulletComponent;
@@ -27,6 +28,9 @@ import org.terasology.registry.In;
 
 /**
  * Selects a single target enemy and then targets all enemies within a small range of that enemy.
+ *
+ * @see SplashTargeterComponent
+ * @see TowerManager
  */
 @RegisterSystem
 public class SplashTargeterSystem extends BaseTargeterSystem {

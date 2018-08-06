@@ -20,9 +20,10 @@ import org.terasology.gooeyDefence.towers.SelectionMethod;
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 
 /**
- * Targets the enemy that is closest to the goal.
+ * Targets a single enemy within range.
  *
  * @see SingleTargeterSystem
+ * @see TowerTargeter
  */
 public class SingleTargeterComponent extends TowerTargeter {
     /**

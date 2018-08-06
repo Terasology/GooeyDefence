@@ -19,6 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.logic.location.LocationComponent;
@@ -27,7 +28,12 @@ import org.terasology.registry.In;
 import java.util.Set;
 
 /**
+ * Handles selecting the enemies for the {@link AoeTargeterComponent}.
+ * <p>
+ * Selects all enemies within range of the tower
  *
+ * @see TowerManager
+ * @see AoeTargeterComponent
  */
 @RegisterSystem
 public class AoeTargeterSystem extends BaseTargeterSystem {

@@ -21,18 +21,17 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.EnemyManager;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 
 /**
- * Targets the first enemy within range.
- * <p>
- * Inherits methods and properties from {@link BaseTargeterSystem}
+ * Targets a single enemy within range.
  *
  * @see SingleTargeterComponent
- * @see BaseTargeterSystem
+ * @see TowerManager
  */
 @RegisterSystem
 public class SingleTargeterSystem extends BaseTargeterSystem {

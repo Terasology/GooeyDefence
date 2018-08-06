@@ -17,6 +17,12 @@ package org.terasology.gooeyDefence.towers.targeters;
 
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 
+/**
+ * Targeter that selects all enemies within range of the tower.
+ *
+ * @see TowerTargeter
+ * @see AoeTargeterSystem
+ */
 public class AoeTargeterComponent extends TowerTargeter {
     @Override
     public float getMultiplier() {
