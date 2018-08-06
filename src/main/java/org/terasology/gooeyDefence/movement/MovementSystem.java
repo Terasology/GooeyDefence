@@ -31,6 +31,7 @@ import org.terasology.registry.In;
  * Handles moving enemies towards a goal, as dictated by their movement component.
  *
  * @see MovementComponent
+ * @see ReachedGoalEvent
  */
 @RegisterSystem
 public class MovementSystem extends BaseComponentSystem implements UpdateSubscriberSystem {

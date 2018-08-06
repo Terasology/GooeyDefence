@@ -20,6 +20,8 @@ import org.terasology.math.geom.Vector3f;
 /**
  * Keeps the enemy at a specific location.
  * Used to pause it when a path is being calculated.
+ *
+ * @see PathComponent
  */
 public class BlankPathComponent implements PathComponent {
     private Vector3f position;

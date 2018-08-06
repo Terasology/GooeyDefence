@@ -26,6 +26,7 @@ import java.util.List;
  * Used for enemies that don't follow the standard entrance path.
  *
  * @see EntrancePathComponent
+ * @see PathComponent
  */
 public class CustomPathComponent implements PathComponent {
     private List<Vector3i> path;

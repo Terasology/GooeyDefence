@@ -21,7 +21,7 @@ import org.terasology.math.geom.Vector3f;
 /**
  * A component that provides a path for the enemy to follow.
  * <p>
- * Intended to have multiple implementations for different pathfollowing situations.
+ * Intended to have multiple implementations for different path following situations.
  *
  * @see EntrancePathComponent
  * @see BlankPathComponent

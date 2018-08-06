@@ -22,7 +22,7 @@ import org.terasology.gooeyDefence.health.HealthComponent;
  * Sent to deal damage to a given entity.
  * If the entities health reaches zero, then the entity will be called to be destroyed.
  * <p>
- * Sent against the entity doing the damage.
+ * Sent against the entity taking the damage
  *
  * @see HealthComponent
  * @see EntityDeathEvent

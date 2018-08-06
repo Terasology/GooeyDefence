@@ -24,6 +24,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.flexiblepathfinding.JPSConfig;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.events.OnEntrancePathCalculated;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
@@ -44,6 +45,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * Handles calculation and storage of paths
+ * <p>
+ * Does not move any entities, this is delegated to the {@link MovementSystem} & {@link EnemyManager}
+ *
+ * @see MovementSystem
+ * @see EnemyManager
+ */
 @Share(PathfindingManager.class)
 @RegisterSystem
 public class PathfindingManager extends BaseComponentSystem {
@@ -56,10 +65,16 @@ public class PathfindingManager extends BaseComponentSystem {
 
     @In
     private PathfinderSystem pathfinderSystem;
-    private List<List<Vector3i>> paths;
     @In
     private WorldProvider worldProvider;
 
+    /**
+     * The paths from each of the entrances to the shrine
+     */
+    private List<List<Vector3i>> paths;
+    /**
+     * Any entities that require re-pathing.
+     */
     private Set<EntityRef> queuedEnemies = new HashSet<>();
 
 
@@ -85,7 +100,9 @@ public class PathfindingManager extends BaseComponentSystem {
 
 
     /**
-     * Update path on a block placed
+     * Update path on a block placed.
+     * <p>
+     * This is only run when the field is activated to avoid the reset triggering it.
      */
     @ReceiveEvent
     public void onPlaceBlocks(PlaceBlocks event, EntityRef entity) {
@@ -95,7 +112,9 @@ public class PathfindingManager extends BaseComponentSystem {
     }
 
     /**
-     * Update path on a block removed
+     * Update path on a block removed.
+     * <p>
+     * This is only run when the field is activated to avoid the reset triggering it.
      */
     @ReceiveEvent
     public void onChangedBlock(OnChangedBlock event, EntityRef entity) {
@@ -106,12 +125,14 @@ public class PathfindingManager extends BaseComponentSystem {
 
     /**
      * Called to request an enemy be re-pathed.
+     * Prevents the path on an enemy being set multiple times
+     * <p>
+     * Filters on {@link LocationComponent}
      *
      * @see RepathEnemyRequest
      */
     @ReceiveEvent
     public void onRepathEnemyRequest(RepathEnemyRequest event, EntityRef entity, LocationComponent locationComponent) {
-        /* Process the enemies path */
         queuedEnemies.add(entity);
         calculatePath(buildJpsConfig(new Vector3i(locationComponent.getWorldPosition())),
                 path -> {
@@ -125,7 +146,8 @@ public class PathfindingManager extends BaseComponentSystem {
     }
 
     /**
-     * Calculate the path from an entrance to the centre
+     * Calculate the path from an entrance to the centre.
+     * This callback is not invoked with the path as an argument.
      *
      * @param id       The entrance to calculate from
      * @param callback A callback to be invoked after the path calculation has finished.
@@ -147,6 +169,7 @@ public class PathfindingManager extends BaseComponentSystem {
 
     /**
      * Calculate the path given the config and the callback.
+     * This callback is called with the path as a parameter
      *
      * @param config   The config to use for the pathfinding.
      * @param callback The callback to be used once the path is found.
@@ -196,6 +219,9 @@ public class PathfindingManager extends BaseComponentSystem {
 
     /**
      * Get a path. Will return null if the path has not been calculated yet.
+     * <p>
+     * An empty path either indicates that no path could be calculated or that
+     * the entrance and shrine are located at the same position
      *
      * @param pathID Which entrance the path should come from
      * @return The given path, or null if it doesn't exist yet.

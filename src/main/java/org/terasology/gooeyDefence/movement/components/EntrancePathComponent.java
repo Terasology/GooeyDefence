@@ -30,6 +30,7 @@ import java.util.List;
  *
  * @see PathfindingManager
  * @see CustomPathComponent
+ * @see PathComponent
  */
 public class EntrancePathComponent implements PathComponent {
     private int step;
@@ -98,7 +99,7 @@ public class EntrancePathComponent implements PathComponent {
     }
 
     /**
-     * @return the Id of the entrance path this component is following.
+     * @return the id of the entrance path this component is following.
      */
     public int getEntranceId() {
         return entranceId;

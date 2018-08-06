@@ -16,10 +16,13 @@
 package org.terasology.gooeyDefence.movement.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.movement.MovementSystem;
 import org.terasology.math.geom.Vector3f;
 
 /**
- * Stores information on how to move the enemy.
+ * Stores information on the speed, and goal to move an entity towards.
+ *
+ * @see MovementSystem
  */
 public class MovementComponent implements Component {
     public float speed;
