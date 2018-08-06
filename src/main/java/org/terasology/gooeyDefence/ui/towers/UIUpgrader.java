@@ -33,6 +33,9 @@ import java.util.List;
 
 /**
  * Displays the upgrades on a component and allows for application of them
+ *
+ * @see UIComponentFields
+ * @see UIUpgrader
  */
 public class UIUpgrader extends CoreWidget {
     private UIComponentFields componentFields = new UIComponentFields();
@@ -153,16 +156,6 @@ public class UIUpgrader extends CoreWidget {
      */
     public void bindEntity(Binding<EntityRef> entityBinding) {
         entity = entityBinding;
-    }
-
-    /**
-     * Bind which upgrade component to use.
-     * By default uses the one present on the entity (If it exists)
-     *
-     * @param upgradesBinding The new binding to apply
-     */
-    public void bindUpgradesComponent(Binding<BlockUpgradesComponent> upgradesBinding) {
-        upgradesComponent = upgradesBinding;
     }
 
     /**

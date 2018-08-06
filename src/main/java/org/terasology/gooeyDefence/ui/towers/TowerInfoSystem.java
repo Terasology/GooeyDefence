@@ -42,6 +42,10 @@ public class TowerInfoSystem extends BaseComponentSystem {
     private NUIManager nuiManager;
     @In
     private UpgradingSystem upgradingSystem;
+
+    /**
+     * Used to avoid a situation where a screen is closed right after opening
+     */
     private boolean screenJustOpened;
 
     /**
@@ -63,7 +67,7 @@ public class TowerInfoSystem extends BaseComponentSystem {
     }
 
     /**
-     * Called when the Frob button is pressed.
+     * Called when the frob button is pressed.
      * Used to close the tower screen if it is open.
      * <p>
      * Filters on {@link CharacterComponent}

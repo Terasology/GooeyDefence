@@ -31,7 +31,9 @@ import org.terasology.rendering.nui.WidgetUtil;
 import org.terasology.rendering.nui.layers.ingame.DeathScreen;
 
 /**
- * Handles overwriting the death screen to allow
+ * Handles overwriting the death screen to allow for resetting and to disable information shown and the respawn option.
+ *
+ * @see DeathScreen
  */
 @RegisterSystem
 public class DeathScreenSystem extends BaseComponentSystem {

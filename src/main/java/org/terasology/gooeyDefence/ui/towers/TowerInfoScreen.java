@@ -41,6 +41,8 @@ import java.util.List;
 
 /**
  * Screen for displaying a myriad of stats and options about a tower.
+ *
+ * @see TowerInfoSystem
  */
 public class TowerInfoScreen extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
@@ -143,7 +145,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     }
 
     /**
-     * `{@link #find(String, Class)}'s all the widgets needed for this screen.
+     * {@link #find(String, Class)}'s all the widgets needed for this screen.
      */
     private void findAllWidgets() {
 
@@ -335,7 +337,6 @@ public class TowerInfoScreen extends CoreScreenLayer {
             blockType = listID;
         }
     }
-
 
     /**
      * Sets the upgrader system used to calculate values for the children

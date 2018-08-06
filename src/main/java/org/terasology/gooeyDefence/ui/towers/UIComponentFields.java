@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.ui.towers;
 
+import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.assets.font.Font;
@@ -31,6 +32,10 @@ import java.util.List;
 
 /**
  * Displays the fields, values and current upgrade for a component.
+ *
+ * @see TowerInfoSystem
+ * @see BaseParser
+ * @see UIUpgrader
  */
 public class UIComponentFields extends CoreWidget {
     /**
