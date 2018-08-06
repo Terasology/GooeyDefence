@@ -17,5 +17,9 @@ package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
 
+/**
+ * Component added the player in order to indicate that the game has been reloaded from save.
+ * It's used to perform checks that need to know if this is the initial creation of the world.
+ */
 public class SavedGameFlagComponent implements Component {
 }

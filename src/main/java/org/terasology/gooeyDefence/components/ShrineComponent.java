@@ -20,7 +20,7 @@ import org.terasology.world.block.ForceBlockActive;
 
 /**
  * Component for the central shrine entity.
- * Stores information relating to the shrine and to the general field.
+ * Used as a filter or flag component.
  */
 @ForceBlockActive
 public class ShrineComponent implements Component {

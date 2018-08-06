@@ -16,10 +16,17 @@
 package org.terasology.gooeyDefence.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.DefenceField;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Used to set values for {@link DefenceField} static class.
+ * It allows for other modules to override the values set in here for customisation
+ *
+ * @see DefenceField
+ */
 public class FieldConfigComponent implements Component {
     public int entranceCount;
     public int shrineRingSize;
