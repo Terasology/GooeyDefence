@@ -17,9 +17,18 @@ package org.terasology.gooeyDefence.ui.componentParsers.targeters;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.targeters.ChainTargeterComponent;
+import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
 import java.util.Map;
 
+/**
+ * Converts values for the chain targeter
+ *
+ * @see ChainTargeterComponent
+ * @see UIUpgrader
+ * @see UpgradingSystem
+ */
 public class ChainParser extends SingleParser {
     @Override
     public Class<? extends Component> getComponentClass() {

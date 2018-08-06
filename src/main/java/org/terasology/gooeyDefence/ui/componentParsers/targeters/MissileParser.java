@@ -17,9 +17,18 @@ package org.terasology.gooeyDefence.ui.componentParsers.targeters;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.targeters.MissileTargeterComponent;
+import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
 import java.util.Map;
 
+/**
+ * Converts values for the Aoe targeter
+ *
+ * @see MissileTargeterComponent
+ * @see UIUpgrader
+ * @see UpgradingSystem
+ */
 public class MissileParser extends SniperParser {
     @Override
     public Class<? extends Component> getComponentClass() {

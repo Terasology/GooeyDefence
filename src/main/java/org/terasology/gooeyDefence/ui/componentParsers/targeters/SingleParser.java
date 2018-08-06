@@ -18,9 +18,18 @@ package org.terasology.gooeyDefence.ui.componentParsers.targeters;
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.targeters.SingleTargeterComponent;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
+import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
 import java.util.Map;
 
+/**
+ * Converts values for the Aoe targeter
+ *
+ * @see SingleTargeterComponent
+ * @see UIUpgrader
+ * @see UpgradingSystem
+ */
 public class SingleParser extends BaseParser {
     @Override
     public Class<? extends Component> getComponentClass() {
@@ -36,7 +45,14 @@ public class SingleParser extends BaseParser {
         return result;
     }
 
+    /**
+     * Converts the attack speed from milliseconds to seconds (1dp)
+     *
+     * @param isUpgrade True if the value is an upgrade
+     * @param value     The value to convert
+     * @return The string version of the value
+     */
     public String attackSpeed(boolean isUpgrade, int value) {
-        return String.format("%.1fs", (float) value / 1000);
+        return convertDuration(value);
     }
 }

@@ -16,12 +16,17 @@
 package org.terasology.gooeyDefence.ui.componentParsers;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.gooeyDefence.ui.towers.UIComponentFields;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Provides information on how to convert data from a component or upgrade into human readable strings.
+ *
+ * @see UIComponentFields
+ * @see UpgradingSystem
  */
 public abstract class BaseParser {
     /**
@@ -62,4 +67,13 @@ public abstract class BaseParser {
         return "+" + handleField(field, rawValue);
     }
 
+    /**
+     * Helper method to convert a duration from milliseconds into seconds, to 1dp
+     *
+     * @param duration The duration to convert
+     * @return The duration as a string.
+     */
+    protected String convertDuration(Number duration) {
+        return String.format("%.1fs", duration.floatValue() / 1000);
+    }
 }

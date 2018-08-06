@@ -17,9 +17,18 @@ package org.terasology.gooeyDefence.ui.componentParsers.targeters;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.targeters.SplashTargeterComponent;
+import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
 import java.util.Map;
 
+/**
+ * Converts values for the Aoe targeter
+ *
+ * @see SplashTargeterComponent
+ * @see UIUpgrader
+ * @see UpgradingSystem
+ */
 public class SplashParser extends SingleParser {
     @Override
     public Class<? extends Component> getComponentClass() {

@@ -17,10 +17,19 @@ package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.effectors.PoisonEffectorComponent;
+import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Converts the values from the poison effector.
+ *
+ * @see PoisonEffectorComponent
+ * @see UIUpgrader
+ * @see UpgradingSystem
+ */
 public class PoisonParser extends DamageParser {
     @Override
     public Class<? extends Component> getComponentClass() {
@@ -36,10 +45,24 @@ public class PoisonParser extends DamageParser {
         return result;
     }
 
+    /**
+     * Converts the poison duration from milliseconds into seconds.
+     *
+     * @param isUpgrade True if the value is actually an upgrade
+     * @param value     The value to convert
+     * @return The value as a string.
+     */
     public String poisonDuration(boolean isUpgrade, int value) {
-        return (isUpgrade ? "+" : "") + String.format("%.1fs", (float) value / 1000);
+        return (isUpgrade ? "+" : "") + convertDuration(value);
     }
 
+    /**
+     * Converts the poison damage
+     *
+     * @param isUpgrade True if the value is actually an upgrade
+     * @param value     The value to convert
+     * @return The value as a string
+     */
     public String poisonDamage(boolean isUpgrade, int value) {
         return (isUpgrade ? "+" : "") + String.valueOf(value);
     }

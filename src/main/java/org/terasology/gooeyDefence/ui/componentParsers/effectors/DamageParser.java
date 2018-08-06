@@ -18,9 +18,18 @@ package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.effectors.DamageEffectorComponent;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
+import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
 import java.util.Map;
 
+/**
+ * Handles conversion of fields for the damage effector.
+ *
+ * @see DamageEffectorComponent
+ * @see UIUpgrader
+ * @see UpgradingSystem
+ */
 public class DamageParser extends BaseParser {
     @Override
     public Class<? extends Component> getComponentClass() {

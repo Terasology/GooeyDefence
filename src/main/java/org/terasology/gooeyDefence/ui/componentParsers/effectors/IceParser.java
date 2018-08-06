@@ -18,10 +18,19 @@ package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.effectors.IceEffectorComponent;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
+import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Converts the ice effector values
+ *
+ * @see IceEffectorComponent
+ * @see UIUpgrader
+ * @see UpgradingSystem
+ */
 public class IceParser extends BaseParser {
     @Override
     public Class<? extends Component> getComponentClass() {
@@ -35,6 +44,13 @@ public class IceParser extends BaseParser {
         return result;
     }
 
+    /**
+     * Converts the slow multiplier into a percentage
+     *
+     * @param isUpgrade If the value is actually an upgrade value
+     * @param value     The value to convert
+     * @return A string version of the value
+     */
     public String slow(boolean isUpgrade, float value) {
         if (!isUpgrade) {
             return (int) ((1 - value) * 100) + "%";

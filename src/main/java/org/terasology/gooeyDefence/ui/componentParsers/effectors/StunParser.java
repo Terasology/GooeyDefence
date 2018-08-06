@@ -18,10 +18,19 @@ package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.effectors.StunEffectorComponent;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
+import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Converts values from the stun effector
+ *
+ * @see StunEffectorComponent
+ * @see UIUpgrader
+ * @see UpgradingSystem
+ */
 public class StunParser extends BaseParser {
     @Override
     public Class<? extends Component> getComponentClass() {
@@ -35,7 +44,14 @@ public class StunParser extends BaseParser {
         return result;
     }
 
+    /**
+     * Converts the duration from milliseconds to seconds.
+     *
+     * @param isUpgrade True if the value is an upgrade
+     * @param value     The value to convert
+     * @return The value as a string.
+     */
     public String stunDuration(boolean isUpgrade, int value) {
-        return isUpgrade ? "+" : "" + String.format("%.1fs", (float) value / 1000);
+        return isUpgrade ? "+" : "" + convertDuration(value);
     }
 }

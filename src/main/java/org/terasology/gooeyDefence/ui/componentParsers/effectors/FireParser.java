@@ -17,9 +17,18 @@ package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.effectors.FireEffectorComponent;
+import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
+import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
 import java.util.Map;
 
+/**
+ * Handles converting fields for the fire effector
+ *
+ * @see FireEffectorComponent
+ * @see UIUpgrader
+ * @see UpgradingSystem
+ */
 public class FireParser extends DamageParser {
     @Override
     public Class<? extends Component> getComponentClass() {
@@ -33,7 +42,14 @@ public class FireParser extends DamageParser {
         return result;
     }
 
+    /**
+     * Converts the duration field from milliseconds into seconds.
+     *
+     * @param isUpgrade True if the value is actually an upgrade value
+     * @param value     The value to convert
+     * @return The string version of the value.
+     */
     public String fireDuration(boolean isUpgrade, int value) {
-        return (isUpgrade ? "+" : "") + String.format("%.1fs", (float) value / 1000);
+        return (isUpgrade ? "+" : "") + convertDuration(value);
     }
 }
