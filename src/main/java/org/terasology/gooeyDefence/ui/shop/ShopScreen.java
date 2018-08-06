@@ -26,6 +26,7 @@ import org.terasology.rendering.assets.texture.Texture;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.ingame.inventory.InventoryGrid;
+import org.terasology.rendering.nui.layers.ingame.inventory.InventoryScreen;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.rendering.nui.layouts.FlowLayout;
 import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
@@ -40,6 +41,11 @@ import java.util.Set;
 
 /**
  * Screen that displays both the shop interface and the player inventory simultaneously.
+ * <p>
+ * Works by overriding the inventory screen on the asset level.
+ * This allows it to utilise the inventory opening logic & to be displayed concurrently.
+ *
+ * @see InventoryScreen
  */
 public class ShopScreen extends CoreScreenLayer {
 

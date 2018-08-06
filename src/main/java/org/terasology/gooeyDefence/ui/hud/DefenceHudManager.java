@@ -29,7 +29,9 @@ import org.terasology.rendering.nui.layers.hud.HealthHud;
 import org.terasology.rendering.nui.widgets.UIIconBar;
 
 /**
- * Manages displaying all the hud elements.
+ * Manages displaying and setting all the hud elements.
+ *
+ * @see DefenceHud
  */
 @RegisterSystem
 public class DefenceHudManager extends BaseComponentSystem {
@@ -40,11 +42,6 @@ public class DefenceHudManager extends BaseComponentSystem {
     private StatSystem statSystem;
 
     private DefenceHud defenceHud;
-
-    @Override
-    public void initialise() {
-
-    }
 
     @Override
     public void postBegin() {

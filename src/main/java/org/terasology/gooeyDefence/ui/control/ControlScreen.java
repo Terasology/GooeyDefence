@@ -26,6 +26,8 @@ import org.terasology.rendering.nui.widgets.UILabel;
 /**
  * Allows the player to control information about the field.
  * This includes for instance, starting a wave.
+ *
+ * @see ControlScreenSystem
  */
 public class ControlScreen extends CoreScreenLayer {
 
@@ -67,7 +69,7 @@ public class ControlScreen extends CoreScreenLayer {
     /**
      * Used to ensure that `E` will still close the screen.
      * Does allow for movement when screen is open.
-     * TODO: Replace this method of closing with another
+     * TODO: Replace this method of closing with another more robust one.
      *
      * @return True if keypresses are allowed
      */

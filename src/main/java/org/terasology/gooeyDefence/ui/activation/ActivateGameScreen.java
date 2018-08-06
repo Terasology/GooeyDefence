@@ -20,6 +20,14 @@ import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
 import org.terasology.rendering.nui.widgets.ActivateEventListener;
 import org.terasology.rendering.nui.widgets.UIButton;
 
+/**
+ * Screen shown at the start of the game.
+ * <p>
+ * Allows the world time to load before pathfinding is called.
+ * Also allows for information to be shown to the player.
+ *
+ * @see ActivateScreenSystem
+ */
 public class ActivateGameScreen extends CoreScreenLayer {
     private UIButton beginButton;
     private RelativeLayout newGameLayout;
@@ -33,10 +41,16 @@ public class ActivateGameScreen extends CoreScreenLayer {
         resumeGameLayout = find("resumeGameLayout", RelativeLayout.class);
     }
 
+    /**
+     * @param listener Listener to call when the begin button is pressed
+     */
     public void subscribeToBegin(ActivateEventListener listener) {
         beginButton.subscribe(listener);
     }
 
+    /**
+     * @param isNewGame True if this screen is being shown in a new game or a game loaded from save.
+     */
     public void setNewGame(boolean isNewGame) {
         newGameLayout.setVisible(isNewGame);
         resumeGameLayout.setVisible(!isNewGame);

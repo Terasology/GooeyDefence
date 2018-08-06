@@ -33,12 +33,18 @@ import org.terasology.utilities.Assets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Wrapper widget used in the shop screen.
+ * Displays a separate widget whilst capturing user interaction with it.
+ * <p>
+ * All size values etc etc are determined by the content widget.
+ */
 public class UIInteractionWrapper extends CoreWidget {
     private UIWidget content;
     private ActivateEventListener listener;
     private UIList<TooltipLine> tooltip;
-    private InteractionListener interactionListener = new BaseInteractionListener() {
 
+    private InteractionListener interactionListener = new BaseInteractionListener() {
         @Override
         public boolean onMouseClick(NUIMouseClickEvent event) {
             if (listener != null) {
@@ -58,10 +64,6 @@ public class UIInteractionWrapper extends CoreWidget {
         tooltip.bindList(new DefaultBinding<>(new ArrayList<>()));
     }
 
-    public void setContent(UIWidget content) {
-        this.content = content;
-    }
-
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawWidget(content);
@@ -78,11 +80,6 @@ public class UIInteractionWrapper extends CoreWidget {
         return content.getMaxContentSize(canvas);
     }
 
-    public void setTooltipLines(List<TooltipLine> lines) {
-        tooltip.setList(lines);
-    }
-
-
     @Override
     public UIWidget getTooltip() {
         if (tooltip.getList().size() > 0) {
@@ -92,6 +89,24 @@ public class UIInteractionWrapper extends CoreWidget {
         }
     }
 
+    /**
+     * @param content The widget to display.
+     */
+    public void setContent(UIWidget content) {
+        this.content = content;
+    }
+
+    /**
+     * @param lines The tooltip lines to display
+     */
+    public void setTooltipLines(List<TooltipLine> lines) {
+        tooltip.setList(lines);
+    }
+
+
+    /**
+     * @param listener The listener to use when this widget is clicked.
+     */
     public void setListener(ActivateEventListener listener) {
         this.listener = listener;
     }

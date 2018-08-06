@@ -25,7 +25,9 @@ import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
  * A HUD layer that displays various different hud elements.
- * This includes the next/current wave and the amount of money
+ * This includes the next/current wave & it's duration and the amount of money
+ *
+ * @see DefenceHudManager
  */
 public class DefenceHud extends CoreHudWidget {
     @In

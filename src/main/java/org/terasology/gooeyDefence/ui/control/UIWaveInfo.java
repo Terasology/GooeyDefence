@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.ui.control;
 
+import org.terasology.gooeyDefence.ui.hud.DefenceHud;
 import org.terasology.gooeyDefence.waves.EntranceInfo;
 import org.terasology.gooeyDefence.waves.WaveInfo;
 import org.terasology.math.geom.Vector2i;
@@ -34,6 +35,8 @@ import java.util.Map;
  * Does not show which entrance nor spawning delays/order
  *
  * @see WaveInfo
+ * @see ControlScreen
+ * @see DefenceHud
  */
 public class UIWaveInfo extends CoreWidget {
     private WaveInfo waveInfo = new WaveInfo();

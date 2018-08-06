@@ -31,7 +31,7 @@ import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 
 /**
- * Manages the display, closing of the ControlScreen.
+ * Manages the display & closing of the ControlScreen.
  * Also updates the screen where needed with specific values.
  *
  * @see ControlScreen
@@ -41,6 +41,9 @@ public class ControlScreenSystem extends BaseComponentSystem {
 
     @In
     private NUIManager nuiManager;
+    /**
+     * Handles the situation where the screen is closed just after it is opened.
+     */
     private boolean screenJustOpened;
     private ControlScreen screen;
 

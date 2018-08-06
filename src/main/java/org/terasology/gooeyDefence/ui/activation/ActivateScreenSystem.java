@@ -25,9 +25,15 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.ScreenLayerClosedEvent;
+import org.terasology.rendering.nui.layers.mainMenu.loadingScreen.LoadingScreen;
 
 /**
+ * System that handles the display of the {@link ActivateGameScreen}.
+ * <p>
+ * Handles listening for the begin button and setting the new game flag in the screen
  *
+ * @see SavedGameFlagComponent
+ * @see ActivateGameScreen
  */
 @RegisterSystem
 public class ActivateScreenSystem extends BaseComponentSystem {
@@ -43,7 +49,12 @@ public class ActivateScreenSystem extends BaseComponentSystem {
     }
 
     /**
+     * Displays the activate screen when the loading screen is closed.
+     * <p>
+     * Called when a screen is closed
+     *
      * @see ScreenLayerClosedEvent
+     * @see LoadingScreen
      */
     @ReceiveEvent
     public void onPlayerSpawned(ScreenLayerClosedEvent event, EntityRef entity) {
