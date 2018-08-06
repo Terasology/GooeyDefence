@@ -18,7 +18,9 @@ package org.terasology.gooeyDefence.health;
 import org.terasology.entitySystem.Component;
 
 /**
- * Adds health functionality to an entity.
+ * Adds a very primitive health system to an entity.
+ *
+ * @see HealthSystem
  */
 public class HealthComponent implements Component {
     public int health;

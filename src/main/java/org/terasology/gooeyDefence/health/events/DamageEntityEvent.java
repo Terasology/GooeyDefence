@@ -19,10 +19,13 @@ import org.terasology.entitySystem.event.Event;
 import org.terasology.gooeyDefence.health.HealthComponent;
 
 /**
- * Event to deal damage to the shrine.
+ * Sent to deal damage to a given entity.
+ * If the entities health reaches zero, then the entity will be called to be destroyed.
+ * <p>
  * Sent against the entity doing the damage.
  *
  * @see HealthComponent
+ * @see EntityDeathEvent
  */
 public class DamageEntityEvent implements Event {
     private int damage;

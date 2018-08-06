@@ -67,6 +67,10 @@ public class HealthSystem extends BaseComponentSystem {
     }
 
     /**
+     * Resets the shrines health to the default specified in it's prefab.
+     * <p>
+     * Called when a field is reset.
+     *
      * @see OnFieldReset
      */
     @ReceiveEvent
