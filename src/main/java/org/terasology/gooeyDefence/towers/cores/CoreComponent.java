@@ -19,6 +19,9 @@ import org.terasology.gooeyDefence.towers.components.TowerCore;
 
 /**
  * Basic tower core.
+ * Simply implements the base core with no additions
+ *
+ * @see TowerCore
  */
 public class CoreComponent extends TowerCore {
 }

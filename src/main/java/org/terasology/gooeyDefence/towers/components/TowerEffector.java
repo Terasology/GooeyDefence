@@ -29,10 +29,25 @@ import org.terasology.gooeyDefence.towers.EffectDuration;
  * @see TowerTargeter
  */
 public abstract class TowerEffector implements Component {
+    /**
+     * The amount of power that the effector requires
+     */
     public int drain;
 
+    /**
+     * Controls how often the effect should be applied on a more abstract level.
+     *
+     * @return The amount of times that this effect should be applied
+     * @see EffectCount
+     */
     public abstract EffectCount getEffectCount();
 
+    /**
+     * Controls how the effect should be called to be removed.
+     *
+     * @return How long the effect is intended to last.
+     * @see EffectDuration
+     */
     public abstract EffectDuration getEffectDuration();
 
 }

@@ -52,6 +52,12 @@ public abstract class TowerTargeter implements Component {
      */
     public Set<EntityRef> affectedEnemies = new HashSet<>();
 
+    /**
+     * A balancing multiplier passed to effectors on this tower.
+     * It's used to provide balancing between different tower types.
+     *
+     * @return The multiplier to be passed to all effectors
+     */
     public abstract float getMultiplier();
 
 }
