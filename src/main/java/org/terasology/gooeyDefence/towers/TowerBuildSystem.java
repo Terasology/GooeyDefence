@@ -59,7 +59,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
 
 
     /**
-     * Called when the field is activated, either from a new game or loaded save.
+     * Called when the field is activated, either from a new game, loaded save or reset.
      *
      * @see OnFieldActivated
      */

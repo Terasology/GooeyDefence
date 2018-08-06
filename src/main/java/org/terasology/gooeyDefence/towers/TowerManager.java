@@ -30,9 +30,9 @@ import org.terasology.gooeyDefence.towers.components.TowerCore;
 import org.terasology.gooeyDefence.towers.components.TowerEffector;
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
+import org.terasology.gooeyDefence.towers.events.OnBlocksAdded;
 import org.terasology.gooeyDefence.towers.events.RemoveEffectEvent;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
-import org.terasology.gooeyDefence.towers.events.OnBlocksAdded;
 import org.terasology.gooeyDefence.towers.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.towers.events.TowerDestroyedEvent;
 import org.terasology.logic.delay.DelayManager;
@@ -112,7 +112,7 @@ public class TowerManager extends BaseComponentSystem {
         for (EntityRef tower : towerEntities) {
             TowerComponent towerComponent = tower.getComponent(TowerComponent.class);
             for (EntityRef targeter : towerComponent.targeter) {
-                delayManager.cancelPeriodicAction(tower, buildEventId(tower, targeter));
+                delayManager.cancelPeriodicAction(tower, buildEventId(targeter));
             }
             tower.destroy();
         }
@@ -163,7 +163,7 @@ public class TowerManager extends BaseComponentSystem {
         for (EntityRef targeter : towerComponent.targeter) {
             TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
             delayManager.addPeriodicAction(towerEntity,
-                    buildEventId(towerEntity, targeter),
+                    buildEventId(targeter),
                     targeterComponent.attackSpeed,
                     targeterComponent.attackSpeed);
         }
@@ -183,7 +183,7 @@ public class TowerManager extends BaseComponentSystem {
             if (event.getAddedBlock().contains(targeter)) {
                 TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
                 delayManager.addPeriodicAction(towerEntity,
-                        buildEventId(towerEntity, targeter),
+                        buildEventId(targeter),
                         targeterComponent.attackSpeed,
                         targeterComponent.attackSpeed);
             }
@@ -214,9 +214,9 @@ public class TowerManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, TowerComponent component) {
-        if (DefenceField.fieldActivated && isEventIdCorrect(entity, event.getActionId())) {
+        if (DefenceField.fieldActivated && isEventIdCorrect(event.getActionId())) {
             if (hasEnoughPower(component)) {
-                EntityRef targeter = entityManager.getEntity(getTargeterId(event.getActionId()));
+                EntityRef targeter = getTargeterId(event.getActionId());
                 handleTowerShooting(component, targeter);
             }
         }
@@ -224,14 +224,14 @@ public class TowerManager extends BaseComponentSystem {
 
     /**
      * Handles the removal of a targeter from a tower.
-     * Does this by calling the tower to end the effects on the
+     * Does this by calling the tower to end the effects on the enemies where appropriate.
      *
-     * @param tower
-     * @param targeter
+     * @param tower    The main tower entity to remove the targeter from.
+     * @param targeter The targeter to remove
      */
     private void handleTargeterRemoval(EntityRef tower, EntityRef targeter) {
 
-        delayManager.cancelPeriodicAction(tower, buildEventId(tower, targeter));
+        delayManager.cancelPeriodicAction(tower, buildEventId(targeter));
 
         TowerComponent towerComponent = tower.getComponent(TowerComponent.class);
         TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
@@ -298,6 +298,7 @@ public class TowerManager extends BaseComponentSystem {
      * @param target      The target enemy
      * @param multiplier  The multiplier from the targeter
      * @param isTargetNew Indicates if the enemy is newly targeted. Used to filter effectors
+     * @see EffectCount
      */
     private void applyEffects(Set<EntityRef> effectors, EntityRef target, float multiplier, boolean isTargetNew) {
         ApplyEffectEvent event = new ApplyEffectEvent(target, multiplier);
@@ -325,6 +326,7 @@ public class TowerManager extends BaseComponentSystem {
      * @param effectors  The effectors to check through
      * @param oldTarget  The target to remove the effects from
      * @param multiplier The effect multiplier to apply to the event
+     * @see EffectDuration
      */
     private void endEffects(Set<EntityRef> effectors, EntityRef oldTarget, float multiplier) {
         RemoveEffectEvent event = new RemoveEffectEvent(oldTarget, multiplier);
@@ -346,35 +348,34 @@ public class TowerManager extends BaseComponentSystem {
     /**
      * Checks that the periodic event is intended for the given tower.
      *
-     * @param tower   The tower to check for
      * @param eventId The id of the periodic event
      * @return True if the event belongs to the tower
      * @see PeriodicActionTriggeredEvent
      */
-    private boolean isEventIdCorrect(EntityRef tower, String eventId) {
+    private boolean isEventIdCorrect(String eventId) {
         return eventId.startsWith("towerDefence");
     }
 
     /**
-     * Gets the ID of the targeter from the periodic event id.
+     * Gets the targeter entity from the periodic event id.
      *
      * @param eventId The id of the periodic event
-     * @return The ID of the targeter entity ref
+     * @return The targeter entity encoded in the event.
+     * @see PeriodicActionTriggeredEvent
      */
-    private long getTargeterId(String eventId) {
+    private EntityRef getTargeterId(String eventId) {
         String id = eventId.substring(eventId.indexOf('|') + 1);
-        return Long.parseLong(id);
+        return entityManager.getEntity(Long.parseLong(id));
     }
 
     /**
      * Creates the periodic event id for the targeter on a tower
      *
-     * @param tower    The tower the targeter is on
      * @param targeter The targeter the event is sending for
      * @return The id for that periodic action event.
      * @see PeriodicActionTriggeredEvent
      */
-    private String buildEventId(EntityRef tower, EntityRef targeter) {
+    private String buildEventId(EntityRef targeter) {
         return "towerDefence|" + targeter.getId();
     }
 }
