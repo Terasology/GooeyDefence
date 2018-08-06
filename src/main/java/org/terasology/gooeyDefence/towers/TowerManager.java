@@ -32,7 +32,7 @@ import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.towers.events.RemoveEffectEvent;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
-import org.terasology.gooeyDefence.towers.events.TowerChangedEvent;
+import org.terasology.gooeyDefence.towers.events.OnBlocksAdded;
 import org.terasology.gooeyDefence.towers.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.towers.events.TowerDestroyedEvent;
 import org.terasology.logic.delay.DelayManager;
@@ -175,12 +175,12 @@ public class TowerManager extends BaseComponentSystem {
      * <p>
      * Filters on {@link TowerComponent}
      *
-     * @see TowerChangedEvent
+     * @see OnBlocksAdded
      */
     @ReceiveEvent
-    public void onTowerChanged(TowerChangedEvent event, EntityRef towerEntity, TowerComponent towerComponent) {
+    public void onTowerChanged(OnBlocksAdded event, EntityRef towerEntity, TowerComponent towerComponent) {
         for (EntityRef targeter : towerComponent.targeter) {
-            if (event.getChangedBlocks().contains(targeter)) {
+            if (event.getAddedBlock().contains(targeter)) {
                 TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
                 delayManager.addPeriodicAction(towerEntity,
                         buildEventId(towerEntity, targeter),

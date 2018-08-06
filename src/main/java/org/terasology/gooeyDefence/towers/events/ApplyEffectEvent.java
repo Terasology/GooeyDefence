@@ -18,6 +18,7 @@ package org.terasology.gooeyDefence.towers.events;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 import org.terasology.gooeyDefence.towers.components.TowerEffector;
+import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 
 /**
  * Event sent to apply an effect to a target
@@ -41,6 +42,10 @@ public class ApplyEffectEvent implements Event {
         return target;
     }
 
+    /**
+     * @return The moderating damage multiplier to use for this effect
+     * @see TowerTargeter#getMultiplier()
+     */
     public float getDamageMultiplier() {
         return multiplier;
     }

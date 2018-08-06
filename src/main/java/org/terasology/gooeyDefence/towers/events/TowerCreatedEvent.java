@@ -16,6 +16,8 @@
 package org.terasology.gooeyDefence.towers.events;
 
 import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.towers.TowerBuildSystem;
+import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.components.TowerComponent;
 
 /**
@@ -23,6 +25,8 @@ import org.terasology.gooeyDefence.towers.components.TowerComponent;
  * Sent against the new tower.
  *
  * @see TowerComponent
+ * @see TowerBuildSystem
+ * @see TowerManager
  */
 public class TowerCreatedEvent implements Event {
 }

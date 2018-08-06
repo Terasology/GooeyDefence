@@ -25,7 +25,7 @@ import java.util.Set;
 
 /**
  * Event sent to select the enemies that will be attacked.
- * Sent against the Emitter blocks in the tower.
+ * Sent against the targeter blocks in the tower.
  *
  * @see TowerTargeter
  */
@@ -35,7 +35,7 @@ public class SelectEnemiesEvent implements Event {
     /**
      * This method should only be used by the sending system after the event has been sent and processed
      *
-     * @return the targets that have been selected by this event.
+     * @return The targets that have been selected by this event.
      */
     public Set<EntityRef> getTargets() {
         return targets;

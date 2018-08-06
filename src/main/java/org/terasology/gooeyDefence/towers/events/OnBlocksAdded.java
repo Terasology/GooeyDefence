@@ -17,6 +17,7 @@ package org.terasology.gooeyDefence.towers.events;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.towers.TowerBuildSystem;
 import org.terasology.gooeyDefence.towers.components.TowerComponent;
 
 import java.util.Collections;
@@ -30,20 +31,26 @@ import java.util.Set;
  * Sent against the newly changed tower
  *
  * @see TowerComponent
+ * @see TowerBuildSystem
+ * @see TowerDestroyedEvent
+ * @see TowerCreatedEvent
  */
-public class TowerChangedEvent implements Event {
+public class OnBlocksAdded implements Event {
     /*TODO: split this into the different block types */
     private Set<EntityRef> changedBlocks;
 
-    public TowerChangedEvent(EntityRef changedBlock) {
+    public OnBlocksAdded(EntityRef changedBlock) {
         changedBlocks = Collections.singleton(changedBlock);
     }
 
-    public TowerChangedEvent(Set<EntityRef> changedBlocks) {
+    public OnBlocksAdded(Set<EntityRef> changedBlocks) {
         this.changedBlocks = changedBlocks;
     }
 
-    public Set<EntityRef> getChangedBlocks() {
+    /**
+     * @return All the blocks that were added to the tower.
+     */
+    public Set<EntityRef> getAddedBlock() {
         return changedBlocks;
     }
 }

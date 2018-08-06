@@ -31,7 +31,7 @@ import org.terasology.gooeyDefence.towers.components.TowerCore;
 import org.terasology.gooeyDefence.towers.components.TowerEffector;
 import org.terasology.gooeyDefence.towers.components.TowerMultiBlockComponent;
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
-import org.terasology.gooeyDefence.towers.events.TowerChangedEvent;
+import org.terasology.gooeyDefence.towers.events.OnBlocksAdded;
 import org.terasology.gooeyDefence.towers.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.towers.events.TowerDestroyedEvent;
 import org.terasology.logic.health.DoDestroyEvent;
@@ -119,7 +119,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
             /* One neighboring tower */
             case 1:
                 addToTower(towers.iterator().next(), blockEntity)
-                        .send(new TowerChangedEvent(blockEntity));
+                        .send(new OnBlocksAdded(blockEntity));
                 break;
             /* Multiple neighboring towers */
             default:
@@ -133,7 +133,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
 
                 Set<EntityRef> newBlocks = getAllFrom(targetTower);
                 newBlocks = Sets.difference(newBlocks, oldBlocks);
-                targetTower.send(new TowerChangedEvent(newBlocks));
+                targetTower.send(new OnBlocksAdded(newBlocks));
                 break;
         }
     }

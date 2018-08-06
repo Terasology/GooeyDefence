@@ -18,6 +18,7 @@ package org.terasology.gooeyDefence.towers.events;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 import org.terasology.gooeyDefence.towers.components.TowerEffector;
+import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 
 /**
  * Event sent to remove an effect from the target
@@ -34,10 +35,17 @@ public class RemoveEffectEvent implements Event {
         this.multiplier = multiplier;
     }
 
+    /**
+     * @return The entity to remove the effect from.
+     */
     public EntityRef getTarget() {
         return target;
     }
 
+    /**
+     * @return The moderating damage multiplier to use for this effect
+     * @see TowerTargeter#getMultiplier()
+     */
     public float getMultiplier() {
         return multiplier;
     }
