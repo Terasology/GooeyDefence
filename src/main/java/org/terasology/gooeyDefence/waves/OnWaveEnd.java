@@ -16,6 +16,12 @@
 package org.terasology.gooeyDefence.waves;
 
 import org.terasology.entitySystem.event.Event;
+import org.terasology.gooeyDefence.DefenceField;
 
+/**
+ * Event sent out when an event ends
+ * <p>
+ * Sent against the {@link DefenceField#getShrineEntity() Shrine Entity}
+ */
 public class OnWaveEnd implements Event {
 }

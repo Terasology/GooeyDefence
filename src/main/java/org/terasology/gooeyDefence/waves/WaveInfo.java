@@ -49,6 +49,9 @@ public class WaveInfo {
      */
     public Range<Integer> waveRange;
 
+    /**
+     * Plain constructor for serialisation
+     */
     public WaveInfo() {
 
     }

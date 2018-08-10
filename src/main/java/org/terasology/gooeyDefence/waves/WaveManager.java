@@ -216,6 +216,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
      * All wave values that are too low to be valid for the wave number will be removed from the master map.
      *
      * @param waveNum The wave to build for
+     * @see WaveInfo
      */
     private void buildValidInfos(int waveNum) {
         validInfos = new ArrayList<>();
@@ -255,6 +256,13 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
         waveInfos.put(pos, waves);
     }
 
+    /**
+     * Gets the wave range for a wave info.
+     * As ranges cannot be serialised, they are calculated from the base values and cached.
+     *
+     * @param info The info to get the range from
+     * @return The Range this wave info operates over
+     */
     private Range<Integer> getWaveRange(WaveInfo info) {
         if (info.waveRange == null) {
             convertToRange(info);
@@ -262,6 +270,11 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
         return info.waveRange;
     }
 
+    /**
+     * Converts the values on a wave info from a lower and upper bound into an {@link Range<Integer>}
+     *
+     * @param info The wave info to convert
+     */
     private void convertToRange(WaveInfo info) {
         if (info.lowerBound >= 0) {
             if (info.upperBound >= 0) {
@@ -281,6 +294,4 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
             }
         }
     }
-
-
 }

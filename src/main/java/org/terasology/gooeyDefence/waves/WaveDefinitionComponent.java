@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * Component which allows for easy definition of the waves on prefabs
+ * @see WaveInfo
  */
 public class WaveDefinitionComponent implements Component {
     /**
