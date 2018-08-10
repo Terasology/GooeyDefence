@@ -84,7 +84,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
     private DelayManager delayManager;
     @In
     private InWorldRenderer inWorldRenderer;
-    private Random random = new FastRandom();
+    private final Random random = new FastRandom();
 
     /**
      * Applies the initial fire effect to an entity

@@ -27,8 +27,8 @@ import org.terasology.gooeyDefence.towers.components.TowerTargeter;
  * @see TowerEffector
  */
 public class RemoveEffectEvent implements Event {
-    private EntityRef target;
-    private float multiplier;
+    private final EntityRef target;
+    private final float multiplier;
 
     public RemoveEffectEvent(EntityRef target, float multiplier) {
         this.target = target;

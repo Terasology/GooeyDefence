@@ -15,8 +15,6 @@
  */
 package org.terasology.gooeyDefence.ui.towers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.towers.SelectionMethod;
@@ -45,7 +43,6 @@ import java.util.List;
  * @see TowerInfoSystem
  */
 public class TowerInfoScreen extends CoreScreenLayer {
-    private static final Logger logger = LoggerFactory.getLogger(TowerInfoScreen.class);
     /**
      * The family to use to display text as white
      */
@@ -61,60 +58,53 @@ public class TowerInfoScreen extends CoreScreenLayer {
     /**
      * The ID of the list of targeters. Also the value of `blockType` if the block is a targeter
      */
-    private static final String TARGTER_ID = "targeterList";
+    private static final String TARGETER_ID = "targeterList";
     /**
      * The ID of the list of effectors. Also the value of `blockType` if the block is an effector
      */
     private static final String EFFECTOR_ID = "effectorList";
-
-    /* Widgets that deal with the general block information */
-    private RelativeLayout blockInfoPanel;
-    private UILabel blockName;
-    private UILabel blockDescription;
-
-    /* Widget that deals with the block stats and upgrading */
-    private UIUpgrader blockUpgrades;
-
     /* Widgets that deal with the options for the block */
-    private UIButton[] targetSelectionButtons = new UIButton[4];
-    private FlowLayout selectionModeLayout;
-
-    /* Widgets that deal with the general information about the tower */
-    private UILabel powerProductionLabel;
-    private UILabel powerProduction;
-    private UILabel powerUsage;
-
-    /* Widgets that display the list of blocks */
-    private UIList<EntityRef> coreList;
-    private UIList<EntityRef> effectorList;
-    private UIList<EntityRef> targeterList;
-
-    /* Elements of the tower and block selected */
-    private TowerComponent towerComponent;
-    private EntityRef blockEntity = EntityRef.NULL;
-    private String blockType;
-
-    /* Bindings and other reused anonymous classes */
-    private ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
-        @Override
-        public Boolean get() {
-            return blockEntity != EntityRef.NULL;
-        }
-    };
-    private StringTextRenderer<EntityRef> entityToStringRenderer = new StringTextRenderer<EntityRef>() {
+    private final UIButton[] targetSelectionButtons = new UIButton[4];
+    private final StringTextRenderer<EntityRef> entityToStringRenderer = new StringTextRenderer<EntityRef>() {
         @Override
         public String getString(EntityRef entity) {
             DisplayNameComponent nameComponent = entity.getComponent(DisplayNameComponent.class);
             return nameComponent != null ? nameComponent.name : entity.getParentPrefab().getName();
         }
     };
+    /* Widgets that deal with the general block information */
+    private RelativeLayout blockInfoPanel;
+    private UILabel blockName;
+    private UILabel blockDescription;
+    /* Widget that deals with the block stats and upgrading */
+    private UIUpgrader blockUpgrades;
+    private FlowLayout selectionModeLayout;
+    /* Widgets that deal with the general information about the tower */
+    private UILabel powerProductionLabel;
+    private UILabel powerProduction;
+    private UILabel powerUsage;
+    /* Widgets that display the list of blocks */
+    private UIList<EntityRef> coreList;
+    private UIList<EntityRef> effectorList;
+    private UIList<EntityRef> targeterList;
+    /* Elements of the tower and block selected */
+    private TowerComponent towerComponent;
+    private EntityRef blockEntity = EntityRef.NULL;
+    /* Bindings and other reused anonymous classes */
+    private final ReadOnlyBinding<Boolean> generalVisibleBinding = new ReadOnlyBinding<Boolean>() {
+        @Override
+        public Boolean get() {
+            return blockEntity != EntityRef.NULL;
+        }
+    };
+    private String blockType;
 
     @Override
     public void initialise() {
         findAllWidgets();
 
         bindGeneralWidgets();
-        bindGeneralInfoWigets();
+        bindGeneralInfoWidgets();
         bindEffectorWidgets();
         bindTargeterWidgets();
         bindCoreWidgets();
@@ -167,7 +157,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
 
         coreList = find(CORE_ID, UIList.class);
         effectorList = find(EFFECTOR_ID, UIList.class);
-        targeterList = find(TARGTER_ID, UIList.class);
+        targeterList = find(TARGETER_ID, UIList.class);
     }
 
     /**
@@ -200,7 +190,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
     /**
      * Setup all the bindings for the general tower info widgets.
      */
-    private void bindGeneralInfoWigets() {
+    private void bindGeneralInfoWidgets() {
         powerProduction.bindText(new ReadOnlyBinding<String>() {
             @Override
             public String get() {
@@ -277,7 +267,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
         selectionModeLayout.bindVisible(new ReadOnlyBinding<Boolean>() {
             @Override
             public Boolean get() {
-                return blockType.equals(TARGTER_ID);
+                return blockType.equals(TARGETER_ID);
             }
         });
         targetSelectionButtons[0].subscribe(widget -> targetingOptionSelected(SelectionMethod.FIRST));

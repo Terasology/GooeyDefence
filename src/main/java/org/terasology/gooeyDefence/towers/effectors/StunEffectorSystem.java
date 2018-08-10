@@ -56,7 +56,7 @@ public class StunEffectorSystem extends BaseComponentSystem {
     /**
      * A list of the path components to re-apply to the enemy once the stun wears off.
      */
-    private Map<EntityRef, PathComponent> pathStorage = new HashMap<>();
+    private final Map<EntityRef, PathComponent> pathStorage = new HashMap<>();
 
     @In
     private DelayManager delayManager;

@@ -43,11 +43,6 @@ public class ActivateScreenSystem extends BaseComponentSystem {
     @In
     private LocalPlayer localPlayer;
 
-    @Override
-    public void postBegin() {
-        super.postBegin();
-    }
-
     /**
      * Displays the activate screen when the loading screen is closed.
      * <p>

@@ -58,7 +58,7 @@ public class UpgradingSystem extends BaseComponentSystem {
     @In
     private ClassMetaLibrary classMetaLibrary;
     private ComponentLibrary componentLibrary;
-    private Map<Class, BaseParser> parserMap = new HashMap<>();
+    private final Map<Class, BaseParser> parserMap = new HashMap<>();
 
     @Override
     public void postBegin() {
@@ -389,7 +389,7 @@ public class UpgradingSystem extends BaseComponentSystem {
      * @see BaseParser
      */
     private final class DefaultParser extends BaseParser {
-        private Component component;
+        private final Component component;
 
 
         private DefaultParser(Component component) {

@@ -71,7 +71,7 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
      * @param targeterComponent The targeter
      * @return True if the targeter can attack the enemy
      */
-    protected boolean canUseTarget(EntityRef target, Vector3f targeterPos, SniperTargeterComponent targeterComponent) {
+    private boolean canUseTarget(EntityRef target, Vector3f targeterPos, SniperTargeterComponent targeterComponent) {
         if (target.exists()) {
             Vector3f enemyLocation = target.getComponent(LocationComponent.class).getWorldPosition();
             float enemyDistance = targeterPos.distanceSquared(enemyLocation);

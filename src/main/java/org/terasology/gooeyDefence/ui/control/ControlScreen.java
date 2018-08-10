@@ -19,8 +19,8 @@ import org.terasology.gooeyDefence.waves.WaveManager;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.UIWidget;
+import org.terasology.rendering.nui.WidgetUtil;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
-import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
@@ -34,17 +34,14 @@ public class ControlScreen extends CoreScreenLayer {
     @In
     private WaveManager waveManager;
 
-    private UIButton startButton;
     private UIWaveInfo waveInfo;
-    private UILabel waveDuration;
 
     @Override
     public void initialise() {
-        startButton = find("startButton", UIButton.class);
         waveInfo = find("waveInfo", UIWaveInfo.class);
-        waveDuration = find("waveDuration", UILabel.class);
+        UILabel waveDuration = find("waveDuration", UILabel.class);
 
-        startButton.subscribe(this::startButtonPressed);
+        WidgetUtil.trySubscribe(this, "startButton", this::startButtonPressed);
         waveInfo.setWaveInfo(waveManager.getCurrentWave());
         waveDuration.bindText(new ReadOnlyBinding<String>() {
             @Override
@@ -81,6 +78,7 @@ public class ControlScreen extends CoreScreenLayer {
     /**
      * Method handler for when the start button is pressed.
      */
+    @SuppressWarnings("unused")
     private void startButtonPressed(UIWidget ignored) {
         waveManager.startAttack();
     }

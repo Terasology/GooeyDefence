@@ -30,8 +30,8 @@ import java.util.List;
  * @see PathfindingManager
  */
 public class OnEntrancePathCalculated implements Event {
-    private int pathId;
-    private List<Vector3i> newPath;
+    private final int pathId;
+    private final List<Vector3i> newPath;
 
     public OnEntrancePathCalculated(int pathId, List<Vector3i> newPath) {
         this.pathId = pathId;

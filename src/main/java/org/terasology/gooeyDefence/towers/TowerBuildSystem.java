@@ -16,8 +16,6 @@
 package org.terasology.gooeyDefence.towers;
 
 import com.google.common.collect.Sets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -50,7 +48,6 @@ import java.util.Set;
  */
 @RegisterSystem
 public class TowerBuildSystem extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(TowerBuildSystem.class);
 
     @In
     private BlockEntityRegistry blockEntityRegistry;

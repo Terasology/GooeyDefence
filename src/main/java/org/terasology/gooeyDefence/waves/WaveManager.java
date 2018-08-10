@@ -16,7 +16,6 @@
 package org.terasology.gooeyDefence.waves;
 
 import com.google.common.collect.Range;
-import com.google.common.collect.Streams;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -48,42 +47,37 @@ import java.util.TreeMap;
 @Share(WaveManager.class)
 public class WaveManager extends BaseComponentSystem implements UpdateSubscriberSystem {
     /**
+     * All possible wave info's that could be valid.
+     * Arranged by lower bound, using -1 if they have none.
+     */
+    private final SortedMap<Integer, Set<WaveInfo>> waveInfos = new TreeMap<>(Integer::compareTo);
+    private final Random random = new FastRandom();
+    /**
      * Flag used to indicate that an attack is underway
      */
     private boolean isAttackUnderway;
-
     /**
      * A list of the time until another enemy will be spawned at each entrance
      */
     private float[] spawnDelays = {};
-
     /**
      * All the valid Wave Info's, according to the most recent calculation
      */
     private List<WaveInfo> validInfos = new ArrayList<>();
-
-    /**
-     * All possible wave info's that could be valid.
-     * Arranged by lower bound, using -1 if they have none.
-     */
-    private SortedMap<Integer, Set<WaveInfo>> waveInfos = new TreeMap<>(Integer::compareTo);
-
     /**
      * The current wave that is being spawned, or is about to be spawned.
      */
     private WaveInfo currentWave;
-
     private float remainingDuration;
-
     @In
     private EnemyManager enemyManager;
     @In
     private StatSystem statSystem;
-    private Random random = new FastRandom();
 
     @Override
     public void preBegin() {
-        Prefab config = Assets.getPrefab(DefenceUris.WAVES_CONFIG).get();
+        Prefab config = Assets.getPrefab(DefenceUris.WAVES_CONFIG)
+                .orElseThrow(() -> new IllegalStateException("No wave config found"));
         stripFromComponent(config.getComponent(WaveDefinitionComponent.class));
 
         generateWave(statSystem.getWaveNumber());
@@ -113,7 +107,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
         if (!isAttackUnderway) {
             isAttackUnderway = true;
 
-            remainingDuration = Streams.stream(currentWave.entranceInfos)
+            remainingDuration = currentWave.entranceInfos.stream()
                     .map(entranceInfo -> entranceInfo.delays
                             .stream()
                             .reduce(0f, Float::sum))

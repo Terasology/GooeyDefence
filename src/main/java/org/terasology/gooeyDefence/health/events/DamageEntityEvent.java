@@ -28,7 +28,7 @@ import org.terasology.gooeyDefence.health.HealthComponent;
  * @see EntityDeathEvent
  */
 public class DamageEntityEvent implements Event {
-    private int damage;
+    private final int damage;
 
     public DamageEntityEvent(int damage) {
         this.damage = damage;

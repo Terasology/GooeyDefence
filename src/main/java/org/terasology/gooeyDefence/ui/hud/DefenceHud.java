@@ -36,15 +36,13 @@ public class DefenceHud extends CoreHudWidget {
     private StatSystem statSystem;
 
     private UIWaveInfo waveInfo;
-    private UILabel waveDuration;
-    private UILabel moneyLabel;
 
 
     @Override
     public void initialise() {
         waveInfo = find("waveInfo", UIWaveInfo.class);
-        waveDuration = find("waveDuration", UILabel.class);
-        moneyLabel = find("moneyLabel", UILabel.class);
+        UILabel waveDuration = find("waveDuration", UILabel.class);
+        UILabel moneyLabel = find("moneyLabel", UILabel.class);
 
 
         waveDuration.bindText(new ReadOnlyBinding<String>() {

@@ -73,7 +73,7 @@ public final class DefenceField {
      * <p>
      * This is the point enemies will path to so the enemies must be able reach it. (ie, no solid blocks there)
      */
-    public static Vector3i fieldCentre = new Vector3i(0, 0, 0);
+    public static final Vector3i FIELD_CENTRE = new Vector3i(0, 0, 0);
     /**
      * The location of each of the entrances.
      * <p>

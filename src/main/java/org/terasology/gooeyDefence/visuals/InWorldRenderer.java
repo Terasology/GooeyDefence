@@ -80,8 +80,8 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     private int shrineDamaged;
     private EntityRef rangeSphere;
-    private Map<EntityRef, SphereInfo> expandingSpheres = new HashMap<>();
-    private Map<EntityRef, EntityRef> bullets = new HashMap<>();
+    private final Map<EntityRef, SphereInfo> expandingSpheres = new HashMap<>();
+    private final Map<EntityRef, EntityRef> bullets = new HashMap<>();
 
     @Override
     public void initialise() {

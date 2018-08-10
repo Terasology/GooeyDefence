@@ -38,12 +38,12 @@ import java.util.List;
  * @see UIUpgrader
  */
 public class UIUpgrader extends CoreWidget {
-    private UIComponentFields componentFields = new UIComponentFields();
-    private UIUpgradePaths upgradePaths = new UIUpgradePaths();
+    private final UIComponentFields componentFields = new UIComponentFields();
+    private final UIUpgradePaths upgradePaths = new UIUpgradePaths();
     private Binding<EntityRef> entity = new DefaultBinding<>(EntityRef.NULL);
     private UpgradeInfo currentUpgrade;
     private UpgradingSystem upgradingSystem;
-    private Binding<BlockUpgradesComponent> upgradesComponent = new ReadOnlyBinding<BlockUpgradesComponent>() {
+    private final Binding<BlockUpgradesComponent> upgradesComponent = new ReadOnlyBinding<BlockUpgradesComponent>() {
         @Override
         public BlockUpgradesComponent get() {
             return isEnabled() ? entity.get().getComponent(BlockUpgradesComponent.class) : null;

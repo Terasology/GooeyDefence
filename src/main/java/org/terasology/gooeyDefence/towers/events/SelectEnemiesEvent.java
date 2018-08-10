@@ -30,7 +30,7 @@ import java.util.Set;
  * @see TowerTargeter
  */
 public class SelectEnemiesEvent implements Event {
-    private Set<EntityRef> targets = new HashSet<>();
+    private final Set<EntityRef> targets = new HashSet<>();
 
     /**
      * This method should only be used by the sending system after the event has been sent and processed

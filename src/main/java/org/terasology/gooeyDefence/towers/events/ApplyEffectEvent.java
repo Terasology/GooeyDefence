@@ -27,8 +27,8 @@ import org.terasology.gooeyDefence.towers.components.TowerTargeter;
  * @see TowerEffector
  */
 public class ApplyEffectEvent implements Event {
-    private EntityRef target;
-    private float multiplier;
+    private final EntityRef target;
+    private final float multiplier;
 
     public ApplyEffectEvent(EntityRef target, float multiplier) {
         this.target = target;

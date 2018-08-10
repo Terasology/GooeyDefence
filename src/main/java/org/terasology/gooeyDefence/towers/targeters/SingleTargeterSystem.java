@@ -15,8 +15,6 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -35,7 +33,6 @@ import org.terasology.registry.In;
  */
 @RegisterSystem
 public class SingleTargeterSystem extends BaseTargeterSystem {
-    private static final Logger logger = LoggerFactory.getLogger(SingleTargeterSystem.class);
 
     @In
     protected EnemyManager enemyManager;

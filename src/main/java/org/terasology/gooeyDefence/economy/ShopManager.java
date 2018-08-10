@@ -154,10 +154,9 @@ public class ShopManager extends BaseComponentSystem {
      * Calls on {@link #purchase(EntityRef)}
      *
      * @param block The block to purchase
-     * @return True if the purchase was successful. False otherwise
      */
-    public boolean purchase(Block block) {
-        return purchase(blockItemFactory.newInstance(block.getBlockFamily()));
+    public void purchase(Block block) {
+        purchase(blockItemFactory.newInstance(block.getBlockFamily()));
     }
 
     /**
@@ -166,21 +165,20 @@ public class ShopManager extends BaseComponentSystem {
      * Calls on {@link #purchase(EntityRef)}
      *
      * @param prefab The prefab to purchase
-     * @return True if the purchase was successful. False otherwise
      */
-    public boolean purchase(Prefab prefab) {
-        return purchase(entityManager.create(prefab));
+    public void purchase(Prefab prefab) {
+        purchase(entityManager.create(prefab));
     }
 
     /**
      * Tries to purchase an entity, by removing the cost and giving the item.
      *
      * @param ware The item to buy
-     * @return True if the item was bought and given successful, false otherwise.
      */
-    private boolean purchase(EntityRef ware) {
+    private void purchase(EntityRef ware) {
         EntityRef character = localPlayer.getCharacterEntity();
-        return EconomyManager.tryRemoveMoney(character, getWareCost(ware))
-                && inventoryManager.giveItem(character, character, ware);
+        if (EconomyManager.tryRemoveMoney(character, getWareCost(ware))) {
+            inventoryManager.giveItem(character, character, ware);
+        }
     }
 }

@@ -16,8 +16,6 @@
 package org.terasology.gooeyDefence.towers;
 
 import com.google.common.collect.Sets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -45,15 +43,12 @@ import java.util.Set;
 
 @RegisterSystem
 public class TowerManager extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(TowerManager.class);
 
+    private final Set<EntityRef> towerEntities = new HashSet<>();
     @In
     private DelayManager delayManager;
     @In
     private EntityManager entityManager;
-
-    private Set<EntityRef> towerEntities = new HashSet<>();
-
 
     /**
      * Get the drain caused by all the targeters on a tower

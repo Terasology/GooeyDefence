@@ -40,7 +40,7 @@ import java.util.function.Consumer;
  * @see UpgradingSystem
  */
 public class UIUpgradePaths extends CoreWidget {
-    private FlowLayout upgrades = new FlowLayout();
+    private final FlowLayout upgrades = new FlowLayout();
     private Consumer<UpgradeList> listener;
     private List<UpgradeList> upgradeLists;
     private Binding<BlockUpgradesComponent> upgradesComponent = new DefaultBinding<>();

@@ -37,7 +37,7 @@ import java.util.Set;
  */
 public class OnBlocksAdded implements Event {
     /*TODO: split this into the different block types */
-    private Set<EntityRef> changedBlocks;
+    private final Set<EntityRef> changedBlocks;
 
     public OnBlocksAdded(EntityRef changedBlock) {
         changedBlocks = Collections.singleton(changedBlock);

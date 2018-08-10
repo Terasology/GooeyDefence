@@ -39,7 +39,7 @@ public class EconomyManager extends BaseComponentSystem {
      * @param amount      The amount of money to add
      * @return True if the transaction was successful, false otherwise.
      */
-    public static boolean tryAddMoney(EntityRef destination, int amount) {
+    private static boolean tryAddMoney(EntityRef destination, int amount) {
         WalletComponent component = destination.getComponent(WalletComponent.class);
         if (component != null) {
             component.funds = component.funds + amount;
@@ -73,7 +73,7 @@ public class EconomyManager extends BaseComponentSystem {
      * @param threshold The minimum level to check for
      * @return True if the entity has enough money
      */
-    public static boolean checkBalance(EntityRef source, int threshold) {
+    private static boolean checkBalance(EntityRef source, int threshold) {
         return getBalance(source) >= threshold;
     }
 

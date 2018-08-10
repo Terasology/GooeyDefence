@@ -75,7 +75,7 @@ public class PathfindingManager extends BaseComponentSystem {
     /**
      * Any entities that require re-pathing.
      */
-    private Set<EntityRef> queuedEnemies = new HashSet<>();
+    private final Set<EntityRef> queuedEnemies = new HashSet<>();
 
 
     @Override
@@ -193,7 +193,7 @@ public class PathfindingManager extends BaseComponentSystem {
     private JPSConfig buildJpsConfig(Vector3i start) {
         JPSConfig result = new JPSConfig();
         result.start = start;
-        result.stop = DefenceField.fieldCentre;
+        result.stop = DefenceField.FIELD_CENTRE;
         result.maxDepth = DefenceField.outerRingSize * 2;
         //TODO: Replace width and height with values from enemy.
         result.plugin = new EnemyWalkingPlugin(worldProvider, 0.5f, 0.5f);

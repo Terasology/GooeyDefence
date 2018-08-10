@@ -32,5 +32,5 @@ public class FieldConfigComponent implements Component {
     public int shrineRingSize;
     public int outerRingSize;
     public int entranceRingSize;
-    public List<List<List<Integer>>> shrineData = new ArrayList<>();
+    public final List<List<List<Integer>>> shrineData = new ArrayList<>();
 }

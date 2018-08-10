@@ -24,6 +24,7 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.assets.texture.Texture;
 import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.rendering.nui.WidgetUtil;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.ingame.inventory.InventoryGrid;
 import org.terasology.rendering.nui.layers.ingame.inventory.InventoryScreen;
@@ -31,7 +32,6 @@ import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.rendering.nui.layouts.FlowLayout;
 import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
 import org.terasology.rendering.nui.widgets.TooltipLine;
-import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.utilities.Assets;
 import org.terasology.world.block.Block;
@@ -49,19 +49,15 @@ import java.util.Set;
  */
 public class ShopScreen extends CoreScreenLayer {
 
+    private final Texture texture = Assets.getTexture("engine:terrain")
+            .orElseGet(() -> Assets.getTexture("engine:default").get());
     private FlowLayout wareList;
     private UILabel wareName;
     private ItemIcon wareDisplay;
     private UILabel wareDescription;
     private UILabel wareCost;
-
     private Block selectedBlock;
     private Prefab selectedPrefab;
-
-
-    private Texture texture = Assets.getTexture("engine:terrain")
-            .orElseGet(() -> Assets.getTexture("engine:default").get());
-
     @In
     private LocalPlayer localPlayer;
     @In
@@ -84,8 +80,9 @@ public class ShopScreen extends CoreScreenLayer {
         wareDescription = find("wareDescription", UILabel.class);
         wareCost = find("wareCost", UILabel.class);
         RelativeLayout wareInfoLayout = find("wareInfoLayout", RelativeLayout.class);
-        UIButton buyButton = find("buyButton", UIButton.class);
 
+
+        WidgetUtil.trySubscribe(this, "buyButton", widget -> attemptItemPurchase());
 
         /* No null check is performed, as if a value is null then something has gone wrong and we should crash anyway */
         wareInfoLayout.bindVisible(new ReadOnlyBinding<Boolean>() {
@@ -94,7 +91,6 @@ public class ShopScreen extends CoreScreenLayer {
                 return selectedPrefab != null || selectedBlock != null;
             }
         });
-        buyButton.subscribe(widget -> attemptItemPurchase());
         inventory.bindTargetEntity(new ReadOnlyBinding<EntityRef>() {
             @Override
             public EntityRef get() {

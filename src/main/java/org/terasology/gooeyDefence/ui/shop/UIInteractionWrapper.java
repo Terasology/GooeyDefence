@@ -42,9 +42,9 @@ import java.util.List;
 public class UIInteractionWrapper extends CoreWidget {
     private UIWidget content;
     private ActivateEventListener listener;
-    private UIList<TooltipLine> tooltip;
+    private final UIList<TooltipLine> tooltip;
 
-    private InteractionListener interactionListener = new BaseInteractionListener() {
+    private final InteractionListener interactionListener = new BaseInteractionListener() {
         @Override
         public boolean onMouseClick(NUIMouseClickEvent event) {
             if (listener != null) {

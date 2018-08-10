@@ -40,7 +40,7 @@ import java.util.Map;
  */
 public class UIWaveInfo extends CoreWidget {
     private WaveInfo waveInfo = new WaveInfo();
-    private Map<String, Integer> prefabs = new HashMap<>();
+    private final Map<String, Integer> prefabs = new HashMap<>();
 
     public UIWaveInfo() {
         collatePrefabs();

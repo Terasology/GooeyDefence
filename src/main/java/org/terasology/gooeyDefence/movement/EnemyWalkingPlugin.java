@@ -64,7 +64,7 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
     }
 
     /**
-     * When travelling horizontally, the enemy can travel along all 8 horizonatal directions.
+     * When travelling horizontally, the enemy can travel along all 8 horizontal directions.
      * That is, the enemy can travel diagonally as well as cardinally.
      *
      * @param to   The ending position

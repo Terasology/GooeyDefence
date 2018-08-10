@@ -16,8 +16,6 @@
 
 package org.terasology.gooeyDefence;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -56,9 +54,8 @@ import java.util.Set;
 @Share(EnemyManager.class)
 @RegisterSystem
 public class EnemyManager extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(EnemyManager.class);
 
-    private Set<EntityRef> enemies = new HashSet<>();
+    private final Set<EntityRef> enemies = new HashSet<>();
 
     @In
     private EntityManager entityManager;
@@ -192,7 +189,7 @@ public class EnemyManager extends BaseComponentSystem {
      *
      * @param enemy The enemy to destroy
      */
-    public void destroyEnemy(EntityRef enemy) {
+    private void destroyEnemy(EntityRef enemy) {
         dropMoney(enemy);
         enemies.remove(enemy);
         enemy.destroy();
