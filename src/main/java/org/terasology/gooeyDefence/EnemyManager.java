@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Handles all enemy based actions. Is controlled by {@link DefenceWorldManager}.
+ * Handles all enemy based actions.
  */
 @Share(EnemyManager.class)
 @RegisterSystem

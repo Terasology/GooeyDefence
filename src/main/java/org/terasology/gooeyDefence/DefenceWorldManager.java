@@ -51,9 +51,8 @@ import org.terasology.world.sun.CelestialSystem;
 import java.util.Optional;
 
 /**
- * A class that provides dynamic information about the Defence Field.
- * Also performs all high level actions, delegating specifics to other systems.
- * Static information is given by {@link DefenceField}
+ * Performs miscellaneous tasks not located in other tasks
+ * A catch all class.
  *
  * @see DefenceField
  */

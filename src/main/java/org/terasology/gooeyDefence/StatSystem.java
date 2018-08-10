@@ -32,6 +32,9 @@ import java.util.Optional;
 
 /**
  * Keeps track of various stats within the game at a global level.
+ * This is dynamic information. Static information is provided by the {@link DefenceField} class
+ *
+ * @see DefenceField
  */
 @RegisterSystem
 @Share(StatSystem.class)
@@ -55,6 +58,7 @@ public class StatSystem extends BaseComponentSystem {
 
     /**
      * Used to get the local player's character
+     * <p>
      * Sent when the field is activated.
      *
      * @see OnFieldActivated
@@ -64,10 +68,17 @@ public class StatSystem extends BaseComponentSystem {
         player = localPlayer.getCharacterEntity();
     }
 
+    /**
+     * Progress the counter to the next wave.
+     * It is impossible to go back a wave, hence there is no decrement option.
+     */
     public void incrementWave() {
         waveNumber++;
     }
 
+    /**
+     * @return The current wave for the game.
+     */
     public int getWaveNumber() {
         return waveNumber;
     }

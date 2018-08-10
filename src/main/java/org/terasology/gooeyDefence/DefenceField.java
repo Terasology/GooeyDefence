@@ -30,25 +30,62 @@ import java.util.List;
 
 /**
  * A class that provides Static information about the Defence Field.
- * Dynamic information is given by {@link DefenceWorldManager}
+ * Dynamic information is given by {@link StatSystem}
  *
- * @see DefenceWorldManager
+ * @see StatSystem
  */
 public final class DefenceField {
+    /**
+     * The number of entrances the field has.
+     */
     public static int entranceCount;
-    public static int shrineRingSize;
+    /**
+     * The radius of the main outer dome.
+     * Given in blocks.
+     */
     public static int outerRingSize;
+    /**
+     * The radius of the clear ring around the shrine.
+     * Given in blocks.
+     */
+    public static int shrineRingSize;
+    /**
+     * The radius of the clear zone around the entrance.
+     * Given in blocks.
+     */
     public static int entranceRingSize;
 
+    /**
+     * A boolean that controls if the field is active or not.
+     * Many systems use this to control if they are active or not
+     */
     public static boolean fieldActivated;
 
     /**
      * The data for the shrine's shape.
      * A 1 indicates a block should be placed, and a 0 indicates an empty space
+     *
+     * @see FieldConfigComponent#shrineData
      */
     public static Vector3i[] shrineData;
+    /**
+     * The location of the centre of the field.
+     * <p>
+     * This is the point enemies will path to so the enemies must be able reach it. (ie, no solid blocks there)
+     */
     public static Vector3i fieldCentre = new Vector3i(0, 0, 0);
+    /**
+     * The location of each of the entrances.
+     * <p>
+     * This is automatically generated from the value of {@link #entranceCount}
+     */
     private static Vector3i[] entrances;
+    /**
+     * The entity representing the main shrine.
+     * <p>
+     * This entity is also used to send events, when no appropriate alternative is available.
+     * It is set to the block entity of a block in the shrine.
+     */
     private static EntityRef shrineEntity = EntityRef.NULL;
 
     /**

@@ -15,6 +15,9 @@
  */
 package org.terasology.gooeyDefence;
 
+/**
+ * Contains a static list of assorted assets used throughout the codebase.
+ */
 public final class DefenceUris {
     public static final String MONEY_ITEM = "GooeyDefence:Money";
     public static final String PLAYER = "Engine:Player";
