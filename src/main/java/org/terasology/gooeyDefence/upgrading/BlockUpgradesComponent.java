@@ -20,7 +20,7 @@ import org.terasology.entitySystem.Component;
 import java.util.List;
 
 /**
- * Contains all the information related tot he upgrades possible for this block
+ * Contains all the information related to the upgrades possible for this block
  *
  * @see UpgradeList
  * @see UpgradingSystem
@@ -29,7 +29,7 @@ public class BlockUpgradesComponent implements Component {
     /**
      * The component the upgrades will apply to.
      * Should be the name without the <code>Component</code> ending.
-     * Eg, <code>"SingleTargeterComponent"</code> should be <code>"SingleTargeter</code>
+     * Eg, <code>"SingleTargeterComponent"</code> should be <code>"SingleTargeter"</code>
      */
     public String componentName;
     /**

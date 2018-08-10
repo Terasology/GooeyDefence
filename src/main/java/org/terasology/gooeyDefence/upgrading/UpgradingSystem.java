@@ -27,6 +27,7 @@ import org.terasology.entitySystem.metadata.ComponentMetadata;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
+import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
@@ -41,7 +42,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Handles applying an upgrade to a component
+ * Handles both applying an upgrade to a component and
+ * parsing components and upgrades for UI.
+ *
+ * @see BlockUpgradesComponent
+ * @see BaseParser
+ * @see UIUpgrader
  */
 @Share(UpgradingSystem.class)
 @RegisterSystem
@@ -154,6 +160,9 @@ public class UpgradingSystem extends BaseComponentSystem {
     }
 
 
+    /**
+     * @inheritDoc
+     */
     public <T extends Component> List<String> getComponentFields(T component) {
         return getComponentFields(component, true);
     }
@@ -199,7 +208,7 @@ public class UpgradingSystem extends BaseComponentSystem {
         List<String> fields = getComponentFields(component, false);
         List<String> values = new ArrayList<>(fields.size());
         ComponentMetadata<T> metadata = componentLibrary.getMetadata(component);
-        BaseParser parser = parserMap.getOrDefault(component.getClass(), new DefaultParser());
+        BaseParser parser = parserMap.getOrDefault(component.getClass(), new DefaultParser(component));
 
         for (String field : fields) {
             ComponentFieldMetadata<T, ?> fieldMetadata = metadata.getField(field);
@@ -238,7 +247,7 @@ public class UpgradingSystem extends BaseComponentSystem {
         }
 
         ComponentMetadata<T> metadata = componentLibrary.getMetadata(component);
-        BaseParser parser = parserMap.getOrDefault(component.getClass(), new DefaultParser());
+        BaseParser parser = parserMap.getOrDefault(component.getClass(), new DefaultParser(component));
         for (String field : fields) {
             ComponentFieldMetadata<T, ?> fieldMetadata = metadata.getField(field);
             Number upgradeValue = upgradeInfo.values.getOrDefault(field, null);
@@ -305,6 +314,7 @@ public class UpgradingSystem extends BaseComponentSystem {
     private Object convertToType(Object value, Class<?> type) {
         /* Handle the type being an enum. Can't do this through the switch */
         if (Enum.class.isAssignableFrom(type)) {
+            //noinspection unchecked
             return Enum.valueOf((Class<? extends Enum>) type, value.toString());
         }
         /* The boxing via String.valueOf() is because the de-serialiser /really/ likes mixing up types oddly. */
@@ -316,6 +326,7 @@ public class UpgradingSystem extends BaseComponentSystem {
             case "long":
                 return Double.valueOf(String.valueOf(value)).longValue();
             case "double":
+                //noinspection UnnecessaryUnboxing
                 return Double.valueOf(String.valueOf(value)).doubleValue();
             case "short":
                 return Double.valueOf(String.valueOf(value)).shortValue();
@@ -377,14 +388,11 @@ public class UpgradingSystem extends BaseComponentSystem {
      *
      * @see BaseParser
      */
-    private class DefaultParser extends BaseParser {
+    private final class DefaultParser extends BaseParser {
         private Component component;
 
-        public DefaultParser() {
 
-        }
-
-        public DefaultParser(Component component) {
+        private DefaultParser(Component component) {
             this.component = component;
         }
 
