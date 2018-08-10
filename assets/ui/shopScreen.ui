@@ -1,6 +1,6 @@
 {
   "type": "ShopScreen",
-  "skin": "shopSkin",
+  "skin": "defenceDefault",
   "contents": {
     "type": "RelativeLayout",
     "id": "outerLayout",
