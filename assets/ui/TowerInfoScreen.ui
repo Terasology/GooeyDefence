@@ -1,0 +1,393 @@
+{
+  "type": "TowerInfoScreen",
+  "skin": "defenseDefault",
+  "contents": {
+    "type": "RelativeLayout",
+    "id": "outerLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "id": "outerBox",
+        "layoutInfo": {
+          "use-content-height": false,
+          "use-content-width": false,
+          "position-left": {
+            "offset": 64
+          },
+          "position-right": {
+            "offset": 64
+          },
+          "position-top": {
+            "offset": 64
+          },
+          "position-bottom": {
+            "offset": 64
+          }
+        },
+        "content": {
+          "type": "ColumnLayout",
+          "id": "outerColumnLayout",
+          "columns": 3,
+          "column-widths": [
+            0.33,
+            0.33,
+            0.33
+          ],
+          "contents": [
+            {
+              "type": "RelativeLayout",
+              "id": "blockList",
+              "contents": [
+                {
+                  "type": "UILabel",
+                  "text": "Targeters",
+                  "id": "targeterListLabel",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-top": {
+                      "offset": 32
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "ScrollableArea",
+                  "id": "targeterListArea",
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-top": {
+                      "target": "BOTTOM",
+                      "offset": 8,
+                      "widget": "targeterListLabel"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    },
+                    "position-bottom": {
+                      "target": "TOP",
+                      "offset": 16,
+                      "widget": "effectorListLabel"
+                    }
+                  },
+                  "content": {
+                    "type": "UIList",
+                    "id": "targeterList"
+                  }
+                },
+                {
+                  "type": "UILabel",
+                  "text": "Effectors",
+                  "id": "effectorListLabel",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "use-content-width": true,
+                    "position-vertical-center": {},
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "ScrollableArea",
+                  "id": "effectorListArea",
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-top": {
+                      "target": "BOTTOM",
+                      "offset": 8,
+                      "widget": "effectorListLabel"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    },
+                    "position-bottom": {
+                      "offset": 16
+                    }
+                  },
+                  "content": {
+                    "type": "UIList",
+                    "id": "effectorList"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "RelativeLayout",
+              "id": "blockInfoPanel",
+              "contents": [
+                {
+                  "type": "UILabel",
+                  "id": "blockName",
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-top": {
+                      "offset": 32
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "UILabel",
+                  "id": "blockDescription",
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "blockName"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "UILabel",
+                  "id": "blockUpgradesLabel",
+                  "text": "Stats & Upgrades",
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "blockDescription"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "UIUpgrader",
+                  "id": "blockUpgrades",
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-top": {
+                      "offset": 8,
+                      "target": "BOTTOM",
+                      "widget": "blockUpgradesLabel"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "ColumnLayout",
+                  "id": "blockSettings",
+                  "fillVerticalSpace": false,
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "blockUpgrades"
+                    },
+                    "position-horizontal-center": {}
+                  },
+                  "contents": [
+                    {
+                      "type": "FlowLayout",
+                      "id": "selectionModeLayout",
+                      "contents": [
+                        {
+                          "type": "UIButton",
+                          "id": "firstSelectionButton",
+                          "text": "First",
+                          "layoutInfo": {
+                          }
+                        },
+                        {
+                          "type": "UIButton",
+                          "id": "weakSelectionButton",
+                          "text": "Weak",
+                          "layoutInfo": {
+                          }
+                        },
+                        {
+                          "type": "UIButton",
+                          "id": "strongSelectionButton",
+                          "text": "Strong",
+                          "layoutInfo": {
+                          }
+                        },
+                        {
+                          "type": "UIButton",
+                          "id": "randomSelectionButton",
+                          "text": "Random",
+                          "layoutInfo": {
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "RelativeLayout",
+              "id": "powerColumn",
+              "contents": [
+                {
+                  "type": "UILabel",
+                  "id": "coreListLabel",
+                  "text": "Tower Cores",
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-top": {
+                      "offset": 32
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "ScrollableArea",
+                  "id": "coreListArea",
+                  "layoutInfo": {
+                    "use-content-width": false,
+                    "use-content-height": false,
+                    "position-top": {
+                      "offset": 16,
+                      "target": "BOTTOM",
+                      "widget": "coreListLabel"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    },
+                    "position-bottom": {
+                      "offset": 16,
+                      "target": "TOP",
+                      "widget": "towerStatsLabel"
+                    }
+                  },
+                  "content": {
+                    "type": "UIList",
+                    "id": "coreList"
+                  }
+                },
+                {
+                  "type": "UILabel",
+                  "id": "towerStatsLabel",
+                  "text": "Tower Stats & Info",
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-vertical-center": {},
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    }
+                  }
+                },
+                {
+                  "type": "RelativeLayout",
+                  "id": "towerStats",
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-top": {
+                      "offset": 8,
+                      "target": "BOTTOM",
+                      "widget": "towerStatsLabel"
+                    },
+                    "position-left": {
+                      "offset": 16
+                    },
+                    "position-right": {
+                      "offset": 16
+                    },
+                    "position-bottom": {
+                      "offset": 16
+                    }
+                  },
+                  "contents": [
+                    {
+                      "type": "ColumnLayout",
+                      "id": "towerInfoColumn",
+                      "columns": 2,
+                      "fillVerticalSpace": false,
+                      "autoSizeColumns": true,
+                      "layoutInfo": {
+                        "position-top": {},
+                        "position-left": {},
+                        "position-right": {},
+                        "position-bottom": {}
+                      },
+                      "contents": [
+                        {
+                          "type": "UILabel",
+                          "id": "powerProductionLabel",
+                          "text": "Total Power Produced: "
+                        },
+                        {
+                          "type": "UILabel",
+                          "id": "powerProduction"
+                        },
+                        {
+                          "type": "UILabel",
+                          "id": "powerUsageLabel",
+                          "text": "Total Power Used: "
+                        },
+                        {
+                          "type": "UILabel",
+                          "id": "powerUsage"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
