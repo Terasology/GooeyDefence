@@ -24,6 +24,9 @@ import org.terasology.entitySystem.Component;
 public class SplashBulletComponent implements Component {
     public float splashRange = 1f;
 
+    /**
+     * Required for serialisation.
+     */
     public SplashBulletComponent() {
 
     }

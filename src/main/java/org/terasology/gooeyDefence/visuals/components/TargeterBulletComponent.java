@@ -17,5 +17,8 @@ package org.terasology.gooeyDefence.visuals.components;
 
 import org.terasology.entitySystem.Component;
 
+/**
+ * Flag component used to indicated that an entity is a bullet from a targeter.
+ */
 public class TargeterBulletComponent implements Component {
 }

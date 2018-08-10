@@ -17,5 +17,8 @@ package org.terasology.gooeyDefence.visuals.components;
 
 import org.terasology.entitySystem.Component;
 
+/**
+ * Flag component used on path particle entities.
+ */
 public class PathBlockComponent implements Component {
 }

@@ -57,12 +57,19 @@ import java.util.Map;
 /**
  * Handles misc rendering duties for the module.
  * These involve rendering stuff in world for systems that provide functionality.
+ * <p>
+ * Also handles application and removal of particle effects and shot entities.
  */
 @RegisterSystem
 @Share(InWorldRenderer.class)
 public class InWorldRenderer extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
 
+    /**
+     * A position to move the range indicator that is hidden from the player.
+     * This position is below ground
+     */
     private static final Vector3f OUT_OF_SIGHT = new Vector3f(0, -3, 0);
+
     private BlockSelectionRenderer shrineDamageRenderer;
     @In
     private Time time;
@@ -178,6 +185,9 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         shrineDamageRenderer.endRenderOverlay();
     }
 
+    /**
+     * @inheritDoc
+     */
     public void shootBulletTowards(EntityRef goal, Vector3f start) {
         shootBulletTowards(goal, start, null);
     }
@@ -208,11 +218,6 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
             bullet.addOrSaveComponent(component);
         }
         bullets.put(bullet, goal);
-    }
-
-
-    public void displayExpandingSphere(Vector3f position, float duration) {
-        displayExpandingSphere(position, duration, duration);
     }
 
     /**
@@ -405,10 +410,10 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         /**
          * How long the rangeSphere should expand for, in seconds
          */
-        float duration;
+        private float duration;
         /**
          * How fast the rangeSphere should expand, in blocks per seconds.
          */
-        float expansion;
+        private float expansion;
     }
 }
