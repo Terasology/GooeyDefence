@@ -19,6 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.gooeyDefence.waves.OnWaveEnd;
 import org.terasology.math.geom.Rect2f;
@@ -45,8 +46,8 @@ public class DefenceHudManager extends BaseComponentSystem {
 
     @Override
     public void postBegin() {
-        defenceHud = nuiManager.getHUD().addHUDElement("defenceHud", DefenceHud.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
-        HealthHud healthHud = nuiManager.getHUD().getHUDElement("Core:HealthHud", HealthHud.class);
+        defenceHud = nuiManager.getHUD().addHUDElement(DefenceUris.DEFENCE_HUD, DefenceHud.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
+        HealthHud healthHud = nuiManager.getHUD().getHUDElement(DefenceUris.HEALTH_SCREEN, HealthHud.class);
         UIIconBar healthBar = healthHud.find("healthBar", UIIconBar.class);
 
         defenceHud.updateCurrentWave();

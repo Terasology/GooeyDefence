@@ -43,6 +43,7 @@ import java.util.Set;
 
 @RegisterSystem
 public class TowerManager extends BaseComponentSystem {
+    private static final String EVENT_ID = "towerAttack";
 
     private final Set<EntityRef> towerEntities = new HashSet<>();
     @In
@@ -348,7 +349,7 @@ public class TowerManager extends BaseComponentSystem {
      * @see PeriodicActionTriggeredEvent
      */
     private boolean isEventIdCorrect(String eventId) {
-        return eventId.startsWith("towerDefence");
+        return eventId.startsWith(EVENT_ID);
     }
 
     /**
@@ -371,6 +372,6 @@ public class TowerManager extends BaseComponentSystem {
      * @see PeriodicActionTriggeredEvent
      */
     private String buildEventId(EntityRef targeter) {
-        return "towerDefence|" + targeter.getId();
+        return EVENT_ID + "|" + targeter.getId();
     }
 }

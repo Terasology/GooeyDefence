@@ -21,6 +21,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceField;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnFieldReset;
@@ -52,9 +53,9 @@ public class DeathScreenSystem extends BaseComponentSystem {
      */
     @ReceiveEvent(components = ShrineComponent.class)
     public void onEntityDeath(EntityDeathEvent event, EntityRef entity) {
-        if (!nuiManager.isOpen("Engine:DeathScreen")) {
+        if (!nuiManager.isOpen(DefenceUris.DEATH_SCREEN)) {
             time.setPaused(true);
-            DeathScreen deathScreen = nuiManager.pushScreen("Engine:DeathScreen", DeathScreen.class);
+            DeathScreen deathScreen = nuiManager.pushScreen(DefenceUris.DEATH_SCREEN, DeathScreen.class);
             WidgetUtil.trySubscribe(deathScreen, "retry", widget -> triggerReset());
         }
     }
@@ -87,7 +88,7 @@ public class DeathScreenSystem extends BaseComponentSystem {
     private void finishReset() {
         DefenceField.fieldActivated = true;
         time.setPaused(false);
-        nuiManager.closeScreen("Engine:DeathScreen");
+        nuiManager.closeScreen(DefenceUris.DEATH_SCREEN);
     }
 
 }

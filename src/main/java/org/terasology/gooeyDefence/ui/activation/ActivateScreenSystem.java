@@ -19,6 +19,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.DefenceWorldManager;
 import org.terasology.gooeyDefence.components.SavedGameFlagComponent;
 import org.terasology.logic.players.LocalPlayer;
@@ -53,13 +54,13 @@ public class ActivateScreenSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPlayerSpawned(ScreenLayerClosedEvent event, EntityRef entity) {
-        if (event.getClosedScreenUri().getResourceName().toString().equals("loadingScreen")) {
-            ActivateGameScreen screen = nuiManager.pushScreen("activateGameScreen", ActivateGameScreen.class);
+        if (event.getClosedScreenUri().getResourceName().toString().equals(DefenceUris.LOADING_SCREEN)) {
+            ActivateGameScreen screen = nuiManager.pushScreen(DefenceUris.ACTIVATE_SCREEN, ActivateGameScreen.class);
             screen.subscribeToBegin(widget -> nuiManager.closeScreen(screen));
 
             screen.setNewGame(!localPlayer.getCharacterEntity().hasComponent(SavedGameFlagComponent.class));
             localPlayer.getCharacterEntity().addOrSaveComponent(new SavedGameFlagComponent());
-        } else if (event.getClosedScreenUri().getResourceName().toString().equals("activateGameScreen")) {
+        } else if (event.getClosedScreenUri().getResourceName().toString().equals(DefenceUris.ACTIVATE_SCREEN)) {
             DefenceWorldManager.activateWorld();
         }
     }

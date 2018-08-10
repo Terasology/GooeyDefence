@@ -15,8 +15,6 @@
  */
 package org.terasology.gooeyDefence;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -59,7 +57,6 @@ import java.util.Optional;
 @Share(DefenceWorldManager.class)
 @RegisterSystem
 public class DefenceWorldManager extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(DefenceWorldManager.class);
     private static boolean settingUpField;
     @In
     private CelestialSystem celestialSystem;
@@ -83,7 +80,6 @@ public class DefenceWorldManager extends BaseComponentSystem {
     public static void activateWorld() {
         if (!settingUpField) {
             settingUpField = true;
-            logger.info("Setting up the world.");
             OnFieldActivated activateEvent = new OnFieldActivated(() -> DefenceField.fieldActivated = true);
             activateEvent.beginTask();
             DefenceField.getShrineEntity().send(activateEvent);

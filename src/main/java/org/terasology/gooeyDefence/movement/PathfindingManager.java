@@ -15,8 +15,6 @@
  */
 package org.terasology.gooeyDefence.movement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -56,27 +54,23 @@ import java.util.function.Consumer;
 @Share(PathfindingManager.class)
 @RegisterSystem
 public class PathfindingManager extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(PathfindingManager.class);
     /**
      * How long the pathfinding system should try and find a path for before giving up.
      * In seconds.
      */
     private static final float PATHFINDING_TIMEOUT = 10.f;
-
-    @In
-    private PathfinderSystem pathfinderSystem;
-    @In
-    private WorldProvider worldProvider;
-
-    /**
-     * The paths from each of the entrances to the shrine
-     */
-    private List<List<Vector3i>> paths;
     /**
      * Any entities that require re-pathing.
      */
     private final Set<EntityRef> queuedEnemies = new HashSet<>();
-
+    @In
+    private PathfinderSystem pathfinderSystem;
+    @In
+    private WorldProvider worldProvider;
+    /**
+     * The paths from each of the entrances to the shrine
+     */
+    private List<List<Vector3i>> paths;
 
     @Override
     public void preBegin() {
@@ -160,7 +154,6 @@ public class PathfindingManager extends BaseComponentSystem {
                     if (!path.equals(oldPath)) {
                         DefenceField.getShrineEntity().send(new OnEntrancePathCalculated(id, path));
                     }
-                    logger.info("Finished pathfinding for " + id);
                     if (callback != null) {
                         callback.run();
                     }

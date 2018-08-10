@@ -51,18 +51,6 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * The family to use to display test as red
      */
     private static final String RED_TEXT = "redText";
-    /**
-     * The ID of the list of cores. Also the value of `blockType` if the block is a core
-     */
-    private static final String CORE_ID = "coreList";
-    /**
-     * The ID of the list of targeters. Also the value of `blockType` if the block is a targeter
-     */
-    private static final String TARGETER_ID = "targeterList";
-    /**
-     * The ID of the list of effectors. Also the value of `blockType` if the block is an effector
-     */
-    private static final String EFFECTOR_ID = "effectorList";
     /* Widgets that deal with the options for the block */
     private final UIButton[] targetSelectionButtons = new UIButton[4];
     private final StringTextRenderer<EntityRef> entityToStringRenderer = new StringTextRenderer<EntityRef>() {
@@ -155,9 +143,9 @@ public class TowerInfoScreen extends CoreScreenLayer {
         powerProduction = find("powerProduction", UILabel.class);
         powerUsage = find("powerUsage", UILabel.class);
 
-        coreList = find(CORE_ID, UIList.class);
-        effectorList = find(EFFECTOR_ID, UIList.class);
-        targeterList = find(TARGETER_ID, UIList.class);
+        coreList = find("coreList", UIList.class);
+        effectorList = find("effectorList", UIList.class);
+        targeterList = find("targeterList", UIList.class);
     }
 
     /**
@@ -267,7 +255,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
         selectionModeLayout.bindVisible(new ReadOnlyBinding<Boolean>() {
             @Override
             public Boolean get() {
-                return blockType.equals(TARGETER_ID);
+                return blockType.equals("targeterList");
             }
         });
         targetSelectionButtons[0].subscribe(widget -> targetingOptionSelected(SelectionMethod.FIRST));
