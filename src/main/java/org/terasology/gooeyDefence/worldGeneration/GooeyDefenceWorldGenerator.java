@@ -16,6 +16,8 @@
 package org.terasology.gooeyDefence.worldGeneration;
 
 import org.terasology.engine.SimpleUri;
+import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
+import org.terasology.gooeyDefence.worldGeneration.facets.RandomFillingFacet;
 import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
 import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
 import org.terasology.gooeyDefence.worldGeneration.providers.SurfaceHeightProvider;
@@ -31,6 +33,10 @@ import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
 
 /**
  * Generates the GooeyDefence world.
+ * Also provides details used in the world generator listing
+ *
+ * @see DefenceFieldFacet
+ * @see RandomFillingFacet
  */
 @RegisterWorldGenerator(id = "gooeyDefenceField", displayName = "Gooey Defence", description = "The world generator for the Gooey Defence gameplay module")
 public class GooeyDefenceWorldGenerator extends BaseFacetedWorldGenerator {

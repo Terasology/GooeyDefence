@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.providers;
 
+import org.terasology.gooeyDefence.worldGeneration.rasterizers.WorldSurfaceRasterizer;
 import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.world.generation.Border3D;
@@ -24,7 +25,10 @@ import org.terasology.world.generation.Produces;
 import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
 /**
- * Fills the{@link SurfaceHeightFacet} with a surface height of 0 globally.
+ * Fills the {@link SurfaceHeightFacet} with a surface height of 0 globally.
+ *
+ * @see SurfaceHeightFacet
+ * @see WorldSurfaceRasterizer
  */
 @Produces(SurfaceHeightFacet.class)
 public class SurfaceHeightProvider implements FacetProvider {

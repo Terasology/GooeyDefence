@@ -17,6 +17,7 @@ package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.worldGeneration.facets.RandomFillingFacet;
+import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
@@ -30,6 +31,9 @@ import org.terasology.world.generation.facets.SurfaceHeightFacet;
 /**
  * Places blocks according to the values given in {@link org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider}.
  * The block used is the basic building block.
+ *
+ * @see RandomFillingFacet
+ * @see RandomFillingProvider
  */
 public class RandomFillingRasterizer implements WorldRasterizer {
     private Block block;

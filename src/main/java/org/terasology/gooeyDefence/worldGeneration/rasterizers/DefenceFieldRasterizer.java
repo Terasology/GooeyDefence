@@ -18,6 +18,7 @@ package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
+import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
@@ -30,8 +31,11 @@ import org.terasology.world.generation.WorldRasterizer;
 import java.util.Map;
 
 /**
- * Places blocks according to the values set in {@link org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider}.
+ * Places blocks according to the values set in {@link DefenceFieldProvider}.
  * Any block close to the entrance, including those in the mini dome, are set to a different block than the rest of the dome.
+ *
+ * @see DefenceFieldProvider
+ * @see DefenceFieldFacet
  */
 public class DefenceFieldRasterizer implements WorldRasterizer {
     private Block block;

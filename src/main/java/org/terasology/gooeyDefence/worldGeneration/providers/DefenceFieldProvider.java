@@ -17,6 +17,7 @@ package org.terasology.gooeyDefence.worldGeneration.providers;
 
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
+import org.terasology.gooeyDefence.worldGeneration.rasterizers.DefenceFieldRasterizer;
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.world.generation.Border3D;
@@ -26,6 +27,9 @@ import org.terasology.world.generation.Produces;
 
 /**
  * Fills the {@link DefenceFieldFacet} class with data on the dome.
+ *
+ * @see DefenceFieldRasterizer
+ * @see DefenceFieldFacet
  */
 @Produces(DefenceFieldFacet.class)
 public class DefenceFieldProvider implements FacetProvider {

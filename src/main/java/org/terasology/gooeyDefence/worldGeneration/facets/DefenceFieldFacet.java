@@ -15,6 +15,8 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.facets;
 
+import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
+import org.terasology.gooeyDefence.worldGeneration.rasterizers.DefenceFieldRasterizer;
 import org.terasology.math.Region3i;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.facets.base.SparseBooleanFieldFacet3D;
@@ -22,6 +24,9 @@ import org.terasology.world.generation.facets.base.SparseBooleanFieldFacet3D;
 
 /**
  * Facet that provides information on where to place the blocks that make up the main outer dome
+ *
+ * @see DefenceFieldRasterizer
+ * @see DefenceFieldProvider
  */
 public class DefenceFieldFacet extends SparseBooleanFieldFacet3D {
 

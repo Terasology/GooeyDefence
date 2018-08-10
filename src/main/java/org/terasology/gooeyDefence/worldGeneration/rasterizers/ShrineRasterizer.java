@@ -28,6 +28,8 @@ import org.terasology.world.generation.WorldRasterizer;
 
 /**
  * Builds a shrine at the origin of the world.
+ *
+ * @see DefenceField#shrineData
  */
 public class ShrineRasterizer implements WorldRasterizer {
 

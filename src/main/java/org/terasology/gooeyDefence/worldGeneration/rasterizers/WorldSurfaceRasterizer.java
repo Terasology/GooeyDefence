@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
 import org.terasology.gooeyDefence.DefenceUris;
+import org.terasology.gooeyDefence.worldGeneration.providers.SurfaceHeightProvider;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
@@ -28,6 +29,9 @@ import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
 /**
  * Places the base world block at the surface level.
+ *
+ * @see SurfaceHeightFacet
+ * @see SurfaceHeightProvider
  */
 public class WorldSurfaceRasterizer implements WorldRasterizer {
 

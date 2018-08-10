@@ -17,6 +17,7 @@ package org.terasology.gooeyDefence.worldGeneration.providers;
 
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.worldGeneration.facets.RandomFillingFacet;
+import org.terasology.gooeyDefence.worldGeneration.rasterizers.RandomFillingRasterizer;
 import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.math.geom.Vector3i;
@@ -30,6 +31,9 @@ import org.terasology.world.generation.Produces;
 /**
  * Fills the {@link RandomFillingFacet} with random blocks inside the dome.
  * Leaves a free space around the central shrine and entrances, as dictated by {@link DefenceField}
+ *
+ * @see RandomFillingRasterizer
+ * @see RandomFillingFacet
  */
 @Produces(RandomFillingFacet.class)
 public class RandomFillingProvider implements FacetProvider {
@@ -37,7 +41,7 @@ public class RandomFillingProvider implements FacetProvider {
     private Noise noise;
 
     /**
-     * Checks weather a random block can be spawned based on three rules:
+     * Checks whether a random block can be spawned based on three rules:
      * <p>
      * 1. Inside the main dome
      * 2. Outside the inner shrine
