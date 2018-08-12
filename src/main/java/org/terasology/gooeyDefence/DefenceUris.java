@@ -35,13 +35,13 @@ public final class DefenceUris {
     public static final String SPHERE = "GooeyDefence:Sphere";
     public static final String BULLET = "GooeyDefence:Bullet";
 
-    public static final String DEFENCE_HUD = "GooeyDefence:DefenceHudc";
+    public static final String DEFENCE_HUD = "GooeyDefence:DefenceHud";
     public static final String CONTROL_SCREEN = "GooeyDefence:ControlScreen";
     public static final String TOWER_SCREEN = "GooeyDefence:TowerInfoScreen";
     public static final String ACTIVATE_SCREEN = "GooeyDefence:ActivateGameScreen";
+    public static final String HEALTH_HUD = "Core:HealthHud";
     public static final String LOADING_SCREEN = "Engine:LoadingScreen";
     public static final String DEATH_SCREEN = "Engine:DeathScreen";
-    public static final String HEALTH_SCREEN = "Core:HealthScreen";
 
     public static final String WAVES_CONFIG = "GooeyDefence:Waves";
     public static final String FIELD_CONFIG = "GooeyDefence:FieldConfig";

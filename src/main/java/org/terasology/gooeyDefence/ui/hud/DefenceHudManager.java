@@ -47,7 +47,7 @@ public class DefenceHudManager extends BaseComponentSystem {
     @Override
     public void postBegin() {
         defenceHud = nuiManager.getHUD().addHUDElement(DefenceUris.DEFENCE_HUD, DefenceHud.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
-        HealthHud healthHud = nuiManager.getHUD().getHUDElement(DefenceUris.HEALTH_SCREEN, HealthHud.class);
+        HealthHud healthHud = nuiManager.getHUD().getHUDElement(DefenceUris.HEALTH_HUD, HealthHud.class);
         UIIconBar healthBar = healthHud.find("healthBar", UIIconBar.class);
 
         defenceHud.updateCurrentWave();
