@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.ui.activation;
 
+import org.terasology.assets.ResourceUrn;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -54,13 +55,13 @@ public class ActivateScreenSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onPlayerSpawned(ScreenLayerClosedEvent event, EntityRef entity) {
-        if (event.getClosedScreenUri().getResourceName().toString().equals(DefenceUris.LOADING_SCREEN)) {
+        if (event.getClosedScreenUri().equals(new ResourceUrn(DefenceUris.LOADING_SCREEN))) {
             ActivateGameScreen screen = nuiManager.pushScreen(DefenceUris.ACTIVATE_SCREEN, ActivateGameScreen.class);
             screen.subscribeToBegin(widget -> nuiManager.closeScreen(screen));
 
             screen.setNewGame(!localPlayer.getCharacterEntity().hasComponent(SavedGameFlagComponent.class));
             localPlayer.getCharacterEntity().addOrSaveComponent(new SavedGameFlagComponent());
-        } else if (event.getClosedScreenUri().getResourceName().toString().equals(DefenceUris.ACTIVATE_SCREEN)) {
+        } else if (event.getClosedScreenUri().equals(new ResourceUrn(DefenceUris.ACTIVATE_SCREEN))) {
             DefenceWorldManager.activateWorld();
         }
     }
