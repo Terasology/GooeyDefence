@@ -74,7 +74,9 @@ public class ControlScreenSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onWaveEnd(OnWaveEnd event, EntityRef entity) {
-        screen.reloadWaveInfo();
+        if (screen != null) {
+            screen.reloadWaveInfo();
+        }
     }
 
     /**
