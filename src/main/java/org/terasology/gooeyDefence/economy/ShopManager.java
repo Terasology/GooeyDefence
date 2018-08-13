@@ -25,6 +25,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.events.OnFieldReset;
+import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.players.LocalPlayer;
@@ -110,7 +111,7 @@ public class ShopManager extends BaseComponentSystem {
     }
 
     /**
-     * Deletes any dropped money, and resets the players money.
+     * Deletes any dropped money, resets the players money, and clears their inventory
      * <p>
      * Called when the field is reset.
      *
@@ -118,11 +119,26 @@ public class ShopManager extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onFieldReset(OnFieldReset event, EntityRef entity) {
+        resetMoney();
+        cleanUpMoney();
+        cleanUpInventory();
+    }
+
+    private void cleanUpInventory() {
+        InventoryComponent component = assetManager.getAsset(DefenceUris.PLAYER, Prefab.class)
+                .map(prefab -> prefab.getComponent(InventoryComponent.class))
+                .orElse(new InventoryComponent(0));
+        localPlayer.getCharacterEntity().addOrSaveComponent(component);
+    }
+
+    private void resetMoney() {
         WalletComponent component = assetManager.getAsset(DefenceUris.PLAYER, Prefab.class)
                 .map(prefab -> prefab.getComponent(WalletComponent.class))
                 .orElse(new WalletComponent());
         localPlayer.getCharacterEntity().addOrSaveComponent(component);
+    }
 
+    private void cleanUpMoney() {
         Optional<Prefab> optionalPrefab = assetManager.getAsset(DefenceUris.MONEY_ITEM, Prefab.class);
         if (optionalPrefab.isPresent()) {
             Prefab moneyPrefab = optionalPrefab.get();
