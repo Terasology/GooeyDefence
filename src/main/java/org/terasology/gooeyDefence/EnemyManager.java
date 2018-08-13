@@ -136,6 +136,7 @@ public class EnemyManager extends BaseComponentSystem {
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_TRIVIAL)
     public void onEntityDeath(EntityDeathEvent event, EntityRef entity, GooeyComponent component) {
+        dropMoney(entity);
         destroyEnemy(entity);
     }
 
@@ -190,7 +191,6 @@ public class EnemyManager extends BaseComponentSystem {
      * @param enemy The enemy to destroy
      */
     private void destroyEnemy(EntityRef enemy) {
-        dropMoney(enemy);
         enemies.remove(enemy);
         enemy.destroy();
     }
