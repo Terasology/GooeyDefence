@@ -1,6 +1,6 @@
 {
   "type": "shopScreen",
-  "skin": "shopSkin",
+  "skin": "DefenceDefault",
   "contents": {
     "type": "ColumnLayout",
     "id": "outerColumns",

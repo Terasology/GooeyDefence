@@ -1,6 +1,6 @@
 {
   "type": "TowerInfoScreen",
-  "skin": "defenseDefault",
+  "skin": "DefenceDefault",
   "contents": {
     "type": "RelativeLayout",
     "id": "outerLayout",

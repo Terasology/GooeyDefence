@@ -1,6 +1,6 @@
 {
   "type": "ActivateGameScreen",
-  "skin": "defenceDefault",
+  "skin": "DefenceDefault",
   "contents": {
     "type": "RelativeLayout",
     "id": "outerLayout",

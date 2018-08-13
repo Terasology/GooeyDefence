@@ -1,6 +1,6 @@
 {
   "type": "ControlScreen",
-  "skin": "defenseDefault",
+  "skin": "DefenceDefault",
   "contents": {
     "type": "ColumnLayout",
     "id": "outerLayout",
