@@ -19,6 +19,7 @@ import org.terasology.engine.Time;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.entity.internal.EngineEntityManager;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -69,7 +70,8 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      * This position is below ground
      */
     private static final Vector3f OUT_OF_SIGHT = new Vector3f(0, -3, 0);
-
+    private final Map<EntityRef, SphereInfo> expandingSpheres = new HashMap<>();
+    private final Map<EntityRef, EntityRef> bullets = new HashMap<>();
     private BlockSelectionRenderer shrineDamageRenderer;
     @In
     private Time time;
@@ -77,11 +79,8 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     private PathfindingManager pathfindingManager;
     @In
     private EntityManager entityManager;
-
     private int shrineDamaged;
     private EntityRef rangeSphere;
-    private final Map<EntityRef, SphereInfo> expandingSpheres = new HashMap<>();
-    private final Map<EntityRef, EntityRef> bullets = new HashMap<>();
 
     @Override
     public void initialise() {
@@ -89,6 +88,9 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
     @Override
     public void postBegin() {
+        /* Cast is needed to subscribe */
+        ((EngineEntityManager) entityManager).subscribeForDestruction(this::removeAllParticleEffects);
+
         shrineDamageRenderer = new BlockSelectionRenderer(Assets.getTexture(DefenceUris.SHRINE_DAMAGED).get());
         rangeSphere = entityManager.create(DefenceUris.SPHERE);
         LocationComponent sphereLoc = rangeSphere.getComponent(LocationComponent.class);
@@ -352,6 +354,15 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         }
         if (particleMap.isEmpty()) {
             target.removeComponent(ChildrenParticleComponent.class);
+        }
+    }
+
+    public void removeAllParticleEffects(EntityRef target) {
+        if (target.hasComponent(ChildrenParticleComponent.class)) {
+            ChildrenParticleComponent component = target.getComponent(ChildrenParticleComponent.class);
+            component.particleEntities.values().forEach(EntityRef::destroy);
+            component.particleEntities.clear();
+            target.removeComponent(component.getClass());
         }
     }
 
