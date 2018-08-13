@@ -19,7 +19,8 @@ import org.terasology.engine.Time;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.entity.internal.EngineEntityManager;
+import org.terasology.entitySystem.entity.lifecycleEvents.BeforeDeactivateComponent;
+import org.terasology.entitySystem.entity.lifecycleEvents.OnChangedComponent;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -89,7 +90,6 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     @Override
     public void postBegin() {
         /* Cast is needed to subscribe */
-        ((EngineEntityManager) entityManager).subscribeForDestruction(this::removeAllParticleEffects);
 
         shrineDamageRenderer = new BlockSelectionRenderer(Assets.getTexture(DefenceUris.SHRINE_DAMAGED).get());
         rangeSphere = entityManager.create(DefenceUris.SPHERE);
@@ -316,6 +316,21 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
+     * Called when the entity is having the particle component removed.
+     * Removes any latent particle entities.
+     * <p>
+     * Filters on {@link ChildrenParticleComponent}
+     *
+     * @see BeforeDeactivateComponent
+     */
+    @ReceiveEvent(components = ChildrenParticleComponent.class)
+    public void onBeforeDeactivateComponent(BeforeDeactivateComponent event, EntityRef entity, ChildrenParticleComponent childrenParticleComponent) {
+        if (!childrenParticleComponent.particleEntities.isEmpty()) {
+            removeAllParticleEffects(entity);
+        }
+    }
+
+    /**
      * Adds a child particle effect to the entity
      *
      * @param target         The entity to add the effect to
@@ -357,6 +372,12 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         }
     }
 
+    /**
+     * Removes all particle effects from the target.
+     * Handles the case where the target has no particle effects
+     *
+     * @param target The entity to remove the effects from.
+     */
     public void removeAllParticleEffects(EntityRef target) {
         if (target.hasComponent(ChildrenParticleComponent.class)) {
             ChildrenParticleComponent component = target.getComponent(ChildrenParticleComponent.class);
