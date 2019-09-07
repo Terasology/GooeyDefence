@@ -39,7 +39,7 @@ public final class DefenceUris {
     public static final String CONTROL_SCREEN = "GooeyDefence:ControlScreen";
     public static final String TOWER_SCREEN = "GooeyDefence:TowerInfoScreen";
     public static final String ACTIVATE_SCREEN = "GooeyDefence:ActivateGameScreen";
-    public static final String HEALTH_HUD = "Core:HealthHud";
+    public static final String HEALTH_HUD = "Health:HealthHud";
     public static final String LOADING_SCREEN = "Engine:LoadingScreen";
     public static final String DEATH_SCREEN = "Engine:DeathScreen";
 
