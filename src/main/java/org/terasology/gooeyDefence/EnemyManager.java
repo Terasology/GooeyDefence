@@ -16,6 +16,7 @@
 
 package org.terasology.gooeyDefence;
 
+import org.joml.Quaternionf;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -39,6 +40,7 @@ import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.geom.Quat4f;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
@@ -155,7 +157,26 @@ public class EnemyManager extends BaseComponentSystem {
             DefenceField.getShrineEntity().send(new DamageEntityEvent(gooeyComponent.damage));
             destroyEnemy(entity);
         } else {
+            Vector3f prevGoal = pathComponent.getGoal();
             pathComponent.nextStep();
+            Vector3f faceTowards = new Vector3f(pathComponent.getGoal());
+            faceTowards.sub(prevGoal);
+            faceTowards.y = 0.0f;
+            Vector3f perpendicular = new Vector3f();
+            perpendicular.cross(Vector3f.south(), faceTowards);
+            Quat4f entityRot;
+            if (perpendicular.x() == 0.0f && perpendicular.y() == 0.0f && perpendicular.z() == 0.0f) {
+                if(faceTowards.z < 0)
+                    entityRot = new Quat4f(Vector3f.up(), 0.0f) ;
+                else
+                    entityRot = new Quat4f(Vector3f.up(), (float) Math.PI);
+            } else {
+                double angle = Math.acos(faceTowards.normalize().dot(Vector3f.south()));
+                entityRot = new Quat4f(perpendicular, (float) angle);
+            }
+            LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
+            locationComponent.setLocalRotation(entityRot);
+            entity.saveComponent(locationComponent);
             MovementComponent component = entity.getComponent(MovementComponent.class);
             component.goal = pathComponent.getGoal();
         }
