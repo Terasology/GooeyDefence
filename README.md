@@ -7,7 +7,7 @@ Currently this modules lacks a few features that make it publicly playable. Howe
 
 #### Activation 
 Firstly, please start a new world after updating this module. During development I shall make no guarantees that the module will be backwards compatible.  
-Once your new world has loaded you will need to activate it. That is currently done by simply interacting with any block via `E`.
+Once your new world has loaded you will need to activate it. That is currently done by simply ~~interacting with any shrine block via `E`~~ entering the game now.
 
 If the world loaded correctly you should see translucent blue lines crossing the field from the entrances to the shrine. These are the paths the enemies will take in order to reach the spawn. As you alter the world, the paths will also change. If no path is found then the blue line will disappear and your game will probably crash at the moment.  
 Likewise be careful using the debugger, if the pathfinding times out (and it does count time paused in the debugger) then your game will crash.  
@@ -15,11 +15,11 @@ Probably.
 
 
 #### Enemies
-In order to spawn in some enemies just interact with the world again. This can be via the `E` key or by using an item you are holding with `right click`. This does include placing blocks, so do with that as you will.
+In order to spawn in some enemies just interact with the world again. This can be done by interacting with a shrine block with `E` key or by using an item you are holding with `right click`. ~~This does include placing blocks, so do with that as you will~~.
 
 There are three enemy types at the moment, `BasicEnemy`, `FastEnemy` and `StrongEnemy`. However in order to spawn in different types you will need to edit the `EnemyManager#spawnEnemy()` method. Simply change the prefab referenced to one of the other types and recompile.  
 
-When an enemy reaches the shrine, it will be destroyed and make the shrine flash red briefly. The game will not end, so don't worry about having your testing constantly interrupted.
+When an enemy reaches the shrine, it will be destroyed and make the shrine flash red briefly. The game will not end for the release, but the game will end for the master branch. The restart button is there to help, so don't worry about having your testing constantly interrupted.
 
 #### Towers
 The last bit of information you need at the moment is the towers. These are the multiblock structures that will attack the enemies and damage them, with the enemies eventually dying if they reach zero health.
