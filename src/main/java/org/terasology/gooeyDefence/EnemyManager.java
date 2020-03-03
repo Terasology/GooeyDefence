@@ -16,7 +16,6 @@
 
 package org.terasology.gooeyDefence;
 
-import org.joml.Quaternionf;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
