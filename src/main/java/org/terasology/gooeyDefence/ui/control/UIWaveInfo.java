@@ -18,6 +18,7 @@ package org.terasology.gooeyDefence.ui.control;
 import org.terasology.gooeyDefence.ui.hud.DefenceHud;
 import org.terasology.gooeyDefence.waves.EntranceInfo;
 import org.terasology.gooeyDefence.waves.WaveInfo;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.assets.font.Font;
 import org.terasology.rendering.nui.Canvas;
@@ -64,7 +65,7 @@ public class UIWaveInfo extends CoreWidget {
         for (String prefab : prefabs.keySet()) {
             String line = prefab + " x " + prefabs.get(prefab);
             List<String> lines = TextLineBuilder.getLines(font, line, sizeHint.x);
-            Vector2i lineSize = font.getSize(lines);
+            Vector2i lineSize = JomlUtil.from(font.getSize(lines));
             size.addY(lineSize.y());
             size.setX(Math.max(size.x(), lineSize.x()));
         }

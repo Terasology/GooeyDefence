@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.ui.towers;
 
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.assets.font.Font;
@@ -54,7 +55,7 @@ public class UIComponentFields extends CoreWidget {
 
         if (list != null) {
             int offset = (canvas.size().x - getPreferredContentSize(canvas, canvas.size()).x) / 2;
-            Vector2i listSize = font.getSize(list);
+            Vector2i listSize = JomlUtil.from(font.getSize(list));
             canvas.drawTextRaw(String.join("\n", list),
                     font,
                     Color.WHITE,
@@ -62,7 +63,7 @@ public class UIComponentFields extends CoreWidget {
 
             list = values.get();
             offset += listSize.x + SPACING;
-            listSize = font.getSize(list);
+            listSize = JomlUtil.from(font.getSize(list));
             canvas.drawTextRaw(String.join("\n", values.get()),
                     font,
                     Color.WHITE,
@@ -73,7 +74,7 @@ public class UIComponentFields extends CoreWidget {
             if (showUpgrade.get()) {
                 list = upgrades.get();
                 offset += listSize.x + SPACING;
-                listSize = font.getSize(list);
+                listSize = JomlUtil.from(font.getSize(list));
                 canvas.drawTextRaw(String.join("\n", list),
                         font,
                         Color.GREEN,
@@ -90,13 +91,13 @@ public class UIComponentFields extends CoreWidget {
         if (fieldList != null) {
             Font font = canvas.getCurrentStyle().getFont();
 
-            Vector2i fieldSize = font.getSize(fieldList);
-            Vector2i valueSize = font.getSize(values.get());
+            Vector2i fieldSize = JomlUtil.from(font.getSize(fieldList));
+            Vector2i valueSize = JomlUtil.from(font.getSize(values.get()));
 
             Vector2i upgradeSize = Vector2i.zero();
             List<String> upgradeList = upgrades.get();
             if (upgradeList != null) {
-                upgradeSize = font.getSize(upgradeList);
+                upgradeSize = JomlUtil.from(font.getSize(upgradeList));
             }
 
             int width = fieldSize.x + valueSize.x + upgradeSize.x + 2 * SPACING;
