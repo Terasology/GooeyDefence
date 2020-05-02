@@ -1,12 +1,11 @@
 {
     "id" : "GooeyDefence",
-    "version" : "0.1.0-SNAPSHOT",
+    "version" : "0.2.0",
     "author" : "",
     "displayName" : "GooeyDefence",
     "description" : "",
     "dependencies" : [
         {"id" : "FlexiblePathfinding", "minVersion" : "0.1.0"},
-        {"id" : "Core", "minVersion" : "3.0.0"}
     ],
     "serverSideOnly" : false,
     "isGameplay" : "true",
