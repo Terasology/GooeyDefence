@@ -5,7 +5,7 @@
     "displayName" : "GooeyDefence",
     "description" : "",
     "dependencies" : [
-        {"id" : "FlexiblePathfinding", "minVersion" : "0.1.0"},
+        {"id" : "FlexiblePathfinding", "minVersion" : "0.1.0"}
     ],
     "serverSideOnly" : false,
     "isGameplay" : "true",
