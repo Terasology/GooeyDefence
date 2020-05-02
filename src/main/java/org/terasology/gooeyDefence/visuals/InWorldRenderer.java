@@ -20,7 +20,6 @@ import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.entity.lifecycleEvents.BeforeDeactivateComponent;
-import org.terasology.entitySystem.entity.lifecycleEvents.OnChangedComponent;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -130,12 +129,12 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
                     VelocityRangeGeneratorComponent component = pathBlock.getComponent(VelocityRangeGeneratorComponent.class);
 
-                    component.minVelocity = Vector3f.one().scale(-0.5f);
-                    component.maxVelocity = Vector3f.one().scale(0.5f);
+                    component.minVelocity.set(-0.5f);
+                    component.maxVelocity.set(0.5f);
 
                     Vector3f delta = path.get(i - 1).toVector3f().sub(path.get(i).toVector3f());
-                    component.minVelocity.add(delta);
-                    component.maxVelocity.add(delta);
+                    component.minVelocity.add(delta.x, delta.y, delta.z);
+                    component.maxVelocity.add(delta.x, delta.y, delta.z);
 
                 }
             }
