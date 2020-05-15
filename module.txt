@@ -2,7 +2,7 @@
     "id": "GooeyDefence",
     "version": "1.0.0",
     "author": "The Terasology Foundation",
-    "displayName": "GooeyDefence",
+    "displayName": "Gooey Defence",
     "description": "In this gameplay module, the player needs to defend the center against incoming waves using \"towers\".",
     "dependencies": [
         { "id": "FlexiblePathfinding", "minVersion": "0.1.0" },
