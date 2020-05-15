@@ -1,15 +1,15 @@
 {
-    "id" : "GooeyDefence",
-    "version" : "0.2.0",
-    "author" : "",
-    "displayName" : "GooeyDefence",
-    "description" : "",
-    "dependencies" : [
-        {"id" : "FlexiblePathfinding", "minVersion" : "0.1.0"},
-        {"id" : "Inventory", "minVersion" : "1.1.0"},
-        {"id" : "Health", "minVersion" : "0.1.0"}
+    "id": "GooeyDefence",
+    "version": "1.0.0",
+    "author": "The Terasology Foundation",
+    "displayName": "GooeyDefence",
+    "description": "In this gameplay module, the player needs to defend the center against incoming waves using \"towers\".",
+    "dependencies": [
+        { "id": "FlexiblePathfinding", "minVersion": "0.1.0" },
+        { "id": "Health", "minVersion": "1.0.0" },
+        { "id": "Inventory", "minVersion": "1.1.0" }
     ],
-    "serverSideOnly" : false,
-    "isGameplay" : "true",
-    "defaultWorldGenerator" : "GooeyDefence:gooeyDefenceField"
+    "serverSideOnly": false,
+    "isGameplay": "true",
+    "defaultWorldGenerator": "GooeyDefence:gooeyDefenceField"
 }
