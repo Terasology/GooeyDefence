@@ -5,7 +5,7 @@
     "displayName": "Gooey's Defence",
     "description": "In this gameplay module, the player needs to defend the center against incoming waves using \"towers\".",
     "dependencies": [
-        { "id": "FlexiblePathfinding", "minVersion": "0.1.0" },
+        { "id": "FlexiblePathfinding", "minVersion": "1.0.0" },
         { "id": "Health", "minVersion": "1.0.0" },
         { "id": "Inventory", "minVersion": "1.1.0" }
     ],
