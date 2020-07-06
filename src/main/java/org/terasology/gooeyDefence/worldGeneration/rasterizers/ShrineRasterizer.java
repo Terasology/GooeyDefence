@@ -46,7 +46,7 @@ public class ShrineRasterizer implements WorldRasterizer {
         if (chunkRegion.getRegion().encompasses(zero)) {
             //TODO: Find a better way to create the shrine that isn't StructureTemplates.
             for (Vector3i pos : DefenceField.shrineData) {
-                chunk.setBlock(ChunkMath.calcBlockPos(pos), block);
+                chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), block);
             }
         }
     }

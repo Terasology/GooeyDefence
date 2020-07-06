@@ -54,9 +54,9 @@ public class DefenceFieldRasterizer implements WorldRasterizer {
             if (entry.getValue()) {
                 Vector3i pos = entry.getKey();
                 if ((int) DefenceField.distanceToNearestEntrance(pos) < DefenceField.entranceRingSize + 2) {
-                    chunk.setBlock(ChunkMath.calcBlockPos(pos), altBlock);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), altBlock);
                 } else {
-                    chunk.setBlock(ChunkMath.calcBlockPos(pos), block);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), block);
                 }
             }
         }

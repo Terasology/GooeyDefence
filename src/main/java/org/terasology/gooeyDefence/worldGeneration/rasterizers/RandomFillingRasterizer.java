@@ -49,7 +49,7 @@ public class RandomFillingRasterizer implements WorldRasterizer {
         SurfaceHeightFacet surfaceFacet = chunkRegion.getFacet(SurfaceHeightFacet.class);
         for (Vector3i pos : chunkRegion.getRegion()) {
             if (randomFacet.getWorld(pos.x, pos.z) && surfaceFacet.getWorld(pos.x, pos.z) == pos.y) {
-                chunk.setBlock(ChunkMath.calcBlockPos(pos), block);
+                chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), block);
             }
         }
     }
