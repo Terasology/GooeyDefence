@@ -1,32 +1,18 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.ui.towers;
 
+import org.joml.Vector2i;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
-import org.terasology.math.JomlUtil;
-import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector2i;
-import org.terasology.rendering.assets.font.Font;
-import org.terasology.rendering.nui.Canvas;
-import org.terasology.rendering.nui.Color;
-import org.terasology.rendering.nui.CoreWidget;
-import org.terasology.rendering.nui.HorizontalAlign;
-import org.terasology.rendering.nui.VerticalAlign;
-import org.terasology.rendering.nui.databinding.Binding;
-import org.terasology.rendering.nui.databinding.DefaultBinding;
+import org.terasology.nui.Canvas;
+import org.terasology.nui.Color;
+import org.terasology.nui.CoreWidget;
+import org.terasology.nui.HorizontalAlign;
+import org.terasology.nui.VerticalAlign;
+import org.terasology.nui.asset.font.Font;
+import org.terasology.nui.databinding.Binding;
+import org.terasology.nui.databinding.DefaultBinding;
+import org.terasology.nui.util.RectUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,30 +41,30 @@ public class UIComponentFields extends CoreWidget {
 
         if (list != null) {
             int offset = (canvas.size().x - getPreferredContentSize(canvas, canvas.size()).x) / 2;
-            Vector2i listSize = JomlUtil.from(font.getSize(list));
+            Vector2i listSize = font.getSize(list);
             canvas.drawTextRaw(String.join("\n", list),
                     font,
                     Color.WHITE,
-                    Rect2i.createFromMinAndSize(new Vector2i(offset, 0), listSize));
+                    RectUtility.createFromMinAndSize(new Vector2i(offset, 0), listSize));
 
             list = values.get();
             offset += listSize.x + SPACING;
-            listSize = JomlUtil.from(font.getSize(list));
+            listSize = font.getSize(list);
             canvas.drawTextRaw(String.join("\n", values.get()),
                     font,
                     Color.WHITE,
-                    Rect2i.createFromMinAndSize(new Vector2i(offset, 0), listSize),
+                    RectUtility.createFromMinAndSize(new Vector2i(offset, 0), listSize),
                     HorizontalAlign.CENTER,
                     VerticalAlign.TOP);
 
             if (showUpgrade.get()) {
                 list = upgrades.get();
                 offset += listSize.x + SPACING;
-                listSize = JomlUtil.from(font.getSize(list));
+                listSize = font.getSize(list);
                 canvas.drawTextRaw(String.join("\n", list),
                         font,
                         Color.GREEN,
-                        Rect2i.createFromMinAndSize(new Vector2i(offset, 0), listSize),
+                        RectUtility.createFromMinAndSize(new Vector2i(offset, 0), listSize),
                         HorizontalAlign.RIGHT,
                         VerticalAlign.TOP);
             }
@@ -91,20 +77,20 @@ public class UIComponentFields extends CoreWidget {
         if (fieldList != null) {
             Font font = canvas.getCurrentStyle().getFont();
 
-            Vector2i fieldSize = JomlUtil.from(font.getSize(fieldList));
-            Vector2i valueSize = JomlUtil.from(font.getSize(values.get()));
+            Vector2i fieldSize = font.getSize(fieldList);
+            Vector2i valueSize = font.getSize(values.get());
 
-            Vector2i upgradeSize = Vector2i.zero();
+            Vector2i upgradeSize = new Vector2i();
             List<String> upgradeList = upgrades.get();
             if (upgradeList != null) {
-                upgradeSize = JomlUtil.from(font.getSize(upgradeList));
+                upgradeSize = font.getSize(upgradeList);
             }
 
             int width = fieldSize.x + valueSize.x + upgradeSize.x + 2 * SPACING;
             int height = Math.max(Math.max(fieldSize.y, valueSize.y), upgradeSize.y);
             return new Vector2i(width, height);
         }
-        return Vector2i.zero();
+        return new Vector2i();
     }
 
     /**
