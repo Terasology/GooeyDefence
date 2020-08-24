@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.ui.shop;
 
 import org.terasology.entitySystem.entity.EntityRef;
@@ -21,18 +8,18 @@ import org.terasology.gooeyDefence.economy.ShopManager;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.nui.WidgetUtil;
+import org.terasology.nui.databinding.ReadOnlyBinding;
+import org.terasology.nui.layouts.FlowLayout;
+import org.terasology.nui.layouts.relative.RelativeLayout;
+import org.terasology.nui.widgets.TooltipLine;
+import org.terasology.nui.widgets.UILabel;
 import org.terasology.registry.In;
 import org.terasology.rendering.assets.texture.Texture;
 import org.terasology.rendering.nui.CoreScreenLayer;
-import org.terasology.rendering.nui.WidgetUtil;
-import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.ingame.inventory.InventoryGrid;
 import org.terasology.rendering.nui.layers.ingame.inventory.InventoryScreen;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
-import org.terasology.rendering.nui.layouts.FlowLayout;
-import org.terasology.rendering.nui.layouts.relative.RelativeLayout;
-import org.terasology.rendering.nui.widgets.TooltipLine;
-import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.utilities.Assets;
 import org.terasology.world.block.Block;
 
