@@ -15,11 +15,11 @@
  */
 package org.terasology.gooeyDefence.ui.activation;
 
-import org.terasology.assets.ResourceUrn;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.DefenceWorldManager;
 import org.terasology.gooeyDefence.components.SavedGameFlagComponent;
