@@ -1,25 +1,16 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.towers.effectors;
 
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.delay.DelayManager;
+import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
+import org.terasology.engine.logic.delay.PeriodicActionTriggeredEvent;
+import org.terasology.engine.registry.In;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.GooeyComponent;
@@ -27,16 +18,12 @@ import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
-import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.delay.DelayedActionTriggeredEvent;
-import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
-import org.terasology.registry.In;
 
 /**
  * Deals an initial damage, then damage over time to a target.
  * <p>
- * Multiple poison effects cannot be stacked from the same effector,
- * however effects from different poison effectors can stack
+ * Multiple poison effects cannot be stacked from the same effector, however effects from different poison effectors can
+ * stack
  *
  * @see PoisonEffectorComponent
  * @see TowerManager
@@ -44,8 +31,7 @@ import org.terasology.registry.In;
 @RegisterSystem
 public class PoisonEffectorSystem extends BaseComponentSystem {
     /**
-     * How often the damage over time will be dealt
-     * given in milliseconds
+     * How often the damage over time will be dealt given in milliseconds
      */
     private static final int POISON_RATE = 200;
     /**
@@ -67,8 +53,7 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
     /**
      * Applies the effect to the target
      * <p>
-     * Filters on {@link PoisonEffectorComponent}
-     * Sent against the effector
+     * Filters on {@link PoisonEffectorComponent} Sent against the effector
      *
      * @see ApplyEffectEvent
      */
@@ -93,13 +78,13 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
     /**
      * Deals a unit of poison damage to the enemy.
      * <p>
-     * Filters on {@link GooeyComponent}
-     * Called against the poisoned enemy
+     * Filters on {@link GooeyComponent} Called against the poisoned enemy
      *
      * @see PeriodicActionTriggeredEvent
      */
     @ReceiveEvent
-    public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, GooeyComponent enemyComponent) {
+    public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity,
+                                          GooeyComponent enemyComponent) {
         if (DefenceField.fieldActivated && isApplyEvent(event)) {
 
             EntityRef effector = getEffectorEntity(event.getActionId());
@@ -111,13 +96,13 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
     /**
      * Ends the poison effect for an enemy.
      * <p>
-     * Filters on {@link GooeyComponent}
-     * Called against the poisoned enemy
+     * Filters on {@link GooeyComponent} Called against the poisoned enemy
      *
      * @see DelayedActionTriggeredEvent
      */
     @ReceiveEvent
-    public void onDelayedActionTriggered(DelayedActionTriggeredEvent event, EntityRef entity, GooeyComponent enemyComponent) {
+    public void onDelayedActionTriggered(DelayedActionTriggeredEvent event, EntityRef entity,
+                                         GooeyComponent enemyComponent) {
         if (isEndEvent(event)) {
             EntityRef effector = getEffectorEntity(event.getActionId());
             delayManager.cancelPeriodicAction(entity, buildEventID(APPLY_POISON_ID, effector));
@@ -128,7 +113,7 @@ public class PoisonEffectorSystem extends BaseComponentSystem {
     /**
      * Creates the event ID given the base and the entity to encode
      *
-     * @param baseId   The base ID string
+     * @param baseId The base ID string
      * @param effector The entity id to encode
      * @return The ID with the entity encoded
      */

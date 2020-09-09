@@ -18,16 +18,15 @@ import java.util.Map;
 /**
  * Displays a wave.
  * <p>
- * Only shows the enemies that will be spawned, and how many.
- * Does not show which entrance nor spawning delays/order
+ * Only shows the enemies that will be spawned, and how many. Does not show which entrance nor spawning delays/order
  *
  * @see WaveInfo
  * @see ControlScreen
  * @see DefenceHud
  */
 public class UIWaveInfo extends CoreWidget {
-    private WaveInfo waveInfo = new WaveInfo();
     private final Map<String, Integer> prefabs = new HashMap<>();
+    private WaveInfo waveInfo = new WaveInfo();
 
     public UIWaveInfo() {
         collatePrefabs();
@@ -69,8 +68,8 @@ public class UIWaveInfo extends CoreWidget {
     }
 
     /**
-     * Counts up the number of each type of prefab in the wave info.
-     * Stores this as a map between the prefab name (string) and the count (int).
+     * Counts up the number of each type of prefab in the wave info. Stores this as a map between the prefab name
+     * (string) and the count (int).
      */
     private void collatePrefabs() {
         prefabs.clear();

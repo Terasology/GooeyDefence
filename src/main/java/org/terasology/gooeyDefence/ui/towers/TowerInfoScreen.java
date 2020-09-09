@@ -3,14 +3,15 @@
 package org.terasology.gooeyDefence.ui.towers;
 
 import org.joml.Vector2i;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.towers.SelectionMethod;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.components.TowerComponent;
 import org.terasology.gooeyDefence.towers.targeters.SingleTargeterComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
-import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.databinding.ReadOnlyBinding;
 import org.terasology.nui.itemRendering.StringTextRenderer;
@@ -19,7 +20,6 @@ import org.terasology.nui.layouts.relative.RelativeLayout;
 import org.terasology.nui.widgets.UIButton;
 import org.terasology.nui.widgets.UILabel;
 import org.terasology.nui.widgets.UIList;
-import org.terasology.rendering.nui.CoreScreenLayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -255,10 +255,11 @@ public class TowerInfoScreen extends CoreScreenLayer {
      * Subscribes a block list widget to being clicked.
      *
      * @param listWidget The widget to subscribe
-     * @param otherOne   One of the other list widgets
-     * @param otherTwo   One of the other list widgets
+     * @param otherOne One of the other list widgets
+     * @param otherTwo One of the other list widgets
      */
-    private void subscribeSelection(UIList<EntityRef> listWidget, UIList<EntityRef> otherOne, UIList<EntityRef> otherTwo) {
+    private void subscribeSelection(UIList<EntityRef> listWidget, UIList<EntityRef> otherOne,
+                                    UIList<EntityRef> otherTwo) {
         listWidget.subscribeSelection((widget, item) -> {
             if (item != null) {
                 blockUpgrades.clearUpgrade();
@@ -271,8 +272,7 @@ public class TowerInfoScreen extends CoreScreenLayer {
 
 
     /**
-     * Set the tower to display.
-     * Handles refreshing all the widgets and info.
+     * Set the tower to display. Handles refreshing all the widgets and info.
      *
      * @param tower The new tower to set
      */
@@ -281,20 +281,21 @@ public class TowerInfoScreen extends CoreScreenLayer {
     }
 
     /**
-     * Handles a selection button being pressed and set's the value on the block.
-     * The block will always be a targeter because the buttons are hidden otherwise.
+     * Handles a selection button being pressed and set's the value on the block. The block will always be a targeter
+     * because the buttons are hidden otherwise.
      *
      * @param selectionMethod The selection method chosen
      */
     private void targetingOptionSelected(SelectionMethod selectionMethod) {
-        SingleTargeterComponent targeter = DefenceField.getComponentExtending(blockEntity, SingleTargeterComponent.class);
+        SingleTargeterComponent targeter = DefenceField.getComponentExtending(blockEntity,
+                SingleTargeterComponent.class);
         targeter.selectionMethod = selectionMethod;
     }
 
 
     /**
-     * Subscriber called when a button on the list of effectors is pushed.
-     * Sets the current effector and nulls the current targeter
+     * Subscriber called when a button on the list of effectors is pushed. Sets the current effector and nulls the
+     * current targeter
      */
     private void towerBlockSelected(EntityRef entity, String listID) {
         if (entity != null) {

@@ -1,34 +1,21 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.waves;
 
 import com.google.common.collect.Range;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
+import org.terasology.engine.utilities.Assets;
+import org.terasology.engine.utilities.random.FastRandom;
+import org.terasology.engine.utilities.random.Random;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.StatSystem;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
-import org.terasology.utilities.Assets;
-import org.terasology.utilities.random.FastRandom;
-import org.terasology.utilities.random.Random;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,8 +25,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * Handles spawning in each wave.
- * Information for each wave is stored in a special ADT.
+ * Handles spawning in each wave. Information for each wave is stored in a special ADT.
  *
  * @see WaveInfo
  */
@@ -47,8 +33,7 @@ import java.util.TreeMap;
 @Share(WaveManager.class)
 public class WaveManager extends BaseComponentSystem implements UpdateSubscriberSystem {
     /**
-     * All possible wave info's that could be valid.
-     * Arranged by lower bound, using -1 if they have none.
+     * All possible wave info's that could be valid. Arranged by lower bound, using -1 if they have none.
      */
     private final SortedMap<Integer, Set<WaveInfo>> waveInfos = new TreeMap<>(Integer::compareTo);
     private final Random random = new FastRandom();
@@ -100,8 +85,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     }
 
     /**
-     * Begin spawning in the current wave.
-     * Once the wave ends, a new wave will be generated.
+     * Begin spawning in the current wave. Once the wave ends, a new wave will be generated.
      */
     public void startAttack() {
         if (!isAttackUnderway) {
@@ -142,8 +126,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     }
 
     /**
-     * Stops a wave in progress and generates a new wave.
-     * Sends out an event when the wave has fully ended
+     * Stops a wave in progress and generates a new wave. Sends out an event when the wave has fully ended
      *
      * @see OnWaveEnd
      */
@@ -179,12 +162,11 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     }
 
     /**
-     * Spawns in the enemy for an entrance.
-     * Handles the entrance having no more enemies to spawn.
+     * Spawns in the enemy for an entrance. Handles the entrance having no more enemies to spawn.
      *
-     * @param spawnInfo   The information for that entrance
+     * @param spawnInfo The information for that entrance
      * @param entranceNum The id of the entrance to spawn at
-     * @param delta       The time the last frame took to execute
+     * @param delta The time the last frame took to execute
      * @return True if an enemy was spawned, false otherwise
      */
     private boolean spawnAtEntrance(EntranceInfo spawnInfo, int entranceNum, float delta) {
@@ -203,11 +185,11 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     }
 
     /**
-     * Collates a list of all the valid WaveInfos for the current wave number
-     * This is based on the ranges specified in the WaveInfo
+     * Collates a list of all the valid WaveInfos for the current wave number This is based on the ranges specified in
+     * the WaveInfo
      * <p>
-     * Note, this is a destructive action.
-     * All wave values that are too low to be valid for the wave number will be removed from the master map.
+     * Note, this is a destructive action. All wave values that are too low to be valid for the wave number will be
+     * removed from the master map.
      *
      * @param waveNum The wave to build for
      * @see WaveInfo
@@ -224,8 +206,7 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     }
 
     /**
-     * Collects all the wave ranges from the config component.
-     * Handles unbounded options correctly.
+     * Collects all the wave ranges from the config component. Handles unbounded options correctly.
      *
      * @param component The component to scrape data from
      */
@@ -238,10 +219,9 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     }
 
     /**
-     * Places the wave info at the given point.
-     * Handles there being no prior infos at that point correctly.
+     * Places the wave info at the given point. Handles there being no prior infos at that point correctly.
      *
-     * @param pos  The position to place the info into
+     * @param pos The position to place the info into
      * @param info The info to insert
      */
     private void putInfoAt(Integer pos, WaveInfo info) {
@@ -251,8 +231,8 @@ public class WaveManager extends BaseComponentSystem implements UpdateSubscriber
     }
 
     /**
-     * Gets the wave range for a wave info.
-     * As ranges cannot be serialised, they are calculated from the base values and cached.
+     * Gets the wave range for a wave info. As ranges cannot be serialised, they are calculated from the base values and
+     * cached.
      *
      * @param info The info to get the range from
      * @return The Range this wave info operates over

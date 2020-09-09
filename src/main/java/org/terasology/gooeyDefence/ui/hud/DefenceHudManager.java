@@ -2,19 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.ui.hud;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.gooeyDefence.waves.OnWaveEnd;
+import org.terasology.health.rendering.nui.layers.hud.HealthHud;
 import org.terasology.math.geom.Rect2f;
 import org.terasology.nui.databinding.ReadOnlyBinding;
 import org.terasology.nui.widgets.UIIconBar;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.layers.hud.HealthHud;
 
 /**
  * Manages displaying and setting all the hud elements.
@@ -33,7 +33,8 @@ public class DefenceHudManager extends BaseComponentSystem {
 
     @Override
     public void postBegin() {
-        defenceHud = nuiManager.getHUD().addHUDElement(DefenceUris.DEFENCE_HUD, DefenceHud.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
+        defenceHud = nuiManager.getHUD().addHUDElement(DefenceUris.DEFENCE_HUD, DefenceHud.class,
+                Rect2f.createFromMinAndSize(0, 0, 1, 1));
         HealthHud healthHud = nuiManager.getHUD().getHUDElement(DefenceUris.HEALTH_HUD, HealthHud.class);
         UIIconBar healthBar = healthHud.find("healthBar", UIIconBar.class);
 

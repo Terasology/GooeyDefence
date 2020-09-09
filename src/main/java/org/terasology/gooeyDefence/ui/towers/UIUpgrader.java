@@ -3,8 +3,8 @@
 package org.terasology.gooeyDefence.ui.towers;
 
 import org.joml.Vector2i;
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.gooeyDefence.upgrading.BlockUpgradesComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradeInfo;
 import org.terasology.gooeyDefence.upgrading.UpgradeList;
@@ -85,7 +85,8 @@ public class UIUpgrader extends CoreWidget {
         int width = Math.max(fieldsSize.x, pathsSize.x);
 
         canvas.drawWidget(componentFields, RectUtility.createFromMinAndSize(0, 0, canvasSize.x, fieldsSize.y));
-        canvas.drawWidget(upgradePaths, RectUtility.createFromMinAndSize((width - pathsSize.x) / 2, fieldsSize.y, canvasSize.x, pathsSize.y));
+        canvas.drawWidget(upgradePaths, RectUtility.createFromMinAndSize((width - pathsSize.x) / 2, fieldsSize.y,
+                canvasSize.x, pathsSize.y));
     }
 
     @Override
@@ -101,8 +102,7 @@ public class UIUpgrader extends CoreWidget {
     }
 
     /**
-     * Called when an upgrade button is pressed.
-     * Handles the initial selection and the application of that upgrade.
+     * Called when an upgrade button is pressed. Handles the initial selection and the application of that upgrade.
      *
      * @param upgrade The upgrade path selected
      */

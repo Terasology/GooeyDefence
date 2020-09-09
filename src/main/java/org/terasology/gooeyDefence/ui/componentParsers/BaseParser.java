@@ -1,21 +1,8 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.ui.componentParsers;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 import org.terasology.gooeyDefence.ui.towers.UIComponentFields;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 
@@ -48,7 +35,7 @@ public abstract class BaseParser {
     /**
      * Converts a raw value from a field into a human readable version.
      *
-     * @param field    The name of the field being converted.
+     * @param field The name of the field being converted.
      * @param rawValue The value of the field being converted.
      * @return The human readable string to display.
      */
@@ -59,7 +46,7 @@ public abstract class BaseParser {
     /**
      * Converts a raw upgrade value into a human readable version
      *
-     * @param field    The name of the field being converted
+     * @param field The name of the field being converted
      * @param rawValue The value of the upgrade field being converted
      * @return The human readable variant of the field.
      */

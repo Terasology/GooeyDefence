@@ -100,7 +100,7 @@
                   "widget": "beginButton"
                 }
               },
-              "contents":[
+              "contents": [
                 {
                   "type": "UILabel",
                   "id": "newGameInformationLabel",

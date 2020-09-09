@@ -1,35 +1,22 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.upgrading;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.engine.bootstrap.ClassMetaLibrary;
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.metadata.ComponentFieldMetadata;
-import org.terasology.entitySystem.metadata.ComponentLibrary;
-import org.terasology.entitySystem.metadata.ComponentMetadata;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.core.bootstrap.ClassMetaLibrary;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.metadata.ComponentFieldMetadata;
+import org.terasology.engine.entitySystem.metadata.ComponentLibrary;
+import org.terasology.engine.entitySystem.metadata.ComponentMetadata;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
 import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -42,8 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Handles both applying an upgrade to a component and
- * parsing components and upgrades for UI.
+ * Handles both applying an upgrade to a component and parsing components and upgrades for UI.
  *
  * @see BlockUpgradesComponent
  * @see BaseParser
@@ -53,12 +39,12 @@ import java.util.stream.Collectors;
 @RegisterSystem
 public class UpgradingSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(UpgradingSystem.class);
+    private final Map<Class, BaseParser> parserMap = new HashMap<>();
     @In
     private EntityManager entityManager;
     @In
     private ClassMetaLibrary classMetaLibrary;
     private ComponentLibrary componentLibrary;
-    private final Map<Class, BaseParser> parserMap = new HashMap<>();
 
     @Override
     public void postBegin() {
@@ -81,7 +67,7 @@ public class UpgradingSystem extends BaseComponentSystem {
      * Applies a given upgrade to the entity.
      *
      * @param component The component to apply the upgrade onto
-     * @param upgrade   The upgrade to apply
+     * @param upgrade The upgrade to apply
      * @see UpgradeInfo
      */
     public void applyUpgrade(Component component, UpgradeInfo upgrade) {
@@ -100,7 +86,7 @@ public class UpgradingSystem extends BaseComponentSystem {
     /**
      * Gets the instance of the component to upgrade
      *
-     * @param entity            The entity to get the component from
+     * @param entity The entity to get the component from
      * @param upgradesComponent The component containing the upgrade data
      * @return The component that the upgrades should be applied to.
      */
@@ -125,12 +111,11 @@ public class UpgradingSystem extends BaseComponentSystem {
     }
 
     /**
-     * Sets a Number field to the given value.
-     * Requires the field to be of a primitive number type.
+     * Sets a Number field to the given value. Requires the field to be of a primitive number type.
      *
-     * @param field     The field to set
+     * @param field The field to set
      * @param component The component containing the field to set
-     * @param value     The value to set the field to
+     * @param value The value to set the field to
      */
     private void setField(ComponentFieldMetadata field, Component component, Number value) {
         switch (field.getType().getSimpleName()) {
@@ -168,12 +153,11 @@ public class UpgradingSystem extends BaseComponentSystem {
     }
 
     /**
-     * Get a list of all the fields on the component to display in UI.
-     * This list is sorted alphabetically.
+     * Get a list of all the fields on the component to display in UI. This list is sorted alphabetically.
      *
      * @param component The component to get the fields from
      * @param formatted Flag indicating if the returned fields should use the ui name or the field name
-     * @param <T>       The type of the component
+     * @param <T> The type of the component
      * @return A list of all the fields to display in the component.
      */
     private <T extends Component> List<String> getComponentFields(T component, boolean formatted) {
@@ -193,11 +177,11 @@ public class UpgradingSystem extends BaseComponentSystem {
     }
 
     /**
-     * Get a list of all the values of the component to display in the UI.
-     * The values in this list are ordered the same as those in {@link #getComponentFields(Component, boolean)}.
+     * Get a list of all the values of the component to display in the UI. The values in this list are ordered the same
+     * as those in {@link #getComponentFields(Component, boolean)}.
      *
      * @param component The component to get the values from
-     * @param <T>       The type of the component
+     * @param <T> The type of the component
      * @return An ordered list of all the values to display from the component.
      */
     public <T extends Component> List<String> getComponentValues(T component) {
@@ -225,13 +209,13 @@ public class UpgradingSystem extends BaseComponentSystem {
     }
 
     /**
-     * Returns a list of all the values from an upgrade to display.
-     * This list is ordered the same as the values from {@link #getComponentFields(Component, boolean)}.
-     * If a field does not have an upgrade value, then a blank string is used.
+     * Returns a list of all the values from an upgrade to display. This list is ordered the same as the values from
+     * {@link #getComponentFields(Component, boolean)}. If a field does not have an upgrade value, then a blank string
+     * is used.
      *
-     * @param component   The component the upgrade will be applied to
+     * @param component The component the upgrade will be applied to
      * @param upgradeInfo The upgrade to display
-     * @param <T>         The type of the component
+     * @param <T> The type of the component
      * @return An ordered list of all the values to display.
      */
     public <T extends Component> List<String> getComponentUpgrades(T component, UpgradeInfo upgradeInfo) {
@@ -272,23 +256,22 @@ public class UpgradingSystem extends BaseComponentSystem {
      * <p>
      * First tries to call a method on the parser with the following properties:
      * <p>
-     * 1. Same name as the field
-     * 2. Return type of string
-     * 3. First parameter is a boolean
-     * 4. Second parameter is the same type as the field.
+     * 1. Same name as the field 2. Return type of string 3. First parameter is a boolean 4. Second parameter is the
+     * same type as the field.
      * <p>
-     * If it cannot find an appropriate method, it will instead use the
-     * {@link BaseParser#handleUpgrade(String, Object)} or {@link BaseParser#handleField(String, Object)} methods.
-     * By default these simply call {@code String.valueOf()} on the value.
+     * If it cannot find an appropriate method, it will instead use the {@link BaseParser#handleUpgrade(String, Object)}
+     * or {@link BaseParser#handleField(String, Object)} methods. By default these simply call {@code String.valueOf()}
+     * on the value.
      *
-     * @param parser    The parser to use
-     * @param value     The value to convert
+     * @param parser The parser to use
+     * @param value The value to convert
      * @param fieldName The name of the field being converted
      * @param fieldType The type of the field being converted
      * @param isUpgrade True if the value is an upgrade value, false otherwise
      * @return The human readable version of the value
      */
-    private String tryParseValue(BaseParser parser, Object value, String fieldName, Class<?> fieldType, boolean isUpgrade) {
+    private String tryParseValue(BaseParser parser, Object value, String fieldName, Class<?> fieldType,
+                                 boolean isUpgrade) {
         MethodHandle method = getHandleForMethod(parser, fieldName, fieldType);
         if (method == null) {
             return parseWithBackup(parser, fieldName, value, isUpgrade);
@@ -296,19 +279,19 @@ public class UpgradingSystem extends BaseComponentSystem {
             try {
                 return method.invoke(isUpgrade, convertToType(value, fieldType)).toString();
             } catch (Throwable throwable) {
-                logger.error(String.format("Unable to call method for %s on %s. It threw %s", fieldName, parser.getClass().getSimpleName(), throwable.toString()));
+                logger.error(String.format("Unable to call method for %s on %s. It threw %s", fieldName,
+                        parser.getClass().getSimpleName(), throwable.toString()));
                 return parseWithBackup(parser, fieldName, value, isUpgrade);
             }
         }
     }
 
     /**
-     * Converts the value into the given type.
-     * The value may not be of a the correct type to be cast. Eg, float's may be passed as doubles.
-     * The value returned should be a primitive if possible.
+     * Converts the value into the given type. The value may not be of a the correct type to be cast. Eg, float's may be
+     * passed as doubles. The value returned should be a primitive if possible.
      *
      * @param value The value to convert
-     * @param type  The type to convert it to
+     * @param type The type to convert it to
      * @return The value, converted to the given type.
      */
     private Object convertToType(Object value, Class<?> type) {
@@ -341,13 +324,12 @@ public class UpgradingSystem extends BaseComponentSystem {
 
 
     /**
-     * The backup parser. Calls either of
-     * {@link BaseParser#handleUpgrade(String, Object)} or {@link BaseParser#handleField(String, Object)}
-     * on the target parser.
+     * The backup parser. Calls either of {@link BaseParser#handleUpgrade(String, Object)} or {@link
+     * BaseParser#handleField(String, Object)} on the target parser.
      *
-     * @param parser    The parser to use to do the converting..
+     * @param parser The parser to use to do the converting..
      * @param fieldName The name of the field being converted.
-     * @param value     The value to convert
+     * @param value The value to convert
      * @param isUpgrade True if the value is an upgrade value, false otherwise.
      * @return The converted string.
      */
@@ -362,8 +344,8 @@ public class UpgradingSystem extends BaseComponentSystem {
     /**
      * Gets the method handler to call on the parser in order to convert the value.
      *
-     * @param parser    The parser to search on
-     * @param name      The name of the field
+     * @param parser The parser to search on
+     * @param name The name of the field
      * @param parameter The type of the value to convert
      * @return The method handler if there is one, null otherwise.
      */
@@ -380,11 +362,11 @@ public class UpgradingSystem extends BaseComponentSystem {
 
 
     /**
-     * A default implementation of the parsers.
-     * Returns all the fields on a component, and does not apply any formatting to values.
+     * A default implementation of the parsers. Returns all the fields on a component, and does not apply any formatting
+     * to values.
      * <p>
-     * Has to be a private class of Upgrading System so it can access the Component Library.
-     * Also prevents it from being instantiated and used elsewhere.
+     * Has to be a private class of Upgrading System so it can access the Component Library. Also prevents it from being
+     * instantiated and used elsewhere.
      *
      * @see BaseParser
      */

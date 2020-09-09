@@ -1,28 +1,15 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.movement;
 
+import org.terasology.engine.math.Region3i;
+import org.terasology.engine.world.WorldProvider;
 import org.terasology.flexiblepathfinding.plugins.basic.WalkingPlugin;
-import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.world.WorldProvider;
 
 /**
- * Plugin that defines how the standard enemies will walk.
- * This plugin allows enemies to move horizontally and vertically
+ * Plugin that defines how the standard enemies will walk. This plugin allows enemies to move horizontally and
+ * vertically
  *
  * @see WalkingPlugin
  */
@@ -42,7 +29,7 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
     /**
      * Checks that all the blocks the enemy will pass through are penetrable.
      *
-     * @param to   The ending position
+     * @param to The ending position
      * @param from The starting position
      * @return True if all the blocks are penetrable.
      */
@@ -64,10 +51,10 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
     }
 
     /**
-     * When travelling horizontally, the enemy can travel along all 8 horizontal directions.
-     * That is, the enemy can travel diagonally as well as cardinally.
+     * When travelling horizontally, the enemy can travel along all 8 horizontal directions. That is, the enemy can
+     * travel diagonally as well as cardinally.
      *
-     * @param to   The ending position
+     * @param to The ending position
      * @param from The starting position
      * @return True if the movement is horizontally possible.
      */
@@ -76,10 +63,9 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
     }
 
     /**
-     * When travelling vertically, the enemy can only go directly up or down.
-     * That is, they cannot travel diagonally
+     * When travelling vertically, the enemy can only go directly up or down. That is, they cannot travel diagonally
      *
-     * @param to   The ending position
+     * @param to The ending position
      * @param from The starting position
      * @return True if the movement is vertically possible.
      */
@@ -91,7 +77,7 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
      * Check if the movement is walkable.
      * <p>
      *
-     * @param to   The ending position
+     * @param to The ending position
      * @param from The starting position
      * @return True if the the movement is walkable
      */
@@ -102,7 +88,7 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
     /**
      * Checks if the movement is strictly horizontal
      *
-     * @param to   The ending position
+     * @param to The ending position
      * @param from The starting position
      * @return True if both positions are at the same height.
      */

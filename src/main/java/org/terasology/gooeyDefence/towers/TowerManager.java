@@ -1,26 +1,16 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.towers;
 
 import com.google.common.collect.Sets;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.delay.DelayManager;
+import org.terasology.engine.logic.delay.PeriodicActionTriggeredEvent;
+import org.terasology.engine.registry.In;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.towers.components.TowerComponent;
@@ -33,9 +23,6 @@ import org.terasology.gooeyDefence.towers.events.RemoveEffectEvent;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.towers.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.towers.events.TowerDestroyedEvent;
-import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
-import org.terasology.registry.In;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -146,8 +133,7 @@ public class TowerManager extends BaseComponentSystem {
 
 
     /**
-     * Called when a tower is created.
-     * Adds the tower to the list and sets the periodic actions for it's attacks
+     * Called when a tower is created. Adds the tower to the list and sets the periodic actions for it's attacks
      * <p>
      * Filters on {@link TowerComponent}
      *
@@ -166,8 +152,7 @@ public class TowerManager extends BaseComponentSystem {
     }
 
     /**
-     * Called when a block is added to a tower.
-     * Cancels the old periodic actions and schedules new ones.
+     * Called when a block is added to a tower. Cancels the old periodic actions and schedules new ones.
      * <p>
      * Filters on {@link TowerComponent}
      *
@@ -187,8 +172,7 @@ public class TowerManager extends BaseComponentSystem {
     }
 
     /**
-     * Called when a tower is destroyed.
-     * Removes all the periodic actions and the tower from the store.
+     * Called when a tower is destroyed. Removes all the periodic actions and the tower from the store.
      * <p>
      * Filters on {@link TowerComponent}
      */
@@ -201,15 +185,15 @@ public class TowerManager extends BaseComponentSystem {
     }
 
     /**
-     * Called every attack cycle per targeter.
-     * Checks if the tower can fire, and if so, fires that targeter.
+     * Called every attack cycle per targeter. Checks if the tower can fire, and if so, fires that targeter.
      * <p>
      * Filters on {@link TowerComponent}
      *
      * @see PeriodicActionTriggeredEvent
      */
     @ReceiveEvent
-    public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, TowerComponent component) {
+    public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity,
+                                          TowerComponent component) {
         if (DefenceField.fieldActivated && isEventIdCorrect(event.getActionId())) {
             if (hasEnoughPower(component)) {
                 EntityRef targeter = getTargeterId(event.getActionId());
@@ -219,10 +203,10 @@ public class TowerManager extends BaseComponentSystem {
     }
 
     /**
-     * Handles the removal of a targeter from a tower.
-     * Does this by calling the tower to end the effects on the enemies where appropriate.
+     * Handles the removal of a targeter from a tower. Does this by calling the tower to end the effects on the enemies
+     * where appropriate.
      *
-     * @param tower    The main tower entity to remove the targeter from.
+     * @param tower The main tower entity to remove the targeter from.
      * @param targeter The targeter to remove
      */
     private void handleTargeterRemoval(EntityRef tower, EntityRef targeter) {
@@ -240,7 +224,7 @@ public class TowerManager extends BaseComponentSystem {
      * Handles the steps involved in making a targeter shoot.
      *
      * @param towerComponent The TowerComponent of the tower entity shooting.
-     * @param targeter       The targeter that's shooting
+     * @param targeter The targeter that's shooting
      */
     private void handleTowerShooting(TowerComponent towerComponent, EntityRef targeter) {
         Set<EntityRef> currentTargets = getTargetedEnemies(targeter);
@@ -267,12 +251,13 @@ public class TowerManager extends BaseComponentSystem {
     /**
      * Applies all the effects on a tower to the targeted enemies
      *
-     * @param effectors      The effectors on the tower
+     * @param effectors The effectors on the tower
      * @param currentTargets The current targets of the tower
-     * @param towerTargeter  The targeter shooting
+     * @param towerTargeter The targeter shooting
      * @see TowerEffector
      */
-    private void applyEffectsToTargets(Set<EntityRef> effectors, Set<EntityRef> currentTargets, TowerTargeter towerTargeter) {
+    private void applyEffectsToTargets(Set<EntityRef> effectors, Set<EntityRef> currentTargets,
+                                       TowerTargeter towerTargeter) {
         Set<EntityRef> exTargets = Sets.difference(towerTargeter.affectedEnemies, currentTargets);
 
         /* Apply effects to targeted enemies */
@@ -290,9 +275,9 @@ public class TowerManager extends BaseComponentSystem {
     /**
      * Applies all the effects on a tower to an enemy.
      *
-     * @param effectors   The effectors to use to apply the effects
-     * @param target      The target enemy
-     * @param multiplier  The multiplier from the targeter
+     * @param effectors The effectors to use to apply the effects
+     * @param target The target enemy
+     * @param multiplier The multiplier from the targeter
      * @param isTargetNew Indicates if the enemy is newly targeted. Used to filter effectors
      * @see EffectCount
      */
@@ -311,7 +296,8 @@ public class TowerManager extends BaseComponentSystem {
                     effector.send(event);
                     break;
                 default:
-                    throw new EnumConstantNotPresentException(EffectCount.class, effectorComponent.getEffectCount().toString());
+                    throw new EnumConstantNotPresentException(EffectCount.class,
+                            effectorComponent.getEffectCount().toString());
             }
         }
     }
@@ -319,8 +305,8 @@ public class TowerManager extends BaseComponentSystem {
     /**
      * Calls on each effector to end the effect on a target, where applicable.
      *
-     * @param effectors  The effectors to check through
-     * @param oldTarget  The target to remove the effects from
+     * @param effectors The effectors to check through
+     * @param oldTarget The target to remove the effects from
      * @param multiplier The effect multiplier to apply to the event
      * @see EffectDuration
      */
@@ -336,7 +322,8 @@ public class TowerManager extends BaseComponentSystem {
                 case PERMANENT:
                     break;
                 default:
-                    throw new EnumConstantNotPresentException(EffectDuration.class, effectorComponent.getEffectCount().toString());
+                    throw new EnumConstantNotPresentException(EffectDuration.class,
+                            effectorComponent.getEffectCount().toString());
             }
         }
     }

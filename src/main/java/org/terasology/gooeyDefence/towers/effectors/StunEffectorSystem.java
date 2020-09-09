@@ -1,24 +1,17 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.towers.effectors;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.delay.DelayManager;
+import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.utilities.random.FastRandom;
+import org.terasology.engine.utilities.random.Random;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.GooeyComponent;
@@ -28,20 +21,13 @@ import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
-import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.delay.DelayedActionTriggeredEvent;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.registry.In;
-import org.terasology.utilities.random.FastRandom;
-import org.terasology.utilities.random.Random;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Briefly pauses an enemy.
- * Does this by swapping the path component for the blank one.
+ * Briefly pauses an enemy. Does this by swapping the path component for the blank one.
  *
  * @see StunEffectorComponent
  * @see BlankPathComponent
@@ -57,20 +43,17 @@ public class StunEffectorSystem extends BaseComponentSystem {
      * A list of the path components to re-apply to the enemy once the stun wears off.
      */
     private final Map<EntityRef, PathComponent> pathStorage = new HashMap<>();
-
+    @In
+    private final Random random = new FastRandom();
     @In
     private DelayManager delayManager;
-    @In
-    private Random random = new FastRandom();
-
     @In
     private InWorldRenderer inWorldRenderer;
 
     /**
      * Applies the stun effect to a target
      * <p>
-     * Filters on {@link StunEffectorComponent}
-     * Sent against the effector block
+     * Filters on {@link StunEffectorComponent} Sent against the effector block
      *
      * @see ApplyEffectEvent
      */
@@ -91,8 +74,8 @@ public class StunEffectorSystem extends BaseComponentSystem {
     }
 
     /**
-     * Runs a check to see if the stun should be applied
-     * This is checked against the stun chance and the damage multiplier
+     * Runs a check to see if the stun should be applied This is checked against the stun chance and the damage
+     * multiplier
      *
      * @param damageMultiplier The multiplier to use
      * @return True if the enemy should be stunned, false otherwise.
@@ -106,8 +89,7 @@ public class StunEffectorSystem extends BaseComponentSystem {
     /**
      * Removes the stun from the enemy
      * <p>
-     * Filters on {@link GooeyComponent}
-     * Sent against the enemy
+     * Filters on {@link GooeyComponent} Sent against the enemy
      *
      * @see DelayedActionTriggeredEvent
      */

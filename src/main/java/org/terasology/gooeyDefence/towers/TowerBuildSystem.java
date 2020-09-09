@@ -1,26 +1,19 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.towers;
 
 import com.google.common.collect.Sets;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.destruction.DoDestroyEvent;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.math.Side;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.BlockEntityRegistry;
+import org.terasology.engine.world.block.items.OnBlockItemPlaced;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
@@ -32,13 +25,7 @@ import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 import org.terasology.gooeyDefence.towers.events.OnBlocksAdded;
 import org.terasology.gooeyDefence.towers.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.towers.events.TowerDestroyedEvent;
-import org.terasology.logic.health.DoDestroyEvent;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.In;
-import org.terasology.world.BlockEntityRegistry;
-import org.terasology.world.block.items.OnBlockItemPlaced;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -75,7 +62,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
     /**
      * On a block being placed.
      *
-     * @param event  The block placed event
+     * @param event The block placed event
      * @param entity The world entity placing the blocks
      */
     @ReceiveEvent
@@ -94,14 +81,15 @@ public class TowerBuildSystem extends BaseComponentSystem {
      */
     private void handleTowerBlock(EntityRef entityRef) {
         if (entityRef.hasComponent(LocationComponent.class)) {
-            handleTowerBlock(new Vector3i(entityRef.getComponent(LocationComponent.class).getWorldPosition()), entityRef);
+            handleTowerBlock(new Vector3i(entityRef.getComponent(LocationComponent.class).getWorldPosition()),
+                    entityRef);
         }
     }
 
     /**
      * Handles a tower block being placed
      *
-     * @param pos         The position of the block being placed
+     * @param pos The position of the block being placed
      * @param blockEntity The entity of the block being placed
      */
     private void handleTowerBlock(Vector3i pos, EntityRef blockEntity) {
@@ -138,7 +126,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
     /**
      * Merge multiple towers into a single tower entity
      *
-     * @param towers      The towers to merge
+     * @param towers The towers to merge
      * @param targetTower The tower to merge all the others into
      */
     private void mergeTowers(EntityRef targetTower, Set<EntityRef> towers) {
@@ -152,7 +140,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * Merges two towers into a single tower entity.
      *
      * @param destination The tower to merge into
-     * @param source      The tower merging into the other. This entity will be destroyed.
+     * @param source The tower merging into the other. This entity will be destroyed.
      */
     private void mergeTowers(EntityRef destination, EntityRef source) {
         TowerComponent destComponent = destination.getComponent(TowerComponent.class);
@@ -228,11 +216,10 @@ public class TowerBuildSystem extends BaseComponentSystem {
     }
 
     /**
-     * Called when a block is destroyed.
-     * Rebuilds the tower the destroyed block belonged to.
+     * Called when a block is destroyed. Rebuilds the tower the destroyed block belonged to.
      *
-     * @param event     The destroy event.
-     * @param entity    The entity of the block being destroyed.
+     * @param event The destroy event.
+     * @param entity The entity of the block being destroyed.
      * @param component Flag component to filter only for tower blocks.
      */
     @ReceiveEvent
@@ -261,8 +248,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
     }
 
     /**
-     * Removes a tower entity.
-     * Sending the appropriate events.
+     * Removes a tower entity. Sending the appropriate events.
      *
      * @param tower The tower to remove
      */

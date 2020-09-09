@@ -1,56 +1,42 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence;
 
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.characters.events.AttackEvent;
+import org.terasology.engine.logic.destruction.DestroyEvent;
+import org.terasology.engine.logic.destruction.EngineDamageTypes;
+import org.terasology.engine.logic.inventory.events.DropItemEvent;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
+import org.terasology.engine.utilities.procedural.Noise;
+import org.terasology.engine.utilities.procedural.WhiteNoise;
+import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.block.Block;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.block.entity.CreateBlockDropsEvent;
+import org.terasology.engine.world.block.items.BlockItemFactory;
+import org.terasology.engine.world.sun.CelestialSystem;
 import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.gooeyDefence.components.DestructibleBlockComponent;
 import org.terasology.gooeyDefence.components.FieldConfigComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
-import org.terasology.logic.characters.events.AttackEvent;
-import org.terasology.logic.health.DestroyEvent;
-import org.terasology.logic.health.EngineDamageTypes;
-import org.terasology.logic.inventory.events.DropItemEvent;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
-import org.terasology.utilities.procedural.Noise;
-import org.terasology.utilities.procedural.WhiteNoise;
-import org.terasology.world.WorldProvider;
-import org.terasology.world.block.Block;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.entity.CreateBlockDropsEvent;
-import org.terasology.world.block.items.BlockItemFactory;
-import org.terasology.world.sun.CelestialSystem;
 
 import java.util.Optional;
 
 /**
- * Performs miscellaneous tasks not located in other tasks
- * A catch all class.
+ * Performs miscellaneous tasks not located in other tasks A catch all class.
  *
  * @see DefenceField
  */
@@ -112,7 +98,8 @@ public class DefenceWorldManager extends BaseComponentSystem {
     public void onAttackEntity(AttackEvent event, EntityRef targetEntity) {
         event.consume();
         if (targetEntity.hasComponent(DestructibleBlockComponent.class)) {
-            targetEntity.send(new DestroyEvent(event.getInstigator(), event.getDirectCause(), EngineDamageTypes.PHYSICAL.get()));
+            targetEntity.send(new DestroyEvent(event.getInstigator(), event.getDirectCause(),
+                    EngineDamageTypes.PHYSICAL.get()));
         }
     }
 
@@ -139,9 +126,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
     /**
      * Clears all non world gen block from the field.
      * <p>
-     * The only allowed blocks will be
-     * - {@link DefenceUris#SHRINE}
-     * - {@link BlockManager#AIR_ID}
+     * The only allowed blocks will be - {@link DefenceUris#SHRINE} - {@link BlockManager#AIR_ID}
      *
      * @param size The size of the field to clear.
      */

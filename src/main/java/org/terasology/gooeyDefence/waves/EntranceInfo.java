@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.waves;
 
 import org.terasology.reflection.MappedContainer;
@@ -24,8 +11,8 @@ import java.util.List;
 /**
  * Contains information for spawning enemies at an entrance.
  * <p>
- * The fields {@link #delayCount} & {@link #delay} and the prefab versions, {@link #prefabCount} & {@link #prefab}
- * allow for easy creation of waves if all delays and/or prefabs are the same values.
+ * The fields {@link #delayCount} & {@link #delay} and the prefab versions, {@link #prefabCount} & {@link #prefab} allow
+ * for easy creation of waves if all delays and/or prefabs are the same values.
  * <p>
  * Using both the short version and the full lists is not recommended and will result in un-defined behaviour.
  *
@@ -34,19 +21,17 @@ import java.util.List;
 @MappedContainer
 public class EntranceInfo {
     /**
-     * An ordered list of the delay between each wave
-     * Each delay corresponds to the time until the matching entity will be created.
+     * An ordered list of the delay between each wave Each delay corresponds to the time until the matching entity will
+     * be created.
      * <p>
-     * Ex. <code>delays = [1, 0.5, 0]</code>
-     * Here once the wave is started there will be a 1 second delay, then the first entity spawned
-     * Then a 0.5 second delay and the second entity spawned
-     * Then no delay, meaning the third and last entity will be spawned instantly after the second.
+     * Ex. <code>delays = [1, 0.5, 0]</code> Here once the wave is started there will be a 1 second delay, then the
+     * first entity spawned Then a 0.5 second delay and the second entity spawned Then no delay, meaning the third and
+     * last entity will be spawned instantly after the second.
      */
     public List<Float> delays = new ArrayList<>();
     /**
-     * The ordered list of prefabs to use to spawn the entities.
-     * Each entry in this list must correspond to a delay in {@link #delays} and vice versa.
-     * For no delay use a value of <code>0f</code>
+     * The ordered list of prefabs to use to spawn the entities. Each entry in this list must correspond to a delay in
+     * {@link #delays} and vice versa. For no delay use a value of <code>0f</code>
      */
     public List<String> prefabs = new ArrayList<>();
 

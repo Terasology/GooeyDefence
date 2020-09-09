@@ -1,22 +1,10 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.towers.targeters;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.health.HealthComponent;
@@ -24,7 +12,6 @@ import org.terasology.gooeyDefence.movement.components.PathComponent;
 import org.terasology.gooeyDefence.towers.SelectionMethod;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 
 import java.util.ArrayList;
@@ -35,8 +22,8 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * A base system for tower targeters that provides common methods.
- * This system is not required to be extended by tower systems.
+ * A base system for tower targeters that provides common methods. This system is not required to be extended by tower
+ * systems.
  *
  * @see TowerTargeter
  * @see TowerManager
@@ -46,7 +33,7 @@ public class BaseTargeterSystem extends BaseComponentSystem {
     /**
      * Picks the target from all within range based upon the selection method
      *
-     * @param targets         All enemies within range
+     * @param targets All enemies within range
      * @param selectionMethod The selection method
      * @return The single target, according to the selection method
      */
@@ -88,7 +75,7 @@ public class BaseTargeterSystem extends BaseComponentSystem {
     /**
      * Checks if the enemy from last round can be reused.
      *
-     * @param targeterPos       The position of the target
+     * @param targeterPos The position of the target
      * @param targeterComponent The targeter
      * @return True if the targeter can attack the enemy
      */
@@ -102,15 +89,16 @@ public class BaseTargeterSystem extends BaseComponentSystem {
     /**
      * Gets a single targetable enemy within the tower's range
      * <p>
-     * Attempts to use the entity that was targeted last round.
-     * If that is not possible it picks an enemy in range based on the selection method listed
+     * Attempts to use the entity that was targeted last round. If that is not possible it picks an enemy in range based
+     * on the selection method listed
      *
-     * @param targeterPos       The position of the targeter block
+     * @param targeterPos The position of the targeter block
      * @param targeterComponent The targeter component on the targeter
-     * @param enemyManager      The enemy manager to use if a new enemy needs to be picked
+     * @param enemyManager The enemy manager to use if a new enemy needs to be picked
      * @return A suitable enemy in range, or the null entity if none was found
      */
-    protected EntityRef getTarget(Vector3f targeterPos, SingleTargeterComponent targeterComponent, EnemyManager enemyManager) {
+    protected EntityRef getTarget(Vector3f targeterPos, SingleTargeterComponent targeterComponent,
+                                  EnemyManager enemyManager) {
         EntityRef target = targeterComponent.lastTarget;
 
         if (!canUseTarget(target, targeterPos, targeterComponent)) {

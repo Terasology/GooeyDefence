@@ -1,24 +1,18 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.towers.effectors;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.delay.DelayManager;
+import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
+import org.terasology.engine.logic.delay.PeriodicActionTriggeredEvent;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.utilities.random.FastRandom;
+import org.terasology.engine.utilities.random.Random;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.components.GooeyComponent;
@@ -26,14 +20,7 @@ import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
-import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.delay.DelayedActionTriggeredEvent;
-import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.registry.In;
-import org.terasology.utilities.random.FastRandom;
-import org.terasology.utilities.random.Random;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,8 +29,8 @@ import java.util.stream.Collectors;
 /**
  * Applies the fire effect to the targeted enemies.
  * <p>
- * Fire applies a damage over time, with a chance to have the effect spread to nearby enemies.
- * After a short duration, the burning ends but the enemy can be re-ignited by other enemies.
+ * Fire applies a damage over time, with a chance to have the effect spread to nearby enemies. After a short duration,
+ * the burning ends but the enemy can be re-ignited by other enemies.
  *
  * @see FireEffectorComponent
  * @see TowerManager
@@ -59,38 +46,33 @@ public class FireEffectorSystem extends BaseComponentSystem {
      */
     private static final String END_BURN_ID = "endBurn";
     /**
-     * How often the fire should have a chance to spread.
-     * Given in milliseconds.
+     * How often the fire should have a chance to spread. Given in milliseconds.
      */
     private static final int BURN_RATE = 500;
     /**
-     * How close an enemy has to be before it can be ignited.
-     * Given in blocks
+     * How close an enemy has to be before it can be ignited. Given in blocks
      */
     private static final float BURN_RANGE = 1;
     /**
      * The chance an enemy has of being ignited by a nearby burning enemy.
      */
     private static final float BURN_SPREAD_CHANCE = 0.4f;
-
+    private final Random random = new FastRandom();
     /**
      * All enemies currently on fire.
      */
     private Set<EntityRef> burningEnemies = new HashSet<>();
-
     @In
     private EnemyManager enemyManager;
     @In
     private DelayManager delayManager;
     @In
     private InWorldRenderer inWorldRenderer;
-    private final Random random = new FastRandom();
 
     /**
      * Applies the initial fire effect to an entity
      * <p>
-     * Filters on {@link FireEffectorComponent}
-     * Sent against the effector
+     * Filters on {@link FireEffectorComponent} Sent against the effector
      *
      * @see ApplyEffectEvent
      */
@@ -107,13 +89,13 @@ public class FireEffectorSystem extends BaseComponentSystem {
     /**
      * Processes all burning enemies
      * <p>
-     * Filters on {@link FireEffectorComponent}
-     * Sent against the effector
+     * Filters on {@link FireEffectorComponent} Sent against the effector
      *
      * @see PeriodicActionTriggeredEvent
      */
     @ReceiveEvent
-    public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity, FireEffectorComponent effectorComponent) {
+    public void onPeriodicActionTriggered(PeriodicActionTriggeredEvent event, EntityRef entity,
+                                          FireEffectorComponent effectorComponent) {
         Set<EntityRef> newEnemies = new HashSet<>();
         for (EntityRef enemy : burningEnemies) {
             enemy.send(new DamageEntityEvent(effectorComponent.damage));
@@ -141,8 +123,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
     /**
      * Stops an enemy from burning
      * <p>
-     * Filters on {@link GooeyComponent}
-     * Sent against the burnt enemy
+     * Filters on {@link GooeyComponent} Sent against the burnt enemy
      *
      * @see DelayedActionTriggeredEvent
      */
@@ -155,8 +136,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
     }
 
     /**
-     * Gets all the enemies to spread the fire too.
-     * Does not return any enemies already on fire.
+     * Gets all the enemies to spread the fire too. Does not return any enemies already on fire.
      *
      * @param source The enemy spreading the fire
      * @return All enemies to spread the fire too.

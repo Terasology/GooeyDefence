@@ -1,32 +1,18 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.economy;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.inventory.events.GiveItemEvent;
+import org.terasology.engine.registry.Share;
 import org.terasology.gooeyDefence.DefenceUris;
-import org.terasology.logic.inventory.events.GiveItemEvent;
-import org.terasology.registry.Share;
 
 /**
- * Handles the requirements of the economy subsystem.
- * Contains methods to operate on entities in the system
+ * Handles the requirements of the economy subsystem. Contains methods to operate on entities in the system
  */
 @RegisterSystem
 @Share(EconomyManager.class)
@@ -36,7 +22,7 @@ public class EconomyManager extends BaseComponentSystem {
      * Attempts to add money to an entities wallet.
      *
      * @param destination The entity to add the money to
-     * @param amount      The amount of money to add
+     * @param amount The amount of money to add
      * @return True if the transaction was successful, false otherwise.
      */
     private static boolean tryAddMoney(EntityRef destination, int amount) {
@@ -69,7 +55,7 @@ public class EconomyManager extends BaseComponentSystem {
     /**
      * Checks if an entity has at least a certain level of money
      *
-     * @param source    The entity to check
+     * @param source The entity to check
      * @param threshold The minimum level to check for
      * @return True if the entity has enough money
      */
@@ -95,9 +81,8 @@ public class EconomyManager extends BaseComponentSystem {
     /**
      * Called when money is being picked up by the player. Converts it into balance in their walled
      * <p>
-     * Sent against the item being given
-     * Filters on {@link ValueComponent}
-     * Priority must be high in order to retrieve the event before the money is placed into the inventory
+     * Sent against the item being given Filters on {@link ValueComponent} Priority must be high in order to retrieve
+     * the event before the money is placed into the inventory
      *
      * @see GiveItemEvent
      */

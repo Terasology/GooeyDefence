@@ -1,27 +1,14 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.registry.CoreRegistry;
+import org.terasology.engine.world.BlockEntityRegistry;
 import org.terasology.gooeyDefence.components.FieldConfigComponent;
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.CoreRegistry;
-import org.terasology.world.BlockEntityRegistry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,51 +16,44 @@ import java.util.List;
 
 
 /**
- * A class that provides Static information about the Defence Field.
- * Dynamic information is given by {@link StatSystem}
+ * A class that provides Static information about the Defence Field. Dynamic information is given by {@link StatSystem}
  *
  * @see StatSystem
  */
 public final class DefenceField {
-    /**
-     * The number of entrances the field has.
-     */
-    public static int entranceCount;
-    /**
-     * The radius of the main outer dome.
-     * Given in blocks.
-     */
-    public static int outerRingSize;
-    /**
-     * The radius of the clear ring around the shrine.
-     * Given in blocks.
-     */
-    public static int shrineRingSize;
-    /**
-     * The radius of the clear zone around the entrance.
-     * Given in blocks.
-     */
-    public static int entranceRingSize;
-
-    /**
-     * A boolean that controls if the field is active or not.
-     * Many systems use this to control if they are active or not
-     */
-    public static boolean fieldActivated;
-
-    /**
-     * The data for the shrine's shape.
-     * A 1 indicates a block should be placed, and a 0 indicates an empty space
-     *
-     * @see FieldConfigComponent#shrineData
-     */
-    public static Vector3i[] shrineData;
     /**
      * The location of the centre of the field.
      * <p>
      * This is the point enemies will path to so the enemies must be able reach it. (ie, no solid blocks there)
      */
     public static final Vector3i FIELD_CENTRE = new Vector3i(0, 0, 0);
+    /**
+     * The number of entrances the field has.
+     */
+    public static int entranceCount;
+    /**
+     * The radius of the main outer dome. Given in blocks.
+     */
+    public static int outerRingSize;
+    /**
+     * The radius of the clear ring around the shrine. Given in blocks.
+     */
+    public static int shrineRingSize;
+    /**
+     * The radius of the clear zone around the entrance. Given in blocks.
+     */
+    public static int entranceRingSize;
+    /**
+     * A boolean that controls if the field is active or not. Many systems use this to control if they are active or
+     * not
+     */
+    public static boolean fieldActivated;
+    /**
+     * The data for the shrine's shape. A 1 indicates a block should be placed, and a 0 indicates an empty space
+     *
+     * @see FieldConfigComponent#shrineData
+     */
+    public static Vector3i[] shrineData;
     /**
      * The location of each of the entrances.
      * <p>
@@ -83,8 +63,8 @@ public final class DefenceField {
     /**
      * The entity representing the main shrine.
      * <p>
-     * This entity is also used to send events, when no appropriate alternative is available.
-     * It is set to the block entity of a block in the shrine.
+     * This entity is also used to send events, when no appropriate alternative is available. It is set to the block
+     * entity of a block in the shrine.
      */
     private static EntityRef shrineEntity = EntityRef.NULL;
 
@@ -105,8 +85,8 @@ public final class DefenceField {
     }
 
     /**
-     * Converts the human readable shrine data to a list of positions.
-     * Only intended to be used once to initialise a field.
+     * Converts the human readable shrine data to a list of positions. Only intended to be used once to initialise a
+     * field.
      *
      * @param rawData The human readable version of the data.
      * @return An array of Vector3i containing the location of each one.
@@ -128,8 +108,8 @@ public final class DefenceField {
     }
 
     /**
-     * Calculates the position of each entrance along the rim of the dome.
-     * Only intended to be used once to initialise a field.
+     * Calculates the position of each entrance along the rim of the dome. Only intended to be used once to initialise a
+     * field.
      *
      * @param count The number of entrances
      * @return An array containing the locations of the entrances.
@@ -156,8 +136,7 @@ public final class DefenceField {
     }
 
     /**
-     * Get the shrine entity from the shrine.
-     * Caches the result, recollecting it when it's not existing
+     * Get the shrine entity from the shrine. Caches the result, recollecting it when it's not existing
      *
      * @return The shrine entity, or the null entity if it can't be found
      */
@@ -188,14 +167,15 @@ public final class DefenceField {
     /**
      * Helper method for getting a component given one of its superclasses
      *
-     * @param entity     The entity to search on
+     * @param entity The entity to search on
      * @param superClass The superclass of the component to filter for
-     * @param <Y>        The type of the superclass
+     * @param <Y> The type of the superclass
      * @return The component that extends the superclass
      */
     public static <Y> Y getComponentExtending(EntityRef entity, Class<Y> superClass) {
         if (!entity.exists()) {
-            throw new IllegalArgumentException("Component extending " + superClass.getSimpleName() + " requested from a null entity");
+            throw new IllegalArgumentException("Component extending " + superClass.getSimpleName() + " requested from" +
+                    " a null entity");
         }
         for (Component component : entity.iterateComponents()) {
             if (superClass.isInstance(component)) {
@@ -208,9 +188,9 @@ public final class DefenceField {
     /**
      * Checks if the entity has a component extending a given type.
      *
-     * @param entity     The entity to check on
+     * @param entity The entity to check on
      * @param superClass The class that should be extended
-     * @param <Y>        The type of the superclass
+     * @param <Y> The type of the superclass
      * @return True, if a component on the entity extends the given class
      */
     public static <Y> boolean hasComponentExtending(EntityRef entity, Class<Y> superClass) {

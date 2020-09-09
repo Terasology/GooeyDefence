@@ -1,30 +1,26 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.visuals;
 
-import org.terasology.engine.Time;
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.entity.lifecycleEvents.BeforeDeactivateComponent;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.entitySystem.systems.RenderSystem;
-import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.core.Time;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.lifecycleEvents.BeforeDeactivateComponent;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.systems.RenderSystem;
+import org.terasology.engine.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.logic.location.Location;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.logic.players.PlayerTargetChangedEvent;
+import org.terasology.engine.particles.components.generators.VelocityRangeGeneratorComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
+import org.terasology.engine.rendering.logic.MeshComponent;
+import org.terasology.engine.rendering.world.selection.BlockSelectionRenderer;
+import org.terasology.engine.utilities.Assets;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.ShrineComponent;
@@ -39,25 +35,16 @@ import org.terasology.gooeyDefence.visuals.components.ChildrenParticleComponent;
 import org.terasology.gooeyDefence.visuals.components.PathBlockComponent;
 import org.terasology.gooeyDefence.visuals.components.SplashBulletComponent;
 import org.terasology.gooeyDefence.visuals.components.TargeterBulletComponent;
-import org.terasology.logic.location.Location;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.logic.players.PlayerTargetChangedEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.particles.components.generators.VelocityRangeGeneratorComponent;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
-import org.terasology.rendering.logic.MeshComponent;
-import org.terasology.rendering.world.selection.BlockSelectionRenderer;
-import org.terasology.utilities.Assets;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Handles misc rendering duties for the module.
- * These involve rendering stuff in world for systems that provide functionality.
+ * Handles misc rendering duties for the module. These involve rendering stuff in world for systems that provide
+ * functionality.
  * <p>
  * Also handles application and removal of particle effects and shot entities.
  */
@@ -66,8 +53,7 @@ import java.util.Map;
 public class InWorldRenderer extends BaseComponentSystem implements RenderSystem, UpdateSubscriberSystem {
 
     /**
-     * A position to move the range indicator that is hidden from the player.
-     * This position is below ground
+     * A position to move the range indicator that is hidden from the player. This position is below ground
      */
     private static final Vector3f OUT_OF_SIGHT = new Vector3f(0, -3, 0);
     private final Map<EntityRef, SphereInfo> expandingSpheres = new HashMap<>();
@@ -102,8 +88,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     /**
      * Used to display the damage effect on the shrine
      * <p>
-     * Sent when an entity is damaged
-     * Filters on {@link ShrineComponent}
+     * Sent when an entity is damaged Filters on {@link ShrineComponent}
      *
      * @see DamageEntityEvent
      */
@@ -113,8 +98,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
-     * Called whenever an entrance path is changed.
-     * Used to re-create the path display entities.
+     * Called whenever an entrance path is changed. Used to re-create the path display entities.
      *
      * @see OnEntrancePathCalculated
      */
@@ -127,7 +111,8 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
                 for (int i = path.size() - 1; i >= 2; i--) {
                     EntityRef pathBlock = entityManager.create(DefenceUris.PATH_EFFECT, path.get(i).toVector3f());
 
-                    VelocityRangeGeneratorComponent component = pathBlock.getComponent(VelocityRangeGeneratorComponent.class);
+                    VelocityRangeGeneratorComponent component =
+                            pathBlock.getComponent(VelocityRangeGeneratorComponent.class);
 
                     component.minVelocity.set(-0.5f);
                     component.maxVelocity.set(0.5f);
@@ -142,8 +127,8 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
-     * Called when the block or entity being targeted by the player changes.
-     * Used to render the range visuals for targeters
+     * Called when the block or entity being targeted by the player changes. Used to render the range visuals for
+     * targeters
      *
      * @see PlayerTargetChangedEvent
      */
@@ -194,14 +179,13 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
-     * Shoots a bullet towards an entity.
-     * The bullet will track the entity until either it or the entity is destroyed.
+     * Shoots a bullet towards an entity. The bullet will track the entity until either it or the entity is destroyed.
      * If the goal is destroyed, then it will home in on the last position of it before it was destroyed.
      * <p>
      * When the target is reached an {@link ReachedGoalEvent} will be sent against the bullet.
      *
-     * @param goal      The entity to target
-     * @param start     The starting position of the bullet
+     * @param goal The entity to target
+     * @param start The starting position of the bullet
      * @param component An optional component to add as a flag.
      */
     public void shootBulletTowards(EntityRef goal, Vector3f start, Component component) {
@@ -224,8 +208,8 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     /**
      * Displays a rangeSphere which rapidly expands to a given size.
      *
-     * @param position  The position of the rangeSphere.
-     * @param duration  How long the rangeSphere should expand for, in seconds
+     * @param position The position of the rangeSphere.
+     * @param duration How long the rangeSphere should expand for, in seconds
      * @param finalSize How big the rangeSphere should get, in blocks.
      */
     public void displayExpandingSphere(Vector3f position, float duration, float finalSize) {
@@ -246,8 +230,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
-     * Update all the bullets.
-     * Sets their {@link MovementComponent}'s goal to the target's position.
+     * Update all the bullets. Sets their {@link MovementComponent}'s goal to the target's position.
      */
     private void updateBullets() {
         bullets.keySet().forEach(bullet -> {
@@ -302,28 +285,28 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
-     * Called when a bullet with a splash effect reaches it's goal.
-     * Places an expanding rangeSphere on the goal.
+     * Called when a bullet with a splash effect reaches it's goal. Places an expanding rangeSphere on the goal.
      * <p>
      * Filters on {@link TargeterBulletComponent}, {@link SplashBulletComponent} and {@link MovementComponent}
      *
      * @see ReachedGoalEvent
      */
     @ReceiveEvent(components = {TargeterBulletComponent.class})
-    public void onReachedGoal(ReachedGoalEvent event, EntityRef entity, MovementComponent movementComponent, SplashBulletComponent bulletComponent) {
+    public void onReachedGoal(ReachedGoalEvent event, EntityRef entity, MovementComponent movementComponent,
+                              SplashBulletComponent bulletComponent) {
         displayExpandingSphere(movementComponent.goal, 0.5f, bulletComponent.splashRange);
     }
 
     /**
-     * Called when the entity is having the particle component removed.
-     * Removes any latent particle entities.
+     * Called when the entity is having the particle component removed. Removes any latent particle entities.
      * <p>
      * Filters on {@link ChildrenParticleComponent}
      *
      * @see BeforeDeactivateComponent
      */
     @ReceiveEvent(components = ChildrenParticleComponent.class)
-    public void onBeforeDeactivateComponent(BeforeDeactivateComponent event, EntityRef entity, ChildrenParticleComponent childrenParticleComponent) {
+    public void onBeforeDeactivateComponent(BeforeDeactivateComponent event, EntityRef entity,
+                                            ChildrenParticleComponent childrenParticleComponent) {
         if (!childrenParticleComponent.particleEntities.isEmpty()) {
             removeAllParticleEffects(entity);
         }
@@ -332,7 +315,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     /**
      * Adds a child particle effect to the entity
      *
-     * @param target         The entity to add the effect to
+     * @param target The entity to add the effect to
      * @param particlePrefab The name of the particle prefab to add
      */
     public void addParticleEffect(EntityRef target, String particlePrefab) {
@@ -357,7 +340,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     /**
      * Removes a particle child from the target.
      *
-     * @param target         The entity to remove the child from
+     * @param target The entity to remove the child from
      * @param particlePrefab The name of the prefab to remove.
      */
     public void removeParticleEffect(EntityRef target, String particlePrefab) {
@@ -372,8 +355,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
-     * Removes all particle effects from the target.
-     * Handles the case where the target has no particle effects
+     * Removes all particle effects from the target. Handles the case where the target has no particle effects
      *
      * @param target The entity to remove the effects from.
      */
@@ -389,7 +371,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     /**
      * Checks if the target has a child entity of the given prefab
      *
-     * @param target         The entity to check for children on
+     * @param target The entity to check for children on
      * @param particlePrefab The name of the prefab to check for
      * @return True if the entity has a child with that prefab.
      */
@@ -399,11 +381,9 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     }
 
     /**
-     * Called when an entity dies
-     * Handles destroying any child particle components it may have had.
+     * Called when an entity dies Handles destroying any child particle components it may have had.
      * <p>
-     * Filters on {@link ChildrenParticleComponent}
-     * Sent against the dying entity
+     * Filters on {@link ChildrenParticleComponent} Sent against the dying entity
      *
      * @see EntityDeathEvent
      */

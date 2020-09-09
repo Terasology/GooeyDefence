@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Displays a list of all upgrade paths for the entity.
- * Allows for the option to select an upgrade.
+ * Displays a list of all upgrade paths for the entity. Allows for the option to select an upgrade.
  *
  * @see TowerInfoSystem
  * @see UpgradingSystem

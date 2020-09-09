@@ -1,24 +1,17 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.movement;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
+import org.terasology.engine.world.OnChangedBlock;
+import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.block.entity.placement.PlaceBlocks;
 import org.terasology.flexiblepathfinding.JPSConfig;
 import org.terasology.flexiblepathfinding.PathfinderSystem;
 import org.terasology.gooeyDefence.DefenceField;
@@ -28,13 +21,7 @@ import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
 import org.terasology.gooeyDefence.movement.components.CustomPathComponent;
 import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
-import org.terasology.world.OnChangedBlock;
-import org.terasology.world.WorldProvider;
-import org.terasology.world.block.entity.placement.PlaceBlocks;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,8 +42,7 @@ import java.util.function.Consumer;
 @RegisterSystem
 public class PathfindingManager extends BaseComponentSystem {
     /**
-     * How long the pathfinding system should try and find a path for before giving up.
-     * In seconds.
+     * How long the pathfinding system should try and find a path for before giving up. In seconds.
      */
     private static final float PATHFINDING_TIMEOUT = 10.f;
     /**
@@ -118,8 +104,7 @@ public class PathfindingManager extends BaseComponentSystem {
     }
 
     /**
-     * Called to request an enemy be re-pathed.
-     * Prevents the path on an enemy being set multiple times
+     * Called to request an enemy be re-pathed. Prevents the path on an enemy being set multiple times
      * <p>
      * Filters on {@link LocationComponent}
      *
@@ -140,10 +125,9 @@ public class PathfindingManager extends BaseComponentSystem {
     }
 
     /**
-     * Calculate the path from an entrance to the centre.
-     * This callback is not invoked with the path as an argument.
+     * Calculate the path from an entrance to the centre. This callback is not invoked with the path as an argument.
      *
-     * @param id       The entrance to calculate from
+     * @param id The entrance to calculate from
      * @param callback A callback to be invoked after the path calculation has finished.
      */
     private void calculatePath(int id, Runnable callback) {
@@ -161,10 +145,9 @@ public class PathfindingManager extends BaseComponentSystem {
     }
 
     /**
-     * Calculate the path given the config and the callback.
-     * This callback is called with the path as a parameter
+     * Calculate the path given the config and the callback. This callback is called with the path as a parameter
      *
-     * @param config   The config to use for the pathfinding.
+     * @param config The config to use for the pathfinding.
      * @param callback The callback to be used once the path is found.
      */
     private void calculatePath(JPSConfig config, Consumer<List<Vector3i>> callback) {
@@ -177,8 +160,7 @@ public class PathfindingManager extends BaseComponentSystem {
     }
 
     /**
-     * Produces a config to be used for pathfinding.
-     * Sets the path to run from the given position to the shrine.
+     * Produces a config to be used for pathfinding. Sets the path to run from the given position to the shrine.
      *
      * @param start The starting position of the path.
      * @return A new JPSConfig for the path.
@@ -213,8 +195,8 @@ public class PathfindingManager extends BaseComponentSystem {
     /**
      * Get a path. Will return null if the path has not been calculated yet.
      * <p>
-     * An empty path either indicates that no path could be calculated or that
-     * the entrance and shrine are located at the same position
+     * An empty path either indicates that no path could be calculated or that the entrance and shrine are located at
+     * the same position
      *
      * @param pathID Which entrance the path should come from
      * @return The given path, or null if it doesn't exist yet.

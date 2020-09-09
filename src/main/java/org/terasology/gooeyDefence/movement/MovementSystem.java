@@ -1,31 +1,18 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.movement;
 
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.registry.In;
 
 /**
  * Handles moving enemies towards a goal, as dictated by their movement component.
@@ -48,11 +35,11 @@ public class MovementSystem extends BaseComponentSystem implements UpdateSubscri
     }
 
     /**
-     * Moves an entity towards the goal as set out in the movement component.
-     * Also sends an event when the goal is reached.
+     * Moves an entity towards the goal as set out in the movement component. Also sends an event when the goal is
+     * reached.
      *
      * @param entity The entity to move
-     * @param delta  The time the last frame took in seconds.
+     * @param delta The time the last frame took in seconds.
      */
     private void moveEntity(EntityRef entity, float delta) {
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
@@ -67,9 +54,8 @@ public class MovementSystem extends BaseComponentSystem implements UpdateSubscri
     }
 
     /**
-     * Handles an entity reaching the goal.
-     * Sends out an event for other systems to consume and deal with.
-     * If the event is not consumed, it simply removes the movement component.
+     * Handles an entity reaching the goal. Sends out an event for other systems to consume and deal with. If the event
+     * is not consumed, it simply removes the movement component.
      *
      * @param entity The entity that's reached the goal.
      */
@@ -82,11 +68,10 @@ public class MovementSystem extends BaseComponentSystem implements UpdateSubscri
     }
 
     /**
-     * Moves an entity towards the goal.
-     * Does this by updating the location component on the entity.
+     * Moves an entity towards the goal. Does this by updating the location component on the entity.
      *
      * @param entity The entity to move
-     * @param delta  The time the last frame took in seconds.
+     * @param delta The time the last frame took in seconds.
      */
     private void moveEntityTowardsGoal(EntityRef entity, float delta) {
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);

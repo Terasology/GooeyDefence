@@ -1,27 +1,19 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 
 package org.terasology.gooeyDefence;
 
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.delay.DelayManager;
+import org.terasology.engine.logic.inventory.events.DropItemEvent;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.economy.ValueComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathCalculated;
@@ -36,14 +28,9 @@ import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.movement.components.PathComponent;
 import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
 import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
-import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.inventory.events.DropItemEvent;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Quat4f;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
 
 import java.util.HashSet;
 import java.util.List;
@@ -79,8 +66,7 @@ public class EnemyManager extends BaseComponentSystem {
     }
 
     /**
-     * Called when the field is activated.
-     * Clears the enemy store and re-scans for any enemies.
+     * Called when the field is activated. Clears the enemy store and re-scans for any enemies.
      */
     @ReceiveEvent
     public void onFieldActivated(OnFieldActivated event, EntityRef entity) {
@@ -130,8 +116,7 @@ public class EnemyManager extends BaseComponentSystem {
     }
 
     /**
-     * Called when an entity reaches zero health.
-     * Filters on {@link GooeyComponent}
+     * Called when an entity reaches zero health. Filters on {@link GooeyComponent}
      *
      * @see EntityDeathEvent
      */
@@ -183,11 +168,10 @@ public class EnemyManager extends BaseComponentSystem {
     }
 
     /**
-     * Spawns an enemy at the given entrance.
-     * Also begins it travelling down the path.
+     * Spawns an enemy at the given entrance. Also begins it travelling down the path.
      *
      * @param entranceNumber The entrance to spawn at
-     * @param prefab         The prefab of the enemy to spawn in.
+     * @param prefab The prefab of the enemy to spawn in.
      */
     public void spawnEnemy(int entranceNumber, String prefab) {
         if (!DefenceField.fieldActivated) {
@@ -217,8 +201,8 @@ public class EnemyManager extends BaseComponentSystem {
     }
 
     /**
-     * Drops the amount of money an enemy had.
-     * Drops money in 5 unit increments. If the enemy has no value, then nothing is dropped
+     * Drops the amount of money an enemy had. Drops money in 5 unit increments. If the enemy has no value, then nothing
+     * is dropped
      *
      * @param enemy The enemy to drop money for
      */
@@ -246,7 +230,7 @@ public class EnemyManager extends BaseComponentSystem {
     /**
      * Obtain all the enemies that are within range of the given position.
      *
-     * @param pos   The position to look for
+     * @param pos The position to look for
      * @param range The range to search in.
      * @return A set of all enemies found within this range.
      */

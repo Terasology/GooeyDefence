@@ -2,16 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.ui.activation;
 
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
 import org.terasology.nui.WidgetUtil;
 import org.terasology.nui.layouts.relative.RelativeLayout;
 import org.terasology.nui.widgets.ActivateEventListener;
-import org.terasology.rendering.nui.CoreScreenLayer;
 
 /**
  * Screen shown at the start of the game.
  * <p>
- * Allows the world time to load before pathfinding is called.
- * Also allows for information to be shown to the player.
+ * Allows the world time to load before pathfinding is called. Also allows for information to be shown to the player.
  *
  * @see ActivateScreenSystem
  */

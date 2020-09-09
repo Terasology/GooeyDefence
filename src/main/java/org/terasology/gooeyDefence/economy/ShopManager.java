@@ -1,42 +1,29 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.economy;
 
-import org.terasology.entitySystem.ComponentContainer;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.ComponentContainer;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.inventory.ItemComponent;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
+import org.terasology.engine.world.block.Block;
+import org.terasology.engine.world.block.BlockExplorer;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.block.BlockUri;
+import org.terasology.engine.world.block.family.BlockFamily;
+import org.terasology.engine.world.block.items.BlockItemFactory;
 import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.events.OnFieldReset;
-import org.terasology.logic.inventory.InventoryComponent;
-import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.inventory.ItemComponent;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
-import org.terasology.world.block.Block;
-import org.terasology.world.block.BlockExplorer;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.BlockUri;
-import org.terasology.world.block.family.BlockFamily;
-import org.terasology.world.block.items.BlockItemFactory;
+import org.terasology.inventory.logic.InventoryComponent;
+import org.terasology.inventory.logic.InventoryManager;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -67,8 +54,8 @@ public class ShopManager extends BaseComponentSystem {
     private BlockItemFactory blockItemFactory;
 
     /**
-     * Gets how much money a ware will cost.
-     * Tries to use the cost on the purchasable component, with the value component as a fallback.
+     * Gets how much money a ware will cost. Tries to use the cost on the purchasable component, with the value
+     * component as a fallback.
      *
      * @param ware The ware to get the price for
      * @return The price of the ware.
