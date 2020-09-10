@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.waves;
 
-import org.terasology.reflection.MappedContainer;
+import org.terasology.nui.reflection.MappedContainer;
 
 import java.util.ArrayList;
 import java.util.Collections;

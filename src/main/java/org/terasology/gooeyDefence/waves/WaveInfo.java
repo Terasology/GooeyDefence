@@ -3,7 +3,7 @@
 package org.terasology.gooeyDefence.waves;
 
 import com.google.common.collect.Range;
-import org.terasology.reflection.MappedContainer;
+import org.terasology.nui.reflection.MappedContainer;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.upgrading;
 
-import org.terasology.reflection.MappedContainer;
+import org.terasology.nui.reflection.MappedContainer;
 
 import java.util.ArrayList;
 import java.util.List;
