@@ -44,7 +44,7 @@ public class VisualEffectorSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onApplyEffect(ApplyEffectEvent event, EntityRef entity, VisualEffectorComponent component) {
         SkeletalMeshComponent targetMesh = event.getTarget().getComponent(SkeletalMeshComponent.class);
-        targetMesh.scale.scale(2f);
+        targetMesh.scale.mul(2f);
 
         event.getTarget().saveComponent(targetMesh);
     }
@@ -59,7 +59,7 @@ public class VisualEffectorSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onRemoveEffect(RemoveEffectEvent event, EntityRef entity, VisualEffectorComponent component) {
         SkeletalMeshComponent targetMesh = event.getTarget().getComponent(SkeletalMeshComponent.class);
-        targetMesh.scale.scale(0.5f);
+        targetMesh.scale.mul(0.5f);
         event.getTarget().saveComponent(targetMesh);
     }
 }
