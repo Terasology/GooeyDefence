@@ -5,11 +5,11 @@
     "description": "The basic attacker"
   },
   "skeletalmesh": {
-    "mesh": "enemy",
+    "mesh": "MawGooey:gooey",
     "heightOffset": -2.0,
     "material": "basicEnemy",
     "animationPool": [
-      "gooeyIdleBreathing"
+      "MawGooey:gooey#ArmatureAction"
     ],
     "loop": true,
     "scale": [

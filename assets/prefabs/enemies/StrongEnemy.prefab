@@ -5,11 +5,11 @@
     "description": "A slow, but powerful enemy type"
   },
   "skeletalmesh": {
-    "mesh": "enemy",
+    "mesh": "MawGooey:gooey",
     "heightOffset": -2.0,
     "material": "strongEnemy",
     "animationPool": [
-      "gooeyIdleBreathing"
+      "MawGooey:gooey#ArmatureAction"
     ],
     "loop": true,
     "scale": [
