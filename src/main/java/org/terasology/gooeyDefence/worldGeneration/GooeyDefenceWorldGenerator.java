@@ -27,6 +27,8 @@ import org.terasology.gooeyDefence.worldGeneration.rasterizers.ShrineRasterizer;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.WorldSurfaceRasterizer;
 import org.terasology.registry.In;
 import org.terasology.world.generation.BaseFacetedWorldGenerator;
+import org.terasology.world.generation.ElevationCompatibilityProvider;
+import org.terasology.world.generation.SurfaceHeightCompatibilityProvider;
 import org.terasology.world.generation.WorldBuilder;
 import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
@@ -52,6 +54,7 @@ public class GooeyDefenceWorldGenerator extends BaseFacetedWorldGenerator {
     protected WorldBuilder createWorld() {
         return new WorldBuilder(worldGeneratorPluginLibrary)
                 .addProvider(new SurfaceHeightProvider())
+                .addProvider(new ElevationCompatibilityProvider())
                 .addProvider(new DefenceFieldProvider())
                 .addProvider(new RandomFillingProvider())
                 .addRasterizer(new WorldSurfaceRasterizer())
