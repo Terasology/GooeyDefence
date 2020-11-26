@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.towers.targeters;
 
 import com.google.common.collect.Sets;
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -23,7 +24,7 @@ import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
+import org.terasology.math.JomlUtil;
 import org.terasology.registry.In;
 
 import java.util.Set;
@@ -50,7 +51,7 @@ public class ChainTargeterSystem extends BaseTargeterSystem {
      */
     @ReceiveEvent
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, ChainTargeterComponent targeterComponent) {
-        EntityRef target = getTarget(locationComponent.getWorldPosition(), targeterComponent, enemyManager);
+        EntityRef target = getTarget(locationComponent.getWorldPosition(new Vector3f()), targeterComponent, enemyManager);
 
         if (target.exists()) {
             event.addToList(chainToNearby(target, targeterComponent.chainLength, targeterComponent.chainRange));
@@ -67,7 +68,7 @@ public class ChainTargeterSystem extends BaseTargeterSystem {
      * @return A set containing all chained enemies.
      */
     private Set<EntityRef> chainToNearby(EntityRef start, int maxChain, float chainRange) {
-        Vector3f position = start.getComponent(LocationComponent.class).getWorldPosition();
+        Vector3f position = start.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
         Set<EntityRef> result = Sets.newHashSet(start);
 
         for (int i = 0; i < maxChain; i++) {
@@ -79,8 +80,8 @@ public class ChainTargeterSystem extends BaseTargeterSystem {
             EntityRef closestEnemy = enemies.stream().min((first, second) -> {
                 LocationComponent firstComponent = first.getComponent(LocationComponent.class);
                 LocationComponent secondComponent = second.getComponent(LocationComponent.class);
-                float firstDistance = firstComponent.getWorldPosition().distanceSquared(position);
-                float secondDistance = secondComponent.getWorldPosition().distanceSquared(position);
+                float firstDistance = firstComponent.getWorldPosition(new Vector3f()).distanceSquared(position);
+                float secondDistance = secondComponent.getWorldPosition(new Vector3f()).distanceSquared(position);
                 return Float.compare(firstDistance, secondDistance);
             }).orElse(EntityRef.NULL);
             result.add(closestEnemy);

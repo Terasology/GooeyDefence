@@ -15,9 +15,9 @@
  */
 package org.terasology.gooeyDefence.movement.components;
 
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.terasology.gooeyDefence.movement.PathfindingManager;
-import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class EntrancePathComponent implements PathComponent {
     private int step;
     private int entranceId;
     private Vector3f goal;
-    private PathfindingManager pathManager;
+    private transient PathfindingManager pathManager;
 
     /**
      * Empty constructor for deserialisation.
@@ -59,14 +59,14 @@ public class EntrancePathComponent implements PathComponent {
             throw new IllegalArgumentException();
         }
         step = startStep;
-        goal = pathManager.getPath(entranceId).get(step).toVector3f();
+        goal = new Vector3f(pathManager.getPath(entranceId).get(step));
     }
 
     public EntrancePathComponent(int entranceId, PathfindingManager pathManager) {
         this.entranceId = entranceId;
         this.pathManager = pathManager;
         step = pathManager.getPath(entranceId).size() - 1;
-        goal = pathManager.getPath(entranceId).get(step).toVector3f();
+        goal = new Vector3f(pathManager.getPath(entranceId).get(step));
     }
 
     /**
@@ -94,7 +94,7 @@ public class EntrancePathComponent implements PathComponent {
         List<Vector3i> path = pathManager.getPath(entranceId);
         step--;
         step = Math.min(Math.max(0, step), path.size() - 1);
-        goal = path.get(step).toVector3f();
+        goal = new Vector3f(path.get(step));
 
     }
 

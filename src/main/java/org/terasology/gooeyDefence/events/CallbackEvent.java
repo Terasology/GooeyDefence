@@ -20,7 +20,7 @@ package org.terasology.gooeyDefence.events;
  * When all tasks are finished, it will run the callback.
  */
 public abstract class CallbackEvent {
-    private Runnable callback;
+    private transient Runnable callback;
     private int tasks;
 
     /**

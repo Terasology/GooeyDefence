@@ -15,9 +15,9 @@
  */
 package org.terasology.gooeyDefence.movement.components;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.Component;
 import org.terasology.gooeyDefence.movement.MovementSystem;
-import org.terasology.math.geom.Vector3f;
 
 /**
  * Stores information on the speed, and goal to move an entity towards.
@@ -26,7 +26,7 @@ import org.terasology.math.geom.Vector3f;
  */
 public class MovementComponent implements Component {
     public float speed;
-    public Vector3f goal = Vector3f.zero();
+    public Vector3f goal = new Vector3f();
     public float reachedDistance = 0.1f;
 
 

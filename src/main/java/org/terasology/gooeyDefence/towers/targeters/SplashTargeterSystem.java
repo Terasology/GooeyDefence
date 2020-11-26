@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -50,15 +51,15 @@ public class SplashTargeterSystem extends BaseTargeterSystem {
      */
     @ReceiveEvent
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SplashTargeterComponent targeterComponent) {
-        EntityRef target = getTarget(locationComponent.getWorldPosition(), targeterComponent, enemyManager);
+        EntityRef target = getTarget(locationComponent.getWorldPosition(new Vector3f()), targeterComponent, enemyManager);
 
         if (target.exists()) {
             LocationComponent targetLocation = target.getComponent(LocationComponent.class);
-            event.addToList(enemyManager.getEnemiesInRange(targetLocation.getWorldPosition(), targeterComponent.splashRange));
+            event.addToList(enemyManager.getEnemiesInRange(targetLocation.getWorldPosition(new Vector3f()), targeterComponent.splashRange));
 
             inWorldRenderer.shootBulletTowards(
                     target,
-                    locationComponent.getWorldPosition(),
+                    locationComponent.getWorldPosition(new Vector3f()),
                     new SplashBulletComponent(targeterComponent.splashRange));
         }
 

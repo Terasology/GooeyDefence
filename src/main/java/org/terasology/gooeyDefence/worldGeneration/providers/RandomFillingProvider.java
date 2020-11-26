@@ -15,12 +15,15 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.providers;
 
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
+import org.joml.Vector3i;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.worldGeneration.facets.RandomFillingFacet;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.RandomFillingRasterizer;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.utilities.procedural.Noise;
 import org.terasology.utilities.procedural.WhiteNoise;
 import org.terasology.world.generation.Border3D;
@@ -53,8 +56,8 @@ public class RandomFillingProvider implements FacetProvider {
      * @param noise The noise generator to use
      * @return true if a block should be spawned there. False otherwise
      */
-    public static boolean shouldSpawnBlock(BaseVector2i pos, Noise noise) {
-        double distance = pos.distance(BaseVector2i.ZERO);
+    public static boolean shouldSpawnBlock(Vector2ic pos, Noise noise) {
+        double distance = pos.distance(new Vector2i());
         return distance > DefenceField.shrineRingSize
                 && distance < DefenceField.outerRingSize
 
@@ -75,7 +78,7 @@ public class RandomFillingProvider implements FacetProvider {
 
         Rect2i processRegion = facet.getWorldRegion();
         for (BaseVector2i pos : processRegion.contents()) {
-            if (shouldSpawnBlock(pos, noise)) {
+            if (shouldSpawnBlock(JomlUtil.from(pos), noise)) {
                 facet.setWorld(pos.x(), pos.y(), true);
             }
             region.setRegionFacet(RandomFillingFacet.class, facet);

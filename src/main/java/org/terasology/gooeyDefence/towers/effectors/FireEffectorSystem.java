@@ -30,6 +30,7 @@ import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.utilities.random.FastRandom;
@@ -163,7 +164,7 @@ public class FireEffectorSystem extends BaseComponentSystem {
      */
     private Set<EntityRef> spreadFire(EntityRef source) {
         Vector3f sourcePos = source.getComponent(LocationComponent.class).getWorldPosition();
-        return enemyManager.getEnemiesInRange(sourcePos, BURN_RANGE)
+        return enemyManager.getEnemiesInRange(JomlUtil.from(sourcePos), BURN_RANGE)
                 .stream()
                 .filter(enemy -> !burningEnemies.contains(enemy) && canBurn())
                 .collect(Collectors.toSet());

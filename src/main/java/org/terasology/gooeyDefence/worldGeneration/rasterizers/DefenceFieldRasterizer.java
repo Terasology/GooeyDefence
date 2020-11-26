@@ -20,6 +20,7 @@ import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
 import org.terasology.math.ChunkMath;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
@@ -53,7 +54,7 @@ public class DefenceFieldRasterizer implements WorldRasterizer {
         for (Map.Entry<Vector3i, Boolean> entry : fieldFacet.getWorldEntries().entrySet()) {
             if (entry.getValue()) {
                 Vector3i pos = entry.getKey();
-                if ((int) DefenceField.distanceToNearestEntrance(pos) < DefenceField.entranceRingSize + 2) {
+                if ((int) DefenceField.distanceToNearestEntrance(JomlUtil.from(pos)) < DefenceField.entranceRingSize + 2) {
                     chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), altBlock);
                 } else {
                     chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), block);

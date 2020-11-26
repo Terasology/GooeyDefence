@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.movement;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -24,7 +25,6 @@ import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.movement.components.MovementComponent;
 import org.terasology.gooeyDefence.movement.events.ReachedGoalEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 
 /**
@@ -58,7 +58,7 @@ public class MovementSystem extends BaseComponentSystem implements UpdateSubscri
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
         LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
 
-        float distSqr = locationComponent.getWorldPosition().distanceSquared(movementComponent.goal);
+        float distSqr = locationComponent.getWorldPosition(new Vector3f()).distanceSquared(movementComponent.goal);
         if (distSqr < movementComponent.reachedDistance) {
             entityReachedGoal(entity);
         } else {
@@ -94,12 +94,12 @@ public class MovementSystem extends BaseComponentSystem implements UpdateSubscri
 
         Vector3f target = new Vector3f(movementComponent.goal)
                 /* Calculate required heading */
-                .sub(locationComponent.getWorldPosition())
+                .sub(locationComponent.getWorldPosition(new Vector3f()))
                 .normalize()
                 /* Scale to the speed */
-                .scale(movementComponent.speed * delta);
+                .mul(movementComponent.speed * delta);
         /* Move the entity */
-        locationComponent.setWorldPosition(locationComponent.getWorldPosition().add(target));
+        locationComponent.setWorldPosition(locationComponent.getWorldPosition(new Vector3f()).add(target));
         entity.saveComponent(locationComponent);
     }
 
