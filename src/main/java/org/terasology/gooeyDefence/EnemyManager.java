@@ -16,6 +16,12 @@
 
 package org.terasology.gooeyDefence;
 
+import org.joml.AxisAngle4f;
+import org.joml.Math;
+import org.joml.Quaternionf;
+import org.joml.RoundingMode;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -39,9 +45,6 @@ import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Quat4f;
-import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
@@ -108,7 +111,7 @@ public class EnemyManager extends BaseComponentSystem {
 
                 /* Check if the goal is on the new path */
                 MovementComponent movementComponent = enemy.getComponent(MovementComponent.class);
-                Vector3i goal = new Vector3i(movementComponent.goal);
+                Vector3i goal = new Vector3i(movementComponent.goal, RoundingMode.FLOOR);
                 List<Vector3i> newPath = event.getNewPath();
 
                 enemy.removeComponent(DefenceField.getComponentExtending(enemy, PathComponent.class).getClass());
@@ -162,16 +165,17 @@ public class EnemyManager extends BaseComponentSystem {
             faceTowards.sub(prevGoal);
             if (faceTowards.y() == 0) {
                 Vector3f perpendicular = new Vector3f();
-                perpendicular.cross(Vector3f.south(), faceTowards);
-                Quat4f entityRot;
+                perpendicular.cross(new Vector3f(0,0,-1), faceTowards);
+                Quaternionf entityRot;
                 if (perpendicular.x() == 0.0f && perpendicular.y() == 0.0f && perpendicular.z() == 0.0f) {
-                    if (faceTowards.z < 0)
-                        entityRot = new Quat4f(Vector3f.up(), 0.0f);
-                    else
-                        entityRot = new Quat4f(Vector3f.up(), (float) Math.PI);
+                    if (faceTowards.z < 0) {
+                        entityRot = new Quaternionf(new AxisAngle4f(0.0f,new Vector3f(0,0,1)));
+                    } else {
+                        entityRot = new Quaternionf(new AxisAngle4f((float) Math.PI, new Vector3f(0, 0, 1)));
+                    }
                 } else {
-                    double angle = Math.acos(faceTowards.normalize().dot(Vector3f.south()));
-                    entityRot = new Quat4f(perpendicular, (float) angle);
+                    double angle = Math.acos(faceTowards.normalize().dot(new Vector3f(0, 0, -1)));
+                    entityRot = new Quaternionf(new AxisAngle4f((float) angle, perpendicular));
                 }
                 LocationComponent locationComponent = entity.getComponent(LocationComponent.class);
                 locationComponent.setLocalRotation(entityRot);
@@ -190,11 +194,13 @@ public class EnemyManager extends BaseComponentSystem {
      * @param prefab         The prefab of the enemy to spawn in.
      */
     public void spawnEnemy(int entranceNumber, String prefab) {
-        if (!DefenceField.fieldActivated) {
+        // TODO: the path can be of size zero??
+        if (!DefenceField.fieldActivated || pathfindingManager.getPath(entranceNumber).size() == 0) {
             return;
         }
 
-        EntityRef entity = entityManager.create(prefab, DefenceField.entrancePos(entranceNumber).toVector3f());
+
+        EntityRef entity = entityManager.create(prefab, new Vector3f(DefenceField.entrancePos(entranceNumber)));
 
         /* Setup pathfinding component */
         EntrancePathComponent component = new EntrancePathComponent(entranceNumber, pathfindingManager);
@@ -224,7 +230,7 @@ public class EnemyManager extends BaseComponentSystem {
      */
     private void dropMoney(EntityRef enemy) {
         if (enemy.hasComponent(ValueComponent.class)) {
-            Vector3f location = enemy.getComponent(LocationComponent.class).getWorldPosition();
+            Vector3f location = enemy.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
             int value = enemy.getComponent(ValueComponent.class).value;
 
             /* Drop the money in instances of 5 */
@@ -254,7 +260,7 @@ public class EnemyManager extends BaseComponentSystem {
         float rangeSqr = range * range;
         Set<EntityRef> result = new HashSet<>();
         for (EntityRef enemy : enemies) {
-            Vector3f enemyPos = enemy.getComponent(LocationComponent.class).getWorldPosition();
+            Vector3f enemyPos = enemy.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
             if (enemyPos.distanceSquared(pos) <= rangeSqr) {
                 result.add(enemy);
             }

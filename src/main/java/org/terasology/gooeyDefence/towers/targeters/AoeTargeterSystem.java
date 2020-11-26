@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -53,10 +54,10 @@ public class AoeTargeterSystem extends BaseTargeterSystem {
      */
     @ReceiveEvent
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, AoeTargeterComponent targeterComponent) {
-        Set<EntityRef> targets = enemyManager.getEnemiesInRange(locationComponent.getWorldPosition(), targeterComponent.range);
+        Set<EntityRef> targets = enemyManager.getEnemiesInRange(locationComponent.getWorldPosition(new Vector3f()), targeterComponent.range);
         event.addToList(targets);
         if (!targets.isEmpty()) {
-            inWorldRenderer.displayExpandingSphere(locationComponent.getWorldPosition(), (float) targeterComponent.attackSpeed / 1000, targeterComponent.range * 2 + 1);
+            inWorldRenderer.displayExpandingSphere(locationComponent.getWorldPosition(new Vector3f()), (float) targeterComponent.attackSpeed / 1000, targeterComponent.range * 2 + 1);
         }
     }
 }

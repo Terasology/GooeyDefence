@@ -15,10 +15,11 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
+import org.joml.Vector3i;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.math.ChunkMath;
-import org.terasology.math.geom.Vector3i;
+import org.terasology.math.JomlUtil;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
@@ -43,10 +44,10 @@ public class ShrineRasterizer implements WorldRasterizer {
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         Vector3i zero = new Vector3i(0, 0, 0);
-        if (chunkRegion.getRegion().encompasses(zero)) {
+        if (chunkRegion.getRegion().encompasses(JomlUtil.from(zero))) {
             //TODO: Find a better way to create the shrine that isn't StructureTemplates.
             for (Vector3i pos : DefenceField.shrineData) {
-                chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), block);
+                chunk.setBlock(ChunkMath.calcRelativeBlockPos(JomlUtil.from(pos)), block);
             }
         }
     }

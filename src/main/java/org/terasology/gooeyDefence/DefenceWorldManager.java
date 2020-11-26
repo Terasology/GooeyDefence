@@ -33,6 +33,7 @@ import org.terasology.logic.health.DestroyEvent;
 import org.terasology.logic.health.EngineDamageTypes;
 import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
@@ -181,7 +182,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
             for (int y = -width; y <= width; y++) {
                 pos2i.setX(x);
                 pos2i.setY(y);
-                if (RandomFillingProvider.shouldSpawnBlock(pos2i, noise)) {
+                if (RandomFillingProvider.shouldSpawnBlock(JomlUtil.from(pos2i), noise)) {
                     pos3i.setX(pos2i.x);
                     pos3i.setZ(pos2i.y);
                     worldProvider.setBlock(pos3i, fieldBlock);

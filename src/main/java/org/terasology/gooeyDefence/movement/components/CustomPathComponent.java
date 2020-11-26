@@ -15,8 +15,9 @@
  */
 package org.terasology.gooeyDefence.movement.components;
 
-import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
+
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class CustomPathComponent implements PathComponent {
     public CustomPathComponent(List<Vector3i> path) {
         this.path = path;
         this.step = path.size() - 1;
-        this.goal = path.get(step).toVector3f();
+        this.goal = new Vector3f(path.get(step));
     }
 
 
@@ -60,7 +61,7 @@ public class CustomPathComponent implements PathComponent {
     public void nextStep() {
         step--;
         step = Math.min(Math.max(0, step), path.size() - 1);
-        this.goal = path.get(step).toVector3f();
+        this.goal = new Vector3f(path.get(step));
     }
 
     @Override

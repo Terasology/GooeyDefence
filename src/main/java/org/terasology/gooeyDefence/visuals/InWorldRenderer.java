@@ -15,6 +15,9 @@
  */
 package org.terasology.gooeyDefence.visuals;
 
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
+import org.joml.Vector3i;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -42,8 +45,7 @@ import org.terasology.gooeyDefence.visuals.components.TargeterBulletComponent;
 import org.terasology.logic.location.Location;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerTargetChangedEvent;
-import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
+import org.terasology.math.JomlUtil;
 import org.terasology.particles.components.generators.VelocityRangeGeneratorComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -69,7 +71,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
      * A position to move the range indicator that is hidden from the player.
      * This position is below ground
      */
-    private static final Vector3f OUT_OF_SIGHT = new Vector3f(0, -3, 0);
+    private static final Vector3fc OUT_OF_SIGHT = new Vector3f(0, -3, 0);
     private final Map<EntityRef, SphereInfo> expandingSpheres = new HashMap<>();
     private final Map<EntityRef, EntityRef> bullets = new HashMap<>();
     private BlockSelectionRenderer shrineDamageRenderer;
@@ -125,14 +127,14 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         for (List<Vector3i> path : paths) {
             if (path != null) {
                 for (int i = path.size() - 1; i >= 2; i--) {
-                    EntityRef pathBlock = entityManager.create(DefenceUris.PATH_EFFECT, path.get(i).toVector3f());
+                    EntityRef pathBlock = entityManager.create(DefenceUris.PATH_EFFECT, new Vector3f(path.get(i)));
 
                     VelocityRangeGeneratorComponent component = pathBlock.getComponent(VelocityRangeGeneratorComponent.class);
 
                     component.minVelocity.set(-0.5f);
                     component.maxVelocity.set(0.5f);
 
-                    Vector3f delta = path.get(i - 1).toVector3f().sub(path.get(i).toVector3f());
+                    Vector3f delta = new Vector3f(path.get(i - 1)).sub(new Vector3f(path.get(i)));
                     component.minVelocity.add(delta.x, delta.y, delta.z);
                     component.maxVelocity.add(delta.x, delta.y, delta.z);
 
@@ -180,7 +182,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         if (shrineDamaged > 0) {
             shrineDamaged -= time.getGameDeltaInMs();
             for (Vector3i pos : DefenceField.shrineData) {
-                shrineDamageRenderer.renderMark2(pos);
+                shrineDamageRenderer.renderMark2(JomlUtil.from(pos));
             }
         }
         shrineDamageRenderer.endRenderOverlay();
@@ -207,7 +209,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
     public void shootBulletTowards(EntityRef goal, Vector3f start, Component component) {
         EntityRef bullet = entityManager.create(DefenceUris.BULLET);
         MovementComponent movementComponent = new MovementComponent();
-        movementComponent.goal = goal.getComponent(LocationComponent.class).getWorldPosition();
+        movementComponent.goal = goal.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
         movementComponent.speed = (float) 30;
         movementComponent.reachedDistance = 0.5f;
         bullet.addOrSaveComponent(movementComponent);
@@ -265,7 +267,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         for (EntityRef bullet : bullets.keySet()) {
             MovementComponent component = bullet.getComponent(MovementComponent.class);
             EntityRef goal = bullets.get(bullet);
-            component.goal = goal.getComponent(LocationComponent.class).getWorldPosition();
+            component.goal = goal.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
         }
     }
 

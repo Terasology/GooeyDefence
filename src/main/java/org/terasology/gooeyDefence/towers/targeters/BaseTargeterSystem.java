@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.gooeyDefence.DefenceField;
@@ -25,7 +26,6 @@ import org.terasology.gooeyDefence.towers.SelectionMethod;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -95,7 +95,7 @@ public class BaseTargeterSystem extends BaseComponentSystem {
     private boolean canUseTarget(EntityRef target, Vector3f targeterPos, TowerTargeter targeterComponent) {
         return target.exists()
                 && target.getComponent(LocationComponent.class)
-                .getWorldPosition()
+                .getWorldPosition(new Vector3f())
                 .distance(targeterPos) < targeterComponent.range;
     }
 

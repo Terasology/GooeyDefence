@@ -15,6 +15,9 @@
  */
 package org.terasology.gooeyDefence.movement;
 
+import org.joml.RoundingMode;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -29,7 +32,7 @@ import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
 import org.terasology.gooeyDefence.movement.components.CustomPathComponent;
 import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3i;
+import org.terasology.math.JomlUtil;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.world.OnChangedBlock;
@@ -42,6 +45,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Handles calculation and storage of paths
@@ -128,7 +132,7 @@ public class PathfindingManager extends BaseComponentSystem {
     @ReceiveEvent
     public void onRepathEnemyRequest(RepathEnemyRequest event, EntityRef entity, LocationComponent locationComponent) {
         queuedEnemies.add(entity);
-        calculatePath(buildJpsConfig(new Vector3i(locationComponent.getWorldPosition())),
+        calculatePath(buildJpsConfig(new Vector3i(locationComponent.getWorldPosition(new Vector3f()), RoundingMode.FLOOR)),
                 path -> {
                     if (!path.isEmpty() && queuedEnemies.contains(entity)) {
                         CustomPathComponent customPathComponent = new CustomPathComponent(path);
@@ -171,7 +175,7 @@ public class PathfindingManager extends BaseComponentSystem {
         pathfinderSystem.requestPath(config, (path, end) -> {
             /* In order to make the path use zero as the end, we need to flip it. */
             Collections.reverse(path);
-            callback.accept(path);
+            callback.accept(path.stream().map(JomlUtil::from).collect(Collectors.toList()));
         });
 
     }
@@ -185,8 +189,8 @@ public class PathfindingManager extends BaseComponentSystem {
      */
     private JPSConfig buildJpsConfig(Vector3i start) {
         JPSConfig result = new JPSConfig();
-        result.start = start;
-        result.stop = DefenceField.FIELD_CENTRE;
+        result.start = JomlUtil.from(start);
+        result.stop = JomlUtil.from(DefenceField.FIELD_CENTRE);
         result.maxDepth = DefenceField.outerRingSize * 2;
         //TODO: Replace width and height with values from enemy.
         result.plugin = new EnemyWalkingPlugin(worldProvider, 0.5f, 0.5f);

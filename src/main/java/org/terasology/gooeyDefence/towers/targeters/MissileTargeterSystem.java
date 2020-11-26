@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -24,7 +25,6 @@ import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.gooeyDefence.visuals.components.SplashBulletComponent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 
 import java.util.Set;
@@ -56,16 +56,16 @@ public class MissileTargeterSystem extends SniperTargeterSystem {
     @ReceiveEvent
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, MissileTargeterComponent targeterComponent) {
 
-        Vector3f worldPos = locationComponent.getWorldPosition();
+        Vector3f worldPos = locationComponent.getWorldPosition(new Vector3f());
         EntityRef target = getTarget(worldPos, targeterComponent);
 
         if (target.exists()) {
-            Vector3f targetPos = target.getComponent(LocationComponent.class).getWorldPosition();
+            Vector3f targetPos = target.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
             Set<EntityRef> targets = enemyManager.getEnemiesInRange(targetPos, targeterComponent.splashRange);
             event.addToList(targets);
             inWorldRenderer.shootBulletTowards(
                     target,
-                    locationComponent.getWorldPosition(),
+                    locationComponent.getWorldPosition(new Vector3f()),
                     new SplashBulletComponent(targeterComponent.splashRange));
         }
         targeterComponent.lastTarget = target;

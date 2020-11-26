@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.towers.effectors;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -31,7 +32,6 @@ import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.utilities.random.FastRandom;
 import org.terasology.utilities.random.Random;
@@ -83,7 +83,7 @@ public class StunEffectorSystem extends BaseComponentSystem {
             pathStorage.put(target, pathComponent);
             target.removeComponent(pathComponent.getClass());
 
-            Vector3f position = target.getComponent(LocationComponent.class).getWorldPosition();
+            Vector3f position = target.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
             target.addComponent(new BlankPathComponent(position));
             delayManager.addDelayedAction(target, REMOVE_STUN_ID, component.stunDuration);
             inWorldRenderer.addParticleEffect(target, DefenceUris.STUN_PARTICLES);

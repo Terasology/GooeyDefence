@@ -15,11 +15,11 @@
  */
 package org.terasology.gooeyDefence;
 
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.gooeyDefence.components.FieldConfigComponent;
-import org.terasology.math.geom.BaseVector3i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.BlockEntityRegistry;
 
@@ -73,7 +73,7 @@ public final class DefenceField {
      * <p>
      * This is the point enemies will path to so the enemies must be able reach it. (ie, no solid blocks there)
      */
-    public static final Vector3i FIELD_CENTRE = new Vector3i(0, 0, 0);
+    public static final Vector3ic FIELD_CENTRE = new Vector3i(0, 0, 0);
     /**
      * The location of each of the entrances.
      * <p>
@@ -152,7 +152,7 @@ public final class DefenceField {
      * @return The position of the entrance
      */
     public static Vector3i entrancePos(int id) {
-        return id < entrances.length && id >= 0 ? entrances[id] : Vector3i.zero();
+        return id < entrances.length && id >= 0 ? entrances[id] : new Vector3i();
     }
 
     /**
@@ -173,7 +173,7 @@ public final class DefenceField {
      * @param pos The position to check
      * @return True, if the position is inside a clear zone around any entrance. False otherwise
      */
-    public static boolean inRangeOfEntrance(BaseVector3i pos) {
+    public static boolean inRangeOfEntrance(Vector3ic pos) {
         return distanceToNearestEntrance(pos) < entranceRingSize;
     }
 
@@ -181,7 +181,7 @@ public final class DefenceField {
      * @param pos The position to check
      * @return The distance between the position and the nearest entrance.
      */
-    public static double distanceToNearestEntrance(BaseVector3i pos) {
+    public static double distanceToNearestEntrance(Vector3ic pos) {
         return Arrays.stream(entrances).mapToDouble(pos::distance).min().orElse(-1);
     }
 

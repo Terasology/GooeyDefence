@@ -18,6 +18,7 @@ package org.terasology.gooeyDefence.worldGeneration.providers;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.DefenceFieldRasterizer;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.world.generation.Border3D;
@@ -45,7 +46,7 @@ public class DefenceFieldProvider implements FacetProvider {
              * 2. Part of an entrance dome, but outside the main dome
              */
             int centreDistance = (int) pos.distance(BaseVector3i.ZERO);
-            int entranceDistance = (int) DefenceField.distanceToNearestEntrance(pos);
+            int entranceDistance = (int) DefenceField.distanceToNearestEntrance(JomlUtil.from(pos));
             if (centreDistance == DefenceField.outerRingSize
                     && entranceDistance >= DefenceField.entranceRingSize) {
                 facet.setWorld(pos, true);

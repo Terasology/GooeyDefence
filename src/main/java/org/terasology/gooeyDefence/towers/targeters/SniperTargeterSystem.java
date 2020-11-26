@@ -16,6 +16,7 @@
 package org.terasology.gooeyDefence.towers.targeters;
 
 import com.google.common.collect.Sets;
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -24,7 +25,6 @@ import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 
 import java.util.Set;
@@ -52,13 +52,13 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
      */
     @ReceiveEvent
     public void onSelectEnemies(SelectEnemiesEvent event, EntityRef entity, LocationComponent locationComponent, SniperTargeterComponent targeterComponent) {
-        Vector3f worldPos = locationComponent.getWorldPosition();
+        Vector3f worldPos = locationComponent.getWorldPosition(new Vector3f());
         EntityRef target = getTarget(worldPos, targeterComponent);
         if (target.exists()) {
             event.addToList(target);
             inWorldRenderer.shootBulletTowards(
                     target,
-                    locationComponent.getWorldPosition());
+                    locationComponent.getWorldPosition(new Vector3f()));
         }
         targeterComponent.lastTarget = target;
     }
@@ -73,7 +73,7 @@ public class SniperTargeterSystem extends BaseTargeterSystem {
      */
     private boolean canUseTarget(EntityRef target, Vector3f targeterPos, SniperTargeterComponent targeterComponent) {
         if (target.exists()) {
-            Vector3f enemyLocation = target.getComponent(LocationComponent.class).getWorldPosition();
+            Vector3f enemyLocation = target.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
             float enemyDistance = targeterPos.distanceSquared(enemyLocation);
             return enemyDistance < targeterComponent.range * targeterComponent.range
                     && enemyDistance > targeterComponent.minimumRange * targeterComponent.minimumRange;
