@@ -22,16 +22,16 @@ import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.FacetProvider;
 import org.terasology.world.generation.GeneratingRegion;
 import org.terasology.world.generation.Produces;
-import org.terasology.world.generation.facets.SurfaceHeightFacet;
+import org.terasology.world.generation.facets.ElevationFacet;
 
 /**
- * Fills the {@link SurfaceHeightFacet} with a surface height of 0 globally.
+ * Fills the {@link ElevationFacet} with a surface height of 0 globally.
  *
- * @see SurfaceHeightFacet
+ * @see ElevationFacet
  * @see WorldSurfaceRasterizer
  */
-@Produces(SurfaceHeightFacet.class)
-public class SurfaceHeightProvider implements FacetProvider {
+@Produces(ElevationFacet.class)
+public class ElevationProvider implements FacetProvider {
     @Override
     public void setSeed(long seed) {
 
@@ -39,13 +39,13 @@ public class SurfaceHeightProvider implements FacetProvider {
 
     @Override
     public void process(GeneratingRegion region) {
-        Border3D border = region.getBorderForFacet(SurfaceHeightFacet.class);
-        SurfaceHeightFacet facet = new SurfaceHeightFacet(region.getRegion(), border);
+        Border3D border = region.getBorderForFacet(ElevationFacet.class);
+        ElevationFacet facet = new ElevationFacet(region.getRegion(), border);
 
         Rect2i processRegion = facet.getWorldRegion();
         for (BaseVector2i position : processRegion.contents()) {
             facet.setWorld(position, 0f);
         }
-        region.setRegionFacet(SurfaceHeightFacet.class, facet);
+        region.setRegionFacet(ElevationFacet.class, facet);
     }
 }
