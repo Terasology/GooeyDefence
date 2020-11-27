@@ -20,7 +20,7 @@ import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.gooeyDefence.worldGeneration.facets.RandomFillingFacet;
 import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
 import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
-import org.terasology.gooeyDefence.worldGeneration.providers.SurfaceHeightProvider;
+import org.terasology.gooeyDefence.worldGeneration.providers.ElevationProvider;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.DefenceFieldRasterizer;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.RandomFillingRasterizer;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.ShrineRasterizer;
@@ -28,7 +28,6 @@ import org.terasology.gooeyDefence.worldGeneration.rasterizers.WorldSurfaceRaste
 import org.terasology.registry.In;
 import org.terasology.world.generation.BaseFacetedWorldGenerator;
 import org.terasology.world.generation.ElevationCompatibilityProvider;
-import org.terasology.world.generation.SurfaceHeightCompatibilityProvider;
 import org.terasology.world.generation.WorldBuilder;
 import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
@@ -53,8 +52,7 @@ public class GooeyDefenceWorldGenerator extends BaseFacetedWorldGenerator {
     @Override
     protected WorldBuilder createWorld() {
         return new WorldBuilder(worldGeneratorPluginLibrary)
-                .addProvider(new SurfaceHeightProvider())
-                .addProvider(new ElevationCompatibilityProvider())
+                .addProvider(new ElevationProvider())
                 .addProvider(new DefenceFieldProvider())
                 .addProvider(new RandomFillingProvider())
                 .addRasterizer(new WorldSurfaceRasterizer())

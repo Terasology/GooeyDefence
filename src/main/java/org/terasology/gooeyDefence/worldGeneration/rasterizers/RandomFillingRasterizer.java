@@ -26,7 +26,7 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
-import org.terasology.world.generation.facets.SurfaceHeightFacet;
+import org.terasology.world.generation.facets.ElevationFacet;
 
 /**
  * Places blocks according to the values given in {@link org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider}.
@@ -46,7 +46,7 @@ public class RandomFillingRasterizer implements WorldRasterizer {
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         RandomFillingFacet randomFacet = chunkRegion.getFacet(RandomFillingFacet.class);
-        SurfaceHeightFacet surfaceFacet = chunkRegion.getFacet(SurfaceHeightFacet.class);
+        ElevationFacet surfaceFacet = chunkRegion.getFacet(ElevationFacet.class);
         for (Vector3i pos : chunkRegion.getRegion()) {
             if (randomFacet.getWorld(pos.x, pos.z) && surfaceFacet.getWorld(pos.x, pos.z) == pos.y) {
                 chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), block);

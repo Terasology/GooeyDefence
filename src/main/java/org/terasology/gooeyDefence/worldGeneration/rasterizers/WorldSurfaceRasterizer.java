@@ -16,7 +16,7 @@
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
 import org.terasology.gooeyDefence.DefenceUris;
-import org.terasology.gooeyDefence.worldGeneration.providers.SurfaceHeightProvider;
+import org.terasology.gooeyDefence.worldGeneration.providers.ElevationProvider;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
@@ -25,13 +25,13 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
-import org.terasology.world.generation.facets.SurfaceHeightFacet;
+import org.terasology.world.generation.facets.ElevationFacet;
 
 /**
  * Places the base world block at the surface level.
  *
- * @see SurfaceHeightFacet
- * @see SurfaceHeightProvider
+ * @see ElevationFacet
+ * @see ElevationProvider
  */
 public class WorldSurfaceRasterizer implements WorldRasterizer {
 
@@ -44,9 +44,9 @@ public class WorldSurfaceRasterizer implements WorldRasterizer {
 
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
-        SurfaceHeightFacet surfaceHeightFacet = chunkRegion.getFacet(SurfaceHeightFacet.class);
+        ElevationFacet elevationFacet = chunkRegion.getFacet(ElevationFacet.class);
         for (Vector3i pos : chunkRegion.getRegion()) {
-            float height = surfaceHeightFacet.getWorld(pos.x, pos.z);
+            float height = elevationFacet.getWorld(pos.x, pos.z);
             if (pos.y < height) {
                 chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), block);
             }
