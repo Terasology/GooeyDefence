@@ -4,18 +4,18 @@
     "name": "Fast Enemy",
     "description": "A fast but weak enemy type"
   },
-  "skeletalmesh": {
+  "skeletalMesh": {
     "mesh": "MawGooey:gooey",
-    "heightOffset": -2.0,
+    "heightOffset": -0.5,
     "material": "MawGooey:gooeySkinYellow",
     "animationPool": [
       "MawGooey:gooey#ArmatureAction"
     ],
     "loop": true,
     "scale": [
-      0.25,
-      0.25,
-      0.25
+      0.45,
+      0.45,
+      0.45
     ]
   },
   "Location": {},
@@ -36,8 +36,8 @@
   "GooeyDefence:Health": {
     "health": 5
   },
-  "Value":{
-    "value":5
+  "Value": {
+    "value": 5
   }
 }
 
