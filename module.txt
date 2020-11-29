@@ -8,7 +8,8 @@
         { "id": "CoreRendering", "minVersion": "1.0.0" },
         { "id": "FlexiblePathfinding", "minVersion": "1.0.0" },
         { "id": "Health", "minVersion": "1.0.0" },
-        { "id": "Inventory", "minVersion": "1.1.0" }
+        { "id": "Inventory", "minVersion": "1.1.0" },
+        { "id": "MawGooey", "minVersion": "1.0.0" }
     ],
     "serverSideOnly": false,
     "isGameplay": "true",

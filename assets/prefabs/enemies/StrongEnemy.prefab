@@ -4,18 +4,18 @@
     "name": "Strong Enemy",
     "description": "A slow, but powerful enemy type"
   },
-  "skeletalmesh": {
-    "mesh": "enemy",
-    "heightOffset": -2.0,
-    "material": "strongEnemy",
+  "skeletalMesh": {
+    "mesh": "MawGooey:gooey",
+    "heightOffset": -0.5,
+    "material": "MawGooey:gooeySkinGreen",
     "animationPool": [
-      "gooeyIdleBreathing"
+      "MawGooey:gooey#ArmatureAction"
     ],
     "loop": true,
     "scale": [
-      0.25,
-      0.25,
-      0.25
+      0.45,
+      0.45,
+      0.45
     ]
   },
   "Location": {},
@@ -36,8 +36,8 @@
   "GooeyDefence:Health": {
     "health": 50
   },
-  "Value":{
-    "value":15
+  "Value": {
+    "value": 15
   }
 }
 

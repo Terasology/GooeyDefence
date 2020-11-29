@@ -4,18 +4,18 @@
     "name": "Basic Enemy",
     "description": "The basic attacker"
   },
-  "skeletalmesh": {
-    "mesh": "enemy",
-    "heightOffset": -2.0,
-    "material": "basicEnemy",
+  "skeletalMesh": {
+    "mesh": "MawGooey:gooey",
+    "heightOffset": -0.5,
+    "material": "MawGooey:gooeySkinPurple",
     "animationPool": [
-      "gooeyIdleBreathing"
+      "MawGooey:gooey#ArmatureAction"
     ],
     "loop": true,
     "scale": [
-      0.25,
-      0.25,
-      0.25
+      0.45,
+      0.45,
+      0.45
     ]
   },
   "Location": {},
@@ -36,8 +36,8 @@
   "GooeyDefence:Health": {
     "health": 20
   },
-  "Value":{
-    "value":10
+  "Value": {
+    "value": 10
   }
 }
 
