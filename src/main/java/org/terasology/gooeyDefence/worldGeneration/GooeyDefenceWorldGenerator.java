@@ -27,7 +27,6 @@ import org.terasology.gooeyDefence.worldGeneration.rasterizers.ShrineRasterizer;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.WorldSurfaceRasterizer;
 import org.terasology.registry.In;
 import org.terasology.world.generation.BaseFacetedWorldGenerator;
-import org.terasology.world.generation.ElevationCompatibilityProvider;
 import org.terasology.world.generation.WorldBuilder;
 import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
