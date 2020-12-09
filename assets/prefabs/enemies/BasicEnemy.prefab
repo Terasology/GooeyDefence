@@ -6,7 +6,7 @@
   },
   "skeletalMesh": {
     "mesh": "Gooey:gooey",
-    "heightOffset": -0.5,
+    "heightOffset": 0.5,
     "material": "Gooey:gooeySkinPurple",
     "animationPool": [
       "Gooey:gooey#ArmatureAction"
