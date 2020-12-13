@@ -17,7 +17,7 @@ package org.terasology.gooeyDefence.worldGeneration.facets;
 
 import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.DefenceFieldRasterizer;
-import org.terasology.math.Region3i;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.facets.base.SparseBooleanFieldFacet3D;
 
@@ -30,7 +30,7 @@ import org.terasology.world.generation.facets.base.SparseBooleanFieldFacet3D;
  */
 public class DefenceFieldFacet extends SparseBooleanFieldFacet3D {
 
-    public DefenceFieldFacet(Region3i region, Border3D border) {
+    public DefenceFieldFacet(BlockRegion region, Border3D border) {
         super(region, border);
     }
 

@@ -44,7 +44,7 @@ public class ShrineRasterizer implements WorldRasterizer {
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         Vector3i zero = new Vector3i(0, 0, 0);
-        if (chunkRegion.getRegion().encompasses(JomlUtil.from(zero))) {
+        if (chunkRegion.getRegion().containsPoint(zero)) {
             //TODO: Find a better way to create the shrine that isn't StructureTemplates.
             for (Vector3i pos : DefenceField.shrineData) {
                 chunk.setBlock(ChunkMath.calcRelativeBlockPos(JomlUtil.from(pos)), block);

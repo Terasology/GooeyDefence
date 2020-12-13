@@ -15,13 +15,15 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.worldGeneration.providers.ElevationProvider;
 import org.terasology.math.ChunkMath;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegions;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
@@ -45,10 +47,10 @@ public class WorldSurfaceRasterizer implements WorldRasterizer {
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         ElevationFacet elevationFacet = chunkRegion.getFacet(ElevationFacet.class);
-        for (Vector3i pos : chunkRegion.getRegion()) {
-            float height = elevationFacet.getWorld(pos.x, pos.z);
-            if (pos.y < height) {
-                chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), block);
+        for (Vector3ic pos : BlockRegions.iterableInPlace(chunkRegion.getRegion())) {
+            float height = elevationFacet.getWorld(pos.x(), pos.z());
+            if (pos.y() < height) {
+                chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos, new Vector3i()), block);
             }
         }
     }
