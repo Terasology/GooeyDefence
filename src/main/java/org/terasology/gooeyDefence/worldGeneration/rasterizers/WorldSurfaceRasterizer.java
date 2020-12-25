@@ -23,7 +23,6 @@ import org.terasology.math.ChunkMath;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.BlockRegions;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
@@ -47,7 +46,7 @@ public class WorldSurfaceRasterizer implements WorldRasterizer {
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         ElevationFacet elevationFacet = chunkRegion.getFacet(ElevationFacet.class);
-        for (Vector3ic pos : BlockRegions.iterableInPlace(chunkRegion.getRegion())) {
+        for (Vector3ic pos : chunkRegion.getRegion()) {
             float height = elevationFacet.getWorld(pos.x(), pos.z());
             if (pos.y() < height) {
                 chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos, new Vector3i()), block);
