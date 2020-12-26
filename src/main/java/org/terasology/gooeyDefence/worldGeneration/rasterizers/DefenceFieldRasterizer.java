@@ -15,13 +15,13 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.rasterizers;
 
+import org.joml.Vector3i;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.JomlUtil;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
@@ -51,13 +51,14 @@ public class DefenceFieldRasterizer implements WorldRasterizer {
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         DefenceFieldFacet fieldFacet = chunkRegion.getFacet(DefenceFieldFacet.class);
+        Vector3i tempPos = new Vector3i();
         for (Map.Entry<Vector3i, Boolean> entry : fieldFacet.getWorldEntries().entrySet()) {
             if (entry.getValue()) {
                 Vector3i pos = entry.getKey();
-                if ((int) DefenceField.distanceToNearestEntrance(JomlUtil.from(pos)) < DefenceField.entranceRingSize + 2) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), altBlock);
+                if ((int) DefenceField.distanceToNearestEntrance(pos) < DefenceField.entranceRingSize + 2) {
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos, tempPos), altBlock);
                 } else {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos), block);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos, tempPos), block);
                 }
             }
         }
