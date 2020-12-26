@@ -46,10 +46,11 @@ public class WorldSurfaceRasterizer implements WorldRasterizer {
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         ElevationFacet elevationFacet = chunkRegion.getFacet(ElevationFacet.class);
+        Vector3i tempPos = new Vector3i();
         for (Vector3ic pos : chunkRegion.getRegion()) {
             float height = elevationFacet.getWorld(pos.x(), pos.z());
             if (pos.y() < height) {
-                chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos, new Vector3i()), block);
+                chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos, tempPos), block);
             }
         }
     }
