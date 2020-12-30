@@ -34,6 +34,7 @@ import org.terasology.gooeyDefence.towers.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.towers.events.TowerDestroyedEvent;
 import org.terasology.logic.health.DoDestroyEvent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
@@ -81,7 +82,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onAddedBlocks(OnBlockItemPlaced event, EntityRef entity) {
         if (event.getPlacedBlock().hasComponent(TowerMultiBlockComponent.class)) {
-            handleTowerBlock(event.getPosition(), event.getPlacedBlock());
+            handleTowerBlock(JomlUtil.from(event.getPosition()), event.getPlacedBlock());
         }
     }
 
