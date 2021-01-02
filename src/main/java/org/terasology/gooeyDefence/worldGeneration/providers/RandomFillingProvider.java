@@ -26,6 +26,7 @@ import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.utilities.procedural.Noise;
 import org.terasology.utilities.procedural.WhiteNoise;
+import org.terasology.world.block.BlockAreac;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.FacetProvider;
 import org.terasology.world.generation.GeneratingRegion;
@@ -76,9 +77,9 @@ public class RandomFillingProvider implements FacetProvider {
         Border3D border = region.getBorderForFacet(RandomFillingFacet.class);
         RandomFillingFacet facet = new RandomFillingFacet(region.getRegion(), border);
 
-        Rect2i processRegion = facet.getWorldRegion();
-        for (BaseVector2i pos : processRegion.contents()) {
-            if (shouldSpawnBlock(JomlUtil.from(pos), noise)) {
+        BlockAreac processRegion = facet.getWorldRegion();
+        for (Vector2ic pos : processRegion) {
+            if (shouldSpawnBlock(pos, noise)) {
                 facet.setWorld(pos.x(), pos.y(), true);
             }
             region.setRegionFacet(RandomFillingFacet.class, facet);

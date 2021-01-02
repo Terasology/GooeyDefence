@@ -15,9 +15,11 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.providers;
 
+import org.joml.Vector2ic;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.WorldSurfaceRasterizer;
 import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.Rect2i;
+import org.terasology.world.block.BlockAreac;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.FacetProvider;
 import org.terasology.world.generation.GeneratingRegion;
@@ -42,8 +44,8 @@ public class ElevationProvider implements FacetProvider {
         Border3D border = region.getBorderForFacet(ElevationFacet.class);
         ElevationFacet facet = new ElevationFacet(region.getRegion(), border);
 
-        Rect2i processRegion = facet.getWorldRegion();
-        for (BaseVector2i position : processRegion.contents()) {
+        BlockAreac processRegion = facet.getWorldRegion();
+        for (Vector2ic position : processRegion) {
             facet.setWorld(position, 0f);
         }
         region.setRegionFacet(ElevationFacet.class, facet);
