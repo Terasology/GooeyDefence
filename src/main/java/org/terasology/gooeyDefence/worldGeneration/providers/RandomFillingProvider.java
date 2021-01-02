@@ -77,7 +77,7 @@ public class RandomFillingProvider implements FacetProvider {
         Border3D border = region.getBorderForFacet(RandomFillingFacet.class);
         RandomFillingFacet facet = new RandomFillingFacet(region.getRegion(), border);
 
-        BlockAreac processRegion = facet.getWorldRegion();
+        BlockAreac processRegion = facet.getWorldArea();
         for (Vector2ic pos : processRegion) {
             if (shouldSpawnBlock(pos, noise)) {
                 facet.setWorld(pos.x(), pos.y(), true);

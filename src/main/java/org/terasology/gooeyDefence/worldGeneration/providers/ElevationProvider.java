@@ -44,7 +44,7 @@ public class ElevationProvider implements FacetProvider {
         Border3D border = region.getBorderForFacet(ElevationFacet.class);
         ElevationFacet facet = new ElevationFacet(region.getRegion(), border);
 
-        BlockAreac processRegion = facet.getWorldRegion();
+        BlockAreac processRegion = facet.getWorldArea();
         for (Vector2ic position : processRegion) {
             facet.setWorld(position, 0f);
         }
