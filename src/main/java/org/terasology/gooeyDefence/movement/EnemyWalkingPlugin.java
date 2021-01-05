@@ -15,10 +15,11 @@
  */
 package org.terasology.gooeyDefence.movement;
 
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.terasology.flexiblepathfinding.plugins.basic.WalkingPlugin;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.world.WorldProvider;
+import org.terasology.world.block.BlockRegion;
 
 /**
  * Plugin that defines how the standard enemies will walk.
@@ -32,7 +33,7 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
     }
 
     @Override
-    public boolean isReachable(Vector3i to, Vector3i from) {
+    public boolean isReachable(Vector3ic to, Vector3ic from) {
         return !to.equals(from)
                 && (isHorizontallyReachable(to, from) || isVerticallyReachable(to, from))
                 && isWalkable(to, from)
@@ -46,15 +47,15 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
      * @param from The starting position
      * @return True if all the blocks are penetrable.
      */
-    private boolean areAllBlocksPenetrable(Vector3i to, Vector3i from) {
-        for (Vector3i relativePosition : getOccupiedRegionRelative()) {
+    private boolean areAllBlocksPenetrable(Vector3ic to, Vector3ic from) {
+        for (Vector3ic relativePosition : getOccupiedRegionRelative()) {
 
             /* The start/stop for this block in the occupied region */
             Vector3i occupiedRegionStart = new Vector3i(to).add(relativePosition);
             Vector3i occupiedRegionEnd = new Vector3i(from).add(relativePosition);
 
-            Region3i movementBounds = Region3i.createBounded(occupiedRegionStart, occupiedRegionEnd);
-            for (Vector3i block : movementBounds) {
+            BlockRegion movementBounds = new BlockRegion(occupiedRegionStart).union(occupiedRegionEnd);
+            for (Vector3ic block : movementBounds) {
                 if (!world.getBlock(block).isPenetrable()) {
                     return false;
                 }
@@ -71,7 +72,7 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
      * @param from The starting position
      * @return True if the movement is horizontally possible.
      */
-    private boolean isHorizontallyReachable(Vector3i to, Vector3i from) {
+    private boolean isHorizontallyReachable(Vector3ic to, Vector3ic from) {
         return isMovementHorizontal(to, from) && to.distanceSquared(from) <= 2;
     }
 
@@ -83,7 +84,7 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
      * @param from The starting position
      * @return True if the movement is vertically possible.
      */
-    private boolean isVerticallyReachable(Vector3i to, Vector3i from) {
+    private boolean isVerticallyReachable(Vector3ic to, Vector3ic from) {
         return !isMovementHorizontal(to, from) && to.distanceSquared(from) <= 1;
     }
 
@@ -95,7 +96,7 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
      * @param from The starting position
      * @return True if the the movement is walkable
      */
-    private boolean isWalkable(Vector3i to, Vector3i from) {
+    private boolean isWalkable(Vector3ic to, Vector3ic from) {
         return isWalkable(to) || isWalkable(from);
     }
 
@@ -106,7 +107,7 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
      * @param from The starting position
      * @return True if both positions are at the same height.
      */
-    private boolean isMovementHorizontal(Vector3i to, Vector3i from) {
-        return to.y == from.y;
+    private boolean isMovementHorizontal(Vector3ic to, Vector3ic from) {
+        return to.y() == from.y();
     }
 }
