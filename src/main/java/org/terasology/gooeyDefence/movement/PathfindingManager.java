@@ -189,7 +189,7 @@ public class PathfindingManager extends BaseComponentSystem {
      */
     private JPSConfig buildJpsConfig(Vector3i start) {
         JPSConfig result = new JPSConfig();
-        result.start = start;
+        result.start = new Vector3i(start);
         result.stop = new Vector3i(DefenceField.FIELD_CENTRE);
         result.maxDepth = DefenceField.outerRingSize * 2;
         //TODO: Replace width and height with values from enemy.
