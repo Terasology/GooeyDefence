@@ -175,7 +175,7 @@ public class PathfindingManager extends BaseComponentSystem {
         pathfinderSystem.requestPath(config, (path, end) -> {
             /* In order to make the path use zero as the end, we need to flip it. */
             Collections.reverse(path);
-            callback.accept(path.stream().map(JomlUtil::from).collect(Collectors.toList()));
+            callback.accept(path);
         });
 
     }
@@ -189,8 +189,8 @@ public class PathfindingManager extends BaseComponentSystem {
      */
     private JPSConfig buildJpsConfig(Vector3i start) {
         JPSConfig result = new JPSConfig();
-        result.start = JomlUtil.from(start);
-        result.stop = JomlUtil.from(DefenceField.FIELD_CENTRE);
+        result.start = start;
+        result.stop = new Vector3i(DefenceField.FIELD_CENTRE);
         result.maxDepth = DefenceField.outerRingSize * 2;
         //TODO: Replace width and height with values from enemy.
         result.plugin = new EnemyWalkingPlugin(worldProvider, 0.5f, 0.5f);
