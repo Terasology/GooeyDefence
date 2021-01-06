@@ -15,6 +15,9 @@
  */
 package org.terasology.gooeyDefence;
 
+import org.joml.Vector2i;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -33,9 +36,6 @@ import org.terasology.logic.health.DestroyEvent;
 import org.terasology.logic.health.EngineDamageTypes;
 import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.JomlUtil;
-import org.terasology.math.geom.Vector2i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.utilities.procedural.Noise;
@@ -124,7 +124,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
     public void onCreateBlockDrops(CreateBlockDropsEvent event, EntityRef entity, LocationComponent component) {
         if (entity.getParentPrefab().getName().equals(DefenceUris.PLAIN_WORLD_BLOCK)) {
             event.consume();
-            factory.newInstance(blockManager.getBlockFamily(DefenceUris.PLAIN_BLOCK)).send(new DropItemEvent(component.getWorldPosition()));
+            factory.newInstance(blockManager.getBlockFamily(DefenceUris.PLAIN_BLOCK)).send(new DropItemEvent(component.getWorldPosition(new Vector3f())));
         }
     }
 
@@ -147,7 +147,7 @@ public class DefenceWorldManager extends BaseComponentSystem {
      * @param size The size of the field to clear.
      */
     private void clearField(int size) {
-        Vector3i pos = Vector3i.zero();
+        Vector3i pos = new Vector3i();
         Block block;
         for (int x = -size; x <= size; x++) {
             /* We use circle eq "x^2 + y^2 = r^2" to work out where we need to start */
@@ -174,17 +174,16 @@ public class DefenceWorldManager extends BaseComponentSystem {
      */
     private void createRandomFill(int size) {
         Noise noise = new WhiteNoise(System.currentTimeMillis());
-        Vector2i pos2i = Vector2i.zero();
-        Vector3i pos3i = Vector3i.zero();
+        Vector2i pos2i = new Vector2i();
+        Vector3i pos3i = new Vector3i();
 
         for (int x = -size; x <= size; x++) {
             int width = (int) Math.floor(Math.sqrt(size * size - x * x));
             for (int y = -width; y <= width; y++) {
-                pos2i.setX(x);
-                pos2i.setY(y);
-                if (RandomFillingProvider.shouldSpawnBlock(JomlUtil.from(pos2i), noise)) {
-                    pos3i.setX(pos2i.x);
-                    pos3i.setZ(pos2i.y);
+                pos2i.set(x,y);
+                if (RandomFillingProvider.shouldSpawnBlock(pos2i, noise)) {
+                    pos3i.x = pos2i.x;
+                    pos3i.z = pos2i.y;
                     worldProvider.setBlock(pos3i, fieldBlock);
                 }
             }
