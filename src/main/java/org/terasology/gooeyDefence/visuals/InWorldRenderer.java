@@ -45,7 +45,6 @@ import org.terasology.gooeyDefence.visuals.components.TargeterBulletComponent;
 import org.terasology.logic.location.Location;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerTargetChangedEvent;
-import org.terasology.math.JomlUtil;
 import org.terasology.particles.components.generators.VelocityRangeGeneratorComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -156,7 +155,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
             LocationComponent targeterLoc = event.getNewTarget().getComponent(LocationComponent.class);
             TowerTargeter targeter = DefenceField.getComponentExtending(event.getNewTarget(), TowerTargeter.class);
 
-            sphereLoc.setWorldPosition(targeterLoc.getWorldPosition());
+            sphereLoc.setWorldPosition(targeterLoc.getWorldPosition(new Vector3f()));
             sphereLoc.setLocalScale(targeter.range * 2 + 1);
 
         } else {
@@ -182,7 +181,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
         if (shrineDamaged > 0) {
             shrineDamaged -= time.getGameDeltaInMs();
             for (Vector3i pos : DefenceField.shrineData) {
-                shrineDamageRenderer.renderMark2(JomlUtil.from(pos));
+                shrineDamageRenderer.renderMark2(pos);
             }
         }
         shrineDamageRenderer.endRenderOverlay();
@@ -347,7 +346,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
 
                 LocationComponent targetLoc = target.getComponent(LocationComponent.class);
                 LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
-                childLoc.setWorldPosition(targetLoc.getWorldPosition());
+                childLoc.setWorldPosition(targetLoc.getWorldPosition(new Vector3f()));
                 Location.attachChild(target, particleEntity);
                 particleEntity.setOwner(target);
 
