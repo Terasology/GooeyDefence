@@ -156,7 +156,7 @@ public class InWorldRenderer extends BaseComponentSystem implements RenderSystem
             LocationComponent targeterLoc = event.getNewTarget().getComponent(LocationComponent.class);
             TowerTargeter targeter = DefenceField.getComponentExtending(event.getNewTarget(), TowerTargeter.class);
 
-            sphereLoc.setWorldPosition(targeterLoc.getWorldPosition());
+            sphereLoc.setWorldPosition(targeterLoc.getWorldPosition(new Vector3f()));
             sphereLoc.setLocalScale(targeter.range * 2 + 1);
 
         } else {
