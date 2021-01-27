@@ -24,6 +24,7 @@ import org.terasology.math.ChunkMath;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.chunks.Chunks;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
@@ -51,7 +52,7 @@ public class RandomFillingRasterizer implements WorldRasterizer {
         Vector3i tempPos = new Vector3i();
         for (Vector3ic pos : chunkRegion.getRegion()) {
             if (randomFacet.getWorld(pos.x(), pos.z()) && surfaceFacet.getWorld(pos.x(), pos.z()) == pos.y()) {
-                chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos, tempPos), block);
+                chunk.setBlock(Chunks.toRelative(pos, tempPos), block);
             }
         }
     }

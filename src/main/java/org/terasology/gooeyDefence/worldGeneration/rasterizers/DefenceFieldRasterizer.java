@@ -25,6 +25,7 @@ import org.terasology.math.JomlUtil;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.chunks.Chunks;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
@@ -56,9 +57,9 @@ public class DefenceFieldRasterizer implements WorldRasterizer {
             if (entry.getValue()) {
                 Vector3i pos = entry.getKey();
                 if ((int) DefenceField.distanceToNearestEntrance(pos) < DefenceField.entranceRingSize + 2) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos, tempPos), altBlock);
+                    chunk.setBlock(Chunks.toRelative(pos, tempPos), altBlock);
                 } else {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(pos, tempPos), block);
+                    chunk.setBlock(Chunks.toRelative(pos, tempPos), block);
                 }
             }
         }
