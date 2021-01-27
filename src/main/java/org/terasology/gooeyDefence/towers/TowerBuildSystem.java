@@ -16,6 +16,10 @@
 package org.terasology.gooeyDefence.towers;
 
 import com.google.common.collect.Sets;
+import org.joml.RoundingMode;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -34,9 +38,7 @@ import org.terasology.gooeyDefence.towers.events.TowerCreatedEvent;
 import org.terasology.gooeyDefence.towers.events.TowerDestroyedEvent;
 import org.terasology.logic.health.DoDestroyEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.JomlUtil;
 import org.terasology.math.Side;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.items.OnBlockItemPlaced;
@@ -82,7 +84,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onAddedBlocks(OnBlockItemPlaced event, EntityRef entity) {
         if (event.getPlacedBlock().hasComponent(TowerMultiBlockComponent.class)) {
-            handleTowerBlock(JomlUtil.from(event.getPosition()), event.getPlacedBlock());
+            handleTowerBlock(event.getPosition(), event.getPlacedBlock());
         }
     }
 
@@ -91,11 +93,11 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * Wrapper to allow easy iteration over a collection of entities.
      *
      * @param entityRef The block entity to handle
-     * @see #handleTowerBlock(Vector3i, EntityRef)
+     * @see #handleTowerBlock(Vector3ic, EntityRef)
      */
     private void handleTowerBlock(EntityRef entityRef) {
         if (entityRef.hasComponent(LocationComponent.class)) {
-            handleTowerBlock(new Vector3i(entityRef.getComponent(LocationComponent.class).getWorldPosition()), entityRef);
+            handleTowerBlock(new Vector3i(entityRef.getComponent(LocationComponent.class).getWorldPosition(new Vector3f()), RoundingMode.FLOOR), entityRef);
         }
     }
 
@@ -105,7 +107,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * @param pos         The position of the block being placed
      * @param blockEntity The entity of the block being placed
      */
-    private void handleTowerBlock(Vector3i pos, EntityRef blockEntity) {
+    private void handleTowerBlock(Vector3ic pos, EntityRef blockEntity) {
         /* Find all tower blocks nearby */
         Set<EntityRef> towers = findAttachedTowers(pos);
         switch (towers.size()) {
@@ -214,10 +216,10 @@ public class TowerBuildSystem extends BaseComponentSystem {
      * @param position The position to scan around
      * @return The neighbouring towers
      */
-    private Set<EntityRef> findAttachedTowers(Vector3i position) {
+    private Set<EntityRef> findAttachedTowers(Vector3ic position) {
         Set<EntityRef> results = new HashSet<>();
         for (Side side : Side.values()) {
-            Vector3i sidePos = new Vector3i(side.getVector3i()).add(position);
+            Vector3i sidePos = new Vector3i(side.direction()).add(position);
             EntityRef entity = blockEntityRegistry.getExistingEntityAt(sidePos);
 
             TowerMultiBlockComponent component = entity.getComponent(TowerMultiBlockComponent.class);
@@ -284,7 +286,7 @@ public class TowerBuildSystem extends BaseComponentSystem {
         blocks.forEach(entityRef -> entityRef.getComponent(TowerMultiBlockComponent.class).setTowerEntity(EntityRef.NULL));
 
         for (EntityRef block : blocks) {
-            Vector3i pos = new Vector3i(block.getComponent(LocationComponent.class).getWorldPosition());
+            Vector3i pos = new Vector3i(block.getComponent(LocationComponent.class).getWorldPosition(new Vector3f()), RoundingMode.FLOOR);
             handleTowerBlock(pos, block);
         }
     }

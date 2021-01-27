@@ -15,6 +15,7 @@
  */
 package org.terasology.gooeyDefence.towers.effectors;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -31,7 +32,6 @@ import org.terasology.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.logic.delay.PeriodicActionTriggeredEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.JomlUtil;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.utilities.random.FastRandom;
 import org.terasology.utilities.random.Random;
@@ -163,8 +163,8 @@ public class FireEffectorSystem extends BaseComponentSystem {
      * @return All enemies to spread the fire too.
      */
     private Set<EntityRef> spreadFire(EntityRef source) {
-        Vector3f sourcePos = source.getComponent(LocationComponent.class).getWorldPosition();
-        return enemyManager.getEnemiesInRange(JomlUtil.from(sourcePos), BURN_RANGE)
+        Vector3f sourcePos = source.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
+        return enemyManager.getEnemiesInRange(sourcePos, BURN_RANGE)
                 .stream()
                 .filter(enemy -> !burningEnemies.contains(enemy) && canBurn())
                 .collect(Collectors.toSet());

@@ -17,8 +17,6 @@ package org.terasology.gooeyDefence.worldGeneration.providers;
 
 import org.joml.Vector2ic;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.WorldSurfaceRasterizer;
-import org.terasology.math.geom.BaseVector2i;
-import org.terasology.math.geom.Rect2i;
 import org.terasology.world.block.BlockAreac;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.FacetProvider;
