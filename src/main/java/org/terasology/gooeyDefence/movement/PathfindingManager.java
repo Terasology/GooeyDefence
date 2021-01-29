@@ -32,7 +32,6 @@ import org.terasology.gooeyDefence.movement.components.BlankPathComponent;
 import org.terasology.gooeyDefence.movement.components.CustomPathComponent;
 import org.terasology.gooeyDefence.movement.events.RepathEnemyRequest;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.JomlUtil;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.world.OnChangedBlock;
@@ -45,7 +44,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * Handles calculation and storage of paths
