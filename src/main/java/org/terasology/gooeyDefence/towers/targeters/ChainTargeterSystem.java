@@ -24,7 +24,6 @@ import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.JomlUtil;
 import org.terasology.registry.In;
 
 import java.util.Set;

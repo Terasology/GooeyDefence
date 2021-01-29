@@ -17,7 +17,6 @@ package org.terasology.gooeyDefence.worldGeneration.facets;
 
 import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.RandomFillingRasterizer;
-import org.terasology.math.Region3i;
 import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.facets.base.BaseBooleanFieldFacet2D;

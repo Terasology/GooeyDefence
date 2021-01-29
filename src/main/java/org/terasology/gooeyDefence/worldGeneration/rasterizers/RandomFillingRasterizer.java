@@ -20,7 +20,6 @@ import org.joml.Vector3ic;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.worldGeneration.facets.RandomFillingFacet;
 import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
-import org.terasology.math.ChunkMath;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
