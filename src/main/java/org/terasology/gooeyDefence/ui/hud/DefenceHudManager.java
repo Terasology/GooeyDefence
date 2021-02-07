@@ -1,4 +1,4 @@
-// Copyright 2020 The Terasology Foundation
+// Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.ui.hud;
 
@@ -9,7 +9,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.gooeyDefence.waves.OnWaveEnd;
-import org.terasology.math.geom.Rect2f;
+import org.terasology.joml.geom.Rectanglef;
 import org.terasology.nui.databinding.ReadOnlyBinding;
 import org.terasology.nui.widgets.UIIconBar;
 import org.terasology.registry.In;
@@ -33,7 +33,7 @@ public class DefenceHudManager extends BaseComponentSystem {
 
     @Override
     public void postBegin() {
-        defenceHud = nuiManager.getHUD().addHUDElement(DefenceUris.DEFENCE_HUD, DefenceHud.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
+        defenceHud = nuiManager.getHUD().addHUDElement(DefenceUris.DEFENCE_HUD, DefenceHud.class, new Rectanglef(0, 0, 1, 1));
         HealthHud healthHud = nuiManager.getHUD().getHUDElement(DefenceUris.HEALTH_HUD, HealthHud.class);
         UIIconBar healthBar = healthHud.find("healthBar", UIIconBar.class);
 
