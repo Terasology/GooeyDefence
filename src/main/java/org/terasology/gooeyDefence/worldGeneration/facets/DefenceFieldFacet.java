@@ -15,11 +15,11 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.facets;
 
+import org.terasology.engine.world.block.BlockRegion;
+import org.terasology.engine.world.generation.Border3D;
+import org.terasology.engine.world.generation.facets.base.SparseBooleanFieldFacet3D;
 import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.DefenceFieldRasterizer;
-import org.terasology.world.block.BlockRegion;
-import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.facets.base.SparseBooleanFieldFacet3D;
 
 
 /**

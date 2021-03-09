@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * Component added the player in order to indicate that the game has been reloaded from save.

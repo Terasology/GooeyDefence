@@ -3,6 +3,7 @@
 package org.terasology.gooeyDefence.ui.shop;
 
 import org.joml.Vector2i;
+import org.terasology.engine.utilities.Assets;
 import org.terasology.nui.BaseInteractionListener;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.CoreWidget;
@@ -15,7 +16,6 @@ import org.terasology.nui.widgets.ActivateEventListener;
 import org.terasology.nui.widgets.TooltipLine;
 import org.terasology.nui.widgets.TooltipLineRenderer;
 import org.terasology.nui.widgets.UIList;
-import org.terasology.utilities.Assets;
 
 import java.util.ArrayList;
 import java.util.List;

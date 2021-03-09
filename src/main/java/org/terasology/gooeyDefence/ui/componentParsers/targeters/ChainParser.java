@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.ui.componentParsers.targeters;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.targeters.ChainTargeterComponent;
 import org.terasology.gooeyDefence.ui.towers.UIUpgrader;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;

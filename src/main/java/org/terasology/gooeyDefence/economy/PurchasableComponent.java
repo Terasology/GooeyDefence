@@ -15,8 +15,8 @@
  */
 package org.terasology.gooeyDefence.economy;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.world.block.items.AddToBlockBasedItem;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.world.block.items.AddToBlockBasedItem;
 
 /**
  * Indicates that the item can be bought and thus will be available in the shop

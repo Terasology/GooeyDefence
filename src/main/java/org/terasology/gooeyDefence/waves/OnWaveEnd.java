@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.waves;
 
-import org.terasology.entitySystem.event.Event;
+import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.gooeyDefence.DefenceField;
 
 /**

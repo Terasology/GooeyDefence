@@ -15,20 +15,20 @@
  */
 package org.terasology.gooeyDefence.ui.towers;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.input.binds.interaction.FrobButton;
+import org.terasology.engine.logic.characters.CharacterComponent;
+import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.towers.components.TowerMultiBlockComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 import org.terasology.input.ButtonState;
-import org.terasology.input.binds.interaction.FrobButton;
-import org.terasology.logic.characters.CharacterComponent;
-import org.terasology.logic.common.ActivateEvent;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.NUIManager;
 
 /**
  * Handles setting up and showing the tower screen when a tower is interacted with

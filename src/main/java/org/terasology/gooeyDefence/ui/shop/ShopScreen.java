@@ -2,26 +2,26 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.ui.shop;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.logic.inventory.ItemComponent;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.assets.texture.Texture;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
+import org.terasology.engine.rendering.nui.layers.ingame.inventory.InventoryGrid;
+import org.terasology.engine.rendering.nui.layers.ingame.inventory.InventoryScreen;
+import org.terasology.engine.rendering.nui.layers.ingame.inventory.ItemIcon;
+import org.terasology.engine.utilities.Assets;
+import org.terasology.engine.world.block.Block;
 import org.terasology.gooeyDefence.economy.ShopManager;
-import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.inventory.ItemComponent;
-import org.terasology.logic.players.LocalPlayer;
 import org.terasology.nui.WidgetUtil;
 import org.terasology.nui.databinding.ReadOnlyBinding;
 import org.terasology.nui.layouts.FlowLayout;
 import org.terasology.nui.layouts.relative.RelativeLayout;
 import org.terasology.nui.widgets.TooltipLine;
 import org.terasology.nui.widgets.UILabel;
-import org.terasology.registry.In;
-import org.terasology.rendering.assets.texture.Texture;
-import org.terasology.rendering.nui.CoreScreenLayer;
-import org.terasology.rendering.nui.layers.ingame.inventory.InventoryGrid;
-import org.terasology.rendering.nui.layers.ingame.inventory.InventoryScreen;
-import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
-import org.terasology.utilities.Assets;
-import org.terasology.world.block.Block;
 
 import java.util.Collections;
 import java.util.Set;

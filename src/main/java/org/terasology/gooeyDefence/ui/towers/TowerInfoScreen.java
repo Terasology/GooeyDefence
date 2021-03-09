@@ -3,14 +3,15 @@
 package org.terasology.gooeyDefence.ui.towers;
 
 import org.joml.Vector2i;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.towers.SelectionMethod;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.components.TowerComponent;
 import org.terasology.gooeyDefence.towers.targeters.SingleTargeterComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
-import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.databinding.ReadOnlyBinding;
 import org.terasology.nui.itemRendering.StringTextRenderer;
@@ -19,7 +20,6 @@ import org.terasology.nui.layouts.relative.RelativeLayout;
 import org.terasology.nui.widgets.UIButton;
 import org.terasology.nui.widgets.UILabel;
 import org.terasology.nui.widgets.UIList;
-import org.terasology.rendering.nui.CoreScreenLayer;
 
 import java.util.ArrayList;
 import java.util.List;

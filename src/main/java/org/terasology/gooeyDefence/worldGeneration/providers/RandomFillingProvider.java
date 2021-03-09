@@ -18,16 +18,16 @@ package org.terasology.gooeyDefence.worldGeneration.providers;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 import org.joml.Vector3i;
+import org.terasology.engine.utilities.procedural.Noise;
+import org.terasology.engine.utilities.procedural.WhiteNoise;
+import org.terasology.engine.world.block.BlockAreac;
+import org.terasology.engine.world.generation.Border3D;
+import org.terasology.engine.world.generation.FacetProvider;
+import org.terasology.engine.world.generation.GeneratingRegion;
+import org.terasology.engine.world.generation.Produces;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.worldGeneration.facets.RandomFillingFacet;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.RandomFillingRasterizer;
-import org.terasology.utilities.procedural.Noise;
-import org.terasology.utilities.procedural.WhiteNoise;
-import org.terasology.world.block.BlockAreac;
-import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.FacetProvider;
-import org.terasology.world.generation.GeneratingRegion;
-import org.terasology.world.generation.Produces;
 
 /**
  * Fills the {@link RandomFillingFacet} with random blocks inside the dome.

@@ -16,16 +16,16 @@
 package org.terasology.gooeyDefence.towers.targeters;
 
 import org.joml.Vector3f;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.SelectEnemiesEvent;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
 import org.terasology.gooeyDefence.visuals.components.SplashBulletComponent;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.registry.In;
 
 /**
  * Selects a single target enemy and then targets all enemies within a small range of that enemy.

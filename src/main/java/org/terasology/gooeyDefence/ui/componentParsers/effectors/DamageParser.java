@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.ui.componentParsers.effectors;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.effectors.DamageEffectorComponent;
 import org.terasology.gooeyDefence.ui.componentParsers.BaseParser;
 import org.terasology.gooeyDefence.ui.towers.UIUpgrader;

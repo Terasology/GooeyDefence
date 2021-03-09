@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.visuals.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * Flag component used on path particle entities.

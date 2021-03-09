@@ -15,11 +15,11 @@
  */
 package org.terasology.gooeyDefence.worldGeneration.facets;
 
+import org.terasology.engine.world.block.BlockRegion;
+import org.terasology.engine.world.generation.Border3D;
+import org.terasology.engine.world.generation.facets.base.BaseBooleanFieldFacet2D;
 import org.terasology.gooeyDefence.worldGeneration.providers.RandomFillingProvider;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.RandomFillingRasterizer;
-import org.terasology.world.block.BlockRegion;
-import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.facets.base.BaseBooleanFieldFacet2D;
 
 /**
  * Facet that fills the centre of the dome with a random assortment of blocks

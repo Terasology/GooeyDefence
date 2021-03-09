@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.health;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * Adds a very primitive health system to an entity.

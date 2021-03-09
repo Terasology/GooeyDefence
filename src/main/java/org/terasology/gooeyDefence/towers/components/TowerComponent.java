@@ -15,8 +15,8 @@
  */
 package org.terasology.gooeyDefence.towers.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.gooeyDefence.towers.TowerManager;
 
 import java.util.HashSet;

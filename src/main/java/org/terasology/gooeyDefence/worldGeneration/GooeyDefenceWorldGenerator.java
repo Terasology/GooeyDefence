@@ -15,7 +15,12 @@
  */
 package org.terasology.gooeyDefence.worldGeneration;
 
-import org.terasology.engine.SimpleUri;
+import org.terasology.engine.core.SimpleUri;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.generation.BaseFacetedWorldGenerator;
+import org.terasology.engine.world.generation.WorldBuilder;
+import org.terasology.engine.world.generator.RegisterWorldGenerator;
+import org.terasology.engine.world.generator.plugin.WorldGeneratorPluginLibrary;
 import org.terasology.gooeyDefence.worldGeneration.facets.DefenceFieldFacet;
 import org.terasology.gooeyDefence.worldGeneration.facets.RandomFillingFacet;
 import org.terasology.gooeyDefence.worldGeneration.providers.DefenceFieldProvider;
@@ -25,11 +30,6 @@ import org.terasology.gooeyDefence.worldGeneration.rasterizers.DefenceFieldRaste
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.RandomFillingRasterizer;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.ShrineRasterizer;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.WorldSurfaceRasterizer;
-import org.terasology.registry.In;
-import org.terasology.world.generation.BaseFacetedWorldGenerator;
-import org.terasology.world.generation.WorldBuilder;
-import org.terasology.world.generator.RegisterWorldGenerator;
-import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
 
 /**
  * Generates the GooeyDefence world.

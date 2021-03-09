@@ -15,8 +15,8 @@
  */
 package org.terasology.gooeyDefence.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.world.block.ForceBlockActive;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.world.block.ForceBlockActive;
 
 /**
  * Component for the central shrine entity.

@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.health.events;
 
-import org.terasology.entitySystem.event.Event;
+import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.gooeyDefence.health.HealthComponent;
 
 /**

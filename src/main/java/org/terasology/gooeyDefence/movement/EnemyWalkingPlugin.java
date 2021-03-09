@@ -17,9 +17,9 @@ package org.terasology.gooeyDefence.movement;
 
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
+import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.flexiblepathfinding.plugins.basic.WalkingPlugin;
-import org.terasology.world.WorldProvider;
-import org.terasology.world.block.BlockRegion;
 
 /**
  * Plugin that defines how the standard enemies will walk.

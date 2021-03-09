@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * General purpose catch all component.

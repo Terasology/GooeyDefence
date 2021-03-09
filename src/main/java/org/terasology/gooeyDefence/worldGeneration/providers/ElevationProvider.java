@@ -16,13 +16,13 @@
 package org.terasology.gooeyDefence.worldGeneration.providers;
 
 import org.joml.Vector2ic;
+import org.terasology.engine.world.block.BlockAreac;
+import org.terasology.engine.world.generation.Border3D;
+import org.terasology.engine.world.generation.FacetProvider;
+import org.terasology.engine.world.generation.GeneratingRegion;
+import org.terasology.engine.world.generation.Produces;
+import org.terasology.engine.world.generation.facets.ElevationFacet;
 import org.terasology.gooeyDefence.worldGeneration.rasterizers.WorldSurfaceRasterizer;
-import org.terasology.world.block.BlockAreac;
-import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.FacetProvider;
-import org.terasology.world.generation.GeneratingRegion;
-import org.terasology.world.generation.Produces;
-import org.terasology.world.generation.facets.ElevationFacet;
 
 /**
  * Fills the {@link ElevationFacet} with a surface height of 0 globally.

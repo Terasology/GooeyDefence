@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.economy;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * Stores the entities current funds.

@@ -16,8 +16,9 @@
 package org.terasology.gooeyDefence.towers.targeters;
 
 import org.joml.Vector3f;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.gooeyDefence.DefenceField;
 import org.terasology.gooeyDefence.EnemyManager;
 import org.terasology.gooeyDefence.health.HealthComponent;
@@ -25,7 +26,6 @@ import org.terasology.gooeyDefence.movement.components.PathComponent;
 import org.terasology.gooeyDefence.towers.SelectionMethod;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
-import org.terasology.logic.location.LocationComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.visuals.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * Used to flag bullets as having a splash effect on them.

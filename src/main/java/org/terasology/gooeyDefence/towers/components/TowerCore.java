@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.towers.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * Base class for all the Core blocks

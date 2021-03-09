@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.ui.componentParsers;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 import org.terasology.gooeyDefence.ui.towers.UIComponentFields;
 import org.terasology.gooeyDefence.upgrading.UpgradingSystem;
 

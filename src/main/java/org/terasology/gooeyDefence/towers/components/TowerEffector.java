@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.towers.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 import org.terasology.gooeyDefence.towers.EffectCount;
 import org.terasology.gooeyDefence.towers.EffectDuration;
 

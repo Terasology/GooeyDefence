@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.movement.events;
 
-import org.terasology.entitySystem.event.ConsumableEvent;
+import org.terasology.engine.entitySystem.event.ConsumableEvent;
 import org.terasology.gooeyDefence.movement.MovementSystem;
 
 /**

@@ -15,9 +15,9 @@
  */
 package org.terasology.gooeyDefence.towers.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.world.block.ForceBlockActive;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.world.block.ForceBlockActive;
 
 /**
  * Used to mark the block as being used in towers.

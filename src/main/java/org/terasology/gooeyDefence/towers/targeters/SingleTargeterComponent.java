@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.towers.targeters;
 
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.gooeyDefence.towers.SelectionMethod;
 import org.terasology.gooeyDefence.towers.components.TowerTargeter;
 

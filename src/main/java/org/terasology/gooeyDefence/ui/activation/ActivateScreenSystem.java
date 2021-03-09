@@ -16,18 +16,18 @@
 package org.terasology.gooeyDefence.ui.activation;
 
 import org.terasology.assets.ResourceUrn;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.engine.rendering.nui.ScreenLayerClosedEvent;
+import org.terasology.engine.rendering.nui.layers.mainMenu.loadingScreen.LoadingScreen;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.DefenceWorldManager;
 import org.terasology.gooeyDefence.components.SavedGameFlagComponent;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.ScreenLayerClosedEvent;
-import org.terasology.rendering.nui.layers.mainMenu.loadingScreen.LoadingScreen;
 
 /**
  * System that handles the display of the {@link ActivateGameScreen}.

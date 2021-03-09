@@ -16,7 +16,7 @@
 package org.terasology.gooeyDefence.movement.components;
 
 import org.joml.Vector3f;
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 import org.terasology.gooeyDefence.movement.MovementSystem;
 
 /**
