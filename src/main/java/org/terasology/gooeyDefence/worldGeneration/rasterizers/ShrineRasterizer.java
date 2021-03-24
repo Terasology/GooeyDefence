@@ -19,8 +19,8 @@ import org.joml.Vector3i;
 import org.terasology.engine.registry.CoreRegistry;
 import org.terasology.engine.world.block.Block;
 import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.chunks.Chunk;
 import org.terasology.engine.world.chunks.Chunks;
-import org.terasology.engine.world.chunks.CoreChunk;
 import org.terasology.engine.world.generation.Region;
 import org.terasology.engine.world.generation.WorldRasterizer;
 import org.terasology.gooeyDefence.DefenceField;
@@ -41,7 +41,7 @@ public class ShrineRasterizer implements WorldRasterizer {
     }
 
     @Override
-    public void generateChunk(CoreChunk chunk, Region chunkRegion) {
+    public void generateChunk(Chunk chunk, Region chunkRegion) {
         Vector3i zero = new Vector3i(0, 0, 0);
         if (chunkRegion.getRegion().contains(zero)) {
             //TODO: Find a better way to create the shrine that isn't StructureTemplates.
