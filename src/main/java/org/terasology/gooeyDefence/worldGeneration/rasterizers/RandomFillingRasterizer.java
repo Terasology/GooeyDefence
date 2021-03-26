@@ -20,8 +20,8 @@ import org.joml.Vector3ic;
 import org.terasology.engine.registry.CoreRegistry;
 import org.terasology.engine.world.block.Block;
 import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.chunks.Chunk;
 import org.terasology.engine.world.chunks.Chunks;
-import org.terasology.engine.world.chunks.CoreChunk;
 import org.terasology.engine.world.generation.Region;
 import org.terasology.engine.world.generation.WorldRasterizer;
 import org.terasology.engine.world.generation.facets.ElevationFacet;
@@ -45,7 +45,7 @@ public class RandomFillingRasterizer implements WorldRasterizer {
     }
 
     @Override
-    public void generateChunk(CoreChunk chunk, Region chunkRegion) {
+    public void generateChunk(Chunk chunk, Region chunkRegion) {
         RandomFillingFacet randomFacet = chunkRegion.getFacet(RandomFillingFacet.class);
         ElevationFacet surfaceFacet = chunkRegion.getFacet(ElevationFacet.class);
         Vector3i tempPos = new Vector3i();
