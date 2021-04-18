@@ -16,6 +16,8 @@ In case a new effector extends another effector, it may need to override these m
 The `getEffectCount()` method is used to collect information on how many times an effector's effect should be applied to a target.
 The following options are provided by the `EffectCount` enum:
 
+| Option       | Effect Application                                            |
+|--------------|---------------------------------------------------------------|
 | `PER_SHOT`   | Every single time the tower attacks, this effector is applied |
 | `CONTINUOUS` | The effect is only applied when the enemy is first attacked   |
 
@@ -23,6 +25,8 @@ The following options are provided by the `EffectCount` enum:
 The `getEffectDuration()` method is used to get information on how long an effector's effect applied on a target is expected to last.
 The following options are provided by the `EffectDuration` enum.
 
+| Option      | Effect Duration                                                      |
+|-------------|----------------------------------------------------------------------|
 | `INSTANT`   | The effect has no duration                                           |
 | `LASTING`   | The effect has a duration for as long as the enemy is being attacked |
 | `PERMANENT` | The effect has a duration, but it's not determined how long          |

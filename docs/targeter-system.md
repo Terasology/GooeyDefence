@@ -13,6 +13,8 @@ A targeter system by default is not expected to react to `SelectEnemiesEvent`s s
 
 The `BaseTargeterSystem` provides a number of optional-to-use helper methods to simplify implementing targeter systems and avoid code duplication.
 
+| Method          | Functionality                                                                          |
+|-----------------|----------------------------------------------------------------------------------------|
 | getSingleTarget | selecting a single target from a given input list based on a given selection strategy  |
 | canUseTarget    | basic check to see if a target exists and is within range                              |
 | getTarget       | selecting a single target based on range, selection method and location of a tower     |

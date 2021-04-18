@@ -8,6 +8,8 @@ Additionally, a system is required including the implementation of the logic sel
 
 The following fields are mandatory for every targeters to implement:
 
+| Field           | Description                                         |
+|-----------------|-----------------------------------------------------|
 | drain           | The amount of power the targeter will consume       |
 | range           | The range of the targeter in blocks                 |
 | attackSpeed     | How often the targeter will attack, in milliseconds |
@@ -28,7 +30,9 @@ The strategy is a mandatory property of every targeter, stored in the `selection
 A targeter can only apply the selection strategy on targets within its range.
 The following target selection strategies are available for use:
 
-| FIRST  | The enemy closest to shrine     |
-| WEAK   | The enemy with the least health |
-| STRONG | The enemy with the most health  |
-| RANDOM | A random enemy within range     |
+| Strategy | Description                     |
+|----------|---------------------------------|
+| FIRST    | The enemy closest to shrine     |
+| WEAK     | The enemy with the least health |
+| STRONG   | The enemy with the most health  |
+| RANDOM   | A random enemy within range     |
