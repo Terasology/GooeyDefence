@@ -20,7 +20,7 @@ They drain the tower's power to realize the tower's effect on targeted enemies.
 Currently, there are the following effectors:
 
 | Effector       | Effect       |  Notes                                |
--------------------------------------------------------------------------
+|----------------|--------------|---------------------------------------|
 | DamageEffector | Plain Damage | direct damage only                    |
 | FireEffector   | Burn Damage  | damage over time, chance of spreading |
 | IceEffector    | Slow         |                                       |
@@ -43,7 +43,7 @@ A targeter has a maximum range, an attack speed, and a selection strategy for ta
 Currently, there are the following targeters:
 
 | Targeter        | Selection Strategy                                                                            |
--------------------------------------------------------------------------------------------------------------------
+|-----------------|-----------------------------------------------------------------------------------------------|
 | AoeTargeter     | All targets in range                                                                          |
 | ChainTargeter   | Single base target, attack chaining to additional targets depending on chain range and length |
 | MissileTargeter | Single, far away base target, small splash radius                                             |
