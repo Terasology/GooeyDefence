@@ -34,7 +34,7 @@ gradlew :module:GooeyDefence:check
 
 ### Documentation via gh-pages
 
-The documentation of this module is build with [docsify].
+The documentation of this module is built with [docsify].
 It is served via [gh-pages].
 To preview the site you can either use the `docsify` [CLI tool](https://github.com/docsifyjs/docsify-cli) or just run a static server on the `docs` folder.
 
@@ -43,3 +43,4 @@ To preview the site you can either use the `docsify` [CLI tool](https://github.c
 [gh-pages]: https://pages.github.com/
 [docsify]: https://docsify.js.org/#/
 [contributor-guide]: https://github.com/MovingBlocks/Terasology/wiki/Contributor-Quick-Start
+
