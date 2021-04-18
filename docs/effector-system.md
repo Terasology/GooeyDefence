@@ -1,10 +1,29 @@
+# `EffectorSystem`
 
-The system should listen for an ApplyEffectEvent.
-This event will be sent against the effector itself, to allow for the system to filter for the correct component.
-The event will always only be sent with a single enemy target, with multiple events being sent for each enemy targeted.
-If the effector has EffectDuration.LASTING then a second event will be sent to remove the effect from enemies, RemoveEffectEvent.
-This is the same as the prior event and is sent against the effector with a single enemy target.
-Of note is that the event will contain a strength multiplier, this should be used to weaken or strengthen an effect, and is used as a balancing tool on a per-targeter basis.
-It is gauranteed that the value will be the same for both the ApplyEffectEvent and RemoveEffectEvent
-The system may otherwise do whatever it needs to, in order to apply the effect.
-This includes listening for other events, injecting managers and other things common for a system.
+Every tower effector requires a respective system to apply the effector's effect to a target.
+In order to do so, a system can inject managers, listen and react to events sent by other systems, and send out events itself.
+
+## `ApplyEffectEvent`
+
+`ApplyEffectEvent` is the trigger event any effector system should listen for.
+This event is sent against the effector, allowing systems to filter for their associated `EffectorComponent`.
+An effector system by default is not expected to react to `ApplyEffectEvent`s sent against other effectors.
+
+Every `ApplyEffectEvent` only affects a single target.
+If an effector's effect applies to multiple targets, multiple `ApplyEffectEvent`s will be sent.
+The combination of multiple effectors can further result in multiple `ApplyEffectEvent`s bein sent for the same target.
+
+## `RemoveEffectEvent`
+
+If an effector's effect duration is `EffectDuration.LASTING`, then a second event called `RemoveEffectEvent` will be sent at some point in time.
+This event is expected to remove the effect from a target.
+
+Like `ApplyEffectEvent`, `RemoveEffectEvent` is sent against an effector and affects a single target.
+
+## Effect Strength
+
+Both, the `ApplyEffectEvent` and the `RemoveEffectEvent` contain a strength multiplier.
+An effector system can weaken or strengthen an effect based on various conditions, including intervention by other systems.
+The respective implementation is up to the system.
+The strength multiplier can be used as a balancing tool on a per-targeter basis.
+It is guaranteed that the multiplier is equal for both, the `ApplyEffectEvent` and `RemoveEffectEvent`.
