@@ -1,4 +1,4 @@
-# Towers
+# The Towers
 
 Towers are the multi-block structures that attack the enemies either by damaging them or affecting their stats.
 A tower is made up of at least three blocks:
@@ -6,10 +6,10 @@ A tower is made up of at least three blocks:
 * an effector block
 * a targeter block
 
-## Core
+## Cores
 
-The core of a tower defines the power level.
-A tower needs power to run effectors and targeters that will allow the tower to affect enemies.
+The Cores of a tower define its power level.
+A tower needs power to run effectors and targeters that will allow the tower to target gooeys and affect these targets.
 Upgrades to a tower core increase the amount of power it can provide. 
 
 ## Effectors
@@ -57,3 +57,17 @@ If, for instance `AoeTargeter` and `SingleTargeter` had the same multiplier, the
 This would result in the `AoeTargeter` being objectively a better choice, resulting in an imbalance across the different targeters.
 
 Multiple types of targeters can be stacked onto a single tower to leverage multiple different selection strategies.
+
+## Connectors
+
+Connectors are plain blocks that do not provide any function to the tower other than connecting functional blocks.
+Functional blocks can also be placed adjacent to each other, but with connectors they don't have to, allowing for a cost-effective yet more strategic placement while still leveraging the other components of a tower.
+
+## Upgrades
+
+The effectiveness of a tower's components can be improved by upgrading them using the "Tower Sceen" (`E`).
+The "Tower Screen" lists all functional components of a tower.
+Selecting any of those displays details of the respective component and means to upgrade it.
+
+Available tower component upgrades depend on the component type. For instance, for examples targeter upgrades include increasing range and attack speed.
+Breaking an upgraded tower component block will reset all applied upgrades.

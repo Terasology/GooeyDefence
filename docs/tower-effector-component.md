@@ -1,7 +1,7 @@
 # `TowerEffector` Component
 
 The `TowerEffector` component is the base class for all tower effectors.
-New effectors can be created by extending the `TowerEffector` component and adding it to a block.
+New effectors can be created by extending the `TowerEffector` component and adding it to a block extending `GooeyDefence:PlainBlock`.
 Additionally, a system is required including the implementation of the logic applying the effector's effect to a target.
 
 New effectors can also extend other existing effector components to leverage fields defined in those and avoid code duplication.

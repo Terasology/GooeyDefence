@@ -5,7 +5,7 @@ In order to do so, a system can inject managers, listen and react to events sent
 
 ## `ApplyEffectEvent`
 
-`ApplyEffectEvent` is the trigger event any effector system should listen for.
+`ApplyEffectEvent` is the trigger event every effector system should listen for.
 This event is sent against the effector, allowing systems to filter for their associated `EffectorComponent`.
 An effector system by default is not expected to react to `ApplyEffectEvent`s sent against other effectors.
 
@@ -22,8 +22,7 @@ Like `ApplyEffectEvent`, `RemoveEffectEvent` is sent against an effector and aff
 
 ## Effect Strength
 
-Both, the `ApplyEffectEvent` and the `RemoveEffectEvent` contain a strength multiplier.
-An effector system can weaken or strengthen an effect based on various conditions, including intervention by other systems.
-The respective implementation is up to the system.
-The strength multiplier can be used as a balancing tool on a per-targeter basis.
+An effector's effect can be strengthened or weakened.
+This depends on the target initiating the attack as different targeter types have different multipliers to balance long ranges and powerful selection strategies.
+In both, the `ApplyEffectEvent` and the `RemoveEffectEvent` the effector system is expected to weaken or strengthen its effect based on the attack initiating targeter's multiplier.
 It is guaranteed that the multiplier is equal for both, the `ApplyEffectEvent` and `RemoveEffectEvent`.
