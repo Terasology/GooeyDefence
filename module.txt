@@ -3,13 +3,28 @@
     "version": "1.1.1-SNAPSHOT",
     "author": "The Terasology Foundation",
     "displayName": "Gooey's Defence",
-    "description": "In this gameplay module, the player needs to defend the center against incoming waves using \"towers\".",
+    "description": "Tower-defense style gameplay in which the player needs to defend the center of the gameplay arena against incoming waves of Gooeys by building \"towers\" that attack them.",
     "dependencies": [
-        { "id": "CoreRendering", "minVersion": "1.0.0" },
-        { "id": "FlexiblePathfinding", "minVersion": "1.0.0" },
-        { "id": "Gooey", "minVersion": "1.0.0" },
-        { "id": "Health", "minVersion": "1.0.0" },
-        { "id": "Inventory", "minVersion": "1.1.0" }
+        {
+            "id": "CoreRendering",
+            "minVersion": "1.0.0"
+        },
+        {
+            "id": "FlexiblePathfinding",
+            "minVersion": "1.0.0"
+        },
+        {
+            "id": "Gooey",
+            "minVersion": "1.0.0"
+        },
+        {
+            "id": "Health",
+            "minVersion": "2.0.0-SNAPSHOT"
+        },
+        {
+            "id": "Inventory",
+            "minVersion": "1.1.0"
+        }
     ],
     "serverSideOnly": false,
     "isGameplay": "true",
