@@ -16,8 +16,10 @@
 package org.terasology.gooeyDefence.movement.components;
 
 
+import com.google.common.collect.Lists;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
+import org.terasology.gestalt.entitysystem.component.Component;
 
 import java.util.List;
 
@@ -29,9 +31,9 @@ import java.util.List;
  * @see EntrancePathComponent
  * @see PathComponent
  */
-public class CustomPathComponent implements PathComponent {
-    private List<Vector3i> path;
-    private Vector3f goal;
+public class CustomPathComponent implements PathComponent<CustomPathComponent> {
+    private List<Vector3i> path = Lists.newArrayList();
+    private Vector3f goal = new Vector3f();
     private int step;
 
     /**
@@ -67,5 +69,13 @@ public class CustomPathComponent implements PathComponent {
     @Override
     public boolean atEnd() {
         return step == 0;
+    }
+
+
+    @Override
+    public void copy(CustomPathComponent other) {
+        this.path = Lists.newArrayList(other.path);
+        this.goal.set(other.goal);
+        this.step = other.step;
     }
 }

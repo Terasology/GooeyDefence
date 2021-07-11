@@ -16,4 +16,9 @@ public class ValueComponent implements Component<ValueComponent> {
      * How much money one instance of this entity is worth
      */
     public int value;
+
+    @Override
+    public void copy(ValueComponent other) {
+        this.value = other.value;
+    }
 }

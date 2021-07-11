@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.towers.components;
 
+import com.google.common.collect.Sets;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.gestalt.entitysystem.component.Component;
 import org.terasology.gooeyDefence.towers.TowerManager;
@@ -23,4 +24,12 @@ public class TowerComponent implements Component<TowerComponent> {
     public Set<EntityRef> effector = new HashSet<>();
     public Set<EntityRef> targeter = new HashSet<>();
     public Set<EntityRef> plains = new HashSet<>();
+
+    @Override
+    public void copy(TowerComponent other) {
+        this.cores = Sets.newHashSet(other.cores);
+        this.effector = Sets.newHashSet(other.effector);
+        this.targeter = Sets.newHashSet(other.targeter);
+        this.plains = Sets.newHashSet(other.plains);
+    }
 }

@@ -32,10 +32,10 @@ import java.util.List;
  * @see CustomPathComponent
  * @see PathComponent
  */
-public class EntrancePathComponent implements PathComponent {
+public class EntrancePathComponent implements PathComponent<EntrancePathComponent> {
     private int step;
     private int entranceId;
-    private Vector3f goal;
+    private Vector3f goal = new Vector3f();
     private transient PathfindingManager pathManager;
 
     /**
@@ -103,5 +103,13 @@ public class EntrancePathComponent implements PathComponent {
      */
     public int getEntranceId() {
         return entranceId;
+    }
+
+    @Override
+    public void copy(EntrancePathComponent other) {
+        this.step = other.step;
+        this.entranceId = other.entranceId;
+        this.goal.set(other.goal);
+        this.pathManager = other.pathManager;
     }
 }

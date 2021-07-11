@@ -14,7 +14,7 @@ import org.terasology.gestalt.entitysystem.component.Component;
  * @see BlankPathComponent
  * @see CustomPathComponent
  */
-public interface PathComponent extends Component {
+public interface PathComponent<T extends PathComponent> extends Component<T> {
 
     /**
      * Step zero must be the end of the path.

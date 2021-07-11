@@ -24,4 +24,9 @@ public class TowerMultiBlockComponent implements Component<TowerMultiBlockCompon
     public void setTowerEntity(EntityRef towerEntity) {
         this.towerEntity = towerEntity;
     }
+
+    @Override
+    public void copy(TowerMultiBlockComponent other) {
+        this.towerEntity = other.towerEntity;
+    }
 }

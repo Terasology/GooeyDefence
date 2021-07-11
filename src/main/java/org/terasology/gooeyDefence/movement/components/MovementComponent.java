@@ -17,4 +17,10 @@ public class MovementComponent implements Component<MovementComponent> {
     public float reachedDistance = 0.1f;
 
 
+    @Override
+    public void copy(MovementComponent other) {
+        this.speed = other.speed;
+        this.goal.set(other.goal);
+        this.reachedDistance = other.reachedDistance;
+    }
 }

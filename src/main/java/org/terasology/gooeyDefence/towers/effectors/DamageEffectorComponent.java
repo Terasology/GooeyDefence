@@ -25,7 +25,7 @@ import org.terasology.gooeyDefence.towers.components.TowerEffector;
  * @see DamageEffectorSystem
  * @see TowerEffector
  */
-public class DamageEffectorComponent extends TowerEffector {
+public class DamageEffectorComponent<T extends DamageEffectorComponent> extends TowerEffector<T> {
     /**
      * The damage to apply to the targets.
      */
@@ -39,5 +39,12 @@ public class DamageEffectorComponent extends TowerEffector {
     @Override
     public EffectDuration getEffectDuration() {
         return EffectDuration.INSTANT;
+    }
+
+
+    @Override
+    public void copy(T other) {
+        super.copy(other);
+        this.damage = other.damage;
     }
 }

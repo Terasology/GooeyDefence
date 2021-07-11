@@ -23,4 +23,8 @@ public class SplashBulletComponent implements Component<SplashBulletComponent> {
     }
 
 
+    @Override
+    public void copy(SplashBulletComponent other) {
+        this.splashRange = other.splashRange;
+    }
 }

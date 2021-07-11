@@ -15,4 +15,9 @@ public class PurchasableComponent implements Component<PurchasableComponent> {
      * If left blank on the prefab, the value component will be used (if it exists).
      */
     public int cost = -1;
+
+    @Override
+    public void copy(PurchasableComponent other) {
+        this.cost = other.cost;
+    }
 }

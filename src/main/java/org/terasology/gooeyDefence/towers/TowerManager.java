@@ -230,7 +230,7 @@ public class TowerManager extends BaseComponentSystem {
         delayManager.cancelPeriodicAction(tower, buildEventId(targeter));
 
         TowerComponent towerComponent = tower.getComponent(TowerComponent.class);
-        TowerTargeter targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
+        TowerTargeter<?> targeterComponent = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
         for (EntityRef enemy : targeterComponent.affectedEnemies) {
             endEffects(towerComponent.effector, enemy, targeterComponent.getMultiplier());
         }
@@ -244,7 +244,7 @@ public class TowerManager extends BaseComponentSystem {
      */
     private void handleTowerShooting(TowerComponent towerComponent, EntityRef targeter) {
         Set<EntityRef> currentTargets = getTargetedEnemies(targeter);
-        TowerTargeter towerTargeter = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
+        TowerTargeter<?> towerTargeter = DefenceField.getComponentExtending(targeter, TowerTargeter.class);
 
         applyEffectsToTargets(towerComponent.effector, currentTargets, towerTargeter);
 

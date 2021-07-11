@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.upgrading;
 
+import com.google.common.collect.Lists;
 import org.terasology.gestalt.entitysystem.component.Component;
 
 import java.util.List;
@@ -22,6 +23,11 @@ public class BlockUpgradesComponent implements Component<BlockUpgradesComponent>
     /**
      * All of the upgrade paths applicable
      */
-    public List<UpgradeList> upgrades;
+    public List<UpgradeList> upgrades = Lists.newArrayList();
 
+    @Override
+    public void copy(BlockUpgradesComponent other) {
+        this.componentName = other.componentName;
+        this.upgrades = Lists.newArrayList(other.upgrades);
+    }
 }

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.towers.components;
 
+import com.google.common.collect.Sets;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.gestalt.entitysystem.component.Component;
 
@@ -19,7 +20,7 @@ import java.util.Set;
  * @see TowerCore
  * @see TowerEffector
  */
-public abstract class TowerTargeter implements Component<TowerTargeter> {
+public abstract class TowerTargeter<T extends TowerTargeter> implements Component<T> {
     /**
      * How much energy this targeter will use
      */
@@ -47,4 +48,11 @@ public abstract class TowerTargeter implements Component<TowerTargeter> {
      */
     public abstract float getMultiplier();
 
+    @Override
+    public void copy(T other) {
+        this.drain = other.drain;
+        this.range = other.range;
+        this.attackSpeed = other.attackSpeed;
+        this.affectedEnemies = Sets.newHashSet(other.affectedEnemies);
+    }
 }

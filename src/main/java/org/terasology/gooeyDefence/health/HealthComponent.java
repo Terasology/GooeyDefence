@@ -12,4 +12,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
 public class HealthComponent implements Component<HealthComponent> {
     public int health;
 
+    @Override
+    public void copy(HealthComponent other) {
+        this.health = other.health;
+    }
 }

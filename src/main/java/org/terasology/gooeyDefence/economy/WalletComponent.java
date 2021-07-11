@@ -15,4 +15,8 @@ public class WalletComponent implements Component<WalletComponent> {
      */
     public int funds;
 
+    @Override
+    public void copy(WalletComponent other) {
+        this.funds = other.funds;
+    }
 }

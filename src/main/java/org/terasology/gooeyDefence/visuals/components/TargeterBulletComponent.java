@@ -8,4 +8,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
  * Flag component used to indicated that an entity is a bullet from a targeter.
  */
 public class TargeterBulletComponent implements Component<TargeterBulletComponent> {
+    @Override
+    public void copy(TargeterBulletComponent other) {
+
+    }
 }

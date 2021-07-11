@@ -11,4 +11,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
  */
 @ForceBlockActive
 public class ShrineComponent implements Component<ShrineComponent> {
+    @Override
+    public void copy(ShrineComponent other) {
+
+    }
 }

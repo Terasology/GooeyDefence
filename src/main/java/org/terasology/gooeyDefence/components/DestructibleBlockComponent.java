@@ -10,4 +10,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
  * All blocks without this are blocked from being destroyed.
  */
 public class DestructibleBlockComponent implements Component<DestructibleBlockComponent> {
+    @Override
+    public void copy(DestructibleBlockComponent other) {
+
+    }
 }

@@ -20,4 +20,14 @@ public class FieldConfigComponent implements Component<FieldConfigComponent> {
     public int outerRingSize;
     public int entranceRingSize;
     public final List<List<List<Integer>>> shrineData = new ArrayList<>();
+
+    @Override
+    public void copy(FieldConfigComponent other) {
+        this.entranceCount = other.entranceCount;
+        this.shrineRingSize = other.shrineRingSize;
+        this.outerRingSize = other.outerRingSize;
+        this.entranceRingSize = other.entranceRingSize;
+        this.shrineData.clear();
+        this.shrineData.addAll(other.shrineData);
+    }
 }

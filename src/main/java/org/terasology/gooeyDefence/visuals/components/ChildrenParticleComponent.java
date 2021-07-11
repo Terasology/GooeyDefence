@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.visuals.components;
 
+import com.google.common.collect.Maps;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.gestalt.entitysystem.component.Component;
 import org.terasology.gooeyDefence.visuals.InWorldRenderer;
@@ -22,4 +23,8 @@ public class ChildrenParticleComponent implements Component<ChildrenParticleComp
      */
     public Map<String, EntityRef> particleEntities = new HashMap<>();
 
+    @Override
+    public void copy(ChildrenParticleComponent other) {
+        this.particleEntities = Maps.newHashMap(other.particleEntities);
+    }
 }

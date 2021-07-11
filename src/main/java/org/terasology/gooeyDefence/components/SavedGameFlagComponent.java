@@ -9,4 +9,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
  * It's used to perform checks that need to know if this is the initial creation of the world.
  */
 public class SavedGameFlagComponent implements Component<SavedGameFlagComponent> {
+    @Override
+    public void copy(SavedGameFlagComponent other) {
+
+    }
 }

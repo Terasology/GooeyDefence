@@ -15,7 +15,7 @@ import org.terasology.gooeyDefence.towers.EffectDuration;
  * @see TowerCore
  * @see TowerTargeter
  */
-public abstract class TowerEffector implements Component<TowerEffector> {
+public abstract class TowerEffector<T extends TowerEffector> implements Component<T> {
     /**
      * The amount of power that the effector requires
      */
@@ -37,4 +37,8 @@ public abstract class TowerEffector implements Component<TowerEffector> {
      */
     public abstract EffectDuration getEffectDuration();
 
+    @Override
+    public void copy(T other) {
+        this.drain = other.drain;
+    }
 }
