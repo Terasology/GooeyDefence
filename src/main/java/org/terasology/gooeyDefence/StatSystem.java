@@ -24,7 +24,6 @@ import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.registry.Share;
-import org.terasology.gooeyDefence.economy.EconomyManager;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.health.HealthComponent;
 
@@ -99,12 +98,5 @@ public class StatSystem extends BaseComponentSystem {
      */
     public int getMaxHealth() {
         return maxHealth;
-    }
-
-    /**
-     * @return How much money the player has.
-     */
-    public int getPlayerMoney() {
-        return EconomyManager.getBalance(player);
     }
 }

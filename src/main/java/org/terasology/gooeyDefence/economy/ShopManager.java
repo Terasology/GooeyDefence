@@ -15,8 +15,11 @@
  */
 package org.terasology.gooeyDefence.economy;
 
+import org.terasology.economy.components.CurrencyStorageComponent;
+import org.terasology.economy.events.WalletUpdatedEvent;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.gestalt.assets.management.AssetManager;
-import org.terasology.engine.entitySystem.ComponentContainer;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
@@ -24,99 +27,34 @@ import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.module.inventory.components.InventoryComponent;
-import org.terasology.module.inventory.systems.InventoryManager;
-import org.terasology.engine.logic.inventory.ItemComponent;
 import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.registry.In;
-import org.terasology.engine.registry.Share;
-import org.terasology.engine.world.block.Block;
-import org.terasology.engine.world.block.BlockExplorer;
-import org.terasology.engine.world.block.BlockManager;
-import org.terasology.engine.world.block.BlockUri;
-import org.terasology.engine.world.block.family.BlockFamily;
-import org.terasology.engine.world.block.items.BlockItemFactory;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.events.OnFieldReset;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Handles the purchasing of blocks
  */
 @RegisterSystem
-@Share(ShopManager.class)
 public class ShopManager extends BaseComponentSystem {
-
-    private Set<Block> purchasableBlocks = new HashSet<>();
-    private Set<Prefab> purchasableItems = new HashSet<>();
-
     @In
     private AssetManager assetManager;
-    @In
-    private BlockManager blockManager;
-    @In
-    private InventoryManager inventoryManager;
     @In
     private LocalPlayer localPlayer;
     @In
     private EntityManager entityManager;
 
-    private BlockItemFactory blockItemFactory;
+    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
+    public void onPlayerJoin(OnPlayerSpawnedEvent onPlayerSpawnedEvent, EntityRef player) {
+        CurrencyStorageComponent component = new CurrencyStorageComponent();
+        component.amount = 100;
 
-    /**
-     * Gets how much money a ware will cost.
-     * Tries to use the cost on the purchasable component, with the value component as a fallback.
-     *
-     * @param ware The ware to get the price for
-     * @return The price of the ware.
-     */
-    public static int getWareCost(ComponentContainer ware) {
-        int cost = ware.getComponent(PurchasableComponent.class).cost;
-        if (cost < 0) {
-            if (ware.hasComponent(ValueComponent.class)) {
-                return ware.getComponent(ValueComponent.class).value;
-            } else {
-                return 0;
-            }
-        } else {
-            return cost;
-        }
+        player.addOrSaveComponent(component);
+        player.send(new WalletUpdatedEvent(component.amount));
     }
 
-    @Override
-    public void postBegin() {
-        blockItemFactory = new BlockItemFactory(entityManager);
-        BlockExplorer blockExplorer = new BlockExplorer(assetManager);
-
-        purchasableItems = assetManager.getLoadedAssets(Prefab.class)
-                .stream()
-                .filter(prefab -> prefab.hasComponent(ItemComponent.class)
-                        && prefab.hasComponent(PurchasableComponent.class))
-                .collect(Collectors.toSet());
-
-        Set<BlockUri> blocks = new HashSet<>();
-        blocks.addAll(blockManager.listRegisteredBlockUris());
-        blocks.addAll(blockExplorer.getAvailableBlockFamilies());
-        blocks.addAll(blockExplorer.getFreeformBlockFamilies());
-
-        purchasableBlocks = blocks.stream()
-                .map(blockManager::getBlockFamily)
-                .map(BlockFamily::getArchetypeBlock)
-                .filter(block -> block.getPrefab().isPresent())
-                .filter(block -> block.getPrefab().get().hasComponent(PurchasableComponent.class))
-                .collect(Collectors.toSet());
-    }
-
-    /**
-     * Deletes any dropped money, resets the players money, and clears their inventory
-     * <p>
-     * Called when the field is reset.
-     *
-     * @see OnFieldReset
-     */
     @ReceiveEvent
     public void onFieldReset(OnFieldReset event, EntityRef entity) {
         resetMoney();
@@ -132,10 +70,8 @@ public class ShopManager extends BaseComponentSystem {
     }
 
     private void resetMoney() {
-        WalletComponent component = assetManager.getAsset(DefenceUris.PLAYER, Prefab.class)
-                .map(prefab -> prefab.getComponent(WalletComponent.class))
-                .orElse(new WalletComponent());
-        localPlayer.getCharacterEntity().addOrSaveComponent(component);
+        localPlayer.getCharacterEntity().getComponent(CurrencyStorageComponent.class).amount = 100;
+        localPlayer.getCharacterEntity().send(new WalletUpdatedEvent(100));
     }
 
     private void cleanUpMoney() {
@@ -147,54 +83,6 @@ public class ShopManager extends BaseComponentSystem {
                     entityRef.destroy();
                 }
             }
-        }
-    }
-
-    /**
-     * @return All the blocks for sale
-     */
-    public Set<Block> getAllBlocks() {
-        return purchasableBlocks;
-    }
-
-    /**
-     * @return All the items for sale
-     */
-    public Set<Prefab> getAllItems() {
-        return purchasableItems;
-    }
-
-    /**
-     * Attempt to purchase a block.
-     * <p>
-     * Calls on {@link #purchase(EntityRef)}
-     *
-     * @param block The block to purchase
-     */
-    public void purchase(Block block) {
-        purchase(blockItemFactory.newInstance(block.getBlockFamily()));
-    }
-
-    /**
-     * Attempt to purchase a prefab.
-     * <p>
-     * Calls on {@link #purchase(EntityRef)}
-     *
-     * @param prefab The prefab to purchase
-     */
-    public void purchase(Prefab prefab) {
-        purchase(entityManager.create(prefab));
-    }
-
-    /**
-     * Tries to purchase an entity, by removing the cost and giving the item.
-     *
-     * @param ware The item to buy
-     */
-    private void purchase(EntityRef ware) {
-        EntityRef character = localPlayer.getCharacterEntity();
-        if (EconomyManager.tryRemoveMoney(character, getWareCost(ware))) {
-            inventoryManager.giveItem(character, character, ware);
         }
     }
 }
