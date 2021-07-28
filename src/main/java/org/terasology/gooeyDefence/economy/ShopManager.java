@@ -39,6 +39,7 @@ import java.util.Optional;
  */
 @RegisterSystem
 public class ShopManager extends BaseComponentSystem {
+    int baseAmount = 100;
     @In
     private AssetManager assetManager;
     @In
@@ -49,7 +50,7 @@ public class ShopManager extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
     public void onPlayerJoin(OnPlayerSpawnedEvent onPlayerSpawnedEvent, EntityRef player) {
         CurrencyStorageComponent component = new CurrencyStorageComponent();
-        component.amount = 100;
+        component.amount = baseAmount;
 
         player.addOrSaveComponent(component);
         player.send(new WalletUpdatedEvent(component.amount));
@@ -70,8 +71,8 @@ public class ShopManager extends BaseComponentSystem {
     }
 
     private void resetMoney() {
-        localPlayer.getCharacterEntity().getComponent(CurrencyStorageComponent.class).amount = 100;
-        localPlayer.getCharacterEntity().send(new WalletUpdatedEvent(100));
+        localPlayer.getCharacterEntity().getComponent(CurrencyStorageComponent.class).amount = baseAmount;
+        localPlayer.getCharacterEntity().send(new WalletUpdatedEvent(baseAmount));
     }
 
     private void cleanUpMoney() {
