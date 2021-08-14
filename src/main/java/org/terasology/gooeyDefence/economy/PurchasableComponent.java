@@ -17,7 +17,7 @@ public class PurchasableComponent implements Component<PurchasableComponent> {
     public int cost = -1;
 
     @Override
-    public void copy(PurchasableComponent other) {
+    public void copyFrom(PurchasableComponent other) {
         this.cost = other.cost;
     }
 }

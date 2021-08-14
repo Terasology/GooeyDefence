@@ -38,7 +38,7 @@ public abstract class TowerEffector<T extends TowerEffector> implements Componen
     public abstract EffectDuration getEffectDuration();
 
     @Override
-    public void copy(T other) {
+    public void copyFrom(T other) {
         this.drain = other.drain;
     }
 }

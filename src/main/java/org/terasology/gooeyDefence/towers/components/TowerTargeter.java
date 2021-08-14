@@ -49,7 +49,7 @@ public abstract class TowerTargeter<T extends TowerTargeter> implements Componen
     public abstract float getMultiplier();
 
     @Override
-    public void copy(T other) {
+    public void copyFrom(T other) {
         this.drain = other.drain;
         this.range = other.range;
         this.attackSpeed = other.attackSpeed;

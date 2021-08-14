@@ -26,7 +26,7 @@ public class TowerComponent implements Component<TowerComponent> {
     public Set<EntityRef> plains = new HashSet<>();
 
     @Override
-    public void copy(TowerComponent other) {
+    public void copyFrom(TowerComponent other) {
         this.cores = Sets.newHashSet(other.cores);
         this.effector = Sets.newHashSet(other.effector);
         this.targeter = Sets.newHashSet(other.targeter);

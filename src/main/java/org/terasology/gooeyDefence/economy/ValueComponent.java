@@ -18,7 +18,7 @@ public class ValueComponent implements Component<ValueComponent> {
     public int value;
 
     @Override
-    public void copy(ValueComponent other) {
+    public void copyFrom(ValueComponent other) {
         this.value = other.value;
     }
 }

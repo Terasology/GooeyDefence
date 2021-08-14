@@ -22,7 +22,7 @@ public class FieldConfigComponent implements Component<FieldConfigComponent> {
     public final List<List<List<Integer>>> shrineData = new ArrayList<>();
 
     @Override
-    public void copy(FieldConfigComponent other) {
+    public void copyFrom(FieldConfigComponent other) {
         this.entranceCount = other.entranceCount;
         this.shrineRingSize = other.shrineRingSize;
         this.outerRingSize = other.outerRingSize;

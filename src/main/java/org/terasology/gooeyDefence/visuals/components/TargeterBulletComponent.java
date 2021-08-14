@@ -9,7 +9,7 @@ import org.terasology.gestalt.entitysystem.component.Component;
  */
 public class TargeterBulletComponent implements Component<TargeterBulletComponent> {
     @Override
-    public void copy(TargeterBulletComponent other) {
+    public void copyFrom(TargeterBulletComponent other) {
 
     }
 }

@@ -47,7 +47,7 @@ public class BlankPathComponent implements PathComponent<BlankPathComponent> {
     }
 
     @Override
-    public void copy(BlankPathComponent other) {
+    public void copyFrom(BlankPathComponent other) {
         this.position.set(other.position);
     }
 }

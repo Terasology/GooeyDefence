@@ -19,7 +19,7 @@ public abstract class TowerCore implements Component<TowerCore> {
     public int power;
 
     @Override
-    public void copy(TowerCore other) {
+    public void copyFrom(TowerCore other) {
         this.power = other.power;
     }
 }

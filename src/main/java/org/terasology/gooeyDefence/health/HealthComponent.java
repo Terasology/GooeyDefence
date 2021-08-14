@@ -13,7 +13,7 @@ public class HealthComponent implements Component<HealthComponent> {
     public int health;
 
     @Override
-    public void copy(HealthComponent other) {
+    public void copyFrom(HealthComponent other) {
         this.health = other.health;
     }
 }

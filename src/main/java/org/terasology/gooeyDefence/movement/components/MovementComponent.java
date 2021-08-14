@@ -18,7 +18,7 @@ public class MovementComponent implements Component<MovementComponent> {
 
 
     @Override
-    public void copy(MovementComponent other) {
+    public void copyFrom(MovementComponent other) {
         this.speed = other.speed;
         this.goal.set(other.goal);
         this.reachedDistance = other.reachedDistance;

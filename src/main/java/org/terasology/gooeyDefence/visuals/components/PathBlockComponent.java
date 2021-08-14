@@ -9,7 +9,7 @@ import org.terasology.gestalt.entitysystem.component.Component;
  */
 public class PathBlockComponent implements Component<PathBlockComponent> {
     @Override
-    public void copy(PathBlockComponent other) {
+    public void copyFrom(PathBlockComponent other) {
 
     }
 }

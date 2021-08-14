@@ -19,7 +19,7 @@ public class WaveDefinitionComponent implements Component<WaveDefinitionComponen
     public List<WaveInfo> waves = new ArrayList<>();
 
     @Override
-    public void copy(WaveDefinitionComponent other) {
+    public void copyFrom(WaveDefinitionComponent other) {
         this.waves = Lists.newArrayList(other.waves);
     }
 }

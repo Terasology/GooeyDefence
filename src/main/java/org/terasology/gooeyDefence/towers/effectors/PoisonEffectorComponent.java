@@ -34,8 +34,8 @@ public class PoisonEffectorComponent extends DamageEffectorComponent<PoisonEffec
     }
 
     @Override
-    public void copy(PoisonEffectorComponent other) {
-        super.copy(other);
+    public void copyFrom(PoisonEffectorComponent other) {
+        super.copyFrom(other);
         this.poisonDamage = other.poisonDamage;
         this.poisonDuration = other.poisonDuration;
     }

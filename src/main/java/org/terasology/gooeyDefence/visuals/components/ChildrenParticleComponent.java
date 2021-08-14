@@ -24,7 +24,7 @@ public class ChildrenParticleComponent implements Component<ChildrenParticleComp
     public Map<String, EntityRef> particleEntities = new HashMap<>();
 
     @Override
-    public void copy(ChildrenParticleComponent other) {
+    public void copyFrom(ChildrenParticleComponent other) {
         this.particleEntities = Maps.newHashMap(other.particleEntities);
     }
 }

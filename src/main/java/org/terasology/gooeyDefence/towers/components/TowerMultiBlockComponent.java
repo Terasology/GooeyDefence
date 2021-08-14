@@ -26,7 +26,7 @@ public class TowerMultiBlockComponent implements Component<TowerMultiBlockCompon
     }
 
     @Override
-    public void copy(TowerMultiBlockComponent other) {
+    public void copyFrom(TowerMultiBlockComponent other) {
         this.towerEntity = other.towerEntity;
     }
 }

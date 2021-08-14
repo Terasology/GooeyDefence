@@ -10,7 +10,7 @@ import org.terasology.gestalt.entitysystem.component.Component;
  */
 public class SavedGameFlagComponent implements Component<SavedGameFlagComponent> {
     @Override
-    public void copy(SavedGameFlagComponent other) {
+    public void copyFrom(SavedGameFlagComponent other) {
 
     }
 }

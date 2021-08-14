@@ -16,7 +16,7 @@ public class WalletComponent implements Component<WalletComponent> {
     public int funds;
 
     @Override
-    public void copy(WalletComponent other) {
+    public void copyFrom(WalletComponent other) {
         this.funds = other.funds;
     }
 }

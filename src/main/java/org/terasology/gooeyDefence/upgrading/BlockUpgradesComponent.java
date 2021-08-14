@@ -26,7 +26,7 @@ public class BlockUpgradesComponent implements Component<BlockUpgradesComponent>
     public List<UpgradeList> upgrades = Lists.newArrayList();
 
     @Override
-    public void copy(BlockUpgradesComponent other) {
+    public void copyFrom(BlockUpgradesComponent other) {
         this.componentName = other.componentName;
         this.upgrades = Lists.newArrayList(other.upgrades);
     }

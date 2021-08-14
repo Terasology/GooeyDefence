@@ -12,7 +12,7 @@ public class GooeyComponent implements Component<GooeyComponent> {
     public int damage;
 
     @Override
-    public void copy(GooeyComponent other) {
+    public void copyFrom(GooeyComponent other) {
         this.damage = other.damage;
     }
 }

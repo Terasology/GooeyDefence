@@ -11,7 +11,7 @@ import org.terasology.gestalt.entitysystem.component.Component;
  */
 public class DestructibleBlockComponent implements Component<DestructibleBlockComponent> {
     @Override
-    public void copy(DestructibleBlockComponent other) {
+    public void copyFrom(DestructibleBlockComponent other) {
 
     }
 }
