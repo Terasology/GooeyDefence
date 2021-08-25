@@ -7,7 +7,7 @@ It adds the "Gooey's Defence" gameplay to the game, which is a tower-defense sty
 The goal is to defend the center of the arena against the malicious Gooeys spawning in waves in the outer areas of the arena and traversing it.
 The player can buy tower components to build towers with various effects to keep the Gooeys from reaching the center._
 
-<h2 align="center"><a href="https://terasology.github.io/GooeyDefence">👉 Documentation 👈</a></h2>
+<h2 align="center"><a href="https://terasology.github.io/GooeyDefence/">👉 Documentation 👈</a></h2>
 
 ## Contributing
 
