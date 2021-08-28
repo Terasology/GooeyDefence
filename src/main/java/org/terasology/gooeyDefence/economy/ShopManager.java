@@ -38,6 +38,7 @@ public class ShopManager extends BaseComponentSystem {
         CurrencyStorageComponent component = assetManager.getAsset(DefenceUris.PLAYER, Prefab.class)
                 .map(prefab -> prefab.getComponent(CurrencyStorageComponent.class))
                 .orElse(new CurrencyStorageComponent());
+        player.addOrSaveComponent(component);
         player.send(new WalletUpdatedEvent(component.amount));
     }
 
@@ -59,6 +60,7 @@ public class ShopManager extends BaseComponentSystem {
         CurrencyStorageComponent component = assetManager.getAsset(DefenceUris.PLAYER, Prefab.class)
                 .map(prefab -> prefab.getComponent(CurrencyStorageComponent.class))
                 .orElse(new CurrencyStorageComponent());
+        localPlayer.getCharacterEntity().addOrSaveComponent(component);
         localPlayer.getCharacterEntity().send(new WalletUpdatedEvent(component.amount));
     }
 
