@@ -26,7 +26,7 @@ import org.terasology.gooeyDefence.towers.components.TowerEffector;
  * @see VisualEffectorSystem
  * @see TowerEffector
  */
-public class VisualEffectorComponent extends TowerEffector {
+public class VisualEffectorComponent extends TowerEffector<VisualEffectorComponent> {
     @Override
     public EffectCount getEffectCount() {
         return EffectCount.CONTINUOUS;

@@ -1,10 +1,10 @@
-// Copyright 2020 The Terasology Foundation
+// Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.ui.towers;
 
 import org.joml.Vector2i;
-import org.terasology.engine.entitySystem.Component;
 import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.gestalt.entitysystem.component.Component;
 import org.terasology.gooeyDefence.upgrading.BlockUpgradesComponent;
 import org.terasology.gooeyDefence.upgrading.UpgradeInfo;
 import org.terasology.gooeyDefence.upgrading.UpgradeList;
