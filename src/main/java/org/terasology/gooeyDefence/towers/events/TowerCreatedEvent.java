@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.towers.events;
 
-import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.gestalt.entitysystem.event.Event;
 import org.terasology.gooeyDefence.towers.TowerBuildSystem;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.components.TowerComponent;
