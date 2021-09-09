@@ -15,7 +15,6 @@
  */
 package org.terasology.gooeyDefence.economy;
 
-import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.engine.entitySystem.ComponentContainer;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
@@ -23,8 +22,6 @@ import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
-import org.terasology.module.inventory.components.InventoryComponent;
-import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.logic.inventory.ItemComponent;
 import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.registry.In;
@@ -35,8 +32,11 @@ import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.BlockUri;
 import org.terasology.engine.world.block.family.BlockFamily;
 import org.terasology.engine.world.block.items.BlockItemFactory;
+import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.events.OnFieldReset;
+import org.terasology.module.inventory.components.InventoryComponent;
+import org.terasology.module.inventory.systems.InventoryManager;
 
 import java.util.HashSet;
 import java.util.Optional;

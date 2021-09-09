@@ -25,6 +25,7 @@ import org.joml.Vector3i;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -138,7 +139,8 @@ public class EnemyManager extends BaseComponentSystem {
      *
      * @see EntityDeathEvent
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_TRIVIAL)
+    @Priority(EventPriority.PRIORITY_TRIVIAL)
+    @ReceiveEvent
     public void onEntityDeath(EntityDeathEvent event, EntityRef entity, GooeyComponent component) {
         dropMoney(entity);
         destroyEnemy(entity);

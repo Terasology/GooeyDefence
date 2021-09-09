@@ -17,6 +17,7 @@ package org.terasology.gooeyDefence.ui.towers;
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -55,7 +56,8 @@ public class TowerInfoSystem extends BaseComponentSystem {
      *
      * @see ActivateEvent
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent
     public void onActivate(ActivateEvent event, EntityRef entity, TowerMultiBlockComponent component) {
         if (!nuiManager.isOpen(DefenceUris.TOWER_SCREEN)) {
             TowerInfoScreen infoScreen = (TowerInfoScreen) nuiManager.pushScreen(DefenceUris.TOWER_SCREEN);
@@ -74,7 +76,8 @@ public class TowerInfoSystem extends BaseComponentSystem {
      *
      * @see FrobButton
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW, components = CharacterComponent.class)
+    @Priority(EventPriority.PRIORITY_LOW)
+    @ReceiveEvent(components = CharacterComponent.class)
     public void onFrobButton(FrobButton event, EntityRef entity) {
         if (event.getState() == ButtonState.UP
                 && nuiManager.isOpen(DefenceUris.TOWER_SCREEN)) {

@@ -15,7 +15,6 @@
  */
 package org.terasology.gooeyDefence.ui.activation;
 
-import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
@@ -25,6 +24,7 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.ScreenLayerClosedEvent;
 import org.terasology.engine.rendering.nui.layers.mainMenu.loadingScreen.LoadingScreen;
+import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.DefenceWorldManager;
 import org.terasology.gooeyDefence.components.SavedGameFlagComponent;

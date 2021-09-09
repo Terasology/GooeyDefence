@@ -8,11 +8,11 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
-import org.terasology.module.health.ui.HealthHud;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.gooeyDefence.waves.OnWaveEnd;
 import org.terasology.joml.geom.Rectanglef;
+import org.terasology.module.health.ui.HealthHud;
 import org.terasology.nui.databinding.ReadOnlyBinding;
 import org.terasology.nui.widgets.UIIconBar;
 
