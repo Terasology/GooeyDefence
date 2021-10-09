@@ -14,6 +14,10 @@
             "minVersion": "1.0.0"
         },
         {
+            "id": "Economy",
+            "minVersion": "1.1.0"
+        },
+        {
             "id": "Gooey",
             "minVersion": "1.0.0"
         },

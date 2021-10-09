@@ -1,5 +1,5 @@
 {
-  "Wallet": {
-    "funds": 100
+  "CurrencyStorage": {
+    "amount": 100
   }
 }
