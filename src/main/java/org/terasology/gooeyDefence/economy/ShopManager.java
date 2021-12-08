@@ -7,27 +7,27 @@ import org.terasology.economy.components.CurrencyStorageComponent;
 import org.terasology.economy.events.WalletUpdatedEvent;
 import org.terasology.economy.ui.MarketUiClientSystem;
 import org.terasology.engine.core.SimpleUri;
-import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnAddedComponent;
-import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.input.InputSystem;
-import org.terasology.engine.logic.players.event.OnPlayerSpawnedEvent;
-import org.terasology.engine.network.ClientComponent;
-import org.terasology.engine.network.events.ConnectedEvent;
-import org.terasology.engine.unicode.EnclosedAlphanumerics;
-import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnAddedComponent;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.input.InputSystem;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.logic.players.event.OnPlayerSpawnedEvent;
+import org.terasology.engine.network.ClientComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.unicode.EnclosedAlphanumerics;
+import org.terasology.gestalt.assets.management.AssetManager;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
+import org.terasology.gooeyDefence.DefenceUris;
+import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.input.ButtonState;
 import org.terasology.input.Input;
 import org.terasology.module.inventory.components.InventoryComponent;
-import org.terasology.engine.logic.players.LocalPlayer;
-import org.terasology.engine.registry.In;
-import org.terasology.gooeyDefence.DefenceUris;
-import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.module.inventory.input.InventoryButton;
 import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
@@ -53,7 +53,8 @@ public class ShopManager extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
-    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
+    @Priority(EventPriority.PRIORITY_LOW)
+    @ReceiveEvent
     public void onPlayerJoin(OnPlayerSpawnedEvent onPlayerSpawnedEvent, EntityRef player, CurrencyStorageComponent currencyStorageComponent) {
         // Fill player's wallet
         CurrencyStorageComponent component = assetManager.getAsset(DefenceUris.PLAYER, Prefab.class)
@@ -108,7 +109,8 @@ public class ShopManager extends BaseComponentSystem {
      * @param event the help button event.
      * @param entity the entity to display the help screen to.
      */
-    @ReceiveEvent(components = {ClientComponent.class, AllowShopScreenComponent.class}, priority = EventPriority.PRIORITY_CRITICAL)
+    @Priority(EventPriority.PRIORITY_CRITICAL)
+    @ReceiveEvent(components = {ClientComponent.class, AllowShopScreenComponent.class})
     public void onInGameShopButton(InventoryButton event, EntityRef entity) {
         if (event.getState() == ButtonState.DOWN) {
             entity.send(new ExpireNotificationEvent(NOTIFICATION_ID));

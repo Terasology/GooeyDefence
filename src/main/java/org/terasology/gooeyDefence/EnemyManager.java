@@ -26,7 +26,7 @@ import org.terasology.economy.components.ValueComponent;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.delay.DelayManager;
@@ -34,6 +34,7 @@ import org.terasology.engine.logic.inventory.events.DropItemEvent;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.registry.Share;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.gooeyDefence.components.GooeyComponent;
 import org.terasology.gooeyDefence.events.OnEntrancePathCalculated;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
@@ -138,7 +139,8 @@ public class EnemyManager extends BaseComponentSystem {
      *
      * @see EntityDeathEvent
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_TRIVIAL)
+    @Priority(EventPriority.PRIORITY_TRIVIAL)
+    @ReceiveEvent
     public void onEntityDeath(EntityDeathEvent event, EntityRef entity, GooeyComponent component) {
         dropMoney(entity);
         destroyEnemy(entity);

@@ -3,9 +3,9 @@
 package org.terasology.gooeyDefence.towers.effectors;
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
 import org.terasology.gooeyDefence.towers.TowerManager;
 import org.terasology.gooeyDefence.towers.events.ApplyEffectEvent;

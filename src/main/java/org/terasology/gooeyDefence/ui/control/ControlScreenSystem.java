@@ -17,7 +17,7 @@ package org.terasology.gooeyDefence.ui.control;
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.input.binds.interaction.FrobButton;
@@ -25,6 +25,7 @@ import org.terasology.engine.logic.characters.CharacterComponent;
 import org.terasology.engine.logic.common.ActivateEvent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.components.ShrineComponent;
 import org.terasology.gooeyDefence.waves.OnWaveEnd;
@@ -88,7 +89,8 @@ public class ControlScreenSystem extends BaseComponentSystem {
      *
      * @see FrobButton
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW, components = CharacterComponent.class)
+    @Priority(EventPriority.PRIORITY_LOW)
+    @ReceiveEvent(components = CharacterComponent.class)
     public void onFrobButton(FrobButton event, EntityRef entity) {
         if (event.getState() == ButtonState.UP
                 && nuiManager.isOpen(DefenceUris.CONTROL_SCREEN)) {

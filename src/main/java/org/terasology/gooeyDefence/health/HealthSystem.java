@@ -17,9 +17,10 @@ package org.terasology.gooeyDefence.health;
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
 import org.terasology.gooeyDefence.events.OnFieldReset;
 import org.terasology.gooeyDefence.health.events.DamageEntityEvent;
@@ -59,7 +60,8 @@ public class HealthSystem extends BaseComponentSystem {
      *
      * @see OnFieldActivated
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
+    @Priority(EventPriority.PRIORITY_LOW)
+    @ReceiveEvent
     public void onFieldActivated(OnFieldActivated event, EntityRef entity, HealthComponent component) {
         if (component.health <= 0) {
             entity.send(new EntityDeathEvent());

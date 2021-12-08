@@ -18,11 +18,10 @@ package org.terasology.gooeyDefence;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
-import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -41,6 +40,8 @@ import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.entity.CreateBlockDropsEvent;
 import org.terasology.engine.world.block.items.BlockItemFactory;
 import org.terasology.engine.world.sun.CelestialSystem;
+import org.terasology.gestalt.assets.management.AssetManager;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.gooeyDefence.components.DestructibleBlockComponent;
 import org.terasology.gooeyDefence.components.FieldConfigComponent;
 import org.terasology.gooeyDefence.events.OnFieldActivated;
@@ -109,7 +110,8 @@ public class DefenceWorldManager extends BaseComponentSystem {
     /**
      * Make blocks destroy instantly
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent
     public void onAttackEntity(AttackEvent event, EntityRef targetEntity) {
         event.consume();
         if (targetEntity.hasComponent(DestructibleBlockComponent.class)) {

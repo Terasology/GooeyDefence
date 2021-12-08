@@ -15,7 +15,7 @@
  */
 package org.terasology.gooeyDefence.movement.events;
 
-import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.gestalt.entitysystem.event.Event;
 import org.terasology.gooeyDefence.movement.PathfindingManager;
 import org.terasology.gooeyDefence.movement.components.CustomPathComponent;
 
