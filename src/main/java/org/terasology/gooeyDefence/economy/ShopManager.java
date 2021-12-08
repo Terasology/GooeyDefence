@@ -1,122 +1,72 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.economy;
 
-import org.terasology.engine.entitySystem.ComponentContainer;
+import org.terasology.economy.components.AllowShopScreenComponent;
+import org.terasology.economy.components.CurrencyStorageComponent;
+import org.terasology.economy.events.WalletUpdatedEvent;
+import org.terasology.economy.ui.MarketUiClientSystem;
+import org.terasology.engine.core.SimpleUri;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnAddedComponent;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
-import org.terasology.engine.logic.inventory.ItemComponent;
+import org.terasology.engine.input.InputSystem;
 import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.logic.players.event.OnPlayerSpawnedEvent;
+import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
-import org.terasology.engine.registry.Share;
-import org.terasology.engine.world.block.Block;
-import org.terasology.engine.world.block.BlockExplorer;
-import org.terasology.engine.world.block.BlockManager;
-import org.terasology.engine.world.block.BlockUri;
-import org.terasology.engine.world.block.family.BlockFamily;
-import org.terasology.engine.world.block.items.BlockItemFactory;
+import org.terasology.engine.unicode.EnclosedAlphanumerics;
 import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.gooeyDefence.DefenceUris;
 import org.terasology.gooeyDefence.events.OnFieldReset;
+import org.terasology.input.ButtonState;
+import org.terasology.input.Input;
 import org.terasology.module.inventory.components.InventoryComponent;
-import org.terasology.module.inventory.systems.InventoryManager;
+import org.terasology.module.inventory.input.InventoryButton;
+import org.terasology.notifications.events.ExpireNotificationEvent;
+import org.terasology.notifications.events.ShowNotificationEvent;
+import org.terasology.notifications.model.Notification;
+import org.terasology.nui.Color;
+import org.terasology.nui.FontColor;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Handles the purchasing of blocks
  */
 @RegisterSystem
-@Share(ShopManager.class)
 public class ShopManager extends BaseComponentSystem {
+    private static final String NOTIFICATION_ID = "GooeyDefence:firstTime";
 
-    private Set<Block> purchasableBlocks = new HashSet<>();
-    private Set<Prefab> purchasableItems = new HashSet<>();
-
+    @In
+    private InputSystem inputSystem;
     @In
     private AssetManager assetManager;
-    @In
-    private BlockManager blockManager;
-    @In
-    private InventoryManager inventoryManager;
     @In
     private LocalPlayer localPlayer;
     @In
     private EntityManager entityManager;
 
-    private BlockItemFactory blockItemFactory;
+    @Priority(EventPriority.PRIORITY_LOW)
+    @ReceiveEvent
+    public void onPlayerJoin(OnPlayerSpawnedEvent onPlayerSpawnedEvent, EntityRef player, CurrencyStorageComponent currencyStorageComponent) {
+        // Fill player's wallet
+        CurrencyStorageComponent component = assetManager.getAsset(DefenceUris.PLAYER, Prefab.class)
+                .map(prefab -> prefab.getComponent(CurrencyStorageComponent.class))
+                .orElse(new CurrencyStorageComponent());
+        player.addOrSaveComponent(component);
+        player.send(new WalletUpdatedEvent(component.amount));
 
-    /**
-     * Gets how much money a ware will cost.
-     * Tries to use the cost on the purchasable component, with the value component as a fallback.
-     *
-     * @param ware The ware to get the price for
-     * @return The price of the ware.
-     */
-    public static int getWareCost(ComponentContainer ware) {
-        int cost = ware.getComponent(PurchasableComponent.class).cost;
-        if (cost < 0) {
-            if (ware.hasComponent(ValueComponent.class)) {
-                return ware.getComponent(ValueComponent.class).value;
-            } else {
-                return 0;
-            }
-        } else {
-            return cost;
-        }
+        // Ensure that the client has the {@link AllowShopScreenComponent} such that they can use the in-game shop from the Economy module.
+        localPlayer.getClientEntity().upsertComponent(AllowShopScreenComponent.class, c -> c.orElse(new AllowShopScreenComponent()));
     }
 
-    @Override
-    public void postBegin() {
-        blockItemFactory = new BlockItemFactory(entityManager);
-        BlockExplorer blockExplorer = new BlockExplorer(assetManager);
-
-        purchasableItems = assetManager.getLoadedAssets(Prefab.class)
-                .stream()
-                .filter(prefab -> prefab.hasComponent(ItemComponent.class)
-                        && prefab.hasComponent(PurchasableComponent.class))
-                .collect(Collectors.toSet());
-
-        Set<BlockUri> blocks = new HashSet<>();
-        blocks.addAll(blockManager.listRegisteredBlockUris());
-        blocks.addAll(blockExplorer.getAvailableBlockFamilies());
-        blocks.addAll(blockExplorer.getFreeformBlockFamilies());
-
-        purchasableBlocks = blocks.stream()
-                .map(blockManager::getBlockFamily)
-                .map(BlockFamily::getArchetypeBlock)
-                .filter(block -> block.getPrefab().isPresent())
-                .filter(block -> block.getPrefab().get().hasComponent(PurchasableComponent.class))
-                .collect(Collectors.toSet());
-    }
-
-    /**
-     * Deletes any dropped money, resets the players money, and clears their inventory
-     * <p>
-     * Called when the field is reset.
-     *
-     * @see OnFieldReset
-     */
     @ReceiveEvent
     public void onFieldReset(OnFieldReset event, EntityRef entity) {
         resetMoney();
@@ -132,10 +82,11 @@ public class ShopManager extends BaseComponentSystem {
     }
 
     private void resetMoney() {
-        WalletComponent component = assetManager.getAsset(DefenceUris.PLAYER, Prefab.class)
-                .map(prefab -> prefab.getComponent(WalletComponent.class))
-                .orElse(new WalletComponent());
+        CurrencyStorageComponent component = assetManager.getAsset(DefenceUris.PLAYER, Prefab.class)
+                .map(prefab -> prefab.getComponent(CurrencyStorageComponent.class))
+                .orElse(new CurrencyStorageComponent());
         localPlayer.getCharacterEntity().addOrSaveComponent(component);
+        localPlayer.getCharacterEntity().send(new WalletUpdatedEvent(component.amount));
     }
 
     private void cleanUpMoney() {
@@ -151,50 +102,57 @@ public class ShopManager extends BaseComponentSystem {
     }
 
     /**
-     * @return All the blocks for sale
-     */
-    public Set<Block> getAllBlocks() {
-        return purchasableBlocks;
-    }
-
-    /**
-     * @return All the items for sale
-     */
-    public Set<Prefab> getAllItems() {
-        return purchasableItems;
-    }
-
-    /**
-     * Attempt to purchase a block.
-     * <p>
-     * Calls on {@link #purchase(EntityRef)}
+     * Handles the button event if in-game shop is enabled.
+     * Needs to have a higher priority than {@link MarketUiClientSystem#onToggleInventory(InventoryButton, EntityRef)}
+     * to receive the {@link InventoryButton} event before it is consumed.
      *
-     * @param block The block to purchase
+     * @param event the help button event.
+     * @param entity the entity to display the help screen to.
      */
-    public void purchase(Block block) {
-        purchase(blockItemFactory.newInstance(block.getBlockFamily()));
-    }
-
-    /**
-     * Attempt to purchase a prefab.
-     * <p>
-     * Calls on {@link #purchase(EntityRef)}
-     *
-     * @param prefab The prefab to purchase
-     */
-    public void purchase(Prefab prefab) {
-        purchase(entityManager.create(prefab));
-    }
-
-    /**
-     * Tries to purchase an entity, by removing the cost and giving the item.
-     *
-     * @param ware The item to buy
-     */
-    private void purchase(EntityRef ware) {
-        EntityRef character = localPlayer.getCharacterEntity();
-        if (EconomyManager.tryRemoveMoney(character, getWareCost(ware))) {
-            inventoryManager.giveItem(character, character, ware);
+    @Priority(EventPriority.PRIORITY_CRITICAL)
+    @ReceiveEvent(components = {ClientComponent.class, AllowShopScreenComponent.class})
+    public void onInGameShopButton(InventoryButton event, EntityRef entity) {
+        if (event.getState() == ButtonState.DOWN) {
+            entity.send(new ExpireNotificationEvent(NOTIFICATION_ID));
         }
+    }
+
+    /**
+     * Get a formatted representation of the primary {@link Input} associated with the given button binding.
+     *
+     * If the display name of the primary bound key is a single character this representation will be the encircled
+     * character. Otherwise the full display name is used. The bound key will be printed in yellow.
+     *
+     * If no key binding was found the text "n/a" in red color is returned.
+     *
+     * @param button the URI of a bindable button
+     * @return a formatted text to be used as representation for the player
+     */
+    //TODO: put this in a common place? Duplicated in Dialogs, EventualSkills, and InGameHelp
+    private String getActivationKey(SimpleUri button) {
+        return inputSystem.getInputsForBindButton(button).stream()
+                .findFirst()
+                .map(Input::getDisplayName)
+                .map(key -> {
+                    if (key.length() == 1) {
+                        // print the key in yellow within a circle
+                        int off = key.charAt(0) - 'A';
+                        char code = (char) (EnclosedAlphanumerics.CIRCLED_LATIN_CAPITAL_LETTER_A + off);
+                        return String.valueOf(code);
+                    } else {
+                        return key;
+                    }
+                })
+                .map(key -> FontColor.getColored(key, Color.yellow))
+                .orElse(FontColor.getColored("n/a", Color.red));
+    }
+
+    @ReceiveEvent(components = AllowShopScreenComponent.class)
+    public void onShopComponentAdded(OnAddedComponent event, EntityRef entity) {
+        Notification notification = new Notification(NOTIFICATION_ID,
+                "Shut Up and Take My Money!",
+                "Press " + getActivationKey(new SimpleUri("Inventory:inventory")) + " to buy tower parts",
+                "Economy:GoldCoin");
+        localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
     }
 }

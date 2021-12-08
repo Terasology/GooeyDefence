@@ -4,7 +4,6 @@ package org.terasology.gooeyDefence.ui.hud;
 
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.layers.hud.CoreHudWidget;
-import org.terasology.gooeyDefence.StatSystem;
 import org.terasology.gooeyDefence.ui.control.UIWaveInfo;
 import org.terasology.gooeyDefence.waves.WaveManager;
 import org.terasology.nui.databinding.ReadOnlyBinding;
@@ -19,8 +18,6 @@ import org.terasology.nui.widgets.UILabel;
 public class DefenceHud extends CoreHudWidget {
     @In
     private WaveManager waveManager;
-    @In
-    private StatSystem statSystem;
 
     private UIWaveInfo waveInfo;
 
@@ -29,7 +26,6 @@ public class DefenceHud extends CoreHudWidget {
     public void initialise() {
         waveInfo = find("waveInfo", UIWaveInfo.class);
         UILabel waveDuration = find("waveDuration", UILabel.class);
-        UILabel moneyLabel = find("moneyLabel", UILabel.class);
 
 
         waveDuration.bindText(new ReadOnlyBinding<String>() {
@@ -45,13 +41,6 @@ public class DefenceHud extends CoreHudWidget {
                 return waveManager.isAttackUnderway();
             }
         });
-        moneyLabel.bindText(new ReadOnlyBinding<String>() {
-            @Override
-            public String get() {
-                return "Money: " + statSystem.getPlayerMoney();
-            }
-        });
-
     }
 
     /**
