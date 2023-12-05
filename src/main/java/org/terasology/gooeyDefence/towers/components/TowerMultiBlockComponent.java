@@ -15,7 +15,7 @@ import org.terasology.gestalt.entitysystem.component.Component;
  */
 @ForceBlockActive
 public class TowerMultiBlockComponent implements Component<TowerMultiBlockComponent> {
-    private EntityRef towerEntity = EntityRef.NULL;
+    public EntityRef towerEntity = EntityRef.NULL;
 
     public EntityRef getTowerEntity() {
         return towerEntity;
