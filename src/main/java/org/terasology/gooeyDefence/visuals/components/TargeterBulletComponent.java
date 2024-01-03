@@ -2,14 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.gooeyDefence.visuals.components;
 
-import org.terasology.gestalt.entitysystem.component.Component;
+import org.terasology.gestalt.entitysystem.component.EmptyComponent;
 
 /**
  * Flag component used to indicated that an entity is a bullet from a targeter.
  */
-public class TargeterBulletComponent implements Component<TargeterBulletComponent> {
-    @Override
-    public void copyFrom(TargeterBulletComponent other) {
-
-    }
+public class TargeterBulletComponent extends EmptyComponent<TargeterBulletComponent> {
 }
