@@ -85,7 +85,7 @@ public class EnemyWalkingPlugin extends WalkingPlugin {
      * @return True if the movement is vertically possible.
      */
     private boolean isVerticallyReachable(Vector3ic to, Vector3ic from) {
-        return !isMovementHorizontal(to, from) && to.distanceSquared(from) <= 1;
+        return isMovementHorizontal(to, from);
     }
 
     /**
